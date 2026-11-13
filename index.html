@@ -2398,22 +2398,8 @@
       }
 
       playMetronome110() {
-        if (this.isMuted || !this.ctx || !this.masterGain) return;
-        try {
-          this.lastMetronomeClickTime = performance.now();
-          const now = this.ctx.currentTime;
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(960, now);
-          osc.frequency.exponentialRampToValueAtTime(180, now + 0.045);
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
-          osc.connect(gain);
-          gain.connect(this.masterGain);
-          osc.start(now);
-          osc.stop(now + 0.045);
-        } catch(e) {}
+        // Completely muted: prevents speaker-to-mic acoustic feedback loop
+        return;
       }
 
       playAEDCharging() {
@@ -4563,7 +4549,7 @@
           // Zero-Drift Clock Metronome Trigger
           if (currentBeatIndex > this.lastPlayedBeatIndex) {
             this.lastPlayedBeatIndex = currentBeatIndex;
-            SoundEngine.playMetronome110();
+            // Metronome audio disabled: Visual flash and beat markers guide 110 BPM rhythm cleanly!
 
             const target = document.getElementById('cprCenterTarget');
             if (target) {
