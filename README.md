@@ -1,8 +1,27 @@
-# HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.5 Production Perfected)
+# HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.6 Clean Focus Edition)
 
 > **“ช่วยให้เป็น เห็นแล้วกล้าทำ”** — คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา (Faculty of Medicine, Burapha University)  
 > ระบบจำลองสถานการณ์กู้ชีพฉุกเฉินและการกู้ชีพขั้นพื้นฐาน (CPR & First Aid) แบบ Interactive สำหรับงาน MDBUU Open House  
 > **Live Deployment:** `https://asia16775-ai.github.io/Emergency-Event-Simulator/`
+
+---
+
+## ⚡ ไฮไลต์การอัปเกรด V6.6 (Clean Focus Activities & Ultra-Prominent Realtime ICU Telemetry HUD)
+
+1. **🧹 ซ่อน Background EKG ในช่วงทำกิจกรรม (Clean Dark Focus Mode):**
+   - คลื่น EKG Background (`#bgEcgCanvas`) จะแสดงผลเฉพาะใน **ห้อง Lobby (หน้าเริ่มเกม / สุ่มกลุ่ม)** เพื่อสร้างบรรยากาศศูนย์จำลองกู้ชีพสุดอลังการ
+   - เมื่อกดเริ่มภารกิจเข้าสู่กิจกรรม (ด่าน 1–6) ระบบจะ **สั่งปิดและซ่อน Background EKG โดยสิ้นเชิง (`display: none`)**
+   - คืนพื้นที่หน้าจอสู่ความมืดสนิท คมชัด สบายตา ไม่แย่งสายตา ลดอาการตาล้าของผู้เล่น และตัดสิ่งรบกวนสมาธิออก 100%
+   - การ์ดหลักปรับเป็นสีพื้นคอนโซลคมเข้ม `#0B1120` อ่านตัวหนังสือและปุ่มคำตอบได้ชัดเจนที่สุด
+
+2. **📈 อัปเกรดมอนิเตอร์ EKG Real-time ด้านบนให้โดดเด่นสะกดทุกสายตา (118px Ultra-Prominent ICU Telemetry):**
+   - **ขยายความสูง Ribbon Bar เป็น 118px:** ให้พื้นที่คลื่นหัวใจมี Headroom สูงขึ้น มองเห็นได้ชัดเจนจากระยะไกลแม้อยู่ท้ายห้อง
+   - **ลำแสงคลื่นหัวใจ 2 ชั้น (Dual-Pass Phosphor Glow):**
+     - ชั้นที่ 1 (Aura Glow): แสงเรืองฟอสฟอร์หนา 8.0px กระจายนีออนเข้มข้น 24px
+     - ชั้นที่ 2 (Core Beam): ลำแสงแกนกลางคมกริบ 3.6px ชัดเจนดั่งจอ Cathode-Ray Oscilloscope
+   - **หัวอ่านไฟกะพริบนำร่องขนาดใหญ่ (Oscilloscope Sweep Head):** ลูกแก้วสีขาวเรืองแสง 11px พร้อมวงแหวนออร่าสีตามสถานะกวาดผ่านหน้าจอตลอดเวลา
+   - **เพิ่มความสูง R-Peak และแอมพลิจูดสัญญาณชีพ:** R-Peak พุ่งสูงคมชัด 54–56px และคลื่น Agonal 38px สวยงามสมจริง
+   - **ตัวเลขสัญญาณชีพขนาดใหญ่พิเศษ 50px:** `HEART RATE` (สีแดงนีออนพุ่งทะลุจอ) และ `SpO2` (สีฟ้าสว่างวาบ) พร้อมเอฟเฟกต์เรืองแสง Text-shadow นีออนระดับ ICU
 
 ---
 

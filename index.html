@@ -224,15 +224,16 @@
       color: #0B111A;
     }
 
-    /* 96px High-DPI Realtime Telemetry Ribbon */
+    /* 118px High-Visibility Realtime Telemetry HUD Ribbon */
     .telemetry-ribbon-bar {
-      height: 96px;
-      background: var(--bg-ribbon);
-      border-bottom: 1px solid var(--border-card);
+      height: 118px;
+      background: #050A14;
+      border-bottom: 2px solid #1E293B;
       display: flex;
       position: relative;
       flex-shrink: 0;
       overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }
     .canvas-ribbon-wrapper {
       flex: 1;
@@ -251,34 +252,37 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
-      background-size: 20px 20px;
+        linear-gradient(to right, rgba(16, 185, 129, 0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16, 185, 129, 0.09) 1px, transparent 1px);
+      background-size: 24px 24px;
     }
     .ecg-status-badge {
       position: absolute;
-      top: 10px;
+      top: 12px;
       left: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      padding: 3px 8px;
-      border-radius: 4px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid #334155;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      padding: 5px 12px;
+      border-radius: 6px;
+      background: rgba(6, 11, 20, 0.94);
+      border: 1.5px solid #334155;
       color: #94A3B8;
       z-index: 10;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
     }
     .ecg-status-badge.critical {
-      color: var(--crimson-crit);
-      border-color: var(--crimson-crit);
-      background: rgba(255, 59, 92, 0.15);
+      color: #FF3B5C;
+      border-color: #FF3B5C;
+      background: rgba(255, 59, 92, 0.2);
+      box-shadow: 0 0 18px rgba(255, 59, 92, 0.35);
       animation: blinkBadge 1.2s infinite;
     }
     .ecg-status-badge.rosc {
-      color: var(--ecg-green);
-      border-color: var(--ecg-green);
-      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
     }
     @keyframes blinkBadge {
       0%, 100% { opacity: 1; }
@@ -289,10 +293,10 @@
     .vitals-box-cluster {
       display: flex;
       align-items: center;
-      gap: 24px;
-      padding: 0 28px;
-      border-left: 1px solid var(--border-card);
-      background: #090D14;
+      gap: 32px;
+      padding: 0 36px;
+      border-left: 2px solid #1E293B;
+      background: #070D18;
       flex-shrink: 0;
     }
     .vital-unit-item {
@@ -301,22 +305,24 @@
       align-items: flex-end;
     }
     .vital-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #64748B;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #94A3B8;
       text-transform: uppercase;
+      margin-bottom: 2px;
     }
     .vital-value-row {
       display: flex;
       align-items: baseline;
-      gap: 4px;
+      gap: 6px;
     }
     .vital-number {
-      font-size: 38px;
-      font-weight: 700;
+      font-size: 50px;
+      font-weight: 900;
       line-height: 1;
       letter-spacing: -0.02em;
+      text-shadow: 0 0 20px currentColor;
     }
     .vital-unit-txt {
       font-size: 13px;
@@ -342,12 +348,10 @@
     }
 
     .stage-card-clean {
-      background: rgba(11, 18, 32, 0.82);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: #0B1120;
+      border: 1px solid #1E293B;
       border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.12);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75);
       width: 100%;
       max-width: 1180px;
       padding: 24px 32px;
@@ -2652,6 +2656,7 @@
       }
 
       render() {
+        if (!document.body.classList.contains('lobby-mode')) return;
         const w = this.width;
         const h = this.height;
         this.ctx.clearRect(0, 0, w, h);
@@ -2938,7 +2943,7 @@
           this.ctx.scale(dpr, dpr);
           this.width = rect.width;
           this.height = rect.height;
-          this.maxPoints = Math.max(150, Math.floor(this.width / 2.2));
+          this.maxPoints = Math.max(160, Math.floor(this.width / 2.2));
         }
       }
 
@@ -2950,48 +2955,48 @@
           this.speed = 2.0;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical';
-            badge.innerText = 'NORMAL SINUS RHYTHM // 76 BPM';
+            badge.innerText = '⚡ LEAD II // NORMAL SINUS RHYTHM // 76 BPM';
           }
         } else if (mode === 'BRADYCARDIA') {
           this.color = '#FF3B5C';
-          this.speed = 1.6;
+          this.speed = 1.7;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerText = 'CRITICAL // BRADYCARDIA 38 BPM';
+            badge.innerText = '⚡ LEAD II // CRITICAL: BRADYCARDIA 38 BPM';
           }
         } else if (mode === 'AGONAL') {
           this.color = '#F59E0B';
           this.speed = 1.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerText = 'CRITICAL // AGONAL DYING RHYTHM 22 BPM';
+            badge.innerText = '⚡ LEAD II // CRITICAL: AGONAL DYING RHYTHM 22 BPM';
           }
         } else if (mode === 'VFIB_COARSE') {
           this.color = '#FF3B5C';
           this.speed = 2.6;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerText = 'CARDIAC ARREST // VENTRICULAR FIBRILLATION';
+            badge.innerText = '⚡ LEAD II // CARDIAC ARREST: VENTRICULAR FIBRILLATION';
           }
         } else if (mode === 'CPR_COMPRESSION') {
           this.color = '#38BDF8';
           this.speed = 2.4;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical';
-            badge.innerText = 'CPR ACTIVE // MECHANICAL COMPRESSIONS';
+            badge.innerText = '⚡ LEAD II // CPR ACTIVE: MECHANICAL COMPRESSIONS (110 BPM)';
           }
         } else if (mode === 'DEFIB_DISCHARGE') {
           this.color = '#38BDF8';
           if (badge) {
             badge.className = 'ecg-status-badge font-technical';
-            badge.innerText = 'DEFIBRILLATION DISCHARGE // SHOCK DELIVERED';
+            badge.innerText = '⚡ LEAD II // DEFIBRILLATION DISCHARGE // SHOCK DELIVERED';
           }
         } else if (mode === 'ROSC') {
           this.color = '#10B981';
           this.speed = 2.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical rosc';
-            badge.innerText = 'ROSC // NORMAL SINUS 88 BPM';
+            badge.innerText = '⚡ LEAD II // ROSC: NORMAL SINUS RHYTHM 88 BPM';
           }
         }
         this.resize();
@@ -3004,38 +3009,38 @@
 
       calcVoltage(p) {
         if (this.compressionSpikeActive) {
-          return (Math.random() - 0.5) * 60;
+          return (Math.random() - 0.5) * 65;
         }
         if (this.mode === 'SINUS' || this.mode === 'ROSC') {
           const mod = p % 130;
-          if (mod >= 15 && mod < 32) return Math.exp(-Math.pow((mod - 23) / 4, 2)) * 8;
-          if (mod >= 42 && mod < 47) return -Math.exp(-Math.pow((mod - 44.5) / 1.5, 2)) * 6;
-          if (mod >= 47 && mod < 57) return Math.exp(-Math.pow((mod - 52) / 2.2, 2)) * 52;
-          if (mod >= 57 && mod < 63) return -Math.exp(-Math.pow((mod - 60) / 1.8, 2)) * 14;
-          if (mod >= 78 && mod < 105) return Math.exp(-Math.pow((mod - 91) / 7, 2)) * 12;
+          if (mod >= 15 && mod < 32) return Math.exp(-Math.pow((mod - 23) / 4, 2)) * 9;
+          if (mod >= 42 && mod < 47) return -Math.exp(-Math.pow((mod - 44.5) / 1.5, 2)) * 7;
+          if (mod >= 47 && mod < 57) return Math.exp(-Math.pow((mod - 52) / 2.2, 2)) * 56;
+          if (mod >= 57 && mod < 63) return -Math.exp(-Math.pow((mod - 60) / 1.8, 2)) * 16;
+          if (mod >= 78 && mod < 105) return Math.exp(-Math.pow((mod - 91) / 7, 2)) * 14;
           return (Math.random() - 0.5) * 1.5;
         } else if (this.mode === 'BRADYCARDIA') {
           const mod = p % 200;
-          if (mod >= 20 && mod < 40) return Math.exp(-Math.pow((mod - 30) / 5, 2)) * 7;
-          if (mod >= 55 && mod < 61) return -Math.exp(-Math.pow((mod - 58) / 1.8, 2)) * 6;
-          if (mod >= 61 && mod < 73) return Math.exp(-Math.pow((mod - 67) / 2.5, 2)) * 50;
-          if (mod >= 73 && mod < 80) return -Math.exp(-Math.pow((mod - 76.5) / 2, 2)) * 14;
-          if (mod >= 105 && mod < 145) return Math.exp(-Math.pow((mod - 125) / 9, 2)) * 10;
+          if (mod >= 20 && mod < 40) return Math.exp(-Math.pow((mod - 30) / 5, 2)) * 8;
+          if (mod >= 55 && mod < 61) return -Math.exp(-Math.pow((mod - 58) / 1.8, 2)) * 7;
+          if (mod >= 61 && mod < 73) return Math.exp(-Math.pow((mod - 67) / 2.5, 2)) * 54;
+          if (mod >= 73 && mod < 80) return -Math.exp(-Math.pow((mod - 76.5) / 2, 2)) * 16;
+          if (mod >= 105 && mod < 145) return Math.exp(-Math.pow((mod - 125) / 9, 2)) * 12;
           return (Math.random() - 0.5) * 1.5;
         } else if (this.mode === 'AGONAL') {
           const mod = p % 300;
           if (mod >= 50 && mod < 160) {
-            return Math.sin((mod - 50) / 110 * Math.PI) * 35 + (Math.random() - 0.5) * 3;
+            return Math.sin((mod - 50) / 110 * Math.PI) * 38 + (Math.random() - 0.5) * 3;
           }
           return (Math.random() - 0.5) * 2;
         } else if (this.mode === 'VFIB_COARSE') {
-          return Math.sin(p * 0.16) * 18 + Math.sin(p * 0.33) * 14 + (Math.random() - 0.5) * 8;
+          return Math.sin(p * 0.16) * 20 + Math.sin(p * 0.33) * 16 + (Math.random() - 0.5) * 8;
         } else if (this.mode === 'CPR_COMPRESSION') {
           const mod = p % 45;
-          if (mod < 20) return Math.sin(mod / 20 * Math.PI) * 38;
+          if (mod < 20) return Math.sin(mod / 20 * Math.PI) * 42;
           return (Math.random() - 0.5) * 4;
         } else if (this.mode === 'DEFIB_DISCHARGE') {
-          return (Math.random() - 0.5) * 85;
+          return (Math.random() - 0.5) * 90;
         }
         return 0;
       }
@@ -3060,12 +3065,34 @@
             const midY = this.height / 2;
             const stepX = this.width / this.maxPoints;
 
+            // DUAL-PASS HIGH-LUMINESCENCE OSCILLOSCOPE BEAM
+            // Pass 1: Broad Phosphor Glow Aura
             this.ctx.save();
             this.ctx.beginPath();
-            this.ctx.lineWidth = 2.8;
+            this.ctx.lineWidth = 8.0;
             this.ctx.strokeStyle = this.color;
-            this.ctx.shadowBlur = 12;
+            this.ctx.shadowBlur = 24;
             this.ctx.shadowColor = this.color;
+            this.ctx.globalAlpha = 0.42;
+            this.ctx.lineJoin = 'round';
+            this.ctx.lineCap = 'round';
+
+            for (let i = 0; i < this.points.length; i++) {
+              const x = i * stepX;
+              const y = midY - this.points[i];
+              if (i === 0) this.ctx.moveTo(x, y);
+              else this.ctx.lineTo(x, y);
+            }
+            this.ctx.stroke();
+            this.ctx.restore();
+
+            // Pass 2: Ultra-Crisp Core Waveform Beam
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.lineWidth = 3.6;
+            this.ctx.strokeStyle = this.color;
+            this.ctx.shadowBlur = 10;
+            this.ctx.shadowColor = '#FFFFFF';
             this.ctx.lineJoin = 'round';
             this.ctx.lineCap = 'round';
 
@@ -3077,16 +3104,28 @@
             }
             this.ctx.stroke();
 
-            // Leading bright neon cursor
+            // Leading bright oscilloscope sweep bead & halo
             if (this.points.length > 0) {
               const lastIdx = this.points.length - 1;
               const lx = lastIdx * stepX;
               const ly = midY - this.points[lastIdx];
+
+              // Outer Luminescent Halo
               this.ctx.beginPath();
-              this.ctx.arc(lx, ly, 4.5, 0, Math.PI * 2);
+              this.ctx.arc(lx, ly, 10, 0, Math.PI * 2);
+              this.ctx.fillStyle = this.color;
+              this.ctx.shadowColor = this.color;
+              this.ctx.shadowBlur = 26;
+              this.ctx.globalAlpha = 0.55;
+              this.ctx.fill();
+
+              // Sharp Solid White Center Bead
+              this.ctx.beginPath();
+              this.ctx.arc(lx, ly, 5.5, 0, Math.PI * 2);
               this.ctx.fillStyle = '#FFFFFF';
               this.ctx.shadowColor = '#FFFFFF';
-              this.ctx.shadowBlur = 14;
+              this.ctx.shadowBlur = 16;
+              this.ctx.globalAlpha = 1.0;
               this.ctx.fill();
             }
             this.ctx.restore();
@@ -3568,7 +3607,7 @@
           const ml = document.getElementById('modalLobby');
           if (ml) { ml.style.display = 'none'; ml.classList.add('hidden-modal'); }
           const bgCanvas = document.getElementById('bgEcgCanvas');
-          if (bgCanvas) bgCanvas.style.opacity = '0.85';
+          if (bgCanvas) bgCanvas.style.display = 'none';
           if (window.ECGEngine) {
             setTimeout(() => window.ECGEngine.resize(), 50);
           }
@@ -4823,7 +4862,10 @@
           modal.classList.remove('hidden-modal');
         }
         const bgCanvas = document.getElementById('bgEcgCanvas');
-        if (bgCanvas) bgCanvas.style.opacity = '1';
+        if (bgCanvas) {
+          bgCanvas.style.display = 'block';
+          bgCanvas.style.opacity = '1';
+        }
 
         this.pickRandomTeam();
       }
