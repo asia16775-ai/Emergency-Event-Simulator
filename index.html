@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.2 Stage Perfected)</title>
+  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.3 Command Console)</title>
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1195,32 +1195,7 @@
       margin-top: 12px;
     }
 
-    /* ==========================================================================
-       09. LOBBY MODAL (SLOT-MACHINE ROULETTE ANIMATION)
-       ========================================================================== */
-    .lobby-modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(4, 7, 12, 0.94);
-      backdrop-filter: blur(12px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .lobby-card-clean {
-      background: #111827;
-      border: 1px solid #2A384C;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 580px;
-      padding: 34px 38px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    /* Lobby styles consolidated in V6.3 */
     .lobby-logo-pill {
       font-size: 12px;
       font-weight: 700;
@@ -1534,6 +1509,458 @@
       color: #94A3B8;
     }
 
+    
+    /* ==========================================================================
+       V6.3 FULLSCREEN AMBIENT EKG BACKGROUND & 3D SLOT REEL ENGINE
+       ========================================================================== */
+    /* V6.3 Clean Lobby Mode: isolate lobby and ambient EKG during Stage 0 */
+    body.lobby-mode .monitor-header,
+    body.lobby-mode .telemetry-ribbon-bar,
+    body.lobby-mode .stage-viewport {
+      display: none !important;
+    }
+    body.lobby-mode .bg-ecg-canvas {
+      opacity: 1 !important;
+    }
+    .bg-ecg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #08111e 0%, #03060c 100%);
+      opacity: 0.18;
+      transition: opacity 0.5s ease;
+    }
+    .confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1002;
+      pointer-events: none;
+    }
+
+    .lobby-card-clean::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #38BDF8, #10B981, transparent);
+    }
+    .lobby-status-ticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #10B981;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin: 0 auto;
+    }
+    .lobby-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseDot 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* 3D High-Tech Slot Machine Reel */
+    .slot-machine-viewport {
+      position: relative;
+      width: 180px;
+      height: 84px;
+      margin: 6px auto;
+      background: #070B12;
+      border: 2px solid #2A384C;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.8), 0 0 18px rgba(56, 189, 248, 0.15);
+    }
+    .slot-machine-viewport.spinning {
+      border-color: #38BDF8;
+      box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.5);
+    }
+    .slot-machine-viewport.winner {
+      border-color: #10B981;
+      box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.8), 0 0 35px rgba(16, 185, 129, 0.7);
+    }
+    .slot-reel-strip {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      transition: transform 0.05s linear;
+      will-change: transform;
+    }
+    .slot-reel-item {
+      height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      font-weight: 800;
+      color: #38BDF8;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+    .slot-machine-viewport.winner .slot-reel-item.active-winner {
+      color: #10B981;
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
+      transform: scale(1.15);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .slot-reel-gradient-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(180deg, #070B12 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slot-reel-gradient-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: linear-gradient(0deg, #070B12 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slot-target-reticle {
+      position: absolute;
+      top: 50%;
+      left: 8px;
+      right: 8px;
+      height: 2px;
+      background: rgba(56, 189, 248, 0.3);
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    
+    /* ==========================================================================
+       V6.3 FULLSCREEN AMBIENT EKG BACKGROUND, GLASSMORPHISM & 3D REEL
+       ========================================================================== */
+    /* V6.3 Clean Lobby Mode: isolate lobby and ambient EKG during Stage 0 */
+    body.lobby-mode .monitor-header,
+    body.lobby-mode .telemetry-ribbon-bar,
+    body.lobby-mode .stage-viewport {
+      display: none !important;
+    }
+    body.lobby-mode .bg-ecg-canvas {
+      opacity: 1 !important;
+    }
+    .bg-ecg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 50% 50%, #08111e 0%, #03060c 100%);
+      opacity: 0.18;
+      transition: opacity 0.5s ease;
+    }
+    .confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1002;
+      pointer-events: none;
+    }
+
+        /* Redesigned Glassmorphic ICU Command Console Lobby */
+    .lobby-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 8, 16, 0.38);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .lobby-modal-backdrop.hidden-modal {
+      display: none !important;
+    }
+    .lobby-card-clean {
+      background: rgba(10, 18, 30, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(56, 189, 248, 0.4);
+      border-radius: 24px;
+      width: 92%;
+      max-width: 620px;
+      padding: 36px 42px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 50px rgba(56, 189, 248, 0.22);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .lobby-card-clean::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #38BDF8, #10B981, transparent);
+    }
+
+    /* Corner Medical Crosshairs */
+    .lobby-corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: rgba(56, 189, 248, 0.6);
+      border-style: solid;
+      pointer-events: none;
+    }
+    .lobby-corner-tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+    .lobby-corner-tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+    .lobby-corner-bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+    .lobby-corner-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+    .lobby-status-ticker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #10B981;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 14px;
+      border-radius: 9999px;
+      margin: 0 auto;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+    .lobby-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseLiveDot 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseLiveDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.65); }
+    }
+
+    /* 3D High-Tech Slot Machine Reel */
+    .slot-machine-viewport {
+      position: relative;
+      width: 190px;
+      height: 88px;
+      margin: 8px auto;
+      background: #060B12;
+      border: 2px solid #1E293B;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.9), 0 0 20px rgba(56, 189, 248, 0.15);
+      transition: all 0.3s ease;
+    }
+    .slot-machine-viewport.spinning {
+      border-color: #38BDF8;
+      box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.5);
+    }
+    .slot-machine-viewport.winner {
+      border-color: #10B981;
+      box-shadow: inset 0 10px 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(16, 185, 129, 0.7);
+    }
+    .slot-reel-strip {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      transition: transform 0.05s linear;
+      will-change: transform;
+    }
+    .slot-reel-item {
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      font-weight: 800;
+      color: #38BDF8;
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 18px rgba(56, 189, 248, 0.5);
+      transition: all 0.25s ease;
+    }
+    .slot-machine-viewport.winner .slot-reel-item.active-winner {
+      color: #10B981;
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.9), 0 0 50px rgba(16, 185, 129, 0.5);
+      transform: scale(1.18);
+    }
+    .slot-reel-gradient-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 26px;
+      background: linear-gradient(180deg, #060B12 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slot-reel-gradient-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 26px;
+      background: linear-gradient(0deg, #060B12 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .slot-target-reticle {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      right: 10px;
+      height: 2px;
+      background: rgba(56, 189, 248, 0.35);
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    
+    /* V6.4 Clean Arcade Choices & Keyword Chips (No Clutter) */
+    .clean-choices-grid-v2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    .game-choice-tile {
+      background: #101926;
+      border: 2px solid #23344D;
+      border-radius: 18px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      min-height: 105px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .game-choice-tile:hover {
+      border-color: #38BDF8;
+      background: #162438;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25);
+    }
+    .game-choice-tile.correct {
+      border-color: #10B981 !important;
+      background: rgba(16, 185, 129, 0.18) !important;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.5) !important;
+    }
+    .game-choice-tile.wrong {
+      border-color: #EF4444 !important;
+      background: rgba(239, 68, 68, 0.18) !important;
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.5) !important;
+    }
+    .choice-badge-v2 {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid #38BDF8;
+      color: #38BDF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      flex-shrink: 0;
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .choice-title-v2 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.4;
+    }
+
+    /* Stage 4: Massive 3-Action Choice Cards */
+    .stage4-choices-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+      margin-top: 32px;
+    }
+    .action-card-stage4 {
+      min-height: 140px;
+      padding: 30px 24px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+    }
+
+    /* Stage 2: Live Keyword Chips */
+    .kw-chips-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+    .kw-chip {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1.5px solid rgba(148, 163, 184, 0.3);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+    .kw-chip.active-matched {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: #10B981;
+      color: #10B981;
+      box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);
+      transform: scale(1.05);
+    }
+
     /* Clean Non-Blocking Toast Notification */
     .toast-container {
       position: fixed;
@@ -1569,7 +1996,11 @@
     }
   </style>
 </head>
-<body>
+<body class="lobby-mode">
+
+  <!-- Fullscreen Ambient ICU Telemetry Background EKG Canvas (V6.3) -->
+  <canvas id="bgEcgCanvas" class="bg-ecg-canvas"></canvas>
+  <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
 
   <!-- Non-Blocking Toast Notification Layer -->
   <div id="toastContainer" class="toast-container"></div>
@@ -1653,38 +2084,53 @@
     </div>
   </main>
 
-  <!-- Lobby Intro Modal with Slot-Machine Roulette Animation -->
+    <!-- Lobby Intro Modal with Ambient EKG & 3D Slot Reel (V6.3) -->
   <div id="modalLobby" class="lobby-modal-backdrop">
     <div class="lobby-card-clean">
-      <div class="lobby-logo-pill font-technical">
-        MDBUU OPEN HOUSE 2026 • ฐาน HEARTBEAT RUSH
+      <div class="lobby-corner lobby-corner-tl"></div>
+      <div class="lobby-corner lobby-corner-tr"></div>
+      <div class="lobby-corner lobby-corner-bl"></div>
+      <div class="lobby-corner lobby-corner-br"></div>
+
+      <div class="lobby-status-ticker font-technical">
+        <span class="lobby-status-dot"></span>
+        BURAPHA MEDICAL SIMULATION CENTER // TELEMETRY ARMED
       </div>
-      <h1 class="lobby-title-clean">
+
+      <h1 class="lobby-title-clean" style="font-size:32px; font-weight:800; letter-spacing:-0.01em; margin-top:2px;">
         จำลองสถานการณ์กู้ชีพฉุกเฉิน
       </h1>
-      <p class="lobby-sub-clean">
+      <p class="lobby-sub-clean" style="font-size:14.5px; color:#94A3B8; margin-top:-6px;">
         “ช่วยให้เป็น เห็นแล้วกล้าทำ” — คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
       </p>
 
-      <div class="lobby-team-selector-box">
-        <span style="font-size:12px; color:#94A3B8; font-weight:600;" class="font-technical">
-          สุ่มกลุ่มตัวแทน (กลุ่ม 01–10)
+      <div class="lobby-team-selector-box" style="padding:18px 24px; background:rgba(6, 11, 18, 0.7); border:1px solid rgba(56, 189, 248, 0.25); border-radius:16px;">
+        <span style="font-size:12.5px; color:#38BDF8; font-weight:700; letter-spacing:0.04em;" class="font-technical">
+          🎰 ระบบสุ่มกลุ่มตัวแทนกู้ชีพ (กลุ่ม 01–10)
         </span>
-        <div id="txtTeamBadge" class="num-readout" style="font-size:46px; font-weight:800; color:#38BDF8; transition: transform 0.15s ease;">
-          03
+
+        <!-- 3D Cylindrical Slot Reel Viewport -->
+        <div id="slotViewport" class="slot-machine-viewport">
+          <div class="slot-reel-gradient-top"></div>
+          <div class="slot-reel-gradient-bottom"></div>
+          <div class="slot-target-reticle"></div>
+          <div id="slotReelStrip" class="slot-reel-strip font-technical">
+            <div class="slot-reel-item num-readout" id="txtTeamBadge">03</div>
+          </div>
         </div>
-        <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
-          🎲 [ กดสุ่มกลุ่ม 01–10 (มีเอฟเฟกต์ + เสียง AI เชิญ) ]
+
+        <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical" style="margin-top:10px; background:#1E293B; border:1px solid #38BDF8; font-weight:700; padding:10px 22px; border-radius:10px; cursor:pointer;">
+          🎲 [ กดสุ่มกลุ่ม 01–10 (เอฟเฟกต์วงล้อ 3D + เสียง AI) ]
         </button>
-        <div id="txtTeamCallout" style="margin-top:10px; font-size:13.5px; color:#38BDF8; font-weight:600; min-height:20px;" class="font-technical"></div>
+        <div id="txtTeamCallout" style="margin-top:10px; font-size:14px; color:#38BDF8; font-weight:600; min-height:22px;" class="font-technical"></div>
       </div>
 
-      <button id="btnStartConsole" class="btn-start-console-clean font-technical">
-        [ เริ่มภารกิจ / เปิดระบบเสียงและไมค์ ]
+      <button id="btnStartConsole" class="btn-start-console-clean font-technical" style="height:54px; font-size:16px; font-weight:800; background:linear-gradient(135deg, #10B981 0%, #059669 100%); border:none; border-radius:12px; color:#FFFFFF; cursor:pointer; box-shadow:0 0 25px rgba(16, 185, 129, 0.4);">
+        ⚡ [ เริ่มภารกิจกู้ชีพ / เปิดระบบมอนิเตอร์ ]
       </button>
 
-      <div style="font-size:11.5px; color:#64748B; font-weight:500;" class="font-technical">
-        [F] เต็มจอ &nbsp; [M] ปิดเสียง &nbsp; [R] รีเซ็ตเริ่มใหม่ &nbsp; [Shift+Right] ข้ามด่าน
+      <div style="font-size:12px; color:#64748B; font-weight:500;" class="font-technical">
+        [F] โหมดเต็มจอ &nbsp;&bull;&nbsp; [M] ปิดเสียง &nbsp;&bull;&nbsp; [R] รีเซ็ตเริ่มใหม่ &nbsp;&bull;&nbsp; [Shift+Right] ข้ามด่าน
       </div>
     </div>
   </div>
@@ -2178,6 +2624,294 @@
     /* ==========================================================================
        HIGH-DPI CLINICAL ECG ENGINE (BURAPHA MEDICAL ACCURACY - FIX #12)
        ========================================================================== */
+
+    /* ==========================================================================
+       V6.3 FULLSCREEN AMBIENT EKG BACKGROUND & CONFETTI ENGINE
+       ========================================================================== */
+    class BackgroundECGEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+        this.phase = 0;
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.init();
+      }
+
+      init() {
+        if (!this.canvas || !this.ctx) return;
+        const resize = () => {
+          const dpr = window.devicePixelRatio || 1;
+          this.width = window.innerWidth;
+          this.height = window.innerHeight;
+          this.canvas.width = this.width * dpr;
+          this.canvas.height = this.height * dpr;
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+          this.ctx.scale(dpr, dpr);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        this.startLoop();
+      }
+
+      startLoop() {
+        const loop = () => {
+          if (!this.ctx) return;
+          this.render();
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      render() {
+        const w = this.width;
+        const h = this.height;
+        this.ctx.clearRect(0, 0, w, h);
+
+        // 1. Draw Medical ICU Telemetry Grid
+        this.ctx.save();
+        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        for (let x = 0; x < w; x += 25) {
+          this.ctx.moveTo(x, 0);
+          this.ctx.lineTo(x, h);
+        }
+        for (let y = 0; y < h; y += 25) {
+          this.ctx.moveTo(0, y);
+          this.ctx.lineTo(w, y);
+        }
+        this.ctx.stroke();
+
+        // Major 125px grid lines
+        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.09)';
+        this.ctx.beginPath();
+        for (let x = 0; x < w; x += 125) {
+          this.ctx.moveTo(x, 0);
+          this.ctx.lineTo(x, h);
+        }
+        for (let y = 0; y < h; y += 125) {
+          this.ctx.moveTo(0, y);
+          this.ctx.lineTo(w, y);
+        }
+        this.ctx.stroke();
+        this.ctx.restore();
+
+        // Watermark telemetry indicators
+        this.ctx.save();
+        this.ctx.font = '11px monospace';
+        this.ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+        this.ctx.fillText('ICU TELEMETRY MONITOR // LEAD II (1.0 mV/cm @ 25 mm/s)', 30, 40);
+        this.ctx.fillText('BURAPHA MEDICAL SIMULATOR // CONTINUOUS AMBIENT EKG', 30, h - 30);
+        this.ctx.restore();
+
+        // Advance wave sweep phase
+        this.phase = (this.phase + 2.4) % 20000;
+
+        // 2. Draw Flowing Emerald EKG Wave (Upper Screen: Y ~ 32%)
+        const midY1 = h * 0.32;
+        this.drawEKGLine(midY1, 1.15, '#10B981', 0.9, 75);
+
+        // 3. Draw Flowing Cyan Pleth/SpO2 Wave (Lower Screen: Y ~ 68%)
+        const midY2 = h * 0.68;
+        this.drawPlethLine(midY2, 0.8, '#38BDF8', 0.75, 65);
+      }
+
+      drawEKGLine(baseY, ampScale, color, alpha, cycleLength) {
+        const w = this.width;
+        this.ctx.save();
+        this.ctx.strokeStyle = color;
+        this.ctx.globalAlpha = alpha;
+        this.ctx.lineWidth = 2.8;
+        this.ctx.shadowBlur = 14;
+        this.ctx.shadowColor = color;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+
+        this.ctx.beginPath();
+        const step = 4;
+        let lastX = 0, lastY = baseY;
+
+        for (let x = 0; x <= w; x += step) {
+          const samplePos = (x + this.phase) % (cycleLength * 4);
+          let offset = 0;
+          const mod = samplePos;
+
+          if (mod >= 10 && mod < 35) {
+            // P wave
+            offset = -Math.sin((mod - 10) / 25 * Math.PI) * 11 * ampScale;
+          } else if (mod >= 42 && mod < 47) {
+            // Q dip
+            offset = 9 * ampScale;
+          } else if (mod >= 47 && mod < 61) {
+            // Sharp R Peak
+            const progress = (mod - 47) / 14;
+            offset = -Math.sin(progress * Math.PI) * 88 * ampScale;
+          } else if (mod >= 61 && mod < 69) {
+            // S dip
+            offset = 16 * ampScale;
+          } else if (mod >= 88 && mod < 135) {
+            // T wave
+            offset = -Math.sin((mod - 88) / 47 * Math.PI) * 20 * ampScale;
+          }
+
+          const y = baseY + offset;
+          if (x === 0) this.ctx.moveTo(x, y);
+          else this.ctx.lineTo(x, y);
+
+          lastX = x;
+          lastY = y;
+        }
+        this.ctx.stroke();
+
+        // Glowing phosphor bead at head of sweep
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.shadowBlur = 18;
+        this.ctx.shadowColor = color;
+        this.ctx.beginPath();
+        this.ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        this.ctx.restore();
+      }
+
+      drawPlethLine(baseY, ampScale, color, alpha, cycleLength) {
+        const w = this.width;
+        this.ctx.save();
+        this.ctx.strokeStyle = color;
+        this.ctx.globalAlpha = alpha;
+        this.ctx.lineWidth = 2.4;
+        this.ctx.shadowBlur = 12;
+        this.ctx.shadowColor = color;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+
+        this.ctx.beginPath();
+        const step = 4;
+        let lastX = 0, lastY = baseY;
+
+        for (let x = 0; x <= w; x += step) {
+          const samplePos = (x + this.phase * 0.9) % (cycleLength * 4);
+          let offset = 0;
+          const mod = samplePos;
+
+          if (mod < 20) {
+            // Rapid systolic rise
+            const prog = mod / 20;
+            offset = -Math.sin(prog * Math.PI * 0.5) * 45 * ampScale;
+          } else if (mod < 40) {
+            // Systolic decline to dicrotic notch
+            const prog = (mod - 20) / 20;
+            offset = -45 * ampScale + (prog * 20 * ampScale);
+          } else if (mod < 55) {
+            // Dicrotic wave bump
+            const prog = (mod - 40) / 15;
+            offset = -25 * ampScale - Math.sin(prog * Math.PI) * 8 * ampScale;
+          } else if (mod < 100) {
+            // Diastolic runoff
+            const prog = (mod - 55) / 45;
+            offset = -25 * ampScale + (prog * 25 * ampScale);
+          }
+
+          const y = baseY + offset;
+          if (x === 0) this.ctx.moveTo(x, y);
+          else this.ctx.lineTo(x, y);
+
+          lastX = x;
+          lastY = y;
+        }
+        this.ctx.stroke();
+
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.shadowBlur = 16;
+        this.ctx.shadowColor = color;
+        this.ctx.beginPath();
+        this.ctx.arc(lastX, lastY, 3.5, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        this.ctx.restore();
+      }
+    }
+
+    /* Confetti Particle Burst Engine */
+    class ConfettiEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
+        this.particles = [];
+        this.init();
+      }
+
+      init() {
+        if (!this.canvas || !this.ctx) return;
+        const resize = () => {
+          const dpr = window.devicePixelRatio || 1;
+          this.canvas.width = window.innerWidth * dpr;
+          this.canvas.height = window.innerHeight * dpr;
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+          this.ctx.scale(dpr, dpr);
+        };
+        resize();
+        window.addEventListener('resize', resize);
+        this.loop();
+      }
+
+      burst(x, y) {
+        const colors = ['#10B981', '#38BDF8', '#F59E0B', '#FFFFFF', '#EC4899', '#A855F7', '#3B82F6'];
+        for (let i = 0; i < 110; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 14 + 5;
+          this.particles.push({
+            x: x,
+            y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 9 + 4,
+            rotation: Math.random() * 360,
+            rotationSpeed: (Math.random() - 0.5) * 20,
+            alpha: 1.0,
+            gravity: 0.35
+          });
+        }
+      }
+
+      loop() {
+        const animate = () => {
+          if (this.ctx && this.particles.length > 0) {
+            this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+              const p = this.particles[i];
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vy += p.gravity;
+              p.vx *= 0.98;
+              p.rotation += p.rotationSpeed;
+              p.alpha -= 0.015;
+
+              if (p.alpha <= 0) {
+                this.particles.splice(i, 1);
+                continue;
+              }
+
+              this.ctx.save();
+              this.ctx.globalAlpha = p.alpha;
+              this.ctx.translate(p.x, p.y);
+              this.ctx.rotate((p.rotation * Math.PI) / 180);
+              this.ctx.fillStyle = p.color;
+              this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+              this.ctx.restore();
+            }
+          }
+          requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+      }
+    }
+
+    let globalConfetti = null;
+    let globalBgEcg = null;
+
     class ECGCanvasEngine {
       constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
@@ -2366,79 +3100,111 @@
       constructor() {
         this.stream = null;
         this.analyser = null;
-        this.zeroGain = null;
-        this.gainFactor = 1.0;
-        this.recognition = null;
-        this.isSttRunning = false;
+        this.processor = null;
+        this.source = null;
+        this.gainFactor = 1.8;
+        this.lastRawPeak = 0;
+        this.heldClapPeak = 0;
         this.lastClapTimestamp = 0;
         this.byteTimeData = null;
         this.byteFreqData = null;
-        this.noiseFloor = 0.05;
-        this.cprClapSensitivity = 0.05;
+        this.cprClapSensitivity = 0.04;
         this.onResultCallback = null;
+        this.isSttRunning = false;
+        this.recognition = null;
       }
 
-      async ensureMicLive(timeoutMs = 2000) {
-        if (window._analyser && window._micStream && window._micStream.active) {
-          const track = window._micStream.getAudioTracks()[0];
+      async ensureMicLive(force = false) {
+        if (!force && this.stream && this.processor) {
+          const track = this.stream.getAudioTracks()[0];
           if (track && track.readyState === 'live' && track.enabled) {
-            this.stream = window._micStream;
-            this.analyser = window._analyser;
             return true;
           }
         }
         try {
-          SoundEngine.initAndResume();
-          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            console.warn('getUserMedia not supported');
-            return false;
+          if (SoundEngine.ctx && SoundEngine.ctx.state === 'suspended') {
+            await SoundEngine.ctx.resume();
           }
-          const micPromise = navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: false,
-              noiseSuppression: false,
-              autoGainControl: false
-            }
-          });
-          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Mic timeout')), timeoutMs));
-          const stream = await Promise.race([micPromise, timeoutPromise]);
 
-          window._micStream = stream;
+          if (this.stream) {
+            try { this.stream.getTracks().forEach(t => t.stop()); } catch(e) {}
+          }
+          if (this.processor) {
+            try { this.processor.disconnect(); } catch(e) {}
+            this.processor = null;
+          }
+          if (this.source) {
+            try { this.source.disconnect(); } catch(e) {}
+            this.source = null;
+          }
+
+          // Simple audio: true is 100% compatible with Safari & Chrome without OverconstrainedError
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           this.stream = stream;
+          window._micStream = stream;
 
           const source = SoundEngine.ctx.createMediaStreamSource(stream);
+          this.source = source;
           window._micSource = source;
 
           const analyser = SoundEngine.ctx.createAnalyser();
-          analyser.fftSize = 1024;
-          analyser.smoothingTimeConstant = 0.2;
-          window._analyser = analyser;
+          analyser.fftSize = 512;
+          analyser.smoothingTimeConstant = 0.1;
           this.analyser = analyser;
+          window._analyser = analyser;
           this.byteTimeData = new Uint8Array(analyser.fftSize);
           this.byteFreqData = new Uint8Array(analyser.frequencyBinCount);
 
-          // Safari WebKit Graph Fix: connect analyser to destination with near-zero gain
+          // Continuous sample-level ScriptProcessor: catches 100% of 15ms hand-clap impulses!
+          const processor = SoundEngine.ctx.createScriptProcessor(1024, 1, 1);
+          this.processor = processor;
+          window._processor = processor;
+
+          this.lastRawPeak = 0;
+          this.heldClapPeak = 0;
+
+          processor.onaudioprocess = (e) => {
+            const input = e.inputBuffer.getChannelData(0);
+            let peak = 0;
+            for (let i = 0; i < input.length; i++) {
+              const abs = Math.abs(input[i]);
+              if (abs > peak) peak = abs;
+            }
+            this.lastRawPeak = peak;
+            // Peak hold with decay envelope
+            if (peak > this.heldClapPeak) {
+              this.heldClapPeak = peak;
+            } else {
+              this.heldClapPeak *= 0.88;
+            }
+          };
+
           const zeroGain = SoundEngine.ctx.createGain();
-          zeroGain.gain.value = 0.0001;
+          zeroGain.gain.value = 0.00001;
           this.zeroGain = zeroGain;
+
           source.connect(analyser);
-          analyser.connect(zeroGain);
+          source.connect(processor);
+          processor.connect(zeroGain);
           zeroGain.connect(SoundEngine.ctx.destination);
 
           return true;
         } catch(e) {
-          console.warn('Microphone permission or timeout:', e);
+          console.warn('ensureMicLive failed:', e);
           return false;
         }
       }
 
       async testMicAccess() {
-        const ok = await this.ensureMicLive();
+        const ok = await this.ensureMicLive(true);
         showToast(ok ? '🎙️ ไมโครโฟนพร้อมใช้งาน รับเสียงชัดเจนค่ะ' : '⚠️ ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ค่ะ');
       }
 
       getRawRMS() {
-        if (!this.analyser) return 0;
+        if (!this.analyser) {
+          if (window._analyser) this.analyser = window._analyser;
+          else return this.heldClapPeak || this.lastRawPeak || 0;
+        }
         if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
         this.analyser.getByteTimeDomainData(this.byteTimeData);
         let sumSquares = 0;
@@ -2446,63 +3212,46 @@
           const norm = (this.byteTimeData[i] - 128) / 128;
           sumSquares += norm * norm;
         }
-        return Math.sqrt(sumSquares / this.byteTimeData.length);
+        const rms = Math.sqrt(sumSquares / this.byteTimeData.length);
+        return Math.max(rms, (this.heldClapPeak || 0) * 0.7);
       }
 
       getCalibratedDecibels() {
-        const rms = this.getRawRMS();
-        // Calibrate linearly from 10 dB up to 100 dB
-        const db = Math.min(100, Math.max(10, Math.round(10 + (rms * 260 * this.gainFactor))));
-        return { raw: rms * this.gainFactor, db };
+        const raw = this.getRawRMS() * this.gainFactor;
+        const db = Math.min(100, Math.max(10, Math.round(10 + (raw * 240))));
+        return { raw, db };
       }
 
-      // Fix #3: Ultra-Responsive Hand Clap Detector (No Blind Spot, Low-Threshold Ready)
+      // Continuous sample-level hand clap & transient detector
       getClapSpikeData() {
-        if (!this.analyser) {
-          if (window._analyser) this.analyser = window._analyser;
-          else return { spike: 0, isClap: false };
+        if (!this.processor && !this._isConnecting) {
+          this._isConnecting = true;
+          this.ensureMicLive(false).finally(() => { this._isConnecting = false; });
+        }
+        const samplePeak = this.heldClapPeak || this.lastRawPeak || 0;
+        let analyserPeak = 0;
+        if (this.analyser) {
+          if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
+          this.analyser.getByteTimeDomainData(this.byteTimeData);
+          let maxDev = 0;
+          for (let i = 0; i < this.byteTimeData.length; i++) {
+            const dev = Math.abs(this.byteTimeData[i] - 128);
+            if (dev > maxDev) maxDev = dev;
+          }
+          analyserPeak = maxDev / 128;
         }
 
-        if (SoundEngine.ctx && SoundEngine.ctx.state === 'suspended') {
-          SoundEngine.ctx.resume().catch(() => {});
-        }
-
-        // 1. Time domain waveform deviation (peak amplitude)
-        if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
-        this.analyser.getByteTimeDomainData(this.byteTimeData);
-        let maxDev = 0;
-        for (let i = 0; i < this.byteTimeData.length; i++) {
-          const dev = Math.abs(this.byteTimeData[i] - 128);
-          if (dev > maxDev) maxDev = dev;
-        }
-        const peak = (maxDev / 128) * this.gainFactor;
-
-        // 2. Frequency domain broadband burst (claps have wide spectrum energy)
-        if (!this.byteFreqData) this.byteFreqData = new Uint8Array(this.analyser.frequencyBinCount);
-        this.analyser.getByteFrequencyData(this.byteFreqData);
-        let freqEnergy = 0;
-        const maxBins = Math.min(220, this.byteFreqData.length);
-        for (let i = 2; i < maxBins; i++) {
-          freqEnergy += this.byteFreqData[i];
-        }
-        const avgEnergy = (freqEnergy / (maxBins - 2)) / 255;
-
-        // Combined clap score (0.0 to 1.0)
-        const clapSpike = Math.min(1.0, Math.max(peak * 2.2, avgEnergy * 2.5));
-
+        const spike = Math.min(1.0, Math.max(samplePeak * 2.5, analyserPeak * 2.2) * (this.gainFactor || 1.8));
+        const threshold = this.cprClapSensitivity || 0.04;
         const now = performance.now();
-        // Default sensitivity 0.05 (responsive and sensitive to real room claps)
-        const threshold = this.cprClapSensitivity || 0.05;
-        const isClap = clapSpike >= threshold;
-        const cooldownPassed = (now - this.lastClapTimestamp) > 175; // allow up to 320 BPM
-
+        const isClap = spike >= threshold;
         let triggered = false;
-        if (isClap && cooldownPassed) {
+        if (isClap && (now - this.lastClapTimestamp) > 190) {
           this.lastClapTimestamp = now;
+          this.heldClapPeak = 0; // reset consumed peak
           triggered = true;
         }
-
-        return { spike: clapSpike, isClap: triggered };
+        return { spike, isClap: triggered };
       }
 
       startSpeechRecognition(onResultCallback) {
@@ -2663,64 +3412,106 @@
         this.isStageChoiceLocked = false;
       }
 
-      init() {
+            init() {
+        document.body.classList.add('lobby-mode');
         this.startSessionTimer();
         window.ECGEngine = new ECGCanvasEngine('ecgCanvas');
+        globalBgEcg = new BackgroundECGEngine('bgEcgCanvas');
+        globalConfetti = new ConfettiEngine('confettiCanvas');
         this.bindEvents();
       }
 
-      // Fix #1: Slot-Machine Roulette Animation with Ticking Clicks & Pop
+      // V6.3: Cinematic 3D Slot Machine Reel with Fast Snappy Deceleration (2.0s) & Confetti Burst
       pickRandomTeam() {
         if (this.isRandomizingTeam) return;
         this.isRandomizingTeam = true;
+
+        // Force-unlock Web Audio AudioContext immediately on user gesture!
+        try { SoundEngine.initAndResume(); } catch(e) {}
+
+        const viewport = document.getElementById('slotViewport');
         const badge = document.getElementById('txtTeamBadge');
         const btn = document.getElementById('btnRandomTeam');
-        if (btn) btn.disabled = true;
+        const callout = document.getElementById('txtTeamCallout');
 
-        let spins = 0;
-        const totalSpins = 24;
-        let delay = 35;
+        if (btn) {
+          btn.disabled = true;
+          btn.style.opacity = '0.75';
+          btn.innerText = '🎲 กำลังหมุนสุ่มกลุ่มตัวแทน...';
+        }
+        if (callout) callout.innerText = '';
+        if (viewport) {
+          viewport.classList.remove('winner');
+          viewport.classList.add('spinning');
+        }
 
-        const roll = () => {
-          spins++;
+        // Pick winning group
+        const finalNum = Math.floor(Math.random() * 10) + 1;
+        this.selectedTeam = String(finalNum).padStart(2, '0');
+
+        let step = 0;
+        const totalSteps = 20; // 20 steps = exactly ~2.1 seconds
+        let stepDelay = 35; // starts fast at 35ms
+
+        const tick = () => {
+          step++;
           const tempNum = Math.floor(Math.random() * 10) + 1;
-          const formatted = String(tempNum).padStart(2, '0');
-          if (badge) {
-            badge.innerText = formatted;
-            badge.style.transform = `scale(${1 + Math.random() * 0.15})`;
-          }
-          SoundEngine.playPulseBeep(980 + spins * 32, 0.025);
+          const displayNum = String(tempNum).padStart(2, '0');
 
-          if (spins < totalSpins) {
-            delay += Math.floor(spins * 2.3);
-            setTimeout(roll, delay);
+          if (badge) {
+            badge.innerText = displayNum;
+            badge.style.transform = `scale(${1.0 + Math.random() * 0.15}) translateY(${(Math.random() - 0.5) * 6}px)`;
+          }
+
+          // Mechanical high-tech ticker audio beep
+          try { SoundEngine.playPulseBeep(880 + (step * 28), 0.025); } catch(e) {}
+
+          if (step < totalSteps) {
+            stepDelay += 8; // smooth deceleration curve
+            setTimeout(tick, stepDelay);
           } else {
-            const finalNum = Math.floor(Math.random() * 10) + 1;
-            this.selectedTeam = String(finalNum).padStart(2, '0');
+            // WINNER LAND!
             if (badge) {
               badge.innerText = this.selectedTeam;
-              badge.style.transform = 'scale(1.3)';
-              badge.style.color = '#10B981';
+              badge.style.transform = 'scale(1.35)';
+              badge.classList.add('active-winner');
               setTimeout(() => {
-                badge.style.transform = 'scale(1)';
-                badge.style.color = '#38BDF8';
-              }, 450);
+                if (badge) badge.style.transform = 'scale(1.15)';
+              }, 400);
             }
-            SoundEngine.playStageClear();
-            this.isRandomizingTeam = false;
-            if (btn) btn.disabled = false;
+            if (viewport) {
+              viewport.classList.remove('spinning');
+              viewport.classList.add('winner');
+            }
 
-            const callout = document.getElementById('txtTeamCallout');
+            // Confetti burst from viewport position
+            if (globalConfetti && viewport) {
+              const rect = viewport.getBoundingClientRect();
+              globalConfetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            }
+
+            // Play stage clear chime
+            try { SoundEngine.playStageClear(); } catch(e) {}
+
             if (callout) {
-              callout.innerHTML = `📢 ขอเชิญตัวแทนกลุ่มที่ <strong style="color:#10B981; font-size:16px;">${this.selectedTeam}</strong> ออกมาเตรียมพร้อมด้านหน้าเวทีได้เลยค่ะ!`;
+              callout.innerHTML = `🎉 กลุ่มตัวแทนที่ได้: <strong style="color:#10B981; font-size:18px;">กลุ่มที่ ${this.selectedTeam}</strong> &bull; ขอเชิญออกมาด้านหน้าได้เลยค่ะ!`;
             }
 
-            // Fix #1: AI voice announcement inviting representative team
+            if (btn) {
+              btn.disabled = false;
+              btn.style.opacity = '1';
+              btn.innerText = '🎲 [ สุ่มกลุ่มใหม่อีกครั้ง ]';
+            }
+
+            this.isRandomizingTeam = false;
+
+            // Thai AI Voice Invitation
             const teamNum = parseInt(this.selectedTeam, 10);
             speakAndWait(`ได้กลุ่มที่ ${teamNum} ค่ะ! ขอเชิญน้องตัวแทนกลุ่มที่ ${teamNum} ออกมาเตรียมพร้อมกู้ชีพด้านหน้าได้เลยค่ะ!`);
           }
         };
-        roll();
+
+        tick();
       }
 
       startSessionTimer() {
@@ -2764,6 +3555,14 @@
         this.isStageChoiceLocked = false;
         speechDebouncer.clear();
         MicSensor.stopSpeechRecognition();
+
+        if (newStage > 0) {
+          document.body.classList.remove('lobby-mode');
+          const ml = document.getElementById('modalLobby');
+          if (ml) { ml.style.display = 'none'; ml.classList.add('hidden-modal'); }
+          const bgCanvas = document.getElementById('bgEcgCanvas');
+          if (bgCanvas) bgCanvas.style.opacity = '0.18';
+        }
 
         // Update Nav step pills
         for (let i = 0; i <= 6; i++) {
@@ -2842,7 +3641,7 @@
         const card = document.getElementById('stageMainCard');
         if (!card) return;
 
-        // Stage 1: Scene Safety (Voice + Click with Debounced Silence Detection)
+        // Stage 1: Scene Safety (No Clutter, Big Bold Choices)
         if (this.currentStage === 1) {
           card.innerHTML = `
             <div>
@@ -2861,76 +3660,39 @@
                 </div>
               </div>
 
-              <!-- Briefing Strip -->
-              <div class="scene-briefing-strip">
-                <div class="scene-brief-pill">
-                  <span class="scene-brief-icon">🚗</span>
-                  <div>
-                    <div class="scene-brief-lbl font-technical">เหตุการณ์</div>
-                    <div class="scene-brief-val">รถเก๋งชนรั้วทางเท้า มีกลุ่มควัน</div>
-                  </div>
-                </div>
-                <div class="scene-brief-pill warning">
-                  <span class="scene-brief-icon">⚠️</span>
-                  <div>
-                    <div class="scene-brief-lbl font-technical">จุดอันตรายรอบตัว</div>
-                    <div class="scene-brief-val">ควันจากเครื่องยนต์, รถวิ่งผ่านด้วยความเร็ว</div>
-                  </div>
-                </div>
-                <div class="scene-brief-pill success">
-                  <span class="scene-brief-icon">🛡️</span>
-                  <div>
-                    <div class="scene-brief-lbl font-technical">หลักการสากล</div>
-                    <div class="scene-brief-val">SCENE SAFETY: ผู้ช่วยเหลือต้องปลอดภัยก่อน</div>
-                  </div>
-                </div>
-              </div>
-
-              <h2 class="stage-headline-clean">
+              <h2 class="stage-headline-clean" style="font-size:26px; margin-top:14px;">
                 พบผู้บาดเจ็บติดอยู่ในรถเก๋งที่ชนรั้วข้างทาง มีกลุ่มควันพุ่งออกจากฝากระโปรงรถ:
               </h2>
-              <p class="stage-sub-clean">
+              <p class="stage-sub-clean" style="font-size:16px;">
                 สิ่งแรกที่ผู้ช่วยเหลือต้องปฏิบัติก่อนเข้าประเมินผู้ป่วยคือข้อใด? (พูดใส่ไมค์ หรือ คลิกเลือกคำตอบ)
               </p>
             </div>
 
-            <div class="clean-choices-grid">
-              <button id="choice1_1" onclick="GameStateManager.handleStage1Choice(1)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">1</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">รีบวิ่งเข้าไปกระชากเปิดประตูรถเพื่อดึงคนเจ็บออกมาทันที</div>
-                  <div class="choice-desc-clean">เข้าช่วยเหลือโดยไม่ดูความปลอดภัยรอบตัว</div>
-                </div>
+            <div class="clean-choices-grid-v2">
+              <button id="choice1_1" onclick="GameStateManager.handleStage1Choice(1)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">1</div>
+                <div class="choice-title-v2">รีบวิ่งเข้าไปกระชากเปิดประตูรถเพื่อดึงคนเจ็บออกมาทันที</div>
               </button>
 
-              <button id="choice1_2" onclick="GameStateManager.handleStage1Choice(2)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">2</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">ประเมินความปลอดภัย ดับเครื่องรถ เปิดไฟฉุกเฉิน และกั้นพื้นที่</div>
-                  <div class="choice-desc-clean">Scene Safety: ผู้ช่วยเหลือต้องปลอดภัยก่อนเสมอ</div>
-                </div>
+              <button id="choice1_2" onclick="GameStateManager.handleStage1Choice(2)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout" style="border-color:#10B981; color:#10B981;">2</div>
+                <div class="choice-title-v2">ประเมินความปลอดภัย ดับเครื่องรถ เปิดไฟฉุกเฉิน และกั้นพื้นที่</div>
               </button>
 
-              <button id="choice1_3" onclick="GameStateManager.handleStage1Choice(3)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">3</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">มุดเข้าไปในรถเพื่อทำแผลและพันผ้าห้ามเลือดให้คนเจ็บทันที</div>
-                  <div class="choice-desc-clean">เสี่ยงต่อเพลิงไหม้และโครงสร้างรถยุบตัว</div>
-                </div>
+              <button id="choice1_3" onclick="GameStateManager.handleStage1Choice(3)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">3</div>
+                <div class="choice-title-v2">มุดเข้าไปในรถเพื่อทำแผลและพันผ้าห้ามเลือดให้คนเจ็บทันที</div>
               </button>
 
-              <button id="choice1_4" onclick="GameStateManager.handleStage1Choice(4)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">4</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">ใช้ก้อนหินทุบกระจกหน้ารถให้แตกเพื่อระบายควัน</div>
-                  <div class="choice-desc-clean">เศษกระจกอาจบาดคนเจ็บและเสี่ยงประกายไฟ</div>
-                </div>
+              <button id="choice1_4" onclick="GameStateManager.handleStage1Choice(4)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">4</div>
+                <div class="choice-title-v2">ใช้ก้อนหินทุบกระจกหน้ารถให้แตกเพื่อระบายควัน</div>
               </button>
             </div>
           `;
         }
 
-        // Stage 2: Alert / Shout (Fix #4: User-Adjustable Threshold Slider & Dual-Bar UI)
+        // Stage 2: Alert / Shout (Required: Words Matched + Volume Reached + Speech Finished)
         else if (this.currentStage === 2) {
           card.innerHTML = `
             <div>
@@ -2939,57 +3701,46 @@
                 <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
                 <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ 🔊 ฟังซ้ำ ]</button>
               </div>
-              <h2 class="stage-headline-clean">
+              <h2 class="stage-headline-clean" style="font-size:26px;">
                 เคลื่อนย้ายผู้ป่วยมานอนราบในจุดปลอดภัยแล้ว ตบไหล่เรียกไม่ตอบสนอง!
               </h2>
-              <p class="stage-sub-clean">
-                ให้น้องตัวแทนและเพื่อนๆ ทั้งห้อง <strong style="color:var(--amber-warn);">ช่วยกันตะโกนข้อความนี้ออกมาดังๆ พร้อมกันให้ทะลุขีดเป้าหมาย!</strong>
+              <p class="stage-sub-clean" style="font-size:16px;">
+                ตะโกนขอความช่วยเหลือใส่ไมค์ให้ <strong style="color:#10B981;">ถูกต้องคำพูด</strong> และ <strong style="color:var(--amber-warn);">เสียงดังทะลุเกณฑ์เป้าหมาย</strong> (พูดให้จบประโยค):
               </p>
             </div>
 
             <div class="shout-box-clean">
-              <div class="shout-target-banner">
-                <div class="shout-banner-phrase">
-                  🗣️ "ช่วยด้วย! มีคนหมดสติ ช่วยโทร 1669 และเอาเครื่อง AED มาด้วย!"
-                </div>
-                <div id="txtSpeechDetectedBadge" class="shout-banner-hint font-technical" style="display:none;">
-                  ✓ ได้ยินคำพูดแล้ว แต่ต้องตะโกนให้ดังเกินขีดเป้าหมายด้วยค่ะ!
+              <div class="shout-target-banner" style="padding:16px 20px;">
+                <div class="shout-banner-phrase" style="font-size:20px; font-weight:800;">
+                  🗣️ "ช่วยด้วย! มีคนหมดสติ ช่วยโทร 1669 และเอา AED มาด้วย!"
                 </div>
               </div>
 
-              <!-- 3-Element Breakdown Cards (V6.2 UX Fill) -->
-              <div class="shout-elements-row">
-                <div class="shout-element-card">
-                  <div class="shout-el-num num-readout">1</div>
-                  <div class="shout-el-text">
-                    <div class="shout-el-title font-technical">ตะโกนขอความช่วยเหลือ</div>
-                    <div class="shout-el-desc">“ช่วยด้วย!” เพื่อดึงความสนใจคนรอบข้าง</div>
-                  </div>
+              <!-- Live Keyword Detection Badges -->
+              <div class="kw-chips-row">
+                <div id="chipKwHelp" class="kw-chip">
+                  <span>📢 1. มีคำว่า "ช่วยด้วย!"</span>
                 </div>
-                <div class="shout-element-card">
-                  <div class="shout-el-num num-readout">2</div>
-                  <div class="shout-el-text">
-                    <div class="shout-el-title font-technical">ระบุอาการผู้ป่วย</div>
-                    <div class="shout-el-desc">“มีคนหมดสติ!” แจ้งความเร่งด่วนของอาการ</div>
-                  </div>
+                <div id="chipKwUnc" class="kw-chip">
+                  <span>👤 2. มีคำว่า "มีคนหมดสติ!"</span>
                 </div>
-                <div class="shout-element-card">
-                  <div class="shout-el-num num-readout">3</div>
-                  <div class="shout-el-text">
-                    <div class="shout-el-title font-technical">สั่งอุปกรณ์ช่วยชีวิต</div>
-                    <div class="shout-el-desc">“โทร 1669 และนำเครื่อง AED มา!”</div>
-                  </div>
+                <div id="chipKwAed" class="kw-chip">
+                  <span>🚑 3. มีคำว่า "โทร 1669 / เอา AED มา!"</span>
                 </div>
               </div>
 
-              <!-- Threshold Slider Control (10–85 dB - Fix #2) -->
+              <div id="txtStage2LiveTranscript" class="live-transcript-box font-technical" style="text-align:center; min-height:36px; padding:8px 16px; font-size:15px; color:#38BDF8;">
+                🎙️ รอฟังเสียงพูด... ตะโกนใส่ไมค์ได้เลยค่ะ!
+              </div>
+
+              <!-- Threshold Slider Control (10–85 dB) -->
               <div class="threshold-slider-control">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <span class="font-technical" style="font-size:12px; color:#94A3B8;">
                     🎯 เกณฑ์ความดังเป้าหมาย: <strong id="lblThresholdVal" style="color:#10B981;">${this.stage2ThresholdDb} dB</strong>
                   </span>
                   <div class="threshold-presets" style="display:flex; gap:6px;">
-                    <button onclick="GameStateManager.setStage2Threshold(20)" class="preset-pill font-technical ${this.stage2ThresholdDb === 20 ? 'active' : ''}">ไมค์เบา/กระซิบ (20 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(20)" class="preset-pill font-technical ${this.stage2ThresholdDb === 20 ? 'active' : ''}">ไมค์เบา (20 dB)</button>
                     <button onclick="GameStateManager.setStage2Threshold(45)" class="preset-pill font-technical ${this.stage2ThresholdDb === 45 ? 'active' : ''}">ห้องเรียน (45 dB)</button>
                     <button onclick="GameStateManager.setStage2Threshold(60)" class="preset-pill font-technical ${this.stage2ThresholdDb === 60 ? 'active' : ''}">มาตรฐาน (60 dB)</button>
                     <button onclick="GameStateManager.setStage2Threshold(75)" class="preset-pill font-technical ${this.stage2ThresholdDb === 75 ? 'active' : ''}">ตะโกนดัง (75 dB)</button>
@@ -2998,34 +3749,23 @@
                 <input type="range" id="sliderStage2Threshold" min="10" max="85" value="${this.stage2ThresholdDb}" oninput="GameStateManager.setStage2Threshold(this.value)" class="slider-clean">
               </div>
 
-              <!-- Bar 1: Live Acoustic Volume -->
+              <!-- Live Acoustic Volume Bar -->
               <div class="meter-block">
                 <div class="meter-header-row">
                   <span class="meter-title font-technical">หลอดวัดความดังเสียงสด (LIVE ACOUSTIC VOLUME)</span>
                   <div style="display:flex; align-items:baseline; gap:8px;">
-                    <span id="txtLiveStatusHint" class="font-technical" style="font-size:12.5px; color:#38BDF8;">กำลังฟังเสียงพูด...</span>
+                    <span id="txtLiveStatusHint" class="font-technical" style="font-size:13px; color:#38BDF8;">กำลังฟังเสียงพูด...</span>
                     <span id="txtLiveDecibel" class="num-readout meter-value-txt" style="color:#38BDF8;">-- dB</span>
                   </div>
                 </div>
-                <div class="meter-track-container">
-                  <div id="liveDbBarFill" class="meter-bar-fill" style="background:#38BDF8;"></div>
-                  <div id="dynamicTargetLine" class="target-line-dynamic" style="left:${((this.stage2ThresholdDb - 40) / 70) * 100}%;"></div>
-                  <span id="dynamicTargetLabel" class="target-line-label font-technical" style="left:calc(${((this.stage2ThresholdDb - 40) / 70) * 100}% + 6px);">${this.stage2ThresholdDb} dB TARGET</span>
-                </div>
-              </div>
-
-              <!-- Bar 2: Sustained Loudness Charge -->
-              <div class="meter-block">
-                <div class="meter-header-row">
-                  <span class="meter-title font-technical">หลอดสะสมพลังเสียงกู้ชีพ (ตะโกนต่อเนื่องให้เต็ม 100%)</span>
-                  <span id="txtShoutChargePct" class="num-readout meter-value-txt" style="color:#10B981;">0%</span>
-                </div>
                 <div class="meter-track-container" style="height:22px;">
-                  <div id="shoutChargeBarFill" class="meter-bar-fill" style="background:#10B981;"></div>
+                  <div id="liveDbBarFill" class="meter-bar-fill" style="background:#38BDF8;"></div>
+                  <div id="dynamicTargetLine" class="target-line-dynamic" style="left:${((this.stage2ThresholdDb - 10) / 75) * 100}%;"></div>
+                  <span id="dynamicTargetLabel" class="target-line-label font-technical" style="left:calc(${((this.stage2ThresholdDb - 10) / 75) * 100}% + 6px);">${this.stage2ThresholdDb} dB TARGET</span>
                 </div>
               </div>
 
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
                 <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#94A3B8;">
                   <span class="font-technical">ความไวไมค์:</span>
                   <span id="txtMicGainLabel" class="num-readout" style="color:#38BDF8; font-weight:700;">1.0x</span>
@@ -3033,7 +3773,7 @@
                   <button onclick="GameStateManager.adjustMicGain(0.2)" class="nav-btn" style="height:26px; padding:0 8px;">+</button>
                   <button onclick="MicSensor.testMicAccess()" class="nav-btn font-technical" style="height:26px; font-size:11px;">🎙️ ทดสอบไมค์</button>
                 </div>
-                <button onclick="GameStateManager.advanceStage2Complete()" class="nav-btn font-technical" style="background:#0F172A; color:#10B981; border-color:#10B981; height:32px;">
+                <button onclick="GameStateManager.advanceStage2Complete()" class="nav-btn font-technical" style="background:#0F172A; color:#10B981; border-color:#10B981; height:34px;">
                   ⚡ พิธีกรกดให้ผ่านทันที [SPACEBAR]
                 </button>
               </div>
@@ -3112,7 +3852,7 @@
           `;
         }
 
-        // Stage 4: Breathing Assessment (Fix #6: Debounced Voice Choice)
+        // Stage 4: Breathing Assessment (Action Choices Only, No Clutter)
         else if (this.currentStage === 4) {
           card.innerHTML = `
             <div>
@@ -3126,77 +3866,33 @@
               <div class="voice-answer-bar">
                 <div class="voice-bar-icon">🎙️</div>
                 <div class="voice-bar-text">
-                  <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–3" หรือบอกการประเมินใส่ไมค์ได้เลย (หรือคลิกการ์ดด้านล่าง)</div>
+                  <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–3" หรือบอกการกระทำใส่ไมค์ได้เลย (หรือคลิกการ์ดด้านล่าง)</div>
                   <div id="txtLiveVoiceChoice" class="voice-bar-transcript">⏳ กำลังฟังเสียงพูด...</div>
                 </div>
               </div>
 
-              <h2 class="stage-headline-clean" style="color:var(--amber-warn);">
+              <h2 class="stage-headline-clean" style="color:var(--amber-warn); font-size:26px; margin-top:16px;">
                 ผู้ป่วยมีเสียงหายใจ “เฮือก... ฮึ่ก...” นานๆ ครั้ง แต่หน้าอกไม่ขยับเลย:
               </h2>
-              <p class="stage-sub-clean">
+              <p class="stage-sub-clean" style="font-size:16px;">
                 ลักษณะนี้คือ <strong style="color:var(--crimson-crit);">Agonal Gasping</strong> ผู้ช่วยเหลือต้องตัดสินใจปฏิบัติอย่างไร? (พูดใส่ไมค์ หรือ คลิกเลือกข้อ)
               </p>
-
-              <!-- Clinical Diagnostic Telemetry HUD Box (V6.2 UX Fill) -->
-              <div class="clinical-telemetry-hud-grid">
-                <div class="diag-hud-card">
-                  <div class="diag-hud-header">
-                    <span class="diag-hud-icon">🫁</span>
-                    <span class="diag-hud-title font-technical">การตรวจประเมินทางกายภาพ (PHYSICAL SIGNS)</span>
-                  </div>
-                  <div class="diag-hud-items">
-                    <div class="diag-hud-row">
-                      <span class="diag-hud-lbl font-technical">การเคลื่อนไหวทรวงอก:</span>
-                      <span class="diag-hud-val" style="color:var(--crimson-crit);">ไม่ขยับขึ้นลง (0 ครั้ง/นาที)</span>
-                    </div>
-                    <div class="diag-hud-row">
-                      <span class="diag-hud-lbl font-technical">ลักษณะเสียงหายใจ:</span>
-                      <span class="diag-hud-val" style="color:var(--amber-warn);">อ้าปากงับอากาศเฮือก (Agonal Respiration)</span>
-                    </div>
-                    <div class="diag-hud-row">
-                      <span class="diag-hud-lbl font-technical">ชีพจรหลอดเลือดแดงใหญ่:</span>
-                      <span class="diag-hud-val" style="color:var(--crimson-crit);">คลำไม่พบชีพจรใน 10 วินาที</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="diag-hud-card rule-highlight">
-                  <div class="diag-hud-header">
-                    <span class="diag-hud-icon">⚠️</span>
-                    <span class="diag-hud-title font-technical">กฎเหล็กทางการแพทย์ (AHA / ERC CPR GUIDELINES)</span>
-                  </div>
-                  <div class="diag-hud-text">
-                    <strong>“Agonal Gasping (หายใจเฮือก) ไม่ใช่การหายใจ!”</strong><br>
-                    เป็นเพียงปฏิกิริยาสะท้อนของก้านสมองเมื่อสมองขาดออกซิเจนเฉียบพลัน ถือเป็น <strong>ภาวะหัวใจหยุดเต้น (Cardiac Arrest) ทันที</strong> ห้ามรอ ห้ามเสียเวลา ต้อง <strong>เริ่มกดหน้าอก CPR ทันที!</strong>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            <div class="clean-choices-grid" style="grid-template-columns: repeat(3, 1fr);">
-              <button id="choice4_1" onclick="GameStateManager.handleStage4Choice(1)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">1</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">ยังหายใจอยู่ ให้นั่งรอรถพยาบาล</div>
-                  <div class="choice-desc-clean">เข้าใจผิดคิดว่าหายใจ เสี่ยงเสียชีวิต</div>
-                </div>
+            <div class="stage4-choices-row">
+              <button id="choice4_1" onclick="GameStateManager.handleStage4Choice(1)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">1</div>
+                <div class="choice-title-v2" style="font-size:22px;">ให้นั่งพักรอรถพยาบาล</div>
               </button>
 
-              <button id="choice4_2" onclick="GameStateManager.handleStage4Choice(2)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout" style="border-color:#10B981; color:#10B981;">2</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">หายใจเฮือก = ไม่หายใจ! เริ่มกดหน้าอก CPR ทันที</div>
-                  <div class="choice-desc-clean">หัวใจหยุดเต้นแล้ว! ต้องเริ่ม CPR ทันที</div>
-                </div>
+              <button id="choice4_2" onclick="GameStateManager.handleStage4Choice(2)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout" style="border-color:#10B981; color:#10B981;">2</div>
+                <div class="choice-title-v2" style="font-size:22px;">เริ่มกดหน้าอก CPR ทันที</div>
               </button>
 
-              <button id="choice4_3" onclick="GameStateManager.handleStage4Choice(3)" class="clean-choice-tile">
-                <div class="choice-badge-slate num-readout">3</div>
-                <div class="choice-content-box">
-                  <div class="choice-title-clean">เอายาดมจ่อจมูกและจับนอนตะแคง</div>
-                  <div class="choice-desc-clean">อันตราย! เสียเวลาทองในการช่วยชีวิต</div>
-                </div>
+              <button id="choice4_3" onclick="GameStateManager.handleStage4Choice(3)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">3</div>
+                <div class="choice-title-v2" style="font-size:22px;">เอายาดมจ่อจมูกและจับนอนตะแคง</div>
               </button>
             </div>
           `;
@@ -3219,30 +3915,7 @@
                   ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทั้ง 10 กลุ่ม <strong style="color:var(--ecg-green);">ช่วยกันปรบมือให้ตรงจังหวะบีต!</strong> (หรือกด [SPACEBAR] / คลิกวงกลม)
                 </p>
 
-                <!-- High-Performance CPR Guidelines -->
-                <div class="cpr-guideline-strip">
-                  <div class="cpr-guide-item">
-                    <span class="cpr-guide-icon">🎯</span>
-                    <div>
-                      <div class="cpr-guide-title font-technical">จังหวะกด (RATE)</div>
-                      <div class="cpr-guide-desc">100–120 ครั้ง/นาที (เป้าหมาย 110 BPM)</div>
-                    </div>
-                  </div>
-                  <div class="cpr-guide-item">
-                    <span class="cpr-guide-icon">📏</span>
-                    <div>
-                      <div class="cpr-guide-title font-technical">ความลึก (DEPTH)</div>
-                      <div class="cpr-guide-desc">5–6 ซม. ตรงกึ่งกลางกระดูกหน้าอก</div>
-                    </div>
-                  </div>
-                  <div class="cpr-guide-item">
-                    <span class="cpr-guide-icon">🔄</span>
-                    <div>
-                      <div class="cpr-guide-title font-technical">คืนตัวสุด (RECOIL)</div>
-                      <div class="cpr-guide-desc">ปล่อยหน้าอกคืนตัวเต็มที่ทุกครั้งที่กด</div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
 
               <div class="cpr-chamber-clean">
@@ -3510,17 +4183,70 @@
         }
       }
 
-      // Stage 2 Mic Tracking
+      // Stage 2 Mic Tracking (Fix #3: Must match Words + Reach dB Loudness + Wait for Speech to Finish)
       startStage2Listening() {
         MicSensor.ensureMicLive().catch(() => {});
-        this.shoutChargeProgress = 0;
+        this.stage2Completed = false;
+        this.stage2MatchedKeywords = { help: false, unconscious: false, dispatchAed: false };
+        this.stage2MaxDbReached = 0;
+        this.stage2SpokeWords = false;
+        this.stage2LoudnessPassed = false;
+        this.latestStage2Transcript = '';
+
+        const updateChips = () => {
+          const pillHelp = document.getElementById('chipKwHelp');
+          const pillUnc = document.getElementById('chipKwUnc');
+          const pillAed = document.getElementById('chipKwAed');
+          if (pillHelp) pillHelp.className = 'kw-chip ' + (this.stage2MatchedKeywords.help ? 'active-matched' : '');
+          if (pillUnc) pillUnc.className = 'kw-chip ' + (this.stage2MatchedKeywords.unconscious ? 'active-matched' : '');
+          if (pillAed) pillAed.className = 'kw-chip ' + (this.stage2MatchedKeywords.dispatchAed ? 'active-matched' : '');
+        };
 
         MicSensor.startSpeechRecognition((transcript) => {
           if (this.currentStage !== 2 || this.stage2Completed || window.isSystemSpeaking) return;
           const val = transcript.toLowerCase();
-          if (val.includes('ช่วย') || val.includes('1669') || val.includes('หมดสติ') || val.includes('aed') || val.includes('เออีดี')) {
-            const hintBadge = document.getElementById('txtSpeechDetectedBadge');
-            if (hintBadge) hintBadge.style.display = 'inline-block';
+          this.latestStage2Transcript = transcript;
+
+          const box = document.getElementById('txtStage2LiveTranscript');
+          if (box) box.innerHTML = `🎙️ ได้ยินเสียง: <strong style="color:#FFF;">"${transcript}"</strong>`;
+
+          if (val.includes('ช่วย') || val.includes('ช่วยด้วย') || val.includes('ช่วยเหลือ')) {
+            this.stage2MatchedKeywords.help = true;
+          }
+          if (val.includes('หมดสติ') || val.includes('ไม่รู้สึกตัว') || val.includes('เป็นลม') || val.includes('ไม่ตื่น') || val.includes('คนเจ็บ')) {
+            this.stage2MatchedKeywords.unconscious = true;
+          }
+          if (val.includes('1669') || val.includes('aed') || val.includes('เออีดี') || val.includes('รถพยาบาล') || val.includes('เครื่อง')) {
+            this.stage2MatchedKeywords.dispatchAed = true;
+          }
+          updateChips();
+
+          const count = (this.stage2MatchedKeywords.help ? 1 : 0) +
+                        (this.stage2MatchedKeywords.unconscious ? 1 : 0) +
+                        (this.stage2MatchedKeywords.dispatchAed ? 1 : 0);
+
+          if (count >= 2 || (this.stage2MatchedKeywords.help && (this.stage2MatchedKeywords.unconscious || this.stage2MatchedKeywords.dispatchAed))) {
+            this.stage2SpokeWords = true;
+          }
+
+          // Debounced wait for speech to finish!
+          if (this.stage2SpokeWords && this.stage2LoudnessPassed) {
+            const hint = document.getElementById('txtLiveStatusHint');
+            if (hint) {
+              hint.innerText = '🔥 คำพูดถูกต้องและเสียงดังทะลุเกณฑ์แล้ว... (กำลังรอฟังจบประโยค)';
+              hint.style.color = '#10B981';
+            }
+            speechDebouncer.debounce(() => {
+              if (this.currentStage === 2 && !this.stage2Completed && this.stage2SpokeWords && this.stage2LoudnessPassed) {
+                this.completeStage2();
+              }
+            }, 1200);
+          } else if (this.stage2SpokeWords && !this.stage2LoudnessPassed) {
+            const hint = document.getElementById('txtLiveStatusHint');
+            if (hint) {
+              hint.innerText = `⚠️ ได้ยินคำพูดแล้ว แต่เสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้!`;
+              hint.style.color = '#F59E0B';
+            }
           }
         });
 
@@ -3529,57 +4255,45 @@
 
           if (!window.isSystemSpeaking) {
             const { raw, db } = MicSensor.getCalibratedDecibels();
+            if (db > this.stage2MaxDbReached) this.stage2MaxDbReached = db;
 
             const txtDb = document.getElementById('txtLiveDecibel');
             const txtHint = document.getElementById('txtLiveStatusHint');
             const barLive = document.getElementById('liveDbBarFill');
 
             if (txtDb) txtDb.innerText = `${db} dB`;
-
-            const livePct = Math.min(100, Math.max(0, ((db - 40) / 70) * 100));
-            if (barLive) barLive.style.width = `${livePct}%`;
+            const pct = Math.min(100, Math.max(0, ((db - 10) / 75) * 100));
+            if (barLive) barLive.style.width = `${pct}%`;
 
             const target = this.stage2ThresholdDb;
-            if (db < target - 7) {
-              if (barLive) barLive.style.background = '#38BDF8';
-              if (txtDb) txtDb.style.color = '#38BDF8';
-              if (txtHint) {
-                txtHint.innerText = `อีก ${target - db} dB จะถึงเกณฑ์! ตะโกนให้ดังขึ้นอีก!`;
-                txtHint.style.color = '#38BDF8';
-              }
-            } else if (db < target) {
-              if (barLive) barLive.style.background = '#F59E0B';
-              if (txtDb) txtDb.style.color = '#F59E0B';
-              if (txtHint) {
-                txtHint.innerText = `เกือบถึงแล้ว! อีก ${target - db} dB ตะโกนพร้อมกันให้สุดเสียง!`;
-                txtHint.style.color = '#F59E0B';
-              }
-            } else {
-              // Exceeded target threshold
+            if (db >= target) {
+              this.stage2LoudnessPassed = true;
               if (barLive) barLive.style.background = '#10B981';
               if (txtDb) txtDb.style.color = '#10B981';
-              if (txtHint) {
-                txtHint.innerText = '🔥 ดังทะลุเกณฑ์แล้ว! ค้างระดับเสียงไว้!';
-                txtHint.style.color = '#10B981';
+
+              if (this.stage2SpokeWords) {
+                if (txtHint) {
+                  txtHint.innerText = '🔥 เสียงดังทะลุเกณฑ์และคำพูดถูกต้องแล้ว... (กำลังรอฟังจบประโยค)';
+                  txtHint.style.color = '#10B981';
+                }
+                speechDebouncer.debounce(() => {
+                  if (this.currentStage === 2 && !this.stage2Completed && this.stage2SpokeWords && this.stage2LoudnessPassed) {
+                    this.completeStage2();
+                  }
+                }, 1200);
+              } else {
+                if (txtHint) {
+                  txtHint.innerText = '⚠️ เสียงดังดีมาก! แต่ต้องพูดคำว่า "ช่วยด้วย! มีคนหมดสติ โทร 1669 เอา AED มา" ให้ถูกต้องด้วยค่ะ!';
+                  txtHint.style.color = '#38BDF8';
+                }
               }
-            }
-
-            // Accumulate charge when db >= target
-            if (db >= target || raw >= 0.15) {
-              this.shoutChargeProgress = Math.min(1.0, this.shoutChargeProgress + 0.026); // ~1.2s
-            } else {
-              this.shoutChargeProgress = Math.max(0, this.shoutChargeProgress - 0.009);
-            }
-
-            const chargePct = Math.min(100, Math.round(this.shoutChargeProgress * 100));
-            const barCharge = document.getElementById('shoutChargeBarFill');
-            const txtCharge = document.getElementById('txtShoutChargePct');
-            if (barCharge) barCharge.style.width = `${chargePct}%`;
-            if (txtCharge) txtCharge.innerText = `${chargePct}%`;
-
-            if (chargePct >= 100) {
-              this.completeStage2();
-              return;
+            } else if (!this.stage2LoudnessPassed) {
+              if (barLive) barLive.style.background = db >= target - 10 ? '#F59E0B' : '#38BDF8';
+              if (txtDb) txtDb.style.color = db >= target - 10 ? '#F59E0B' : '#38BDF8';
+              if (txtHint && !this.stage2SpokeWords) {
+                txtHint.innerText = `ระดับเสียงปัจจุบัน ${db} dB (ต้องการ ${target} dB) ตะโกนให้ดังขึ้นอีก!`;
+                txtHint.style.color = '#94A3B8';
+              }
             }
           }
 
@@ -3588,26 +4302,20 @@
         requestAnimationFrame(loop);
       }
 
-      completeStage2() {
+      async completeStage2() {
         if (this.stage2Completed) return;
         this.stage2Completed = true;
         MicSensor.stopSpeechRecognition();
         SoundEngine.playStageClear();
 
-        const barCharge = document.getElementById('shoutChargeBarFill');
-        const txtCharge = document.getElementById('txtShoutChargePct');
-        if (barCharge) barCharge.style.width = '100%';
-        if (txtCharge) txtCharge.innerText = '100%';
-
         const txtHint = document.getElementById('txtLiveStatusHint');
         if (txtHint) {
-          txtHint.innerText = '✓ ตะโกนขอความช่วยเหลือสำเร็จ ยอดเยี่ยมมาก!';
+          txtHint.innerText = '✓ ตะโกนขอความช่วยเหลือได้ถูกต้องและเสียงดังฟังชัด ยอดเยี่ยมมาก!';
           txtHint.style.color = '#10B981';
         }
 
-        setTimeout(() => {
-          this.setStage(3);
-        }, 1600);
+        await speakAndWait('ยอดเยี่ยมมากค่ะ! ตะโกนขอความช่วยเหลือได้ถูกต้อง ชัดเจน และเสียงดังฟังชัดทุกคนได้ยินค่ะ!');
+        this.setStage(3);
       }
 
       adjustMicGain(delta) {
@@ -3800,7 +4508,7 @@
       async runCprCountdownAndStart() {
         MicSensor.stopSpeechRecognition();
         // Re-ensure live mic stream for clapping!
-        await MicSensor.ensureMicLive(2000);
+        await MicSensor.ensureMicLive(false);
 
         const target = document.getElementById('cprCenterTarget');
         const counts = ['3', '2', '1', 'เริ่ม!'];
@@ -4089,8 +4797,16 @@
         window.ECGEngine.setMode('SINUS');
         this.updateVitals(76, 98);
         SoundEngine.stopPulseScheduler();
+
+        document.body.classList.add('lobby-mode');
         const modal = document.getElementById('modalLobby');
-        if (modal) modal.style.display = 'flex';
+        if (modal) {
+          modal.style.display = 'flex';
+          modal.classList.remove('hidden-modal');
+        }
+        const bgCanvas = document.getElementById('bgEcgCanvas');
+        if (bgCanvas) bgCanvas.style.opacity = '1';
+
         this.pickRandomTeam();
       }
 
@@ -4116,7 +4832,6 @@
         document.getElementById('btnStartConsole').addEventListener('click', () => {
           try { SoundEngine.initAndResume(); } catch(e) {}
           this.setStage(1);
-          document.getElementById('modalLobby').style.display = 'none';
           MicSensor.ensureMicLive().catch(e => console.warn('Background mic request:', e));
         });
 
