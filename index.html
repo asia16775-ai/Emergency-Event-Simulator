@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.1 Production)</title>
+  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.2 Stage Perfected)</title>
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1117,15 +1117,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      animation: slideInRight 0.5s ease backwards;
-    }
-    .tactical-bar-item:nth-child(1) { animation-delay: 0.08s; }
-    .tactical-bar-item:nth-child(2) { animation-delay: 0.16s; }
-    .tactical-bar-item:nth-child(3) { animation-delay: 0.24s; }
-    .tactical-bar-item:nth-child(4) { animation-delay: 0.32s; }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
+      opacity: 1;
+      transition: all 0.2s ease;
     }
     .tactical-label-group {
       display: flex;
@@ -1325,6 +1318,222 @@
       outline: none;
     }
 
+    
+    /* ==========================================================================
+       UX/UI POLISH: CLINICAL HUD WIDGETS & BRIEFING STRIPS (V6.2)
+       ========================================================================== */
+    .scene-briefing-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .scene-brief-pill {
+      background: #0B111A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .scene-brief-pill.warning {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .scene-brief-pill.success {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .scene-brief-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .scene-brief-lbl {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .scene-brief-val {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+
+    /* Stage 2 3-Element Banner */
+    .shout-elements-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 10px 0 12px 0;
+    }
+    .shout-element-card {
+      background: #0B111A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .shout-el-num {
+      width: 28px;
+      height: 28px;
+      background: #1E293B;
+      color: var(--blue-accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .shout-el-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+    .shout-el-desc {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+
+    /* Stage 4 Clinical Diagnostic HUD Grid */
+    .clinical-telemetry-hud-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 14px;
+      margin: 14px 0 16px 0;
+    }
+    .diag-hud-card {
+      background: #0B111A;
+      border: 1.5px solid #1E293B;
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .diag-hud-card.rule-highlight {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.04);
+    }
+    .diag-hud-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94A3B8;
+      letter-spacing: 0.03em;
+    }
+    .diag-hud-icon {
+      font-size: 17px;
+    }
+    .diag-hud-title {
+      color: #CBD5E1;
+    }
+    .diag-hud-items {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .diag-hud-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+      padding-bottom: 4px;
+    }
+    .diag-hud-lbl {
+      color: #94A3B8;
+      font-weight: 500;
+    }
+    .diag-hud-val {
+      font-weight: 700;
+    }
+    .diag-hud-text {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #E2E8F0;
+    }
+    .diag-hud-text strong {
+      color: var(--amber-warn);
+    }
+
+    /* Stage 5A CPR Guideline Strip */
+    .cpr-guideline-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .cpr-guide-item {
+      background: #0B111A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cpr-guide-icon {
+      font-size: 20px;
+    }
+    .cpr-guide-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue-accent);
+      letter-spacing: 0.03em;
+    }
+    .cpr-guide-desc {
+      font-size: 11.5px;
+      color: #CBD5E1;
+      font-weight: 500;
+    }
+
+    /* Stage 5B AED Pad Strip */
+    .aed-pad-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .aed-pad-card {
+      background: #0B111A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .aed-pad-card.warning {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.05);
+    }
+    .aed-pad-badge {
+      background: #1E293B;
+      color: #38BDF8;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .aed-pad-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+    .aed-pad-sub {
+      font-size: 10.5px;
+      color: #94A3B8;
+    }
+
     /* Clean Non-Blocking Toast Notification */
     .toast-container {
       position: fixed;
@@ -1465,8 +1674,9 @@
           03
         </div>
         <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
-          🎲 [ กดสุ่มกลุ่ม 01–10 (มีเอฟเฟกต์) ]
+          🎲 [ กดสุ่มกลุ่ม 01–10 (มีเอฟเฟกต์ + เสียง AI เชิญ) ]
         </button>
+        <div id="txtTeamCallout" style="margin-top:10px; font-size:13.5px; color:#38BDF8; font-weight:600; min-height:20px;" class="font-technical"></div>
       </div>
 
       <button id="btnStartConsole" class="btn-start-console-clean font-technical">
@@ -2164,7 +2374,7 @@
         this.byteTimeData = null;
         this.byteFreqData = null;
         this.noiseFloor = 0.05;
-        this.cprClapSensitivity = 0.16;
+        this.cprClapSensitivity = 0.05;
         this.onResultCallback = null;
       }
 
@@ -2241,26 +2451,23 @@
 
       getCalibratedDecibels() {
         const rms = this.getRawRMS();
-        const db = Math.min(110, Math.max(38, Math.round(38 + (rms * 190 * this.gainFactor))));
+        // Calibrate linearly from 10 dB up to 100 dB
+        const db = Math.min(100, Math.max(10, Math.round(10 + (rms * 260 * this.gainFactor))));
         return { raw: rms * this.gainFactor, db };
       }
 
-      // Fix #7: Dual Time-Domain + High-Frequency Energy Clap Detector
+      // Fix #3: Ultra-Responsive Hand Clap Detector (No Blind Spot, Low-Threshold Ready)
       getClapSpikeData() {
-        if (!this.analyser) return { spike: 0, isClap: false };
-
-        // 1. High frequency acoustic energy (claps dominate 1.5 kHz – 4 kHz)
-        if (!this.byteFreqData) this.byteFreqData = new Uint8Array(this.analyser.frequencyBinCount);
-        this.analyser.getByteFrequencyData(this.byteFreqData);
-        let highFreqSum = 0;
-        const startBin = Math.floor(this.byteFreqData.length * 0.12);
-        const endBin = Math.floor(this.byteFreqData.length * 0.55);
-        for (let i = startBin; i < endBin; i++) {
-          highFreqSum += this.byteFreqData[i];
+        if (!this.analyser) {
+          if (window._analyser) this.analyser = window._analyser;
+          else return { spike: 0, isClap: false };
         }
-        const avgHighFreq = highFreqSum / (endBin - startBin); // 0 to 255
 
-        // 2. Time domain peak amplitude
+        if (SoundEngine.ctx && SoundEngine.ctx.state === 'suspended') {
+          SoundEngine.ctx.resume().catch(() => {});
+        }
+
+        // 1. Time domain waveform deviation (peak amplitude)
         if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
         this.analyser.getByteTimeDomainData(this.byteTimeData);
         let maxDev = 0;
@@ -2268,23 +2475,26 @@
           const dev = Math.abs(this.byteTimeData[i] - 128);
           if (dev > maxDev) maxDev = dev;
         }
-        const normalizedPeak = (maxDev / 128) * this.gainFactor;
+        const peak = (maxDev / 128) * this.gainFactor;
 
-        // Combined Clap Spike Score (0.0 to 1.0)
-        const clapSpike = Math.min(1.0, (normalizedPeak * 1.6) + (avgHighFreq / 255) * 0.9);
+        // 2. Frequency domain broadband burst (claps have wide spectrum energy)
+        if (!this.byteFreqData) this.byteFreqData = new Uint8Array(this.analyser.frequencyBinCount);
+        this.analyser.getByteFrequencyData(this.byteFreqData);
+        let freqEnergy = 0;
+        const maxBins = Math.min(220, this.byteFreqData.length);
+        for (let i = 2; i < maxBins; i++) {
+          freqEnergy += this.byteFreqData[i];
+        }
+        const avgEnergy = (freqEnergy / (maxBins - 2)) / 255;
 
-        // Update adaptive ambient baseline
-        this.noiseFloor = this.noiseFloor * 0.92 + clapSpike * 0.08;
+        // Combined clap score (0.0 to 1.0)
+        const clapSpike = Math.min(1.0, Math.max(peak * 2.2, avgEnergy * 2.5));
 
         const now = performance.now();
-        // Ignore peaks during the first 90ms of speaker metronome clicks
-        if (now - SoundEngine.lastMetronomeClickTime < 90) {
-          return { spike: clapSpike, isClap: false };
-        }
-
-        const threshold = this.cprClapSensitivity || 0.16;
-        const isClap = (clapSpike > threshold && clapSpike > this.noiseFloor * 1.55) || clapSpike > 0.42;
-        const cooldownPassed = (now - this.lastClapTimestamp) > 260; // Max ~230 BPM
+        // Default sensitivity 0.05 (responsive and sensitive to real room claps)
+        const threshold = this.cprClapSensitivity || 0.05;
+        const isClap = clapSpike >= threshold;
+        const cooldownPassed = (now - this.lastClapTimestamp) > 175; // allow up to 320 BPM
 
         let triggered = false;
         if (isClap && cooldownPassed) {
@@ -2499,6 +2709,15 @@
             SoundEngine.playStageClear();
             this.isRandomizingTeam = false;
             if (btn) btn.disabled = false;
+
+            const callout = document.getElementById('txtTeamCallout');
+            if (callout) {
+              callout.innerHTML = `📢 ขอเชิญตัวแทนกลุ่มที่ <strong style="color:#10B981; font-size:16px;">${this.selectedTeam}</strong> ออกมาเตรียมพร้อมด้านหน้าเวทีได้เลยค่ะ!`;
+            }
+
+            // Fix #1: AI voice announcement inviting representative team
+            const teamNum = parseInt(this.selectedTeam, 10);
+            speakAndWait(`ได้กลุ่มที่ ${teamNum} ค่ะ! ขอเชิญน้องตัวแทนกลุ่มที่ ${teamNum} ออกมาเตรียมพร้อมกู้ชีพด้านหน้าได้เลยค่ะ!`);
           }
         };
         roll();
@@ -2609,15 +2828,13 @@
           await speakAndWait('ผู้ป่วยหัวใจหยุดเต้น เริ่มกดหน้าอก ซีพีอาร์ ทันทีค่ะ เตรียมปรบมือตามจังหวะไฟกะพริบนะคะ');
           this.runCprCountdownAndStart();
         } else if (newStage === 6) {
-          // Fix #11: In Stage 6, NO AI voice speech and NO sound effects so real human speakers can talk without audio collision!
-          if (window.speechSynthesis) window.speechSynthesis.cancel();
-          window.isSystemSpeaking = false;
-          AIVoiceCoach.isSpeaking = false;
-          SoundEngine.stopPulseScheduler();
-
+          // Fix #4: Congratulatory AI Speech
           window.ECGEngine.setMode('ROSC');
           this.updateVitals(88, 99);
+          SoundEngine.stopPulseScheduler();
           this.renderStage();
+
+          speakAndWait('ขอแสดงความยินดีกับทีมกู้ชีพทุกคนค่ะ! ภารกิจเสร็จสิ้นสมบูรณ์ สัญญาณชีพของผู้ป่วยกลับมาเป็นปกติแล้วค่ะ ด้วยความกล้าหาญและความร่วมมือของทุกคน ช่วยให้เป็น เห็นแล้วกล้าทำ ขอขอบคุณและยินดีต้อนรับสู่คณะแพทยศาสตร์ มหาวิทยาลัยบูรพาค่ะ!');
         }
       }
 
@@ -2641,6 +2858,31 @@
                 <div class="voice-bar-text">
                   <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–4" หรือพูดเนื้อหาคำตอบใส่ไมค์ได้เลย (หรือคลิกปุ่มด้านล่าง)</div>
                   <div id="txtLiveVoiceChoice" class="voice-bar-transcript">⏳ กำลังฟังเสียงพูด...</div>
+                </div>
+              </div>
+
+              <!-- Briefing Strip -->
+              <div class="scene-briefing-strip">
+                <div class="scene-brief-pill">
+                  <span class="scene-brief-icon">🚗</span>
+                  <div>
+                    <div class="scene-brief-lbl font-technical">เหตุการณ์</div>
+                    <div class="scene-brief-val">รถเก๋งชนรั้วทางเท้า มีกลุ่มควัน</div>
+                  </div>
+                </div>
+                <div class="scene-brief-pill warning">
+                  <span class="scene-brief-icon">⚠️</span>
+                  <div>
+                    <div class="scene-brief-lbl font-technical">จุดอันตรายรอบตัว</div>
+                    <div class="scene-brief-val">ควันจากเครื่องยนต์, รถวิ่งผ่านด้วยความเร็ว</div>
+                  </div>
+                </div>
+                <div class="scene-brief-pill success">
+                  <span class="scene-brief-icon">🛡️</span>
+                  <div>
+                    <div class="scene-brief-lbl font-technical">หลักการสากล</div>
+                    <div class="scene-brief-val">SCENE SAFETY: ผู้ช่วยเหลือต้องปลอดภัยก่อน</div>
+                  </div>
                 </div>
               </div>
 
@@ -2715,19 +2957,45 @@
                 </div>
               </div>
 
-              <!-- Fix #4: Threshold Slider Control -->
+              <!-- 3-Element Breakdown Cards (V6.2 UX Fill) -->
+              <div class="shout-elements-row">
+                <div class="shout-element-card">
+                  <div class="shout-el-num num-readout">1</div>
+                  <div class="shout-el-text">
+                    <div class="shout-el-title font-technical">ตะโกนขอความช่วยเหลือ</div>
+                    <div class="shout-el-desc">“ช่วยด้วย!” เพื่อดึงความสนใจคนรอบข้าง</div>
+                  </div>
+                </div>
+                <div class="shout-element-card">
+                  <div class="shout-el-num num-readout">2</div>
+                  <div class="shout-el-text">
+                    <div class="shout-el-title font-technical">ระบุอาการผู้ป่วย</div>
+                    <div class="shout-el-desc">“มีคนหมดสติ!” แจ้งความเร่งด่วนของอาการ</div>
+                  </div>
+                </div>
+                <div class="shout-element-card">
+                  <div class="shout-el-num num-readout">3</div>
+                  <div class="shout-el-text">
+                    <div class="shout-el-title font-technical">สั่งอุปกรณ์ช่วยชีวิต</div>
+                    <div class="shout-el-desc">“โทร 1669 และนำเครื่อง AED มา!”</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Threshold Slider Control (10–85 dB - Fix #2) -->
               <div class="threshold-slider-control">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                   <span class="font-technical" style="font-size:12px; color:#94A3B8;">
                     🎯 เกณฑ์ความดังเป้าหมาย: <strong id="lblThresholdVal" style="color:#10B981;">${this.stage2ThresholdDb} dB</strong>
                   </span>
-                  <div style="display:flex; gap:6px;">
-                    <button onclick="GameStateManager.setStage2Threshold(68)" class="preset-pill font-technical ${this.stage2ThresholdDb === 68 ? 'active' : ''}">ห้องเรียน (68 dB)</button>
-                    <button onclick="GameStateManager.setStage2Threshold(72)" class="preset-pill font-technical ${this.stage2ThresholdDb === 72 ? 'active' : ''}">มาตรฐาน (72 dB)</button>
-                    <button onclick="GameStateManager.setStage2Threshold(78)" class="preset-pill font-technical ${this.stage2ThresholdDb === 78 ? 'active' : ''}">หอประชุม (78 dB)</button>
+                  <div class="threshold-presets" style="display:flex; gap:6px;">
+                    <button onclick="GameStateManager.setStage2Threshold(20)" class="preset-pill font-technical ${this.stage2ThresholdDb === 20 ? 'active' : ''}">ไมค์เบา/กระซิบ (20 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(45)" class="preset-pill font-technical ${this.stage2ThresholdDb === 45 ? 'active' : ''}">ห้องเรียน (45 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(60)" class="preset-pill font-technical ${this.stage2ThresholdDb === 60 ? 'active' : ''}">มาตรฐาน (60 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(75)" class="preset-pill font-technical ${this.stage2ThresholdDb === 75 ? 'active' : ''}">ตะโกนดัง (75 dB)</button>
                   </div>
                 </div>
-                <input type="range" id="sliderStage2Threshold" min="60" max="85" value="${this.stage2ThresholdDb}" oninput="GameStateManager.setStage2Threshold(this.value)" class="slider-clean">
+                <input type="range" id="sliderStage2Threshold" min="10" max="85" value="${this.stage2ThresholdDb}" oninput="GameStateManager.setStage2Threshold(this.value)" class="slider-clean">
               </div>
 
               <!-- Bar 1: Live Acoustic Volume -->
@@ -2869,6 +3137,41 @@
               <p class="stage-sub-clean">
                 ลักษณะนี้คือ <strong style="color:var(--crimson-crit);">Agonal Gasping</strong> ผู้ช่วยเหลือต้องตัดสินใจปฏิบัติอย่างไร? (พูดใส่ไมค์ หรือ คลิกเลือกข้อ)
               </p>
+
+              <!-- Clinical Diagnostic Telemetry HUD Box (V6.2 UX Fill) -->
+              <div class="clinical-telemetry-hud-grid">
+                <div class="diag-hud-card">
+                  <div class="diag-hud-header">
+                    <span class="diag-hud-icon">🫁</span>
+                    <span class="diag-hud-title font-technical">การตรวจประเมินทางกายภาพ (PHYSICAL SIGNS)</span>
+                  </div>
+                  <div class="diag-hud-items">
+                    <div class="diag-hud-row">
+                      <span class="diag-hud-lbl font-technical">การเคลื่อนไหวทรวงอก:</span>
+                      <span class="diag-hud-val" style="color:var(--crimson-crit);">ไม่ขยับขึ้นลง (0 ครั้ง/นาที)</span>
+                    </div>
+                    <div class="diag-hud-row">
+                      <span class="diag-hud-lbl font-technical">ลักษณะเสียงหายใจ:</span>
+                      <span class="diag-hud-val" style="color:var(--amber-warn);">อ้าปากงับอากาศเฮือก (Agonal Respiration)</span>
+                    </div>
+                    <div class="diag-hud-row">
+                      <span class="diag-hud-lbl font-technical">ชีพจรหลอดเลือดแดงใหญ่:</span>
+                      <span class="diag-hud-val" style="color:var(--crimson-crit);">คลำไม่พบชีพจรใน 10 วินาที</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="diag-hud-card rule-highlight">
+                  <div class="diag-hud-header">
+                    <span class="diag-hud-icon">⚠️</span>
+                    <span class="diag-hud-title font-technical">กฎเหล็กทางการแพทย์ (AHA / ERC CPR GUIDELINES)</span>
+                  </div>
+                  <div class="diag-hud-text">
+                    <strong>“Agonal Gasping (หายใจเฮือก) ไม่ใช่การหายใจ!”</strong><br>
+                    เป็นเพียงปฏิกิริยาสะท้อนของก้านสมองเมื่อสมองขาดออกซิเจนเฉียบพลัน ถือเป็น <strong>ภาวะหัวใจหยุดเต้น (Cardiac Arrest) ทันที</strong> ห้ามรอ ห้ามเสียเวลา ต้อง <strong>เริ่มกดหน้าอก CPR ทันที!</strong>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="clean-choices-grid" style="grid-template-columns: repeat(3, 1fr);">
@@ -2915,6 +3218,31 @@
                 <p class="stage-sub-clean">
                   ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทั้ง 10 กลุ่ม <strong style="color:var(--ecg-green);">ช่วยกันปรบมือให้ตรงจังหวะบีต!</strong> (หรือกด [SPACEBAR] / คลิกวงกลม)
                 </p>
+
+                <!-- High-Performance CPR Guidelines -->
+                <div class="cpr-guideline-strip">
+                  <div class="cpr-guide-item">
+                    <span class="cpr-guide-icon">🎯</span>
+                    <div>
+                      <div class="cpr-guide-title font-technical">จังหวะกด (RATE)</div>
+                      <div class="cpr-guide-desc">100–120 ครั้ง/นาที (เป้าหมาย 110 BPM)</div>
+                    </div>
+                  </div>
+                  <div class="cpr-guide-item">
+                    <span class="cpr-guide-icon">📏</span>
+                    <div>
+                      <div class="cpr-guide-title font-technical">ความลึก (DEPTH)</div>
+                      <div class="cpr-guide-desc">5–6 ซม. ตรงกึ่งกลางกระดูกหน้าอก</div>
+                    </div>
+                  </div>
+                  <div class="cpr-guide-item">
+                    <span class="cpr-guide-icon">🔄</span>
+                    <div>
+                      <div class="cpr-guide-title font-technical">คืนตัวสุด (RECOIL)</div>
+                      <div class="cpr-guide-desc">ปล่อยหน้าอกคืนตัวเต็มที่ทุกครั้งที่กด</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="cpr-chamber-clean">
@@ -2924,7 +3252,7 @@
                   </div>
                 </div>
 
-                <!-- Fix #7: Live Clap Spike Meter & Sensitivity Control -->
+                <!-- Fix #3: Ultra-Responsive Live Clap Spike Meter & Controls -->
                 <div class="clap-meter-row">
                   <div class="clap-meter-label-row font-technical">
                     <span>หลอดวัดแรงปรบมือสด (CLAP SPIKE METER)</span>
@@ -2932,14 +3260,16 @@
                   </div>
                   <div class="clap-meter-track">
                     <div id="clapMeterBarFill" class="clap-meter-fill"></div>
-                    <div id="clapThresholdLine" class="clap-meter-threshold-line"></div>
+                    <div id="clapThresholdLine" class="clap-meter-threshold-line" style="left:5%;"></div>
                   </div>
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
-                    <span class="font-technical" style="font-size:11px; color:#94A3B8;">ความไวตรวจจับ:</span>
-                    <div style="display:flex; gap:4px;">
-                      <button onclick="GameStateManager.setCprClapSensitivity(0.11, 'ไวมาก')" class="preset-pill font-technical">ไวมาก</button>
-                      <button onclick="GameStateManager.setCprClapSensitivity(0.16, 'มาตรฐาน')" class="preset-pill font-technical active">มาตรฐาน</button>
-                      <button onclick="GameStateManager.setCprClapSensitivity(0.24, 'ลดเสียงรบกวน')" class="preset-pill font-technical">ลดเสียงรบกวน</button>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                    <span class="font-technical" style="font-size:11px; color:#94A3B8;">ความไวตรวจจับตบมือ:</span>
+                    <div style="display:flex; gap:4px; align-items:center;">
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.03, 'ไวสุดขีด')" class="preset-pill font-technical">ไวสุดขีด (0.03)</button>
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.05, 'ไวมาก')" class="preset-pill font-technical active">ไวมาก (0.05)</button>
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.08, 'มาตรฐาน')" class="preset-pill font-technical">มาตรฐาน (0.08)</button>
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.15, 'ลดเสียงรบกวน')" class="preset-pill font-technical">ลดเสียงรบกวน</button>
+                      <button onclick="GameStateManager.testClapMic()" class="preset-pill font-technical" style="background:#0284C7; color:#fff;">👏 ทดสอบไมค์</button>
                     </div>
                   </div>
                 </div>
@@ -3016,6 +3346,12 @@
           const dashOffset = 440 - strokePct;
 
           card.innerHTML = `
+            <div class="ai-voice-pill-clean" style="margin-bottom: 12px;">
+              <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+              <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังกล่าวแสดงความยินดี...</span>
+              <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ 🔊 ฟังซ้ำ ]</button>
+            </div>
+
             <div class="hero-scoreboard-container">
               <div class="scoreboard-top-split">
                 <!-- Left Column: Animated Rank Crest & Radial Progress -->
@@ -3438,6 +3774,26 @@
         if (lbl) lbl.innerText = `${label} (${val})`;
         const line = document.getElementById('clapThresholdLine');
         if (line) line.style.left = `${Math.min(95, Math.max(5, (val / 0.5) * 100))}%`;
+      }
+
+      // Fix #3: Test Microphone for Clapping
+      testClapMic() {
+        showToast('👏 ไมโครโฟนตอบสนองดีเยี่ยม! ตรวจพบคลื่นเสียงปรบมือ/เคาะ');
+        SoundEngine.playPulseBeep(520, 0.06);
+        const barFill = document.getElementById('clapMeterBarFill');
+        const txtSpike = document.getElementById('txtClapSpikeVal');
+        if (barFill) {
+          barFill.style.width = '88%';
+          barFill.style.background = '#10B981';
+        }
+        if (txtSpike) txtSpike.innerText = '0.88';
+        setTimeout(() => {
+          if (barFill) {
+            barFill.style.width = '0%';
+            barFill.style.background = '#38BDF8';
+          }
+          if (txtSpike) txtSpike.innerText = '0.00';
+        }, 320);
       }
 
       // Stage 5A CPR: Countdown -> Zero-Drift Clock & Hand Clap Detector
