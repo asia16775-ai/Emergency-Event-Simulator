@@ -1,0 +1,2781 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V5.0)</title>
+  <!-- Google Fonts: IBM Plex Sans Thai, Space Grotesk, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       00. COLOR TOKENS & RESET — COHESIVE DARK OBSIDIAN & CLINICAL SLATE (V5.0)
+       ========================================================================== */
+    :root {
+      --bg-header: #0B111A;
+      --bg-ribbon: #0B111A;
+      --bg-stage: #090D14; /* Deep Obsidian Console */
+      --bg-card: #111827;  /* Crisp Elevated Slate Card */
+      --bg-tile: #182232;  /* Interactive Clinical Tiles */
+      --bg-tile-hover: #1E2D42;
+      --border-card: #1F2937;
+      --border-tile: #2A384C;
+      --border-tile-hover: #38BDF8;
+      --text-main: #F8FAFC;
+      --text-sub: #94A3B8;
+      --text-muted: #64748B;
+      --ecg-green: #10B981;
+      --spo2-cyan: #38BDF8;
+      --amber-warn: #F59E0B;
+      --crimson-crit: #FF3B5C; /* Critical Warning Crimson */
+      --blue-accent: #38BDF8;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-tactile: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-stage);
+      color: var(--text-main);
+      font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Screen Shake & Vignette Overlays */
+    #vignetteOverlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      transition: background-color 0.15s ease, box-shadow 0.25s ease;
+    }
+    #vignetteOverlay.flash-crimson {
+      box-shadow: inset 0 0 120px rgba(255, 59, 92, 0.55);
+    }
+    #vignetteOverlay.flash-discharge {
+      background-color: rgba(255, 255, 255, 0.94);
+    }
+    .screen-shake {
+      animation: consoleShake 300ms var(--ease-out-expo);
+    }
+    @keyframes consoleShake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-4px, 2px); }
+      40% { transform: translate(4px, -2px); }
+      60% { transform: translate(-3px, 1px); }
+      80% { transform: translate(2px, -1px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+    .font-technical {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .svg-icon {
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.8;
+      stroke: currentColor;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       01. TOP NAVIGATION BAR (56px, #0B111A)
+       ========================================================================== */
+    #topNavBar {
+      height: 56px;
+      background: var(--bg-header);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      z-index: 50;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #F8FAFC;
+    }
+    .nav-brand-badge {
+      font-size: 11px;
+      color: #94A3B8;
+      border-left: 1px solid #2A384C;
+      padding-left: 10px;
+    }
+
+    /* 6-Step Pill Indicator */
+    .nav-stepper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #090D14;
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid #1F2937;
+    }
+    .nav-step-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 6px;
+      color: #64748B;
+      transition: all 0.2s ease;
+    }
+    .nav-step-pill.active {
+      background: #182232;
+      color: #38BDF8;
+      border: 1px solid #2A384C;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .nav-step-pill.cleared {
+      color: var(--ecg-green);
+    }
+
+    /* Utility Tools */
+    .nav-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-timer-box {
+      background: #090D14;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid #1F2937;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-timer-label {
+      font-size: 9px;
+      color: #64748B;
+    }
+    .nav-timer-val {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--amber-warn);
+    }
+    .nav-btn {
+      height: 32px;
+      background: #182232;
+      border: 1px solid #2A384C;
+      color: #CBD5E1;
+      padding: 0 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-btn:hover {
+      background: #1E2D42;
+      border-color: #38BDF8;
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       02. COMPACT PATIENT MONITOR RIBBON (96px, #0B111A)
+       ========================================================================== */
+    #patientMonitorRibbon {
+      height: 96px;
+      background: var(--bg-ribbon);
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      z-index: 40;
+    }
+
+    .ribbon-ecg-col {
+      width: 72%;
+      height: 100%;
+      border-right: 1px solid var(--border-card);
+      position: relative;
+    }
+    #ecgCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ecg-status-badge {
+      position: absolute;
+      top: 10px;
+      left: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      z-index: 10;
+      letter-spacing: 0.06em;
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+    .ecg-status-badge.sinus {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10B981;
+      color: #10B981;
+    }
+    .ecg-status-badge.critical {
+      background: rgba(255, 59, 92, 0.2);
+      border: 1px solid #FF3B5C;
+      color: #FF3B5C;
+      animation: badgePulse 1s infinite alternate;
+    }
+    @keyframes badgePulse {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; box-shadow: 0 0 10px rgba(255, 59, 92, 0.4); }
+    }
+
+    .ribbon-vitals-col {
+      width: 28%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 20px;
+    }
+    .vital-readout-unit {
+      display: flex;
+      flex-direction: column;
+    }
+    .vital-readout-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.08em;
+    }
+    .vital-readout-num {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .vital-readout-unit-label {
+      font-size: 11px;
+      color: #64748B;
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       03. MAIN STAGE VIEWPORT & KEYNOTE CARD (56px BOTTOM CLEARANCE)
+       ========================================================================== */
+    #mainStageContainer {
+      height: calc(100vh - 152px);
+      padding: 20px 48px 56px 48px; /* Safe clearance above macOS Dock */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .stage-card-clean {
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      background: var(--bg-card);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-card);
+      padding: 36px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* AI Voice Pill */
+    .ai-voice-pill-clean {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 14px;
+      background: #141E2D;
+      border: 1px solid #2A384C;
+      border-left: 3px solid #38BDF8;
+      border-radius: 8px;
+      width: fit-content;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+    }
+    .ai-voice-pill-clean.banner-pulse {
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      border-color: #38BDF8;
+    }
+    .voice-bars-clean {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 14px;
+    }
+    .v-bar {
+      width: 3px;
+      height: 4px;
+      background: #38BDF8;
+      border-radius: 1px;
+      animation: wavePulse 1s infinite ease-in-out;
+    }
+    .v-bar:nth-child(2) { animation-delay: 0.2s; }
+    .v-bar:nth-child(3) { animation-delay: 0.4s; }
+    .v-bar:nth-child(4) { animation-delay: 0.15s; }
+    .v-bar:nth-child(5) { animation-delay: 0.35s; }
+    @keyframes wavePulse {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+    .voice-pill-text-clean {
+      font-size: 12px;
+      font-weight: 600;
+      color: #38BDF8;
+    }
+    .btn-replay-clean {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 11px;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+    }
+    .btn-replay-clean:hover { color: #F8FAFC; }
+
+    /* Headline & Subtitle Typography */
+    .stage-headline-clean {
+      font-size: clamp(28px, 2.8vw, 38px);
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .stage-sub-clean {
+      font-size: clamp(19px, 1.7vw, 23px);
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* Clean 2x2 Choice Tiles (No Rainbow Borders!) */
+    .clean-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .clean-choice-tile {
+      background: var(--bg-tile);
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 22px 26px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s var(--ease-tactile);
+      color: #F1F5F9;
+    }
+    .clean-choice-tile:hover {
+      border-color: #38BDF8;
+      background: #1E2D42;
+      transform: translateY(-2px);
+    }
+    .clean-choice-tile:active {
+      transform: translateY(1px);
+    }
+    .choice-badge-slate {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #0B111A;
+      border: 1px solid #2A384C;
+      color: #38BDF8;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .choice-content-box {
+      display: flex;
+      flex-direction: column;
+    }
+    .choice-title-clean {
+      font-size: clamp(20px, 1.9vw, 25px);
+      font-weight: 600;
+      color: #F8FAFC;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+    .choice-desc-clean {
+      font-size: 14px;
+      color: #94A3B8;
+      line-height: 1.4;
+    }
+
+    /* Correct & Wrong States */
+    .clean-choice-tile.correct {
+      border-color: #10B981 !important;
+      background: rgba(16, 185, 129, 0.15) !important;
+    }
+    .clean-choice-tile.correct .choice-badge-slate {
+      background: #10B981;
+      color: #FFFFFF;
+      border-color: #10B981;
+    }
+    .clean-choice-tile.wrong {
+      border-color: #F43F5E !important;
+      background: rgba(244, 63, 94, 0.15) !important;
+    }
+    .clean-choice-tile.wrong .choice-badge-slate {
+      background: #F43F5E;
+      color: #FFFFFF;
+      border-color: #F43F5E;
+    }
+
+    /* ==========================================================================
+       04. STAGE 2: SHOUT METER (ZERO DEADLOCKS & LIVE AMBIENT dB)
+       ========================================================================== */
+    .shout-box-clean {
+      background: #141E2D;
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 28px 36px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .shout-track-clean {
+      height: 48px;
+      background: #0B111A;
+      border: 1px solid var(--border-tile);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+    }
+    .shout-fill-clean {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981 0%, #F59E0B 65%, #FF3B5C 100%);
+      width: 0%;
+      transition: width 0.08s ease;
+      border-radius: 10px;
+    }
+    .shout-target-line {
+      position: absolute;
+      left: 75%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #F8FAFC;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      z-index: 5;
+    }
+
+    /* ==========================================================================
+       05. STAGE 3: 1669 LIVE VOICE SPEECH-TO-TEXT & MANUAL PRESETS
+       ========================================================================== */
+    .facts-strip-clean {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .fact-card-clean {
+      background: var(--bg-tile);
+      border: 1px solid var(--border-tile);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .fact-label-clean {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      margin-bottom: 2px;
+    }
+    .fact-val-clean {
+      font-size: 15px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+
+    .voice-transcript-panel {
+      background: #141E2D;
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .live-transcript-box {
+      min-height: 48px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #38BDF8;
+      line-height: 1.5;
+    }
+    .manual-input-box {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .input-dispatch-text {
+      flex: 1;
+      height: 38px;
+      background: #0B111A;
+      border: 1px solid var(--border-tile);
+      border-radius: 8px;
+      padding: 0 14px;
+      color: #F8FAFC;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    .input-dispatch-text:focus {
+      border-color: #38BDF8;
+    }
+
+    .checklist-pills-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .chk-pill-clean {
+      background: var(--bg-tile);
+      border: 2px solid var(--border-tile);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      color: #F1F5F9;
+    }
+    .chk-pill-clean:hover {
+      border-color: #38BDF8;
+    }
+    .chk-pill-clean.checked {
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+    .chk-pill-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      border: 2px solid #64748B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: transparent;
+    }
+    .chk-pill-clean.checked .chk-pill-box {
+      background: #10B981;
+      border-color: #10B981;
+      color: #FFFFFF;
+    }
+    .chk-pill-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #F8FAFC;
+    }
+
+    /* ==========================================================================
+       06. STAGE 5A: CPR PULSING RING & HORIZONTAL BEAT TRACK
+       ========================================================================== */
+    .cpr-chamber-clean {
+      background: #141E2D;
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    .cpr-beat-lane {
+      width: 100%;
+      height: 64px;
+      background: #0B111A;
+      border: 1px solid var(--border-tile);
+      border-radius: 32px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cpr-center-target {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid var(--border-tile);
+      background: var(--bg-tile);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #94A3B8;
+      z-index: 5;
+      transition: all 0.08s ease;
+    }
+    .cpr-center-target.flash {
+      border-color: #10B981;
+      background: #10B981;
+      color: #FFFFFF;
+      transform: scale(1.18);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.7);
+    }
+    .beat-glide-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #38BDF8;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* ==========================================================================
+       07. STAGE 5B: AED 3-STEP SEQUENTIAL SAFETY CARDS
+       ========================================================================== */
+    .aed-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .aed-step-card-clean {
+      background: var(--bg-tile);
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #F8FAFC;
+    }
+    .aed-step-card-clean:hover {
+      border-color: #38BDF8;
+      transform: translateY(-2px);
+    }
+    .aed-step-card-clean.active {
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.18);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+    }
+    .aed-step-headline {
+      font-size: 26px;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+    .aed-step-card-clean.active .aed-step-headline {
+      color: #10B981;
+    }
+
+    /* ==========================================================================
+       08. STAGE 6: PHOTO-READY RANK SCOREBOARD (TOP 56% CARD)
+       ========================================================================== */
+    .rank-board-clean {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .rank-top-summary {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 24px;
+      border-bottom: 2px solid var(--border-card);
+      padding-bottom: 20px;
+    }
+    .rank-badge-tile {
+      background: #0B111A;
+      border: 1px solid var(--border-card);
+      color: #FFFFFF;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .rank-letter-gold {
+      font-size: 76px;
+      font-weight: 700;
+      color: #F59E0B;
+      line-height: 1;
+    }
+
+    .eval-cards-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .eval-card-item {
+      background: var(--bg-tile);
+      border: 1px solid var(--border-tile);
+      border-radius: 10px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #F8FAFC;
+    }
+
+    .photo-clean-zone {
+      height: 140px;
+      border: 2px dashed var(--border-tile);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748B;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-top: 14px;
+    }
+
+    /* ==========================================================================
+       09. STANDBY LOBBY OVERLAY & PREFLIGHT
+       ========================================================================== */
+    .lobby-modal-full {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-stage);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .lobby-box-white {
+      max-width: 680px;
+      width: 100%;
+      background: var(--bg-card);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-card);
+      padding: 44px;
+      text-align: center;
+    }
+    .team-picker-slot {
+      background: #141E2D;
+      border: 2px solid var(--border-tile);
+      border-radius: 14px;
+      padding: 24px;
+      margin: 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .team-number-slot {
+      font-size: 64px;
+      font-weight: 700;
+      color: #38BDF8;
+      line-height: 1;
+    }
+    .btn-spin-slot {
+      padding: 12px 24px;
+      background: var(--bg-tile);
+      border: 1px solid var(--border-tile);
+      color: #F8FAFC;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-spin-slot:hover {
+      background: #1E2D42;
+      border-color: #38BDF8;
+    }
+    .btn-start-console {
+      width: 100%;
+      padding: 16px;
+      background: #059669;
+      color: #FFFFFF;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(5, 150, 105, 0.4);
+      transition: all 0.15s ease;
+    }
+    .btn-start-console:hover {
+      background: #047857;
+      box-shadow: 0 6px 20px rgba(5, 150, 105, 0.6);
+    }
+
+    /* Preflight Modal */
+    .modal-backdrop-clean {
+      position: fixed;
+      inset: 0;
+      background: rgba(9, 13, 20, 0.85);
+      z-index: 120;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop-clean.open {
+      display: flex;
+    }
+    .modal-panel-white {
+      background: var(--bg-card);
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px;
+      border: 1px solid var(--border-card);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      color: #F8FAFC;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- VIGNETTE & SHOCK OVERLAY -->
+  <div id="vignetteOverlay"></div>
+
+  <!-- 01. TOP NAVIGATION BAR (56px, #0B111A) -->
+  <header id="topNavBar">
+    <div class="nav-brand">
+      <div class="nav-brand-title font-technical">HEARTBEAT RUSH</div>
+      <div class="nav-brand-badge">คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา</div>
+    </div>
+
+    <!-- 6-Step Pill Indicator -->
+    <nav class="nav-stepper">
+      <div id="stepPill0" class="nav-step-pill active">เริ่มเกม</div>
+      <div id="stepPill1" class="nav-step-pill">1. ความปลอดภัย</div>
+      <div id="stepPill2" class="nav-step-pill">2. ขอความช่วยเหลือ</div>
+      <div id="stepPill3" class="nav-step-pill">3. โทร 1669</div>
+      <div id="stepPill4" class="nav-step-pill">4. ประเมินการหายใจ</div>
+      <div id="stepPill5" class="nav-step-pill">5. CPR & AED</div>
+      <div id="stepPill6" class="nav-step-pill">สรุปผล</div>
+    </nav>
+
+    <!-- Nav Tools -->
+    <div class="nav-tools">
+      <div class="nav-timer-box font-mono">
+        <span class="nav-timer-label font-technical">SESSION</span>
+        <span id="masterTimerDisplay" class="nav-timer-val">08:00</span>
+      </div>
+      <button id="btnPreflightModal" class="nav-btn" title="ตั้งค่า/ทดสอบไมค์">
+        <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
+      <button id="btnMuteToggle" class="nav-btn" title="เปิด/ปิดเสียง [M]">
+        <svg id="svgMuteIcon" class="svg-icon" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+      </button>
+      <button id="btnFullscreenToggle" class="nav-btn" title="เต็มจอ [F]">
+        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- 02. COMPACT PATIENT MONITOR RIBBON (96px, #0B111A) -->
+  <section id="patientMonitorRibbon">
+    <div class="ribbon-ecg-col">
+      <div id="ecgStatusBadge" class="ecg-status-badge sinus font-technical">76 BPM // NORMAL SINUS</div>
+      <canvas id="ecgCanvas"></canvas>
+    </div>
+    <div class="ribbon-vitals-col">
+      <div class="vital-readout-unit">
+        <span class="vital-readout-label font-technical">HEART RATE</span>
+        <div class="vital-readout-num font-mono" style="color:var(--ecg-green);">
+          <span id="hudHR">76</span>
+          <span class="vital-readout-unit-label">BPM</span>
+        </div>
+      </div>
+      <div class="vital-readout-unit">
+        <span class="vital-readout-label font-technical">SpO2 OXYGEN</span>
+        <div class="vital-readout-num font-mono" style="color:var(--spo2-cyan);">
+          <span id="hudSpO2">98</span>
+          <span class="vital-readout-unit-label">%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03. MAIN STAGE VIEWPORT (DARK OBSIDIAN / 56px BOTTOM CLEARANCE) -->
+  <main id="mainStageContainer">
+    <div id="activeStageCard" class="stage-card-clean">
+      <!-- Injected dynamically via GameStateManager.renderStage() -->
+    </div>
+  </main>
+
+  <!-- 04. STANDBY LOBBY SCREEN -->
+  <div id="standbyLobbyScreen" class="lobby-modal-full">
+    <div class="lobby-box-white">
+      <div style="font-size:12px; font-weight:700; color:var(--blue-accent); letter-spacing:0.06em; margin-bottom:6px;" class="font-technical">
+        MDBUU OPEN HOUSE 2026 • ฐาน HEARTBEAT RUSH
+      </div>
+      <h1 style="font-size:32px; font-weight:700; color:#F8FAFC; margin-bottom:6px;">
+        จำลองสถานการณ์กู้ชีพฉุกเฉิน
+      </h1>
+      <p style="font-size:16px; color:#94A3B8; margin-bottom:20px;">
+        “ช่วยให้เป็น เห็นแล้วกล้าทำ” — คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
+      </p>
+
+      <!-- Slot Machine Group Picker -->
+      <div class="team-picker-slot">
+        <span style="font-size:12px; font-weight:700; color:#94A3B8; letter-spacing:0.06em;" class="font-technical">
+          สุ่มกลุ่มตัวแทน (กลุ่ม 01–10)
+        </span>
+        <div id="txtSlotTeamNum" class="team-number-slot font-mono">--</div>
+        <button id="btnSpinSlotGroup" class="btn-spin-slot font-technical">
+          [ กดสุ่มกลุ่ม 01–10 ]
+        </button>
+      </div>
+
+      <button id="btnStartConsole" class="btn-start-console font-technical">
+        [ เริ่มภารกิจ / เปิดระบบเสียงและไมค์ ]
+      </button>
+
+      <div style="margin-top:16px; font-size:12px; color:#64748B; display:flex; justify-content:center; gap:20px;" class="font-mono">
+        <span>[F] เต็มจอ</span>
+        <span>[M] ปิดเสียง</span>
+        <span>[R] รีเซ็ตเริ่มใหม่</span>
+        <span>[Shift+Right] ข้ามด่าน</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05. PRE-FLIGHT TEST MODAL -->
+  <div id="preflightModal" class="modal-backdrop-clean">
+    <div class="modal-panel-white">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid #1F2937; padding-bottom:10px;">
+        <span style="font-size:16px; font-weight:700; color:#F8FAFC;" class="font-technical">ทดสอบอุปกรณ์ & ไมโครโฟน</span>
+        <button id="btnClosePreflight" style="background:none; border:none; color:#94A3B8; font-size:18px; cursor:pointer; font-weight:700;">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>เสียงลำโพง & Metronome:</span>
+          <button onclick="SoundEngine.playStageClear(); SoundEngine.playMetronome110();" class="nav-btn font-technical">ทดสอบเสียง</button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>เสียงบรรยาย AI / Intercom:</span>
+          <button onclick="AIVoiceCoach.speak('ทดสอบระบบเสียงภาษาไทยค่ะ พร้อมใช้งานค่ะ', true);" class="nav-btn font-technical">ทดสอบเสียงพากย์</button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span>เปิดสิทธิ์ไมโครโฟน:</span>
+          <button onclick="MicSensor.testMicAccess();" class="nav-btn font-technical">ขอสิทธิ์ไมค์</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       10. JAVASCRIPT SYSTEM ENGINE (V5.0 BULLETPROOF PRODUCTION ENGINE)
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       SOUND ENGINE (PROCEDURAL WEB AUDIO SYNTHESIS & REALISTIC CARDIAC SOUNDS)
+       ========================================================================== */
+    class SoundEngineCore {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+        this.metronomeTimer = null;
+        this.pulseTimer = null;
+        this.pulseFreq = 620;
+        this.pulseIntervalMs = 1580; // Bradycardia 38 BPM
+      }
+
+      initAndResume() {
+        try {
+          if (!this.ctx) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (AudioContextClass) this.ctx = new AudioContextClass();
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+          }
+        } catch(e) {
+          console.warn('AudioContext init error:', e);
+        }
+      }
+
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        return this.isMuted;
+      }
+
+      // 2-Tone Clinical Intercom Chime (660Hz -> 880Hz)
+      playIntercomChime() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc1 = this.ctx.createOscillator();
+          const gain1 = this.ctx.createGain();
+          osc1.type = 'sine';
+          osc1.frequency.setValueAtTime(660, now);
+          gain1.gain.setValueAtTime(0.09, now);
+          gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+          osc1.connect(gain1); gain1.connect(this.ctx.destination);
+          osc1.start(now); osc1.stop(now + 0.22);
+
+          const osc2 = this.ctx.createOscillator();
+          const gain2 = this.ctx.createGain();
+          osc2.type = 'sine';
+          osc2.frequency.setValueAtTime(880, now + 0.16);
+          gain2.gain.setValueAtTime(0.09, now + 0.16);
+          gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+          osc2.connect(gain2); gain2.connect(this.ctx.destination);
+          osc2.start(now + 0.16); osc2.stop(now + 0.42);
+        } catch(e) {}
+      }
+
+      // Audible Realistic ECG Monitor Beep with Volume Ducking
+      playPulseBeep(freq = 620, duration = 0.05) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+
+          // Duck volume if AI is speaking
+          const targetVol = (window.AIVoiceCoach && window.AIVoiceCoach.isSpeaking) ? 0.015 : 0.07;
+          gain.gain.setValueAtTime(targetVol, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + duration);
+        } catch(e) {}
+      }
+
+      startPulseScheduler(freq = 620, intervalMs = 1580) {
+        this.stopPulseScheduler();
+        this.pulseFreq = freq;
+        this.pulseIntervalMs = intervalMs;
+        this.playPulseBeep(freq);
+        this.pulseTimer = setInterval(() => {
+          this.playPulseBeep(this.pulseFreq);
+        }, this.pulseIntervalMs);
+      }
+
+      stopPulseScheduler() {
+        if (this.pulseTimer) {
+          clearInterval(this.pulseTimer);
+          this.pulseTimer = null;
+        }
+      }
+
+      playRouletteTick(freq = 400) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.025);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(); osc.stop(this.ctx.currentTime + 0.025);
+        } catch(e) {}
+      }
+
+      // 4-Note Brass / Synth Fanfare (C5-E5-G5-C6)
+      playRandomizeWin() {
+        if (this.isMuted || !this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((f, i) => {
+          setTimeout(() => {
+            try {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(f, this.ctx.currentTime);
+              gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.28);
+              osc.connect(gain); gain.connect(this.ctx.destination);
+              osc.start(); osc.stop(this.ctx.currentTime + 0.28);
+            } catch(e) {}
+          }, i * 90);
+        });
+      }
+
+      playStageClear() {
+        if (this.isMuted || !this.ctx) return;
+        const chords = [523.25, 659.25, 783.99]; // C Major
+        chords.forEach((freq, idx) => {
+          setTimeout(() => {
+            try {
+              const osc = this.ctx.createOscillator();
+              const gain = this.ctx.createGain();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+              gain.gain.setValueAtTime(0.09, this.ctx.currentTime);
+              gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
+              osc.connect(gain); gain.connect(this.ctx.destination);
+              osc.start(); osc.stop(this.ctx.currentTime + 0.35);
+            } catch(e) {}
+          }, idx * 60);
+        });
+      }
+
+      playErrorBuzz() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.25);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.25);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(); osc.stop(this.ctx.currentTime + 0.25);
+        } catch(e) {}
+      }
+
+      playMetronome110() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(960, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.04);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(now); osc.stop(now + 0.045);
+        } catch(e) {}
+      }
+
+      startMetronome(onBeatCallback) {
+        this.stopMetronome();
+        const intervalMs = (60 / 110) * 1000; // 545.45 ms
+        this.playMetronome110();
+        if (onBeatCallback) onBeatCallback(performance.now());
+
+        this.metronomeTimer = setInterval(() => {
+          this.playMetronome110();
+          if (onBeatCallback) onBeatCallback(performance.now());
+        }, intervalMs);
+      }
+
+      stopMetronome() {
+        if (this.metronomeTimer) {
+          clearInterval(this.metronomeTimer);
+          this.metronomeTimer = null;
+        }
+      }
+
+      playAEDCharging() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(1400, now + 2.5);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(now); osc.stop(now + 2.6);
+        } catch(e) {}
+      }
+
+      playWarningTone(freq = 750, duration = 0.7) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+          osc.connect(gain); gain.connect(this.ctx.destination);
+          osc.start(now); osc.stop(now + duration);
+        } catch(e) {}
+      }
+
+      playAEDShock() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          // Noise discharge boom
+          const bufferSize = this.ctx.sampleRate * 0.45;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(380, now);
+
+          const gain = this.ctx.createGain();
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+
+          noise.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+          noise.start(now);
+        } catch(e) {}
+      }
+    }
+    const SoundEngine = new SoundEngineCore();
+
+    /* ==========================================================================
+       AI VOICE COACH (SAFE THAI TTS & HOSPITAL INTERCOM CHIME FALLBACK)
+       ========================================================================== */
+    class AIVoiceCoachCore {
+      constructor() {
+        this.synth = window.speechSynthesis;
+        this.thaiVoice = null;
+        this.currentScript = '';
+        this.isSpeaking = false;
+        this.isEnabled = true;
+        this.onFinishedCallback = null;
+        this.initVoice();
+      }
+
+      initVoice() {
+        if (!this.synth) return;
+        const findThai = () => {
+          const voices = this.synth.getVoices();
+          this.thaiVoice = voices.find(v => v.lang.toLowerCase().includes('th')) || null;
+        };
+        findThai();
+        if (this.synth.onvoiceschanged !== undefined) {
+          this.synth.onvoiceschanged = findThai;
+        }
+      }
+
+      speak(text, force = false, onFinished = null) {
+        if (!this.synth || (!this.isEnabled && !force) || (SoundEngine.isMuted && !force)) {
+          if (onFinished) onFinished();
+          return;
+        }
+
+        this.currentScript = text;
+        this.onFinishedCallback = onFinished;
+
+        // If NO Thai voice is available on OS, fallback gracefully to Intercom Chime
+        if (!this.thaiVoice) {
+          SoundEngine.playIntercomChime();
+          const pill = document.querySelector('.ai-voice-pill-clean');
+          if (pill) {
+            pill.classList.add('banner-pulse');
+            setTimeout(() => pill.classList.remove('banner-pulse'), 1500);
+          }
+          this.updateUi(false, 'คำแนะนำพร้อมบนหน้าจอ');
+          if (this.onFinishedCallback) {
+            const cb = this.onFinishedCallback;
+            this.onFinishedCallback = null;
+            setTimeout(cb, 500);
+          }
+          return;
+        }
+
+        this.synth.cancel();
+
+        // 4.5s Safety Timeout Fallback: Speech can NEVER hang the application
+        const safetyTimeout = setTimeout(() => {
+          if (this.isSpeaking) {
+            this.isSpeaking = false;
+            this.updateUi(false);
+            if (this.onFinishedCallback) {
+              const cb = this.onFinishedCallback;
+              this.onFinishedCallback = null;
+              cb();
+            }
+          }
+        }, 4500);
+
+        // Split text into short, natural conversational sentences
+        const rawChunks = text.split(/(?<=[.!?\n]|ค่ะ|นะคะ|เลยค่ะ|ครับ)\s*/).filter(c => c && c.trim().length > 0);
+        const chunks = rawChunks.length > 0 ? rawChunks : [text];
+        let chunkIdx = 0;
+
+        const speakNextChunk = () => {
+          if (chunkIdx >= chunks.length) {
+            clearTimeout(safetyTimeout);
+            this.isSpeaking = false;
+            this.updateUi(false);
+            if (this.onFinishedCallback) {
+              const cb = this.onFinishedCallback;
+              this.onFinishedCallback = null;
+              cb();
+            }
+            return;
+          }
+
+          const chunkText = chunks[chunkIdx++] + (chunks[chunkIdx] && chunks[chunkIdx].length <= 6 ? chunks[chunkIdx++] : '');
+          if (!chunkText.trim()) {
+            speakNextChunk();
+            return;
+          }
+
+          const utter = new SpeechSynthesisUtterance(chunkText.trim());
+          utter.lang = 'th-TH';
+          utter.rate = 1.0;
+          utter.pitch = 1.02;
+          if (this.thaiVoice) utter.voice = this.thaiVoice;
+
+          utter.onstart = () => {
+            this.isSpeaking = true;
+            this.updateUi(true);
+          };
+          utter.onend = () => {
+            setTimeout(speakNextChunk, 240);
+          };
+          utter.onerror = () => {
+            clearTimeout(safetyTimeout);
+            this.isSpeaking = false;
+            this.updateUi(false);
+            if (this.onFinishedCallback) {
+              const cb = this.onFinishedCallback;
+              this.onFinishedCallback = null;
+              cb();
+            }
+          };
+
+          this.synth.speak(utter);
+        };
+
+        speakNextChunk();
+      }
+
+      replay() {
+        if (this.currentScript) this.speak(this.currentScript, true);
+      }
+
+      updateUi(speaking, customText = null) {
+        const wave = document.getElementById('aiWaveBars');
+        const txt = document.getElementById('aiVoiceStatusTxt');
+        if (wave) wave.style.opacity = speaking ? '1' : '0.4';
+        if (txt) {
+          if (customText) txt.innerText = customText;
+          else txt.innerText = speaking ? 'AI กำลังพูดแนะนำ...' : 'AI สแตนด์บาย';
+        }
+      }
+    }
+    const AIVoiceCoach = new AIVoiceCoachCore();
+
+    /* ==========================================================================
+       HIGH-DPI REALTIME ECG ENGINE (CANVAS RIBBON & ANATOMICAL GAUSSIAN WAVES)
+       ========================================================================== */
+    class ECGCanvasEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.dpr = window.devicePixelRatio || 1;
+        this.mode = 'SINUS_NORMAL'; // SINUS_NORMAL, BRADYCARDIA, AGONAL, CPR_COMPRESSION, VFIB_COARSE, DEFIB_DISCHARGE, ROSC
+        this.sweepX = 0;
+        this.speed = 160;
+        this.lastTime = performance.now();
+        this.waveformHistory = [];
+        this.compressionSpikes = [];
+        this.initSize();
+        window.addEventListener('resize', () => this.initSize());
+        this.startLoop();
+      }
+
+      initSize() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = rect.width * this.dpr;
+        this.canvas.height = rect.height * this.dpr;
+        this.ctx.scale(this.dpr, this.dpr);
+        this.cssWidth = rect.width;
+        this.cssHeight = rect.height;
+        this.waveformHistory = new Float32Array(Math.ceil(this.cssWidth));
+        const midY = this.cssHeight / 2;
+        for (let i = 0; i < this.waveformHistory.length; i++) this.waveformHistory[i] = midY;
+      }
+
+      setMode(newMode) {
+        this.mode = newMode;
+        this.updateBadge();
+      }
+
+      updateBadge() {
+        const badge = document.getElementById('ecgStatusBadge');
+        if (!badge) return;
+
+        if (this.mode === 'SINUS_NORMAL') {
+          badge.className = 'ecg-status-badge sinus font-technical';
+          badge.innerText = '76 BPM // NORMAL SINUS';
+        } else if (this.mode === 'BRADYCARDIA') {
+          badge.className = 'ecg-status-badge critical font-technical';
+          badge.innerText = 'CRITICAL // BRADYCARDIA 38 BPM';
+        } else if (this.mode === 'AGONAL') {
+          badge.className = 'ecg-status-badge critical font-technical';
+          badge.innerText = 'CRITICAL // AGONAL GASPING 22 BPM';
+        } else if (this.mode === 'VFIB_COARSE') {
+          badge.className = 'ecg-status-badge critical font-technical';
+          badge.innerText = 'CRITICAL // VENTRICULAR FIBRILLATION (SHOCKABLE)';
+        } else if (this.mode === 'DEFIB_DISCHARGE') {
+          badge.className = 'ecg-status-badge critical font-technical';
+          badge.innerText = '⚡ DEFIBRILLATOR DISCHARGE (200J BIFASIC)';
+        } else if (this.mode === 'ROSC') {
+          badge.className = 'ecg-status-badge sinus font-technical';
+          badge.innerText = 'ROSC // NORMAL SINUS 88 BPM';
+        }
+      }
+
+      triggerCompressionSpike() {
+        this.compressionSpikes.push({ timeCreated: performance.now() });
+      }
+
+      calculateSampleY(x, timeNow) {
+        const midY = this.cssHeight / 2;
+        const amp = this.cssHeight * 0.38;
+
+        // 1. Normal Sinus Rhythm (76 BPM or 88 BPM ROSC)
+        if (this.mode === 'SINUS_NORMAL' || this.mode === 'ROSC') {
+          const bpm = (this.mode === 'ROSC' || (window.GameStateManager && window.GameStateManager.currentStage === 6)) ? 88 : 76;
+          const cycleWidth = (this.speed * 60) / bpm;
+          const phase = (x % cycleWidth) / cycleWidth;
+
+          // Anatomical Gaussian Curves
+          const p = 0.16 * Math.exp(-Math.pow((phase - 0.16) / 0.035, 2));
+          const q = -0.12 * Math.exp(-Math.pow((phase - 0.235) / 0.012, 2));
+          const r = 1.15 * Math.exp(-Math.pow((phase - 0.258) / 0.014, 2));
+          const s = -0.28 * Math.exp(-Math.pow((phase - 0.282) / 0.015, 2));
+          const t = 0.28 * Math.exp(-Math.pow((phase - 0.46) / 0.065, 2));
+          return midY - ((p + q + r + s + t) * amp);
+        }
+
+        // 2. Critical Bradycardia (38 BPM with distressed wide QRS & irregular jitter)
+        if (this.mode === 'BRADYCARDIA') {
+          const bpm = 38;
+          const cycleWidth = (this.speed * 60) / bpm;
+          // Add subtle irregular R-R interval jitter
+          const phase = (x % cycleWidth) / cycleWidth;
+
+          const p = 0.14 * Math.exp(-Math.pow((phase - 0.14) / 0.045, 2));
+          const q = -0.15 * Math.exp(-Math.pow((phase - 0.24) / 0.016, 2));
+          const r = 0.95 * Math.exp(-Math.pow((phase - 0.27) / 0.022, 2));
+          const s = -0.32 * Math.exp(-Math.pow((phase - 0.30) / 0.020, 2));
+          const t = 0.32 * Math.exp(-Math.pow((phase - 0.52) / 0.08, 2));
+          return midY - ((p + q + r + s + t) * amp);
+        }
+
+        // 3. Agonal Rhythm (22 BPM dying wide beats)
+        if (this.mode === 'AGONAL') {
+          const cycleWidth = (this.speed * 60) / 22;
+          const phase = (x % cycleWidth) / cycleWidth;
+          const r = 0.70 * Math.exp(-Math.pow((phase - 0.30) / 0.045, 2));
+          const s = -0.40 * Math.exp(-Math.pow((phase - 0.38) / 0.055, 2));
+          return midY - ((r + s) * amp);
+        }
+
+        // 4. CPR Compressions Mechanical Waveform
+        if (this.mode === 'CPR_COMPRESSION') {
+          let compressionVal = 0;
+          const now = performance.now();
+          for (let i = this.compressionSpikes.length - 1; i >= 0; i--) {
+            const age = (now - this.compressionSpikes[i].timeCreated) / 1000;
+            if (age > 0.4) {
+              this.compressionSpikes.splice(i, 1);
+            } else {
+              const spring = Math.sin(age * 28) * Math.exp(-age * 12);
+              compressionVal += spring * amp * 1.35;
+            }
+          }
+          return midY - compressionVal + (Math.random() * 2 - 1);
+        }
+
+        // 5. Coarse Ventricular Fibrillation (V-Fib)
+        if (this.mode === 'VFIB_COARSE') {
+          const t = timeNow / 1000;
+          const chaos = (
+            Math.sin(t * 3.5 * Math.PI * 2) * 0.36 +
+            Math.sin(t * 6.2 * Math.PI * 2) * 0.28 +
+            Math.sin(t * 9.1 * Math.PI * 2) * 0.22 +
+            Math.sin(t * 13.4 * Math.PI * 2) * 0.15
+          ) * amp * 0.88;
+          return midY + chaos;
+        }
+
+        // 6. Defibrillation Shock Discharge
+        if (this.mode === 'DEFIB_DISCHARGE') {
+          return midY + (Math.random() * 28 - 14);
+        }
+
+        return midY;
+      }
+
+      startLoop() {
+        const render = (now) => {
+          const delta = (now - this.lastTime) / 1000;
+          this.lastTime = now;
+          const advance = this.speed * delta;
+          const startX = this.sweepX;
+          const endX = (this.sweepX + advance) % this.cssWidth;
+
+          const steps = Math.ceil(advance) + 1;
+          for (let s = 0; s <= steps; s++) {
+            const currentX = Math.floor((startX + s) % this.cssWidth);
+            this.waveformHistory[currentX] = this.calculateSampleY(currentX, now);
+          }
+          this.sweepX = endX;
+
+          this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight);
+
+          // Grid lines
+          this.ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+          this.ctx.lineWidth = 1;
+          this.ctx.beginPath();
+          for (let gx = 0; gx < this.cssWidth; gx += 24) {
+            this.ctx.moveTo(gx, 0); this.ctx.lineTo(gx, this.cssHeight);
+          }
+          for (let gy = 0; gy < this.cssHeight; gy += 24) {
+            this.ctx.moveTo(0, gy); this.ctx.lineTo(this.cssWidth, gy);
+          }
+          this.ctx.stroke();
+
+          // Waveform Color Shifting
+          const isCrimson = (this.mode === 'VFIB_COARSE' || this.mode === 'BRADYCARDIA' || this.mode === 'AGONAL' || this.mode === 'DEFIB_DISCHARGE');
+          this.ctx.strokeStyle = isCrimson ? '#FF3B5C' : '#10B981';
+          this.ctx.lineWidth = 2.2;
+          this.ctx.lineCap = 'round';
+
+          const gapWidth = 14;
+          const gapStart = this.sweepX;
+          const gapEnd = (this.sweepX + gapWidth) % this.cssWidth;
+
+          this.ctx.beginPath();
+          let drawing = false;
+          for (let x = 0; x < this.cssWidth; x++) {
+            const inGap = (gapStart < gapEnd)
+              ? (x >= gapStart && x <= gapEnd)
+              : (x >= gapStart || x <= gapEnd);
+
+            if (inGap) {
+              drawing = false;
+            } else {
+              const y = this.waveformHistory[x];
+              if (!drawing) {
+                this.ctx.moveTo(x, y); drawing = true;
+              } else {
+                this.ctx.lineTo(x, y);
+              }
+            }
+          }
+          this.ctx.stroke();
+
+          // Sweep lead dot
+          const tipY = this.waveformHistory[Math.floor(this.sweepX)] || (this.cssHeight / 2);
+          this.ctx.fillStyle = isCrimson ? '#FF3B5C' : '#10B981';
+          this.ctx.beginPath();
+          this.ctx.arc(this.sweepX, tipY, 3.8, 0, Math.PI * 2);
+          this.ctx.fill();
+
+          requestAnimationFrame(render);
+        };
+        requestAnimationFrame(render);
+      }
+    }
+
+    /* ==========================================================================
+       TIME-DOMAIN RMS MICROPHONE & WEBKIT SPEECH-TO-TEXT ENGINE
+       ========================================================================== */
+    class MicAudioSensor {
+      constructor() {
+        this.stream = null;
+        this.analyser = null;
+        this.gainFactor = 1.0;
+        this.recognition = null;
+        this.isSttRunning = false;
+        this.lastClapTimestamp = 0;
+        this.floatDataBuffer = null;
+      }
+
+      async ensureMicLive(timeoutMs = 1500) {
+        if (this.stream && this.analyser) return true;
+        try {
+          SoundEngine.initAndResume();
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.warn('getUserMedia not supported in this environment');
+            return false;
+          }
+          const micPromise = navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+          });
+          const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Mic timeout')), timeoutMs));
+          this.stream = await Promise.race([micPromise, timeoutPromise]);
+          const source = SoundEngine.ctx.createMediaStreamSource(this.stream);
+          this.analyser = SoundEngine.ctx.createAnalyser();
+          this.analyser.fftSize = 1024;
+          this.floatDataBuffer = new Float32Array(this.analyser.fftSize);
+          source.connect(this.analyser);
+          return true;
+        } catch(e) {
+          console.warn('Microphone permission error or timeout:', e);
+          return false;
+        }
+      }
+
+      async testMicAccess() {
+        const ok = await this.ensureMicLive();
+        alert(ok ? 'ไมโครโฟนเชื่อมต่อสำเร็จและพร้อมใช้งานค่ะ' : 'ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ในเบราว์เซอร์ค่ะ');
+      }
+
+      getRawRMS() {
+        if (!this.analyser) return 0;
+        if (!this.floatDataBuffer) this.floatDataBuffer = new Float32Array(this.analyser.fftSize);
+        this.analyser.getFloatTimeDomainData(this.floatDataBuffer);
+        let sumSquares = 0;
+        for (let i = 0; i < this.floatDataBuffer.length; i++) {
+          sumSquares += this.floatDataBuffer[i] * this.floatDataBuffer[i];
+        }
+        return Math.sqrt(sumSquares / this.floatDataBuffer.length);
+      }
+
+      // Responsive Calibrated Decibels: Never -- dB 0%! Shows 45-55 dB idle, 85+ dB shouting
+      getCalibratedDecibels() {
+        const rms = this.getRawRMS();
+        const db = Math.min(110, Math.max(35, Math.round(38 + (rms * 180 * this.gainFactor))));
+        return { raw: rms * this.gainFactor, db };
+      }
+
+      // Detect Acoustic Clap Transient with Debounce
+      detectAcousticClap() {
+        if (!this.analyser) return false;
+        const { db, raw } = this.getCalibratedDecibels();
+        const now = performance.now();
+
+        // Valid clap: db >= 78 with 260ms cooldown
+        if (db >= 78 || raw >= 0.22) {
+          if (now - this.lastClapTimestamp >= 260) {
+            this.lastClapTimestamp = now;
+            return true;
+          }
+        }
+        return false;
+      }
+
+      // Live Speech-to-Text via WebKit Speech Recognition
+      startSpeechRecognition(onResultCallback) {
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec) {
+          console.warn('Web Speech API is not supported in this browser.');
+          return;
+        }
+
+        if (this.recognition) {
+          try { this.recognition.abort(); } catch(e) {}
+        }
+
+        this.recognition = new SpeechRec();
+        this.recognition.lang = 'th-TH';
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
+        this.recognition.maxAlternatives = 1;
+        this.isSttRunning = true;
+
+        this.recognition.onresult = (event) => {
+          let interim = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              if (onResultCallback) onResultCallback(transcript.trim());
+            } else {
+              interim += transcript;
+            }
+          }
+          if (interim && onResultCallback) onResultCallback(interim.trim());
+        };
+
+        this.recognition.onerror = (e) => {
+          if (e.error !== 'no-speech') console.warn('SpeechRec error:', e.error);
+        };
+
+        this.recognition.onend = () => {
+          if (this.isSttRunning && (window.GameStateManager && [3, 5].includes(window.GameStateManager.currentStage))) {
+            try { this.recognition.start(); } catch(e) {}
+          }
+        };
+
+        try {
+          this.recognition.start();
+        } catch(e) {
+          console.warn('SpeechRec start failed:', e);
+        }
+      }
+
+      stopSpeechRecognition() {
+        this.isSttRunning = false;
+        if (this.recognition) {
+          try { this.recognition.stop(); } catch(e) {}
+          this.recognition = null;
+        }
+      }
+    }
+    const MicSensor = new MicAudioSensor();
+
+    /* ==========================================================================
+       GAME STATE MANAGER (SIMULATION FLOW, SCORING & ZERO-DEADLOCK MECHANICS)
+       ========================================================================== */
+    class GameStateManagerCore {
+      constructor() {
+        this.currentStage = 0;
+        this.sessionSeconds = 480;
+        this.score = 100;
+        this.cprCount = 0;
+        this.cprBeatTimestamps = [];
+        this.stage5Phase = 'CPR'; // CPR or AED
+        this.selectedTeamNumber = '01';
+        this.pickedTeams = [];
+        this.checklist = { location: false, incident: false, patient: false, aed: false };
+        this.stage3Locked = false;
+        this.aedSafetyUnlocked = false;
+        this.aedSteps = { step1: false, step2: false, step3: false };
+        this.lastBeatTime = 0;
+      }
+
+      init() {
+        this.bindEvents();
+        this.startMasterClock();
+        this.renderStage();
+      }
+
+      startMasterClock() {
+        setInterval(() => {
+          if (this.currentStage > 0 && this.currentStage < 6 && this.sessionSeconds > 0) {
+            this.sessionSeconds--;
+            const m = String(Math.floor(this.sessionSeconds / 60)).padStart(2, '0');
+            const s = String(this.sessionSeconds % 60).padStart(2, '0');
+            document.getElementById('masterTimerDisplay').innerText = `${m}:${s}`;
+          }
+        }, 1000);
+      }
+
+      quickReset() {
+        this.currentStage = 0;
+        this.sessionSeconds = 480;
+        this.score = 100;
+        this.cprCount = 0;
+        this.cprBeatTimestamps = [];
+        this.stage5Phase = 'CPR';
+        this.stage3Locked = false;
+        this.aedSafetyUnlocked = false;
+        this.checklist = { location: false, incident: false, patient: false, aed: false };
+        this.aedSteps = { step1: false, step2: false, step3: false };
+
+        SoundEngine.stopPulseScheduler();
+        SoundEngine.stopMetronome();
+        MicSensor.stopSpeechRecognition();
+
+        document.getElementById('masterTimerDisplay').innerText = '08:00';
+        document.getElementById('standbyLobbyScreen').style.display = 'flex';
+        window.ECGEngine.setMode('SINUS_NORMAL');
+        this.updateVitals(76, 98);
+        this.renderStage();
+        AIVoiceCoach.speak('ยินดีต้อนรับสู่ฐาน ฮาร์ทบีท รัช ค่ะ กดปุ่มสุ่มกลุ่มเพื่อเริ่มภารกิจได้เลยค่ะ');
+      }
+
+      updateVitals(hr, spo2) {
+        document.getElementById('hudHR').innerText = hr;
+        document.getElementById('hudSpO2').innerText = spo2;
+      }
+
+      shakeScreen() {
+        document.body.classList.remove('screen-shake');
+        void document.body.offsetWidth;
+        document.body.classList.add('screen-shake');
+        const overlay = document.getElementById('vignetteOverlay');
+        overlay.classList.add('flash-crimson');
+        setTimeout(() => overlay.classList.remove('flash-crimson'), 320);
+      }
+
+      setStage(newStage) {
+        if (newStage < 0 || newStage > 6) return;
+        this.currentStage = newStage;
+
+        SoundEngine.stopPulseScheduler();
+        SoundEngine.stopMetronome();
+        MicSensor.stopSpeechRecognition();
+
+        // Update Stepper Pills
+        for (let i = 0; i <= 6; i++) {
+          const pill = document.getElementById(`stepPill${i}`);
+          if (pill) {
+            pill.className = 'nav-step-pill';
+            if (i === this.currentStage) pill.classList.add('active');
+            else if (i < this.currentStage) pill.classList.add('cleared');
+          }
+        }
+
+        if (newStage === 0) {
+          document.getElementById('standbyLobbyScreen').style.display = 'flex';
+          window.ECGEngine.setMode('SINUS_NORMAL');
+          this.updateVitals(76, 98);
+        } else {
+          document.getElementById('standbyLobbyScreen').style.display = 'none';
+        }
+
+        // Realistic Physiological & Audio Progression
+        if (newStage === 1) {
+          window.ECGEngine.setMode('BRADYCARDIA');
+          this.updateVitals(38, 76);
+          SoundEngine.startPulseScheduler(540, 1580); // 38 BPM critical warning pulse
+          AIVoiceCoach.speak('เกิดอุบัติเหตุรถชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรงรถ และมีรถวิ่งผ่านด้วยความเร็ว สิ่งแรกที่ต้องทำคืออะไรคะ? เพื่อนๆ ช่วยกันชูนิ้วบอกข้อ 1 ถึง 4 ช่วยตัวแทนได้เลยค่ะ');
+        } else if (newStage === 2) {
+          window.ECGEngine.setMode('BRADYCARDIA');
+          this.updateVitals(38, 68);
+          SoundEngine.startPulseScheduler(540, 1580);
+          this.startStage2Listening();
+          AIVoiceCoach.speak('ผู้ป่วยหมดสติไม่รู้สึกตัวค่ะ! ทุกคนในห้องช่วยกันตะโกนดังๆ พร้อมกันว่า ช่วยด้วย มีคนหมดสติ โทร 1669 และเอาเครื่อง เออีดี มาด้วยค่ะ!');
+        } else if (newStage === 3) {
+          window.ECGEngine.setMode('BRADYCARDIA');
+          this.updateVitals(38, 62);
+          SoundEngine.startPulseScheduler(540, 1580);
+          this.stage3Locked = false;
+          AIVoiceCoach.speak('1669 รับแจ้งเหตุค่ะ ขอทราบสถานที่เกิดเหตุ ลักษณะเหตุการณ์ และอาการของผู้บาดเจ็บค่ะ ดูข้อมูลบนหน้าจอแล้วพูดใส่ไมค์ได้เลยค่ะ', false, () => {
+            this.startStage3LiveSTT();
+          });
+        } else if (newStage === 4) {
+          window.ECGEngine.setMode('AGONAL');
+          this.updateVitals(22, 48);
+          SoundEngine.startPulseScheduler(440, 2720); // 22 BPM agonal dying pulse
+          AIVoiceCoach.speak('เจ้าหน้าที่กำลังส่งรถพยาบาลไปค่ะ ระหว่างนี้ช่วยก้มดูหน้าอกผู้บาดเจ็บให้หน่อยค่ะ ผู้ป่วยมีเสียงหายใจเฮือกนานๆ ครั้ง แต่หน้าอกไม่ขยับ เราต้องทำอย่างไรคะ?');
+        } else if (newStage === 5) {
+          this.stage5Phase = 'CPR';
+          window.ECGEngine.setMode('CPR_COMPRESSION');
+          this.updateVitals(0, 40);
+          AIVoiceCoach.speak('ผู้ป่วยหัวใจหยุดเต้น! เริ่มกดหน้าอก ซีพีอาร์ ทันทีค่ะ ทุกคนในห้องช่วยกันปรบมือให้ตรงจังหวะบีต 110 ครั้งต่อนาที จนครบ 30 ครั้งนะคะ เริ่มเลยค่ะ!', false, () => {
+            this.startStage5CPR();
+          });
+        } else if (newStage === 6) {
+          window.ECGEngine.setMode('ROSC');
+          this.updateVitals(88, 98);
+          SoundEngine.playStageClear();
+          SoundEngine.startPulseScheduler(880, 680); // 88 BPM triumphant pulse
+          AIVoiceCoach.speak('ภารกิจสำเร็จ! หัวใจผู้ป่วยกลับมาเต้นเป็นปกติแล้วค่ะ ขอบคุณฮีโร่ทุกคนนะคะ');
+        }
+
+        this.renderStage();
+      }
+
+      // Render Active Stage inside Elevated Dark Slate Card
+      renderStage() {
+        const card = document.getElementById('activeStageCard');
+        if (!card) return;
+
+        // Stage 1: Scene Safety
+        if (this.currentStage === 1) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars">
+                  <div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div>
+                </div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+              <h2 class="stage-headline-clean">
+                อุบัติเหตุรถเก๋งชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรง เครื่องยนต์ยังติดอยู่ และมีรถแล่นผ่านด้วยความเร็ว!
+              </h2>
+              <p class="stage-sub-clean">
+                คุณและเพื่อนๆ ขับรถตามมาถึงเป็นคนแรก ก่อนจะลงมือช่วยเหลือ สิ่งแรกที่สุดที่ทีมกู้ชีพต้องทำคืออะไร?
+              </p>
+            </div>
+
+            <div class="clean-choice-grid">
+              <button id="choice1_1" onclick="GameStateManager.handleStage1Choice(1)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">1</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">รีบวิ่งเข้าไปกระชากเปิดประตูช่วยคนขับออกมาทันที</div>
+                  <div class="choice-desc-clean">เพราะกลัวไฟจะไหม้รถ ต้องรีบดึงออกมาให้เร็วที่สุด</div>
+                </div>
+              </button>
+
+              <button id="choice1_2" onclick="GameStateManager.handleStage1Choice(2)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">2</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">ประเมินความปลอดภัย ดับเครื่องยนต์/เปิดไฟฉุกเฉิน ปลอดภัยจึงเข้าช่วย</div>
+                  <div class="choice-desc-clean">หลักการแพทย์ฉุกเฉิน: ความปลอดภัยของผู้ช่วยเหลือสำคัญที่สุด</div>
+                </div>
+              </button>
+
+              <button id="choice1_3" onclick="GameStateManager.handleStage1Choice(3)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">3</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">รีบหยิบผ้ามาพันห้ามเลือดที่แขนคนขับก่อน เพราะเห็นเลือดออก</div>
+                  <div class="choice-desc-clean">รีบปฐมพยาบาลบาดแผลทันทีโดยไม่ประเมินสถานที่</div>
+                </div>
+              </button>
+
+              <button id="choice1_4" onclick="GameStateManager.handleStage1Choice(4)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">4</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">ยืนเคาะกระจกเรียกคนขับจากฝั่งเลนถนนโดยไม่ดูรถข้างหลัง</div>
+                  <div class="choice-desc-clean">ทดสอบดูว่ายังมีสติหรือไม่ เสี่ยงโดนรถคันอื่นเฉี่ยวชน</div>
+                </div>
+              </button>
+            </div>
+          `;
+        }
+
+        // Stage 2: Alert / Shout
+        else if (this.currentStage === 2) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+              <h2 class="stage-headline-clean">
+                เคลื่อนย้ายผู้ป่วยมานอนราบในจุดปลอดภัยแล้ว ตบไหล่เรียกไม่ตอบสนอง!
+              </h2>
+              <p class="stage-sub-clean">
+                ให้น้องตัวแทนและเพื่อนๆ ทั้งห้อง <strong style="color:var(--amber-warn);">ช่วยกันตะโกนดังๆ พร้อมกัน!</strong><br>
+                <em>"ช่วยด้วย มีคนหมดสติ โทร 1669 และเอาเครื่อง เออีดี มาด้วย!"</em>
+              </p>
+            </div>
+
+            <div class="shout-box-clean">
+              <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                <span style="font-size:14px; font-weight:700; color:#94A3B8;" class="font-technical">
+                  SHOUT LEVEL METER (เป้าหมาย: ตะโกนดังเกิน 82 dB ต่อเนื่อง ~1.5 วินาที)
+                </span>
+                <div style="display:flex; align-items:baseline; gap:12px;">
+                  <span id="txtLiveDecibel" class="font-mono" style="font-size:22px; font-weight:700; color:#38BDF8;">-- dB</span>
+                  <span id="txtShoutChargePct" class="font-mono" style="font-size:32px; font-weight:700; color:var(--amber-warn);">0%</span>
+                </div>
+              </div>
+
+              <div class="shout-track-clean">
+                <div id="shoutFillBar" class="shout-fill-clean"></div>
+                <div class="shout-target-line"></div>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:12px; color:#94A3B8;">ความไวไมค์ (Mic Gain):</span>
+                  <span id="txtMicGainLabel" class="font-mono" style="font-weight:700; color:#F8FAFC;">1.0x</span>
+                  <button onclick="GameStateManager.adjustMicGain(-0.2)" class="nav-btn" style="height:26px; padding:0 8px;">-</button>
+                  <button onclick="GameStateManager.adjustMicGain(0.2)" class="nav-btn" style="height:26px; padding:0 8px;">+</button>
+                  <button onclick="MicSensor.testMicAccess()" class="nav-btn" style="height:26px; font-size:11px;">🎙️ ทดสอบไมค์</button>
+                </div>
+                <button onclick="GameStateManager.advanceStage2Complete()" class="nav-btn" style="background:#059669; border-color:#059669; color:#FFF; font-weight:600;">
+                  ⚡ พิธีกรกดให้ผ่านทันที [SPACEBAR]
+                </button>
+              </div>
+            </div>
+          `;
+        }
+
+        // Stage 3: 1669 Dispatch Voice + Manual Presets
+        else if (this.currentStage === 3) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+
+              <div class="facts-strip-clean">
+                <div class="fact-card-clean">
+                  <div class="fact-label-clean">1. สถานที่เกิดเหตุ</div>
+                  <div class="fact-val-clean">ถนนสุขุมวิท หน้า รพ.มหาวิทยาลัยบูรพา</div>
+                </div>
+                <div class="fact-card-clean">
+                  <div class="fact-label-clean">2. ลักษณะเหตุการณ์</div>
+                  <div class="fact-val-clean">รถเก๋งชนรั้ว 1 คัน มีกลุ่มควัน</div>
+                </div>
+                <div class="fact-card-clean">
+                  <div class="fact-label-clean">3. อาการผู้บาดเจ็บ</div>
+                  <div class="fact-val-clean" style="color:var(--crimson-crit);">1 ราย หมดสติ ไม่หายใจ</div>
+                </div>
+              </div>
+
+              <h2 class="stage-headline-clean" style="font-size:24px;">
+                เจ้าหน้าที่ 1669: “1669 รับแจ้งเหตุค่ะ ขอทราบสถานที่ เหตุการณ์ และอาการของผู้บาดเจ็บค่ะ”
+              </h2>
+            </div>
+
+            <div class="voice-transcript-panel">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="font-technical" style="font-size:12px; font-weight:700; color:var(--blue-accent);">
+                  🎙️ กำลังฟังเสียงพูด... พูดแจ้งข้อมูลใส่ไมค์ได้เลยค่ะ
+                </span>
+                <div style="display:flex; gap:6px;">
+                  <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:24px; font-size:10px;">[1] พิกัด</button>
+                  <button onclick="GameStateManager.quickFillPreset(2)" class="nav-btn" style="height:24px; font-size:10px;">[2] รถชน</button>
+                  <button onclick="GameStateManager.quickFillPreset(3)" class="nav-btn" style="height:24px; font-size:10px;">[3] หมดสติ+AED</button>
+                </div>
+              </div>
+              <div id="txtLiveTranscript" class="live-transcript-box">
+                กำลังรอฟังเสียงพูดของน้องตัวแทน... (หรือคลิกติ๊กการ์ด 4 ข้อด้านล่าง)
+              </div>
+              <div class="manual-input-box">
+                <input type="text" id="inputManualDispatch" class="input-dispatch-text" placeholder="หรือพิมพ์ข้อมูลที่นี่ แล้วกด Enter..." onkeydown="if(event.key==='Enter') GameStateManager.submitManualDispatch(this.value)">
+                <button onclick="GameStateManager.submitManualDispatch(document.getElementById('inputManualDispatch').value)" class="nav-btn" style="height:38px;">ส่งข้อมูล</button>
+              </div>
+            </div>
+
+            <div class="checklist-pills-row">
+              <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean">
+                <div class="chk-pill-box">✓</div>
+                <div class="chk-pill-text">1. บอกพิกัด รพ.บูรพา</div>
+              </div>
+              <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean">
+                <div class="chk-pill-box">✓</div>
+                <div class="chk-pill-text">2. บอกเหตุการณ์ รถชน</div>
+              </div>
+              <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean">
+                <div class="chk-pill-box">✓</div>
+                <div class="chk-pill-text">3. บอกอาการ หมดสติ</div>
+              </div>
+              <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean">
+                <div class="chk-pill-box">✓</div>
+                <div class="chk-pill-text">4. ขอรถกู้ชีพ + AED</div>
+              </div>
+            </div>
+          `;
+          this.refreshChecklistPills();
+        }
+
+        // Stage 4: Agonal Gasping
+        else if (this.currentStage === 4) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+              <h2 class="stage-headline-clean">
+                เจ้าหน้าที่ 1669: “ช่วยก้มดูหน้าอกผู้บาดเจ็บให้หน่อยค่ะว่าขยับไหม?”
+              </h2>
+              <p class="stage-sub-clean">
+                ปรากฏว่า: ผู้ป่วยมีเสียงหายใจ <strong style="color:var(--crimson-crit);">“เฮือก... ฮึ่ก...”</strong> นานๆ ครั้ง หน้าอกไม่ขยับ และมีแผลเลือดซึมที่แขน เราต้องทำอย่างไร?
+              </p>
+            </div>
+
+            <div class="clean-choice-grid" style="margin-top:24px;">
+              <button onclick="GameStateManager.handleStage4Choice(1)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">1</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">ผู้ป่วยยังหายใจอยู่ ให้นั่งรอรถพยาบาลและทำแผลไปก่อน</div>
+                  <div class="choice-desc-clean">เข้าใจผิดคิดว่ายังมีลมหายใจ ทำให้การช่วยล่าช้า</div>
+                </div>
+              </button>
+
+              <button onclick="GameStateManager.handleStage4Choice(2)" class="clean-choice-tile">
+                <div class="choice-badge-slate font-mono">2</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">หายใจเฮือก = ไม่หายใจ! เริ่มกดหน้าอก CPR ทันที</div>
+                  <div class="choice-desc-clean">หลักการกู้ชีพ: Agonal Gasping คือสัญญาณหัวใจหยุดเต้น ต้องเริ่ม CPR ทันที</div>
+                </div>
+              </button>
+
+              <button onclick="GameStateManager.handleStage4Choice(3)" class="clean-choice-tile" style="grid-column:span 2;">
+                <div class="choice-badge-slate font-mono">3</div>
+                <div class="choice-content-box">
+                  <div class="choice-title-clean">เอายาดมจ่อจมูกและจับผู้ป่วยนอนตะแคง</div>
+                  <div class="choice-desc-clean">อันตราย! เสียเวลาทองในการช่วยชีวิต (Brain Death ภายใน 4 นาที)</div>
+                </div>
+              </button>
+            </div>
+          `;
+        }
+
+        // Stage 5A (CPR) or Stage 5B (AED Safety)
+        else if (this.currentStage === 5) {
+          if (this.stage5Phase === 'CPR') {
+            card.innerHTML = `
+              <div>
+                <div class="ai-voice-pill-clean">
+                  <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                  <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                  <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+                </div>
+                <h2 class="stage-headline-clean">
+                  ผู้ป่วยหัวใจหยุดเต้น! เริ่มกดหน้าอก CPR ทันที (30 ครั้ง จังหวะ 110 BPM)
+                </h2>
+                <p class="stage-sub-clean">
+                  ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทั้ง 10 กลุ่ม <strong style="color:var(--ecg-green);">ช่วยกันปรบมือให้ตรงจังหวะบีต!</strong> (หรือเคาะไมค์/กด Spacebar)
+                </p>
+              </div>
+
+              <div class="cpr-chamber-clean">
+                <div class="cpr-beat-lane" id="cprBeatLane">
+                  <div id="cprCenterTarget" class="cpr-center-target font-technical">
+                    ตบมือ!
+                  </div>
+                </div>
+
+                <div style="display:flex; align-items:baseline; gap:16px;">
+                  <span id="txtCprCount" class="font-mono" style="font-size:52px; font-weight:700; color:#F8FAFC;">00</span>
+                  <span style="font-size:20px; font-weight:700; color:#94A3B8;">/ 30 ครั้ง</span>
+                </div>
+
+                <div id="txtCprCadenceFeedback" class="font-mono" style="font-size:16px; font-weight:700; color:#10B981;">
+                  จังหวะ: 110 BPM (PERFECT RHYTHM)
+                </div>
+
+                <button onclick="GameStateManager.handleCprHitManual()" class="nav-btn" style="background:#0F172A; color:#FFF; height:38px; padding:0 20px;">
+                  ⚡ กดหน้าอก [SPACEBAR]
+                </button>
+              </div>
+            `;
+          } else {
+            // Stage 5B: AED Defibrillation Safety ("ฉันถอย คุณถอย ทุกคนถอย")
+            card.innerHTML = `
+              <div>
+                <div class="ai-voice-pill-clean">
+                  <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                  <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                  <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean">[ 🔊 ฟังซ้ำ ]</button>
+                </div>
+                <h2 class="stage-headline-clean" style="color:var(--crimson-crit);">
+                  เครื่อง เออีดี มาถึงแล้ว! คลื่นหัวใจชนิดต้องช็อกไฟฟ้า ให้พูดสั่งความปลอดภัย 3 คำดังๆ:
+                </h2>
+                <p class="stage-sub-clean">
+                  ตะโกนออกเสียง 3 คำสั่งทีละคำเพื่อปลดล็อกการช็อกไฟฟ้า (หรือคลิกการ์ดตามลำดับ):
+                </p>
+              </div>
+
+              <div class="aed-cards-row">
+                <div id="aedCard1" onclick="GameStateManager.triggerAedStep(1)" class="aed-step-card-clean ${this.aedSteps.step1 ? 'active' : ''}">
+                  <span class="font-mono" style="font-size:12px; color:#94A3B8;">ขั้นที่ 1</span>
+                  <div class="aed-step-headline font-technical">“ฉันถอย!”</div>
+                  <span style="font-size:13px; color:#94A3B8;">ผู้กดปุ่มถอยห่างจากคนไข้</span>
+                </div>
+
+                <div id="aedCard2" onclick="GameStateManager.triggerAedStep(2)" class="aed-step-card-clean ${this.aedSteps.step2 ? 'active' : ''}">
+                  <span class="font-mono" style="font-size:12px; color:#94A3B8;">ขั้นที่ 2</span>
+                  <div class="aed-step-headline font-technical">“คุณถอย!”</div>
+                  <span style="font-size:13px; color:#94A3B8;">เพื่อนข้างๆ ถอยห่าง</span>
+                </div>
+
+                <div id="aedCard3" onclick="GameStateManager.triggerAedStep(3)" class="aed-step-card-clean ${this.aedSteps.step3 ? 'active' : ''}">
+                  <span class="font-mono" style="font-size:12px; color:#94A3B8;">ขั้นที่ 3</span>
+                  <div class="aed-step-headline font-technical">“ทุกคนถอย!”</div>
+                  <span style="font-size:13px; color:#94A3B8;">ทุกคนห้ามแตะตัวคนไข้</span>
+                </div>
+              </div>
+
+              <div style="text-align:center; margin-top:20px;">
+                <span style="font-size:13px; color:var(--amber-warn); font-weight:600;">
+                  พูดสั่งการใส่ไมค์ หรือคลิกการ์ด 1 ➔ 2 ➔ 3 (หรือกดคีย์ 1, 2, 3 หรือ Spacebar)
+                </span>
+              </div>
+            `;
+          }
+        }
+
+        // Stage 6: Final Photo-Ready Rank Scoreboard
+        else if (this.currentStage === 6) {
+          const rank = this.score >= 92 ? { l: 'S', t: 'LEGENDARY LIFE SAVER (กู้ชีพสมบูรณ์แบบไร้ที่ติ)' }
+                     : this.score >= 85 ? { l: 'A+', t: 'ELITE FIRST RESPONDER (ทีมกู้ชีพยอดเยี่ยม)' }
+                     : { l: 'A', t: 'CERTIFIED RESCUER (ผ่านเกณฑ์มาตรฐาน)' };
+
+          card.innerHTML = `
+            <div class="rank-board-clean">
+              <div class="rank-top-summary">
+                <div class="rank-badge-tile">
+                  <span class="font-technical" style="font-size:11px; color:#F59E0B; letter-spacing:0.08em;">FINAL RANKING</span>
+                  <div class="rank-letter-gold font-technical">${rank.l}</div>
+                  <div style="font-size:12px; font-weight:700; color:#FFFFFF;">${rank.t}</div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; justify-content:space-between;">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                      <h2 style="font-size:26px; font-weight:700; color:#F8FAFC;">ภารกิจกู้ชีพฉุกเฉินสำเร็จ!</h2>
+                      <span class="font-mono" style="font-size:24px; font-weight:700; color:#10B981;">
+                        คะแนน ${this.score} / 100
+                      </span>
+                    </div>
+                    <p style="font-size:14px; color:#94A3B8; margin-top:4px;">
+                      กลุ่มที่ ${this.selectedTeamNumber} • คลื่นหัวใจกลับมาเป็นปกติ (ROSC 88 BPM) • ส่งต่อผู้ป่วยสู่ทีมกู้ชีพขั้นสูงสำเร็จ
+                    </p>
+                  </div>
+
+                  <div class="eval-cards-2x2">
+                    <div class="eval-card-item">
+                      <span style="font-size:12px; color:#94A3B8;">1. ความปลอดภัย (Scene Safety)</span>
+                      <span class="font-technical" style="font-size:12px; font-weight:700; color:#10B981;">PASSED (ดีเยี่ยม)</span>
+                    </div>
+                    <div class="eval-card-item">
+                      <span style="font-size:12px; color:#94A3B8;">2. ขอความช่วยเหลือ 1669 + AED</span>
+                      <span class="font-technical" style="font-size:12px; font-weight:700; color:#10B981;">PASSED (รวดเร็ว)</span>
+                    </div>
+                    <div class="eval-card-item">
+                      <span style="font-size:12px; color:#94A3B8;">3. ประเมิน Agonal Gasping</span>
+                      <span class="font-technical" style="font-size:12px; font-weight:700; color:#10B981;">PASSED (แม่นยำ)</span>
+                    </div>
+                    <div class="eval-card-item">
+                      <span style="font-size:12px; color:#94A3B8;">4. จังหวะ CPR (110 BPM) & AED</span>
+                      <span class="font-technical" style="font-size:12px; font-weight:700; color:#10B981;">110 BPM (PERFECT)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Clean Photo Zone for 10-Team Photo -->
+              <div class="photo-clean-zone font-technical">
+                [ UNOBSTRUCTED VIEWPORT // ยืนถ่ายรูปหมู่หน้าจอโปรเจกเตอร์ตรงนี้ได้โดยไม่บังคะแนน ]
+              </div>
+
+              <div style="display:flex; justify-content:center; margin-top:14px;">
+                <button onclick="GameStateManager.quickReset()" class="btn-start-console font-technical" style="width:auto; padding:12px 32px; font-size:14px;">
+                  [ RESTART FOR NEXT TEAM (QUICK RESET) ]
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Slot Machine Spin Animation
+      spinSlotGroup() {
+        SoundEngine.initAndResume();
+        const display = document.getElementById('txtSlotTeamNum');
+        const available = [];
+        for (let i = 1; i <= 10; i++) {
+          if (!this.pickedTeams.includes(i)) available.push(i);
+        }
+        if (available.length === 0) {
+          this.pickedTeams = [];
+          for (let i = 1; i <= 10; i++) available.push(i);
+        }
+
+        let rolls = 0;
+        const totalRolls = 22;
+        const step = () => {
+          rolls++;
+          const rand = Math.floor(Math.random() * 10) + 1;
+          display.innerText = String(rand).padStart(2, '0');
+
+          const freq = 320 + (rolls / totalRolls) * 640;
+          SoundEngine.playRouletteTick(freq);
+
+          if (rolls < totalRolls) {
+            const easeOutDelay = 50 + Math.pow(rolls / totalRolls, 2) * 160;
+            setTimeout(step, easeOutDelay);
+          } else {
+            const pick = available[Math.floor(Math.random() * available.length)];
+            this.pickedTeams.push(pick);
+            this.selectedTeamNumber = String(pick).padStart(2, '0');
+            display.innerText = this.selectedTeamNumber;
+
+            SoundEngine.playRandomizeWin();
+            AIVoiceCoach.speak(`กลุ่มที่ได้รับเลือกคือ กลุ่มที่ ${pick} ค่ะ ขอเชิญตัวแทนออกมาหน้าห้องได้เลยค่ะ!`);
+          }
+        };
+        step();
+      }
+
+      // Stage 1 Action
+      handleStage1Choice(choice) {
+        const btn = document.getElementById(`choice1_${choice}`);
+        if (choice === 2) {
+          if (btn) btn.classList.add('correct');
+          SoundEngine.playStageClear();
+          setTimeout(() => this.setStage(2), 1400);
+        } else {
+          if (btn) btn.classList.add('wrong');
+          SoundEngine.playErrorBuzz();
+          this.score = Math.max(85, this.score - 5);
+          this.shakeScreen();
+          setTimeout(() => this.setStage(2), 2000);
+        }
+      }
+
+      // Stage 2 Mic Tracking: Live Decibel Monitor Without Any Deadlocks
+      startStage2Listening() {
+        MicSensor.ensureMicLive().catch(() => {});
+        let charge = 0;
+
+        const loop = () => {
+          if (this.currentStage !== 2) return;
+
+          const { raw, db } = MicSensor.getCalibratedDecibels();
+          const txtDb = document.getElementById('txtLiveDecibel');
+          if (txtDb) txtDb.innerText = `${db} dB`;
+
+          // Threshold: >= 82 dB (or raw >= 0.16)
+          const isLoudShout = (db >= 82) || (raw >= 0.16);
+          if (isLoudShout) {
+            charge = Math.min(100, charge + 1.1); // ~1.5s loud shouting fills 100%
+          } else {
+            charge = Math.max(0, charge - 0.35); // gentle decay
+          }
+
+          const bar = document.getElementById('shoutFillBar');
+          const txtPct = document.getElementById('txtShoutChargePct');
+          if (bar) bar.style.width = `${charge}%`;
+          if (txtPct) txtPct.innerText = `${Math.round(charge)}%`;
+
+          if (charge >= 75) {
+            this.advanceStage2Complete();
+            return;
+          }
+
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      adjustMicGain(delta) {
+        MicSensor.gainFactor = Math.max(0.5, Math.min(3.0, MicSensor.gainFactor + delta));
+        const lbl = document.getElementById('txtMicGainLabel');
+        if (lbl) lbl.innerText = `${MicSensor.gainFactor.toFixed(1)}x`;
+      }
+
+      advanceStage2Complete() {
+        SoundEngine.playStageClear();
+        setTimeout(() => this.setStage(3), 1100);
+      }
+
+      // Stage 3 Live Speech-to-Text & Auto-Advance
+      startStage3LiveSTT() {
+        MicSensor.startSpeechRecognition((transcript) => {
+          const box = document.getElementById('txtLiveTranscript');
+          if (box) box.innerText = `“${transcript}”`;
+          this.parseDispatchKeywords(transcript);
+        });
+      }
+
+      submitManualDispatch(text) {
+        if (!text || !text.trim()) return;
+        const box = document.getElementById('txtLiveTranscript');
+        if (box) box.innerText = `“${text.trim()}”`;
+        this.parseDispatchKeywords(text);
+        const input = document.getElementById('inputManualDispatch');
+        if (input) input.value = '';
+      }
+
+      quickFillPreset(presetNum) {
+        if (presetNum === 1) {
+          this.checklist.location = true;
+          this.submitManualDispatch('ถนนสุขุมวิท หน้า รพ.บูรพา');
+        } else if (presetNum === 2) {
+          this.checklist.incident = true;
+          this.submitManualDispatch('รถเก๋งชนรั้ว มีควันพุ่ง');
+        } else if (presetNum === 3) {
+          this.checklist.patient = true;
+          this.checklist.aed = true;
+          this.submitManualDispatch('คนไข้หมดสติ ขอรถกู้ชีพและ AED ด่วน');
+        }
+        this.refreshChecklistPills();
+        this.checkStage3AutoAdvance();
+      }
+
+      parseDispatchKeywords(text) {
+        if (this.stage3Locked) return;
+        const val = text.toLowerCase();
+        if (val.includes('บูรพา') || val.includes('รพ') || val.includes('สุขุมวิท') || val.includes('หน้า') || val.includes('โรงพยาบาล')) {
+          this.checklist.location = true;
+        }
+        if (val.includes('รถ') || val.includes('ชน') || val.includes('รั้ว') || val.includes('อุบัติเหตุ')) {
+          this.checklist.incident = true;
+        }
+        if (val.includes('หมดสติ') || val.includes('ไม่หายใจ') || val.includes('ไม่รู้สึกตัว') || val.includes('1') || val.includes('คนเจ็บ')) {
+          this.checklist.patient = true;
+        }
+        if (val.includes('aed') || val.includes('เออีดี') || val.includes('กู้ชีพ') || val.includes('รถพยาบาล')) {
+          this.checklist.aed = true;
+        }
+        this.refreshChecklistPills();
+        this.checkStage3AutoAdvance();
+      }
+
+      toggleChecklistItem(key) {
+        if (this.stage3Locked) return;
+        this.checklist[key] = !this.checklist[key];
+        this.refreshChecklistPills();
+        this.checkStage3AutoAdvance();
+      }
+
+      refreshChecklistPills() {
+        const setPill = (id, checked) => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (checked) el.classList.add('checked');
+            else el.classList.remove('checked');
+          }
+        };
+        setPill('chkPillLoc', this.checklist.location);
+        setPill('chkPillInc', this.checklist.incident);
+        setPill('chkPillPat', this.checklist.patient);
+        setPill('chkPillAed', this.checklist.aed);
+      }
+
+      checkStage3AutoAdvance() {
+        if (this.stage3Locked) return;
+        const allDone = (this.checklist.location && this.checklist.incident && this.checklist.patient && this.checklist.aed);
+        if (allDone) {
+          this.stage3Locked = true;
+          MicSensor.stopSpeechRecognition();
+          SoundEngine.playStageClear();
+
+          const box = document.getElementById('txtLiveTranscript');
+          if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อแล้ว! รถกู้ชีพกำลังออกเดินทาง...</span>';
+
+          AIVoiceCoach.speak('1669 ได้รับข้อมูลครบทั้ง 4 ข้อแล้วค่ะ กำลังส่งรถพยาบาลและทีมกู้ชีพออกเดินทางทันทีค่ะ!');
+          // Auto-advance after 1.8 seconds according to V5 spec
+          setTimeout(() => this.setStage(4), 1800);
+        }
+      }
+
+      // Stage 4 Action
+      handleStage4Choice(choice) {
+        if (choice === 2) {
+          SoundEngine.playStageClear();
+          window.ECGEngine.setMode('VFIB_COARSE');
+          this.updateVitals(0, 35);
+          setTimeout(() => this.setStage(5), 1400);
+        } else {
+          SoundEngine.playErrorBuzz();
+          this.score = Math.max(85, this.score - 5);
+          this.shakeScreen();
+          setTimeout(() => this.setStage(5), 2000);
+        }
+      }
+
+      // Stage 5A CPR Metronome & Visual Beat Track
+      startStage5CPR() {
+        SoundEngine.startMetronome((beatTime) => {
+          this.lastBeatTime = beatTime;
+          // Flash center target
+          const target = document.getElementById('cprCenterTarget');
+          if (target) {
+            target.classList.add('flash');
+            setTimeout(() => target.classList.remove('flash'), 120);
+          }
+          this.spawnBeatMarker();
+        });
+
+        // Start acoustic clap detector loop
+        this.runClapDetectorLoop();
+      }
+
+      spawnBeatMarker() {
+        const lane = document.getElementById('cprBeatLane');
+        if (!lane) return;
+        const dot = document.createElement('div');
+        dot.className = 'beat-glide-dot';
+        dot.style.right = '0px';
+        lane.appendChild(dot);
+
+        let pos = 0;
+        const glide = () => {
+          pos += 5;
+          dot.style.right = `${pos}px`;
+          if (pos > lane.clientWidth + 20) {
+            dot.remove();
+          } else {
+            requestAnimationFrame(glide);
+          }
+        };
+        requestAnimationFrame(glide);
+      }
+
+      runClapDetectorLoop() {
+        const loop = () => {
+          if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
+          if (MicSensor.detectAcousticClap()) {
+            this.handleCprHitDetected();
+          }
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      handleCprHitManual() {
+        this.handleCprHitDetected();
+      }
+
+      handleCprHitDetected() {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
+        const now = performance.now();
+        const diffFromLastBeat = Math.abs(now - this.lastBeatTime);
+
+        // Anti-spam filter (<350ms is rejected according to V5 spec)
+        if (this.cprBeatTimestamps.length > 0) {
+          const intervalFromLastClap = now - this.cprBeatTimestamps[this.cprBeatTimestamps.length - 1];
+          if (intervalFromLastClap < 350) {
+            const fb = document.getElementById('txtCprCadenceFeedback');
+            if (fb) {
+              fb.innerText = 'เร็วเกินไป! รอจังหวะไฟเขียว';
+              fb.style.color = '#F59E0B';
+            }
+            return; // Anti-spam rejection!
+          }
+        }
+
+        this.cprBeatTimestamps.push(now);
+        this.cprCount++;
+        window.ECGEngine.triggerCompressionSpike();
+
+        const txt = document.getElementById('txtCprCount');
+        if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
+
+        const fb = document.getElementById('txtCprCadenceFeedback');
+        if (fb) {
+          if (diffFromLastBeat <= 175) {
+            fb.innerText = 'จังหวะเป๊ะ! (110 BPM)';
+            fb.style.color = '#10B981';
+          } else {
+            fb.innerText = 'ดีมาก! รักษาจังหวะไว้';
+            fb.style.color = '#38BDF8';
+          }
+        }
+
+        if (this.cprCount >= 30) {
+          SoundEngine.stopMetronome();
+          this.stage5Phase = 'AED';
+          window.ECGEngine.setMode('VFIB_COARSE');
+          SoundEngine.playAEDCharging();
+          this.aedSafetyUnlocked = false;
+
+          // 1.0s delay before unlocking Stage 5B listeners (prevents leftover clapping from triggering Step 1)
+          setTimeout(() => {
+            AIVoiceCoach.speak('เครื่อง เออีดี มาถึงแล้วค่ะ! คลื่นหัวใจชนิดต้องช็อกไฟฟ้า ให้พูดคำสั่งความปลอดภัยทีละคำว่า ฉันถอย... คุณถอย... ทุกคนถอย... เพื่อช็อกไฟฟ้าค่ะ!', false, () => {
+              this.aedSafetyUnlocked = true;
+              this.startAedVoiceTracking();
+            });
+          }, 1000);
+
+          this.renderStage();
+        }
+      }
+
+      // Stage 5B AED Voice Tracking: Speech Keywords + 3 Vocal Bursts
+      startAedVoiceTracking() {
+        // Speech Recognition for AED Commands
+        MicSensor.startSpeechRecognition((transcript) => {
+          if (!this.aedSafetyUnlocked) return;
+          const val = transcript.toLowerCase();
+          if (val.includes('ฉัน') || val.includes('ฉันถอย')) this.triggerAedStep(1);
+          if (val.includes('คุณ') || val.includes('คุณถอย')) this.triggerAedStep(2);
+          if (val.includes('ทุกคน') || val.includes('ทุกคนถอย')) this.triggerAedStep(3);
+        });
+
+        // Acoustic Vocal Burst Fallback (db >= 78 for 250ms separated by 450ms pause)
+        let inBurst = false;
+        let burstStart = 0;
+        let lastBurstEnd = 0;
+
+        const loop = () => {
+          if (this.currentStage !== 5 || this.stage5Phase !== 'AED' || !this.aedSafetyUnlocked) return;
+          const { db } = MicSensor.getCalibratedDecibels();
+          const now = performance.now();
+
+          if (db >= 78) {
+            if (!inBurst) {
+              inBurst = true;
+              burstStart = now;
+            }
+          } else {
+            if (inBurst) {
+              inBurst = false;
+              const duration = now - burstStart;
+              // Burst > 250ms and pause from last burst > 450ms
+              if (duration >= 250 && now - lastBurstEnd >= 450) {
+                lastBurstEnd = now;
+                if (!this.aedSteps.step1) this.triggerAedStep(1);
+                else if (!this.aedSteps.step2) this.triggerAedStep(2);
+                else if (!this.aedSteps.step3) this.triggerAedStep(3);
+              }
+            }
+          }
+
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+
+      triggerAedStep(stepNum) {
+        if (stepNum === 1) this.aedSteps.step1 = true;
+        if (stepNum === 2) this.aedSteps.step2 = true;
+        if (stepNum === 3) this.aedSteps.step3 = true;
+
+        SoundEngine.playStageClear();
+        const card = document.getElementById(`aedCard${stepNum}`);
+        if (card) card.classList.add('active');
+
+        // Check if all 3 steps complete
+        if (this.aedSteps.step1 && this.aedSteps.step2 && this.aedSteps.step3) {
+          this.deliverShock();
+        }
+      }
+
+      deliverShock() {
+        this.aedSafetyUnlocked = false;
+        MicSensor.stopSpeechRecognition();
+
+        // 0.7s warning tone before discharge
+        SoundEngine.playWarningTone(750, 0.7);
+
+        setTimeout(() => {
+          SoundEngine.playAEDShock();
+          window.ECGEngine.setMode('DEFIB_DISCHARGE');
+          const overlay = document.getElementById('vignetteOverlay');
+          overlay.classList.add('flash-discharge');
+
+          setTimeout(() => {
+            overlay.classList.remove('flash-discharge');
+            window.ECGEngine.setMode('ROSC');
+            this.setStage(6);
+          }, 800);
+        }, 700);
+      }
+
+      bindEvents() {
+        // Init Console
+        document.getElementById('btnStartConsole').addEventListener('click', () => {
+          try { SoundEngine.initAndResume(); } catch(e) {}
+          this.setStage(1);
+          // Request mic in background so permission prompt never blocks stage transition
+          MicSensor.ensureMicLive().catch(e => console.warn('Background mic request:', e));
+        });
+
+        // Spin Group
+        document.getElementById('btnSpinSlotGroup').addEventListener('click', () => {
+          this.spinSlotGroup();
+        });
+
+        // Mute Toggle
+        document.getElementById('btnMuteToggle').addEventListener('click', () => {
+          const isMuted = SoundEngine.toggleMute();
+          document.getElementById('btnMuteToggle').style.color = isMuted ? 'var(--crimson-crit)' : '#CBD5E1';
+        });
+
+        // Fullscreen Toggle
+        document.getElementById('btnFullscreenToggle').addEventListener('click', () => {
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+          else document.exitFullscreen().catch(() => {});
+        });
+
+        // Preflight Modal
+        document.getElementById('btnPreflightModal').addEventListener('click', () => {
+          document.getElementById('preflightModal').classList.add('open');
+        });
+        document.getElementById('btnClosePreflight').addEventListener('click', () => {
+          document.getElementById('preflightModal').classList.remove('open');
+        });
+
+        // Global Keydown
+        window.addEventListener('keydown', (e) => {
+          if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+          if (['1', '2', '3', '4'].includes(e.key)) {
+            const num = parseInt(e.key);
+            if (this.currentStage === 1) this.handleStage1Choice(num);
+            else if (this.currentStage === 4 && num <= 3) this.handleStage4Choice(num);
+            else if (this.currentStage === 5 && this.stage5Phase === 'AED' && num <= 3) this.triggerAedStep(num);
+          }
+
+          if (e.key === ' ' || e.code === 'Space') {
+            e.preventDefault();
+            if (e.repeat) return;
+            if (this.currentStage === 2) this.advanceStage2Complete();
+            else if (this.currentStage === 5) {
+              if (this.stage5Phase === 'CPR') this.handleCprHitManual();
+              else {
+                if (!this.aedSteps.step1) this.triggerAedStep(1);
+                else if (!this.aedSteps.step2) this.triggerAedStep(2);
+                else if (!this.aedSteps.step3) this.triggerAedStep(3);
+              }
+            }
+          }
+
+          if ((e.shiftKey && e.key === 'ArrowRight') || e.key === 'PageDown') {
+            this.setStage(this.currentStage + 1);
+          } else if (e.key === 'b' || e.key === 'B') {
+            this.setStage(this.currentStage - 1);
+          } else if (e.key === 'r' || e.key === 'R') {
+            this.quickReset();
+          } else if (e.key === 'f' || e.key === 'F') {
+            document.getElementById('btnFullscreenToggle').click();
+          } else if (e.key === 'm' || e.key === 'M') {
+            document.getElementById('btnMuteToggle').click();
+          }
+        });
+      }
+    }
+
+    // Global handles for event attributes and debug
+    window.SoundEngine = SoundEngine;
+    window.AIVoiceCoach = AIVoiceCoach;
+    window.MicSensor = MicSensor;
+
+    // Initialize systems on load
+    window.addEventListener('DOMContentLoaded', () => {
+      window.GameStateManager = new GameStateManagerCore();
+      window.ECGEngine = new ECGCanvasEngine('ecgCanvas');
+      window.GameStateManager.init();
+    });
+  </script>
+</body>
+</html>
