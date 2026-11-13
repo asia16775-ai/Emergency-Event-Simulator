@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.0 Safari & Chrome Perfected)</title>
+  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.1 Production)</title>
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
 
   <style>
     /* ==========================================================================
-       00. UNIFIED THAI TYPOGRAPHY & DESIGN TOKENS (V6.0 SAFARI & CHROME)
+       00. UNIFIED THAI TYPOGRAPHY & DESIGN TOKENS (V6.1 SAFARI & CHROME)
        ========================================================================== */
     :root {
       --font-thai: 'Prompt', 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -105,7 +105,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      padding: 0 20px;
       z-index: 100;
       flex-shrink: 0;
     }
@@ -113,16 +113,16 @@
     .nav-left-group {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
     }
     .brand-mark {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .brand-pulse-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       background: var(--ecg-green);
       box-shadow: 0 0 10px var(--ecg-green);
@@ -133,17 +133,17 @@
       50% { transform: scale(1.2); opacity: 1; }
     }
     .brand-title {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 800;
       letter-spacing: 0.05em;
       color: #FFFFFF;
     }
     .brand-dept {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-sub);
       font-weight: 500;
       border-left: 1px solid #334155;
-      padding-left: 12px;
+      padding-left: 10px;
     }
 
     /* Stage Steps Breadcrumb */
@@ -157,9 +157,9 @@
       border: 1px solid #1E293B;
     }
     .nav-step-pill {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 6px;
       color: var(--text-muted);
       transition: all 0.2s ease;
@@ -177,42 +177,51 @@
     .nav-right-controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     .session-clock-pill {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: #CBD5E1;
       background: #111827;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 6px;
       border: 1px solid #2A384C;
     }
     .session-clock-pill span.num-readout {
       color: var(--amber-warn);
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
     }
     .nav-btn {
       background: #111827;
       border: 1px solid #2A384C;
       color: #CBD5E1;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.15s ease;
     }
     .nav-btn:hover {
       background: #1F2937;
       border-color: #38BDF8;
       color: #FFFFFF;
+    }
+    .nav-btn.audio-reset-btn {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: #38BDF8;
+      color: #38BDF8;
+    }
+    .nav-btn.audio-reset-btn:hover {
+      background: #38BDF8;
+      color: #0B111A;
     }
 
     /* 96px High-DPI Realtime Telemetry Ribbon */
@@ -292,7 +301,7 @@
       align-items: flex-end;
     }
     .vital-label {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 0.05em;
       color: #64748B;
@@ -327,7 +336,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px 36px 36px 36px;
+      padding: 16px 32px 32px 32px;
       position: relative;
       overflow-y: auto;
     }
@@ -339,7 +348,7 @@
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
       width: 100%;
       max-width: 1180px;
-      padding: 26px 36px;
+      padding: 24px 32px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -352,12 +361,12 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 16px;
+      padding: 9px 16px;
       background: #0E1624;
       border: 1px solid #1E2D42;
       border-left: 4px solid #38BDF8;
       border-radius: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .voice-answer-bar.speaking {
       border-left-color: var(--amber-warn);
@@ -377,12 +386,12 @@
       gap: 2px;
     }
     .voice-bar-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: #94A3B8;
     }
     .voice-bar-transcript {
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 600;
       color: #38BDF8;
       min-height: 20px;
@@ -392,8 +401,8 @@
     .ai-voice-pill-clean {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 6px 14px;
+      gap: 10px;
+      padding: 5px 12px;
       background: #141E2D;
       border: 1px solid #2A384C;
       border-left: 3px solid #38BDF8;
@@ -438,7 +447,7 @@
       50% { height: 14px; }
     }
     .voice-pill-text-clean {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: #38BDF8;
     }
@@ -454,28 +463,28 @@
 
     /* Common Stage Headlines */
     .stage-headline-clean {
-      font-size: 24px;
+      font-size: 23px;
       font-weight: 700;
       color: #F8FAFC;
       line-height: 1.35;
       margin-bottom: 6px;
     }
     .stage-sub-clean {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 500;
       color: var(--text-sub);
       line-height: 1.45;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     /* ==========================================================================
-       03. STAGE 1 & 4: CHOICE TILES (GRID & VISUAL HIERARCHY)
+       03. STAGE 1 & 4: CHOICE TILES
        ========================================================================== */
     .clean-choices-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .clean-choice-tile {
       background: var(--bg-tile);
@@ -512,13 +521,13 @@
       flex: 1;
     }
     .choice-title-clean {
-      font-size: 15.5px;
+      font-size: 15px;
       font-weight: 700;
       color: #F8FAFC;
       margin-bottom: 2px;
     }
     .choice-desc-clean {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 500;
       color: #94A3B8;
       line-height: 1.35;
@@ -543,43 +552,87 @@
     }
 
     /* ==========================================================================
-       04. STAGE 2: DUAL-BAR SHOUT METERS & LOUDNESS GATING (V6.0 PERFECTED)
+       04. STAGE 2: DUAL-BAR SHOUT METERS & SLIDER CONTROL
        ========================================================================== */
     .shout-box-clean {
       background: #141E2D;
       border: 2px solid var(--border-tile);
       border-radius: 14px;
-      padding: 22px 28px;
-      margin-top: 10px;
+      padding: 20px 26px;
+      margin-top: 8px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
     .shout-target-banner {
       background: #0B111A;
       border: 2px solid #2A384C;
       border-radius: 12px;
-      padding: 14px 20px;
+      padding: 12px 18px;
       text-align: center;
     }
     .shout-banner-phrase {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 700;
       color: #F8FAFC;
       letter-spacing: 0.02em;
     }
     .shout-banner-hint {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 500;
       color: var(--amber-warn);
       margin-top: 4px;
     }
 
-    /* Bar 1 & Bar 2 Styling */
-    .meter-block {
+    /* Threshold Slider Control */
+    .threshold-slider-control {
+      background: #0B111A;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 8px 14px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+    }
+    .slider-clean {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #1E293B;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .slider-clean::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #38BDF8;
+      cursor: pointer;
+      box-shadow: 0 0 6px #38BDF8;
+    }
+    .preset-pill {
+      background: #1E293B;
+      border: 1px solid #334155;
+      color: #94A3B8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .preset-pill.active, .preset-pill:hover {
+      background: #38BDF8;
+      color: #0B111A;
+      border-color: #38BDF8;
+    }
+
+    /* Meter Bars */
+    .meter-block {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
     .meter-header-row {
       display: flex;
@@ -587,64 +640,54 @@
       align-items: baseline;
     }
     .meter-title {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #94A3B8;
     }
     .meter-value-txt {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 700;
     }
     .meter-track-container {
       position: relative;
-      height: 28px;
+      height: 26px;
       background: #0B111A;
       border: 1px solid #2A384C;
-      border-radius: 14px;
+      border-radius: 13px;
       overflow: hidden;
     }
     .meter-bar-fill {
       height: 100%;
       width: 0%;
       transition: width 0.08s linear;
-      border-radius: 14px;
+      border-radius: 13px;
     }
-    /* Target Line at 80 dB: (80 - 40) / (110 - 40) = 57.1% */
-    .target-line-80 {
+    .target-line-dynamic {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 57.1%;
+      left: 45.7%; /* Default 72 dB: (72-40)/70 */
       width: 2px;
       background: #F8FAFC;
       z-index: 5;
+      transition: left 0.1s ease;
     }
     .target-line-label {
       position: absolute;
       top: 2px;
-      left: calc(57.1% + 6px);
+      left: calc(45.7% + 6px);
       font-size: 10px;
       font-weight: 700;
       color: #F8FAFC;
       z-index: 6;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       padding: 1px 4px;
       border-radius: 3px;
-    }
-    .badge-speech-hint {
-      display: inline-block;
-      font-size: 12.5px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 6px;
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid var(--amber-warn);
-      color: var(--amber-warn);
-      margin-top: 4px;
+      transition: left 0.1s ease;
     }
 
     /* ==========================================================================
-       05. STAGE 3: 1669 LIVE DISPATCH (COMPACT PADDING & PROMISE-TTS)
+       05. STAGE 3: 1669 LIVE DISPATCH
        ========================================================================== */
     .facts-strip-clean {
       display: grid;
@@ -656,16 +699,16 @@
       background: var(--bg-tile);
       border: 1px solid var(--border-tile);
       border-radius: 10px;
-      padding: 9px 12px;
+      padding: 8px 12px;
     }
     .fact-label-clean {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: #94A3B8;
       margin-bottom: 2px;
     }
     .fact-val-clean {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       color: #F8FAFC;
     }
@@ -674,7 +717,7 @@
       background: #141E2D;
       border: 2px solid var(--border-tile);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       margin-bottom: 10px;
       display: flex;
       flex-direction: column;
@@ -682,7 +725,7 @@
     }
     .live-transcript-box {
       min-height: 38px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 500;
       color: #38BDF8;
       line-height: 1.4;
@@ -694,13 +737,13 @@
     }
     .input-dispatch-text {
       flex: 1;
-      height: 34px;
+      height: 32px;
       background: #0B111A;
       border: 1px solid var(--border-tile);
-      border-radius: 8px;
-      padding: 0 12px;
+      border-radius: 6px;
+      padding: 0 10px;
       color: #F8FAFC;
-      font-size: 13.5px;
+      font-size: 13px;
     }
     .checklist-pills-row {
       display: grid;
@@ -750,22 +793,22 @@
     }
 
     /* ==========================================================================
-       06. STAGE 5A: ZERO-DRIFT CPR BEAT & CLAP SPIKE METER
+       06. STAGE 5A: CPR CLAP DETECTOR & SENSITIVITY CONTROLS
        ========================================================================== */
     .cpr-chamber-clean {
       background: #141E2D;
       border: 2px solid var(--border-tile);
       border-radius: 16px;
-      padding: 20px 24px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       position: relative;
     }
     .cpr-beat-lane {
       width: 100%;
-      height: 90px;
+      height: 96px;
       background: #0B111A;
       border: 1px solid var(--border-tile);
       border-radius: 12px;
@@ -776,22 +819,23 @@
       overflow: hidden;
     }
     .cpr-center-target {
-      width: 76px;
-      height: 76px;
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
       background: #1E293B;
       border: 3px solid #38BDF8;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #F8FAFC;
-      font-size: 13.5px;
+      font-size: 14.5px;
       font-weight: 700;
       z-index: 10;
       cursor: pointer;
       transition: transform 0.1s ease, border-color 0.1s ease;
       text-align: center;
-      line-height: 1.2;
+      line-height: 1.25;
     }
     .cpr-center-target.listening-mode {
       border-color: var(--amber-warn);
@@ -809,12 +853,13 @@
     }
     .beat-glide-dot {
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #38BDF8;
-      box-shadow: 0 0 12px #38BDF8;
-      top: calc(50% - 8px);
+      box-shadow: 0 0 10px #38BDF8;
+      top: calc(50% - 7px);
+      pointer-events: none;
     }
 
     /* Live Clap Spike Meter */
@@ -844,33 +889,48 @@
       height: 100%;
       width: 0%;
       background: #38BDF8;
-      transition: width 0.05s linear;
+      transition: width 0.04s linear;
       border-radius: 7px;
     }
     .clap-meter-threshold-line {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 28%; /* Threshold 0.08 / 0.28 scale ~28% */
+      left: 18%; /* Dynamic sensitivity line */
       width: 2px;
       background: var(--amber-warn);
       z-index: 5;
     }
 
     /* ==========================================================================
-       07. STAGE 5B: AED SAFETY CARDS (SEQUENTIAL 750ms COOLDOWN)
+       07. STAGE 5B: AED SAFETY CARDS (2-PHASE READY CUE)
        ========================================================================== */
+    .aed-charging-banner {
+      background: #0F172A;
+      border: 2px solid var(--amber-warn);
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .aed-charging-banner.ready {
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.15);
+    }
     .aed-cards-cluster {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 14px;
-      margin: 14px 0;
+      margin: 10px 0;
     }
     .aed-safety-card {
       background: var(--bg-tile);
       border: 2px solid var(--border-tile);
       border-radius: 14px;
-      padding: 20px 16px;
+      padding: 18px 14px;
       text-align: center;
       transition: all 0.2s var(--ease-tactile);
       opacity: 0.45;
@@ -899,7 +959,7 @@
       margin-bottom: 4px;
     }
     .aed-card-voice-phrase {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       color: #F8FAFC;
     }
@@ -910,23 +970,23 @@
     }
 
     /* ==========================================================================
-       08. STAGE 6: BROADCAST ESPORTS // HERO MISSION SCOREBOARD
+       08. STAGE 6: HERO MISSION SCOREBOARD (NO AI SPEECH OVERLAY)
        ========================================================================== */
     .hero-scoreboard-container {
       background: linear-gradient(135deg, #0D1522 0%, #111D2E 60%, #0A191E 100%);
       border: 1px solid rgba(16, 185, 129, 0.35);
       border-radius: 24px;
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), 0 0 32px rgba(16, 185, 129, 0.12);
-      padding: 24px 28px;
+      padding: 22px 28px;
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
     .scoreboard-top-split {
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 28px;
+      grid-template-columns: 330px 1fr;
+      gap: 26px;
       align-items: center;
     }
 
@@ -935,7 +995,7 @@
       background: rgba(11, 17, 26, 0.65);
       border: 1px solid rgba(56, 189, 248, 0.2);
       border-radius: 18px;
-      padding: 20px 16px;
+      padding: 18px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -944,12 +1004,12 @@
     }
     .radial-gauge-wrapper {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 150px;
+      height: 150px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .radial-gauge-svg {
       transform: rotate(-90deg);
@@ -978,30 +1038,30 @@
       justify-content: center;
     }
     .rank-letter-display {
-      font-size: 58px;
+      font-size: 54px;
       font-weight: 800;
       line-height: 1;
       color: #F59E0B;
       text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
     }
     .rank-points-counter {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: #94A3B8;
       margin-top: 2px;
     }
     .hero-title-pill {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: #10B981;
       background: rgba(16, 185, 129, 0.14);
       border: 1px solid #10B981;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 6px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .team-badge-display {
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       color: #38BDF8;
       margin-top: 4px;
@@ -1011,13 +1071,13 @@
     .scoreboard-right-stats {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
     .mini-rosc-strip {
       background: #090E17;
       border: 1px solid #1E293B;
       border-radius: 10px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1028,7 +1088,7 @@
       gap: 16px;
     }
     .rosc-badge-txt {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: #10B981;
       display: flex;
@@ -1047,13 +1107,13 @@
     .tactical-stat-bars {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
     }
     .tactical-bar-item {
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid #1E293B;
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 7px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1072,20 +1132,20 @@
       flex-direction: column;
     }
     .tactical-name {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       letter-spacing: 0.05em;
       color: #94A3B8;
     }
     .tactical-detail {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 600;
       color: #F8FAFC;
     }
     .tactical-grade-badge {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
       background: rgba(16, 185, 129, 0.15);
       border: 1px solid #10B981;
@@ -1098,15 +1158,15 @@
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding-top: 12px;
+      padding-top: 10px;
     }
     .event-branding-txt {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: #94A3B8;
     }
     .event-slogan-txt {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       color: #38BDF8;
       margin-left: 8px;
@@ -1115,8 +1175,8 @@
       background: #10B981;
       color: #062415;
       font-weight: 700;
-      font-size: 13px;
-      padding: 8px 18px;
+      font-size: 12.5px;
+      padding: 7px 16px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
@@ -1139,16 +1199,16 @@
       font-weight: 600;
       border: 1px dashed #1E293B;
       border-radius: 12px;
-      margin-top: 14px;
+      margin-top: 12px;
     }
 
     /* ==========================================================================
-       09. LOBBY MODAL (DAYLIGHT BRAUN SIMULATOR INTRO)
+       09. LOBBY MODAL (SLOT-MACHINE ROULETTE ANIMATION)
        ========================================================================== */
     .lobby-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(4, 7, 12, 0.92);
+      background: rgba(4, 7, 12, 0.94);
       backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
@@ -1161,12 +1221,12 @@
       border-radius: 20px;
       width: 90%;
       max-width: 580px;
-      padding: 36px 38px;
+      padding: 34px 38px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
     .lobby-logo-pill {
       font-size: 12px;
@@ -1200,21 +1260,27 @@
       background: #1E293B;
       border: 1px solid #334155;
       color: #F8FAFC;
-      padding: 8px 18px;
+      padding: 8px 20px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.15s ease;
     }
     .btn-team-random:hover {
       border-color: #38BDF8;
+      background: #253347;
+    }
+    .btn-team-random:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     .btn-start-console-clean {
       background: #10B981;
       color: #062415;
-      font-size: 16.5px;
+      font-size: 16px;
       font-weight: 700;
-      padding: 14px 28px;
+      padding: 13px 26px;
       border-radius: 10px;
       border: none;
       cursor: pointer;
@@ -1224,9 +1290,80 @@
       background: #34D399;
       transform: translateY(-1px);
     }
+
+    /* Settings & Voice Audition Modal */
+    .settings-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 7, 12, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .settings-card {
+      background: #111827;
+      border: 1px solid #2A384C;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 480px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .settings-select {
+      width: 100%;
+      height: 38px;
+      background: #0B111A;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #F8FAFC;
+      padding: 0 10px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* Clean Non-Blocking Toast Notification */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3000;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+    .toast-bubble {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid #38BDF8;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.25);
+      color: #F8FAFC;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      transform: translateY(-10px) scale(0.96);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .toast-bubble.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   </style>
 </head>
 <body>
+
+  <!-- Non-Blocking Toast Notification Layer -->
+  <div id="toastContainer" class="toast-container"></div>
 
   <!-- Fullscreen Critical / Defib Vignette Overlay -->
   <div id="vignetteOverlay"></div>
@@ -1254,8 +1391,14 @@
       <div class="session-clock-pill font-technical">
         SESSION <span id="txtSessionClock" class="num-readout">08:00</span>
       </div>
+      <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn" title="รีเซ็ตระดับเสียงและไมค์ให้ดังเต็มที่ทันที">
+        🔄 รีเซ็ตเสียง
+      </button>
       <button id="btnVoiceModeToggle" onclick="AIVoiceCoach.toggleVoiceMode()" class="nav-btn font-technical">
         🔊 เสียง AI: เปิด
+      </button>
+      <button onclick="GameStateManager.openSettingsModal()" class="nav-btn font-technical" title="เลือกเสียง AI ภาษาไทย">
+        ⚙️ เสียง
       </button>
       <button onclick="SoundEngine.toggleMute()" class="nav-btn font-technical" title="Mute Toggle [M]">
         🔊
@@ -1301,7 +1444,7 @@
     </div>
   </main>
 
-  <!-- Lobby Intro Modal -->
+  <!-- Lobby Intro Modal with Slot-Machine Roulette Animation -->
   <div id="modalLobby" class="lobby-modal-backdrop">
     <div class="lobby-card-clean">
       <div class="lobby-logo-pill font-technical">
@@ -1318,11 +1461,11 @@
         <span style="font-size:12px; color:#94A3B8; font-weight:600;" class="font-technical">
           สุ่มกลุ่มตัวแทน (กลุ่ม 01–10)
         </span>
-        <div id="txtTeamBadge" class="num-readout" style="font-size:42px; font-weight:800; color:#38BDF8;">
-          --
+        <div id="txtTeamBadge" class="num-readout" style="font-size:46px; font-weight:800; color:#38BDF8; transition: transform 0.15s ease;">
+          03
         </div>
-        <button onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
-          [ กดสุ่มกลุ่ม 01–10 ]
+        <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
+          🎲 [ กดสุ่มกลุ่ม 01–10 (มีเอฟเฟกต์) ]
         </button>
       </div>
 
@@ -1336,11 +1479,38 @@
     </div>
   </div>
 
+  <!-- Settings & Thai Voice Audition Modal -->
+  <div id="modalSettings" class="settings-modal-backdrop">
+    <div class="settings-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-size:17px; font-weight:700; color:#F8FAFC;" class="font-technical">⚙️ ตั้งค่าเสียง AI และระบบไมโครโฟน</h3>
+        <button onclick="GameStateManager.closeSettingsModal()" class="nav-btn" style="height:28px;">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label style="font-size:12px; color:#94A3B8; font-weight:600;" class="font-technical">เลือกเสียง AI ภาษาไทยที่ชอบ:</label>
+        <select id="selectThaiVoice" class="settings-select font-technical" onchange="AIVoiceCoach.selectVoice(this.value)">
+          <option value="">กำลังโหลดเสียงในเครื่อง...</option>
+        </select>
+        <button onclick="AIVoiceCoach.testAuditionVoice()" class="nav-btn font-technical" style="align-self:flex-start; margin-top:4px;">
+          🔊 ทดลองฟังเสียง AI นี้
+        </button>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #2A384C; padding-top:12px;">
+        <button id="btnVolumeBoost" onclick="SoundEngine.toggleVolumeBoost()" class="nav-btn font-technical">
+          🔈 เสียงปกติ (100%)
+        </button>
+        <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn">
+          🔄 รีเซ็ตเสียงเต็มระบบ
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==========================================================================
-       JAVASCRIPT ARCHITECTURE (V6.0 SAFARI & CHROME PERFECTED)
+       JAVASCRIPT ARCHITECTURE (V6.1 SAFARI & CHROME PERFECTED - 12 USER FIXES)
        ========================================================================== -->
   <script>
-    // Global State for Half-Duplex Walkie-Talkie Gate
+    // Global State for Half-Duplex Gate
     window.isSystemSpeaking = false;
 
     // Helper: Phonetic Thai TTS Dictionary
@@ -1355,13 +1525,32 @@
         .replace(/ม\.บูรพา/g, 'มหาวิทยาลัยบูรพา');
     }
 
+    // Helper: Non-blocking HUD Toast Notification
+    function showToast(msg, durationMs = 2600) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast-bubble font-technical';
+      toast.innerText = msg;
+      container.appendChild(toast);
+      requestAnimationFrame(() => toast.classList.add('show'));
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 280);
+      }, durationMs);
+    }
+
     /* ==========================================================================
-       SOUND ENGINE (PROCEDURAL WEB AUDIO SYNTHESIS & REALISTIC CARDIAC SOUNDS)
+       SOUND ENGINE (MASTER GAIN, AUDIO DUCKING FIX & PROCEDURAL SOUNDS)
        ========================================================================== */
     class SoundEngineCore {
       constructor() {
         this.ctx = null;
+        this.masterGain = null;
         this.isMuted = false;
+        this.masterVolume = 1.0;
         this.pulseTimer = null;
         this.pulseFreq = 620;
         this.pulseIntervalMs = 1580; // Bradycardia 38 BPM
@@ -1372,7 +1561,12 @@
         try {
           if (!this.ctx) {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-            if (AudioContextClass) this.ctx = new AudioContextClass();
+            if (AudioContextClass) {
+              this.ctx = new AudioContextClass();
+              this.masterGain = this.ctx.createGain();
+              this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
+              this.masterGain.connect(this.ctx.destination);
+            }
           }
           if (this.ctx && this.ctx.state === 'suspended') {
             this.ctx.resume().catch(() => {});
@@ -1382,8 +1576,39 @@
         }
       }
 
+      // Fix #3: Master Audio Reset Function
+      resetAudioSystem() {
+        try {
+          this.initAndResume();
+          if (this.ctx && this.masterGain) {
+            this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
+          }
+          if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+          }
+          window.isSystemSpeaking = false;
+          AIVoiceCoach.isSpeaking = false;
+          this.playIntercomChime();
+          showToast('🔄 รีเซ็ตระดับเสียงและไมค์เต็ม 100% เรียบร้อยแล้วค่ะ');
+        } catch(e) {
+          console.warn('Audio reset error:', e);
+        }
+      }
+
+      toggleVolumeBoost() {
+        this.masterVolume = this.masterVolume === 1.0 ? 1.4 : 1.0;
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
+        }
+        const btn = document.getElementById('btnVolumeBoost');
+        if (btn) btn.innerText = this.masterVolume > 1.0 ? '🔊 เสียงเร่งพิเศษ (140%)' : '🔈 เสียงปกติ (100%)';
+      }
+
       toggleMute() {
         this.isMuted = !this.isMuted;
+        if (this.masterGain && this.ctx) {
+          this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : this.masterVolume, this.ctx.currentTime);
+        }
         return this.isMuted;
       }
 
@@ -1406,39 +1631,39 @@
       }
 
       playPulseBeep(freq = 620, duration = 0.08) {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-          gain.gain.setValueAtTime(0.09, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start();
           osc.stop(this.ctx.currentTime + duration);
         } catch(e) {}
       }
 
       playWarningTone(freq = 820, duration = 0.2) {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start();
           osc.stop(this.ctx.currentTime + duration);
         } catch(e) {}
       }
 
       playIntercomChime() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         const freqs = [660, 880];
         freqs.forEach((f, i) => {
           setTimeout(() => {
@@ -1447,10 +1672,10 @@
               const gain = this.ctx.createGain();
               osc.type = 'triangle';
               osc.frequency.setValueAtTime(f, this.ctx.currentTime);
-              gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+              gain.gain.setValueAtTime(0.14, this.ctx.currentTime);
               gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.28);
               osc.connect(gain);
-              gain.connect(this.ctx.destination);
+              gain.connect(this.masterGain);
               osc.start();
               osc.stop(this.ctx.currentTime + 0.28);
             } catch(e) {}
@@ -1458,8 +1683,26 @@
         });
       }
 
+      playTelephoneRing() {
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
+        try {
+          const osc1 = this.ctx.createOscillator();
+          const osc2 = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc1.type = 'sine'; osc1.frequency.setValueAtTime(440, this.ctx.currentTime);
+          osc2.type = 'sine'; osc2.frequency.setValueAtTime(480, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.65);
+          osc1.connect(gain); osc2.connect(gain);
+          gain.connect(this.masterGain);
+          osc1.start(); osc2.start();
+          osc1.stop(this.ctx.currentTime + 0.65);
+          osc2.stop(this.ctx.currentTime + 0.65);
+        } catch(e) {}
+      }
+
       playStageClear() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         const chords = [523.25, 659.25, 783.99]; // C Major
         chords.forEach((freq, idx) => {
           setTimeout(() => {
@@ -1468,10 +1711,10 @@
               const gain = this.ctx.createGain();
               osc.type = 'sine';
               osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-              gain.gain.setValueAtTime(0.09, this.ctx.currentTime);
+              gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
               gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
               osc.connect(gain);
-              gain.connect(this.ctx.destination);
+              gain.connect(this.masterGain);
               osc.start();
               osc.stop(this.ctx.currentTime + 0.35);
             } catch(e) {}
@@ -1480,24 +1723,24 @@
       }
 
       playErrorBuzz() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(120, this.ctx.currentTime);
           osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.25);
-          gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.25);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start();
           osc.stop(this.ctx.currentTime + 0.25);
         } catch(e) {}
       }
 
       playMetronome110() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           this.lastMetronomeClickTime = performance.now();
           const now = this.ctx.currentTime;
@@ -1506,17 +1749,17 @@
           osc.type = 'square';
           osc.frequency.setValueAtTime(960, now);
           osc.frequency.exponentialRampToValueAtTime(180, now + 0.045);
-          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.setValueAtTime(0.18, now);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start(now);
           osc.stop(now + 0.045);
         } catch(e) {}
       }
 
       playAEDCharging() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
@@ -1525,27 +1768,27 @@
           osc.frequency.setValueAtTime(320, now);
           osc.frequency.exponentialRampToValueAtTime(1600, now + 2.8);
           gain.gain.setValueAtTime(0.01, now);
-          gain.gain.linearRampToValueAtTime(0.14, now + 2.8);
+          gain.gain.linearRampToValueAtTime(0.18, now + 2.8);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.0);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start(now);
           osc.stop(now + 3.0);
         } catch(e) {}
       }
 
       playAEDShock() {
-        if (this.isMuted || !this.ctx) return;
+        if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(80, now);
-          gain.gain.setValueAtTime(0.4, now);
+          osc.frequency.setValueAtTime(75, now);
+          gain.gain.setValueAtTime(0.5, now);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.masterGain);
           osc.start(now);
           osc.stop(now + 0.45);
         } catch(e) {}
@@ -1554,12 +1797,13 @@
     const SoundEngine = new SoundEngineCore();
 
     /* ==========================================================================
-       AI VOICE COACH & ASYNC speakAndWait() (FIX #3 & HALF-DUPLEX GATE)
+       NATURAL THAI AI VOICE COACH & AUDITION (FIX #10)
        ========================================================================== */
     class AIVoiceCoachCore {
       constructor() {
         this.synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
         this.thaiVoice = null;
+        this.availableThaiVoices = [];
         this.isEnabled = true;
         this.isVoiceModeEnabled = true;
         this.isSpeaking = false;
@@ -1571,17 +1815,50 @@
         if (!this.synth) return;
         const findThai = () => {
           const voices = this.synth.getVoices();
-          const thaiVoices = voices.filter(v => v.lang.toLowerCase().includes('th'));
+          this.availableThaiVoices = voices.filter(v => v.lang.toLowerCase().includes('th'));
+          // Priority Selection: Google ภาษาไทย -> Premwadee -> Natural -> Siri -> Narisa -> Cloud
           this.thaiVoice =
-            thaiVoices.find(v => v.name.includes('Google')) ||
-            thaiVoices.find(v => v.name.includes('Natural') || v.name.includes('Premwadee')) ||
-            thaiVoices.find(v => !v.localService) ||
-            thaiVoices[0] || null;
+            this.availableThaiVoices.find(v => v.name.includes('Google')) ||
+            this.availableThaiVoices.find(v => v.name.includes('Premwadee')) ||
+            this.availableThaiVoices.find(v => v.name.includes('Natural')) ||
+            this.availableThaiVoices.find(v => v.name.includes('Siri')) ||
+            this.availableThaiVoices.find(v => v.name.includes('Narisa')) ||
+            this.availableThaiVoices[0] || null;
+
+          this.populateDropdown();
         };
         findThai();
         if (this.synth.onvoiceschanged !== undefined) {
           this.synth.onvoiceschanged = findThai;
         }
+      }
+
+      populateDropdown() {
+        const sel = document.getElementById('selectThaiVoice');
+        if (!sel) return;
+        sel.innerHTML = '';
+        if (this.availableThaiVoices.length === 0) {
+          sel.innerHTML = '<option value="">ระบบใช้เสียงสังเคราะห์เริ่มต้นของเบราว์เซอร์</option>';
+          return;
+        }
+        this.availableThaiVoices.forEach(v => {
+          const opt = document.createElement('option');
+          opt.value = v.name;
+          opt.innerText = `${v.name} (${v.lang})`;
+          if (this.thaiVoice && v.name === this.thaiVoice.name) opt.selected = true;
+          sel.appendChild(opt);
+        });
+      }
+
+      selectVoice(voiceName) {
+        const found = this.availableThaiVoices.find(v => v.name === voiceName);
+        if (found) {
+          this.thaiVoice = found;
+        }
+      }
+
+      testAuditionVoice() {
+        speakAndWait('สวัสดีค่ะ ยินดีต้อนรับสู่ คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา สายด่วน หนึ่ง หก หก เก้า พร้อมให้คำแนะนำค่ะ');
       }
 
       toggleVoiceMode() {
@@ -1630,7 +1907,7 @@
     }
     const AIVoiceCoach = new AIVoiceCoachCore();
 
-    // Mandatory Global speakAndWait(text) Implementation (Fix #3)
+    // Mandatory Global speakAndWait(text) Implementation
     function speakAndWait(text) {
       return new Promise((resolve) => {
         AIVoiceCoach.currentScript = text;
@@ -1643,7 +1920,7 @@
           return;
         }
 
-        // Half-Duplex Gate: Stop active speech recognition to prevent speaker audio buffering!
+        // Half-Duplex Gate: Stop speech recognition to prevent speaker buffering
         window.isSystemSpeaking = true;
         AIVoiceCoach.isSpeaking = true;
         MicSensor.stopSpeechRecognition();
@@ -1654,21 +1931,21 @@
         const utter = new SpeechSynthesisUtterance(phoneticText);
         if (AIVoiceCoach.thaiVoice) utter.voice = AIVoiceCoach.thaiVoice;
         utter.lang = 'th-TH';
-        utter.rate = 1.02;
+        utter.rate = 0.98; // Natural, calm medical tempo
         utter.pitch = 1.0;
+        utter.volume = 1.0;
 
         let settled = false;
         const finish = () => {
           if (settled) return;
           settled = true;
-          // Add 650ms natural pause AFTER the AI finishes its last word before reopening mic
+          // Natural 650ms room reverb cooldown before reopening mic
           setTimeout(() => {
             AIVoiceCoach.releaseGate();
             resolve();
           }, 650);
         };
 
-        // Dynamic safety timeout based on text length so it never hangs
         const minDurationMs = Math.max(5000, phoneticText.length * 140);
         const safetyTimer = setTimeout(() => {
           console.warn('Speech safety fallback fired');
@@ -1689,7 +1966,7 @@
     }
 
     /* ==========================================================================
-       HIGH-DPI REALTIME ECG ENGINE (CANVAS RIBBON & GAUSSIAN CARDIAC WAVES)
+       HIGH-DPI CLINICAL ECG ENGINE (BURAPHA MEDICAL ACCURACY - FIX #12)
        ========================================================================== */
     class ECGCanvasEngine {
       constructor(canvasId) {
@@ -1873,7 +2150,7 @@
     }
 
     /* ==========================================================================
-       PERSISTENT MIC & WEBAUDIO SENSOR (SAFARI WEBKIT & CHROME FIXED)
+       PERSISTENT MIC & WEBAUDIO SENSOR (CLAP DETECTION FIXED - FIX #7)
        ========================================================================== */
     class MicAudioSensor {
       constructor() {
@@ -1884,25 +2161,34 @@
         this.recognition = null;
         this.isSttRunning = false;
         this.lastClapTimestamp = 0;
-        this.timeData = null;
-        this.noiseFloor = 0.02;
+        this.byteTimeData = null;
+        this.byteFreqData = null;
+        this.noiseFloor = 0.05;
+        this.cprClapSensitivity = 0.16;
         this.onResultCallback = null;
       }
 
-      async ensureMicLive(timeoutMs = 1500) {
+      async ensureMicLive(timeoutMs = 2000) {
         if (window._analyser && window._micStream && window._micStream.active) {
-          this.stream = window._micStream;
-          this.analyser = window._analyser;
-          return true;
+          const track = window._micStream.getAudioTracks()[0];
+          if (track && track.readyState === 'live' && track.enabled) {
+            this.stream = window._micStream;
+            this.analyser = window._analyser;
+            return true;
+          }
         }
         try {
           SoundEngine.initAndResume();
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            console.warn('getUserMedia not supported in this environment');
+            console.warn('getUserMedia not supported');
             return false;
           }
           const micPromise = navigator.mediaDevices.getUserMedia({
-            audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+            audio: {
+              echoCancellation: false,
+              noiseSuppression: false,
+              autoGainControl: false
+            }
           });
           const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Mic timeout')), timeoutMs));
           const stream = await Promise.race([micPromise, timeoutPromise]);
@@ -1915,13 +2201,13 @@
 
           const analyser = SoundEngine.ctx.createAnalyser();
           analyser.fftSize = 1024;
-          analyser.smoothingTimeConstant = 0.25;
+          analyser.smoothingTimeConstant = 0.2;
           window._analyser = analyser;
           this.analyser = analyser;
-          this.timeData = new Float32Array(analyser.fftSize);
+          this.byteTimeData = new Uint8Array(analyser.fftSize);
+          this.byteFreqData = new Uint8Array(analyser.frequencyBinCount);
 
-          // CRITICAL FOR SAFARI WEBKIT: Connect analyser to destination via near-zero gain
-          // Otherwise Safari stops pulling audio frames through the AnalyserNode!
+          // Safari WebKit Graph Fix: connect analyser to destination with near-zero gain
           const zeroGain = SoundEngine.ctx.createGain();
           zeroGain.gain.value = 0.0001;
           this.zeroGain = zeroGain;
@@ -1931,78 +2217,92 @@
 
           return true;
         } catch(e) {
-          console.warn('Microphone permission error or timeout:', e);
+          console.warn('Microphone permission or timeout:', e);
           return false;
         }
       }
 
       async testMicAccess() {
         const ok = await this.ensureMicLive();
-        alert(ok ? 'ไมโครโฟนเชื่อมต่อสำเร็จและพร้อมใช้งานค่ะ' : 'ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ในเบราว์เซอร์ค่ะ');
+        showToast(ok ? '🎙️ ไมโครโฟนพร้อมใช้งาน รับเสียงชัดเจนค่ะ' : '⚠️ ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ค่ะ');
       }
 
       getRawRMS() {
         if (!this.analyser) return 0;
-        if (!this.timeData) this.timeData = new Float32Array(this.analyser.fftSize);
-        this.analyser.getFloatTimeDomainData(this.timeData);
+        if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
+        this.analyser.getByteTimeDomainData(this.byteTimeData);
         let sumSquares = 0;
-        for (let i = 0; i < this.timeData.length; i++) {
-          sumSquares += this.timeData[i] * this.timeData[i];
+        for (let i = 0; i < this.byteTimeData.length; i++) {
+          const norm = (this.byteTimeData[i] - 128) / 128;
+          sumSquares += norm * norm;
         }
-        return Math.sqrt(sumSquares / this.timeData.length);
+        return Math.sqrt(sumSquares / this.byteTimeData.length);
       }
 
-      // Live Instantaneous Decibels: 40 dB to 110 dB
       getCalibratedDecibels() {
         const rms = this.getRawRMS();
-        const db = Math.min(110, Math.max(38, Math.round(38 + (rms * 185 * this.gainFactor))));
+        const db = Math.min(110, Math.max(38, Math.round(38 + (rms * 190 * this.gainFactor))));
         return { raw: rms * this.gainFactor, db };
       }
 
-      // Sensitive Transient Peak Ratio Clap Detector for Stage 5A (Fix #5)
+      // Fix #7: Dual Time-Domain + High-Frequency Energy Clap Detector
       getClapSpikeData() {
-        if (!this.analyser) return { spike: 0, isClap: false, rawPeak: 0 };
-        if (!this.timeData) this.timeData = new Float32Array(this.analyser.fftSize);
-        this.analyser.getFloatTimeDomainData(this.timeData);
+        if (!this.analyser) return { spike: 0, isClap: false };
 
-        let maxPeak = 0;
-        for (let i = 0; i < this.timeData.length; i++) {
-          const val = Math.abs(this.timeData[i]);
-          if (val > maxPeak) maxPeak = val;
+        // 1. High frequency acoustic energy (claps dominate 1.5 kHz – 4 kHz)
+        if (!this.byteFreqData) this.byteFreqData = new Uint8Array(this.analyser.frequencyBinCount);
+        this.analyser.getByteFrequencyData(this.byteFreqData);
+        let highFreqSum = 0;
+        const startBin = Math.floor(this.byteFreqData.length * 0.12);
+        const endBin = Math.floor(this.byteFreqData.length * 0.55);
+        for (let i = startBin; i < endBin; i++) {
+          highFreqSum += this.byteFreqData[i];
         }
+        const avgHighFreq = highFreqSum / (endBin - startBin); // 0 to 255
 
-        // Maintain slow ambient noise baseline
-        this.noiseFloor = this.noiseFloor * 0.93 + maxPeak * 0.07;
-        const clapSpike = maxPeak * this.gainFactor;
+        // 2. Time domain peak amplitude
+        if (!this.byteTimeData) this.byteTimeData = new Uint8Array(this.analyser.fftSize);
+        this.analyser.getByteTimeDomainData(this.byteTimeData);
+        let maxDev = 0;
+        for (let i = 0; i < this.byteTimeData.length; i++) {
+          const dev = Math.abs(this.byteTimeData[i] - 128);
+          if (dev > maxDev) maxDev = dev;
+        }
+        const normalizedPeak = (maxDev / 128) * this.gainFactor;
+
+        // Combined Clap Spike Score (0.0 to 1.0)
+        const clapSpike = Math.min(1.0, (normalizedPeak * 1.6) + (avgHighFreq / 255) * 0.9);
+
+        // Update adaptive ambient baseline
+        this.noiseFloor = this.noiseFloor * 0.92 + clapSpike * 0.08;
+
         const now = performance.now();
-
-        // Prevent Metronome Self-Triggering: Ignore during the first 85ms of speaker click
-        if (now - SoundEngine.lastMetronomeClickTime < 85) {
-          return { spike: clapSpike, isClap: false, rawPeak: maxPeak };
+        // Ignore peaks during the first 90ms of speaker metronome clicks
+        if (now - SoundEngine.lastMetronomeClickTime < 90) {
+          return { spike: clapSpike, isClap: false };
         }
 
-        const isTransientClap = (clapSpike > 0.075 && maxPeak > this.noiseFloor * 1.45) || clapSpike > 0.14;
-        const cooldownPassed = (now - this.lastClapTimestamp) > 270;
+        const threshold = this.cprClapSensitivity || 0.16;
+        const isClap = (clapSpike > threshold && clapSpike > this.noiseFloor * 1.55) || clapSpike > 0.42;
+        const cooldownPassed = (now - this.lastClapTimestamp) > 260; // Max ~230 BPM
 
         let triggered = false;
-        if (isTransientClap && cooldownPassed) {
+        if (isClap && cooldownPassed) {
           this.lastClapTimestamp = now;
           triggered = true;
         }
 
-        return { spike: clapSpike, isClap: triggered, rawPeak: maxPeak };
+        return { spike: clapSpike, isClap: triggered };
       }
 
-      // Live Speech-to-Text via WebKit Speech Recognition
       startSpeechRecognition(onResultCallback) {
         this.onResultCallback = onResultCallback;
         const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRec) {
-          console.warn('Web Speech API is not supported in this browser.');
+          console.warn('Web Speech API is not supported');
           return;
         }
 
-        // If system is speaking, do NOT start recognition to prevent echo buffer!
         if (window.isSystemSpeaking) return;
 
         if (this.recognition) {
@@ -2019,15 +2319,19 @@
         this.recognition.onresult = (event) => {
           if (window.isSystemSpeaking) return;
           let interim = '';
+          let isFinal = false;
           for (let i = event.resultIndex; i < event.results.length; i++) {
             const transcript = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-              if (this.onResultCallback) this.onResultCallback(transcript.trim());
+              isFinal = true;
+              if (this.onResultCallback) this.onResultCallback(transcript.trim(), true);
             } else {
               interim += transcript;
             }
           }
-          if (interim && this.onResultCallback) this.onResultCallback(interim.trim());
+          if (interim && !isFinal && this.onResultCallback) {
+            this.onResultCallback(interim.trim(), false);
+          }
         };
 
         this.recognition.onerror = (e) => {
@@ -2037,7 +2341,7 @@
         this.recognition.onend = () => {
           if (this.isSttRunning && !window.isSystemSpeaking && (window.GameStateManager && [1, 2, 3, 4, 5].includes(window.GameStateManager.currentStage))) {
             if (window.GameStateManager.currentStage === 5 && window.GameStateManager.stage5Phase === 'CPR') {
-              return; // Metronome CPR stage 5A keeps STT OFF for audio performance!
+              return; // STT is OFF during CPR
             }
             try { this.recognition.start(); } catch(e) {}
           }
@@ -2061,7 +2365,40 @@
     const MicSensor = new MicAudioSensor();
 
     /* ==========================================================================
-       SMART VOICE-TO-CHOICE MATCHER (STAGE 1 & STAGE 4 DUAL INPUT)
+       SPEECH SILENCE DEBOUNCER (FIX #2, #5, #6: WAIT FOR STUDENT TO FINISH!)
+       ========================================================================== */
+    class SpeechDebounceManager {
+      constructor() {
+        this.timer = null;
+        this.latestTranscript = '';
+      }
+
+      feed(transcript, isFinal, onDone, debounceMs = 950) {
+        this.latestTranscript = transcript;
+        if (this.timer) clearTimeout(this.timer);
+
+        if (isFinal) {
+          this.timer = setTimeout(() => {
+            onDone(this.latestTranscript.trim());
+          }, 300);
+        } else {
+          this.timer = setTimeout(() => {
+            if (this.latestTranscript.trim().length > 0) {
+              onDone(this.latestTranscript.trim());
+            }
+          }, debounceMs);
+        }
+      }
+
+      clear() {
+        if (this.timer) clearTimeout(this.timer);
+        this.latestTranscript = '';
+      }
+    }
+    const speechDebouncer = new SpeechDebounceManager();
+
+    /* ==========================================================================
+       SMART VOICE-TO-CHOICE MATCHER
        ========================================================================== */
     function matchVoiceToChoice(transcript, stage) {
       if (!transcript) return null;
@@ -2090,7 +2427,7 @@
     }
 
     /* ==========================================================================
-       GAME STATE MANAGER (SIMULATION FLOW, SCORING & ZERO-DEADLOCK MECHANICS)
+       GAME STATE MANAGER (SIMULATION LOGIC, CONTROLS & STAGES)
        ========================================================================== */
     class GameStateManagerCore {
       constructor() {
@@ -2103,14 +2440,16 @@
         this.lastPlayedBeatIndex = -1;
         this.cprBeatTimestamps = [];
         this.selectedTeam = '03';
+        this.isRandomizingTeam = false;
         this.stage5Phase = 'CPR'; // 'CPR' or 'AED'
         this.aedSteps = { step1: false, step2: false, step3: false };
         this.aedListening = false;
         this.lastAedStepTime = 0;
         this.checklist = { location: false, incident: false, patient: false, aed: false };
         this.stage2Completed = false;
+        this.stage2ThresholdDb = 72; // Default forgiving threshold
         this.stage3Locked = false;
-        this.shoutChargeProgress = 0; // 0 to 1.0
+        this.shoutChargeProgress = 0;
         this.isStageChoiceLocked = false;
       }
 
@@ -2120,11 +2459,49 @@
         this.bindEvents();
       }
 
+      // Fix #1: Slot-Machine Roulette Animation with Ticking Clicks & Pop
       pickRandomTeam() {
-        const num = Math.floor(Math.random() * 10) + 1;
-        this.selectedTeam = String(num).padStart(2, '0');
+        if (this.isRandomizingTeam) return;
+        this.isRandomizingTeam = true;
         const badge = document.getElementById('txtTeamBadge');
-        if (badge) badge.innerText = this.selectedTeam;
+        const btn = document.getElementById('btnRandomTeam');
+        if (btn) btn.disabled = true;
+
+        let spins = 0;
+        const totalSpins = 24;
+        let delay = 35;
+
+        const roll = () => {
+          spins++;
+          const tempNum = Math.floor(Math.random() * 10) + 1;
+          const formatted = String(tempNum).padStart(2, '0');
+          if (badge) {
+            badge.innerText = formatted;
+            badge.style.transform = `scale(${1 + Math.random() * 0.15})`;
+          }
+          SoundEngine.playPulseBeep(980 + spins * 32, 0.025);
+
+          if (spins < totalSpins) {
+            delay += Math.floor(spins * 2.3);
+            setTimeout(roll, delay);
+          } else {
+            const finalNum = Math.floor(Math.random() * 10) + 1;
+            this.selectedTeam = String(finalNum).padStart(2, '0');
+            if (badge) {
+              badge.innerText = this.selectedTeam;
+              badge.style.transform = 'scale(1.3)';
+              badge.style.color = '#10B981';
+              setTimeout(() => {
+                badge.style.transform = 'scale(1)';
+                badge.style.color = '#38BDF8';
+              }, 450);
+            }
+            SoundEngine.playStageClear();
+            this.isRandomizingTeam = false;
+            if (btn) btn.disabled = false;
+          }
+        };
+        roll();
       }
 
       startSessionTimer() {
@@ -2166,6 +2543,7 @@
       async setStage(newStage) {
         this.currentStage = newStage;
         this.isStageChoiceLocked = false;
+        speechDebouncer.clear();
         MicSensor.stopSpeechRecognition();
 
         // Update Nav step pills
@@ -2178,14 +2556,13 @@
           }
         }
 
-        // Stage-Specific Setups
+        // Stage Transitions
         if (newStage === 1) {
           window.ECGEngine.setMode('BRADYCARDIA');
           this.updateVitals(38, 76);
           SoundEngine.startPulseScheduler(540, 1580);
           this.renderStage();
 
-          // Stage 1 AI Intro
           await speakAndWait('เกิดอุบัติเหตุรถชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรงรถ และมีรถวิ่งผ่านด้วยความเร็ว สิ่งแรกที่ต้องทำคืออะไรคะ? พูดว่าเลือกข้อหนึ่งถึงสี่ หรือพูดเนื้อหาคำตอบใส่ไมค์ได้เลยค่ะ');
           this.startStage1VoiceAnswer();
         } else if (newStage === 2) {
@@ -2196,8 +2573,7 @@
           this.shoutChargeProgress = 0;
           this.renderStage();
 
-          // Stage 2 AI Intro
-          await speakAndWait('ผู้ป่วยตบไหล่เรียกแล้วไม่ตอบสนองค่ะ! ให้ทุกคนในห้องช่วยกันตะโกนขอความช่วยเหลือออกมาดังๆ ให้เกินขีดแปดสิบเดซิเบลพร้อมกันเลยค่ะ!');
+          await speakAndWait('ผู้ป่วยตบไหล่เรียกแล้วไม่ตอบสนองค่ะ! ให้ทุกคนในห้องช่วยกันตะโกนขอความช่วยเหลือออกมาดังๆ ให้เกินขีดความดังเป้าหมายพร้อมกันเลยค่ะ!');
           this.startStage2Listening();
         } else if (newStage === 3) {
           window.ECGEngine.setMode('BRADYCARDIA');
@@ -2207,7 +2583,9 @@
           this.checklist = { location: false, incident: false, patient: false, aed: false };
           this.renderStage();
 
-          // Stage 3 AI Prompt (Zero keyword leak)
+          SoundEngine.playTelephoneRing();
+          await new Promise(r => setTimeout(r, 700));
+
           await speakAndWait('สวัสดีค่ะ สายด่วน 1669 รับสายค่ะ! การโทรแจ้งเหตุฉุกเฉิน ต้องบอกข้อมูลสำคัญสี่ข้อจากเหตุการณ์จริง เชิญตัวแทนพูดแจ้งข้อมูลใส่ไมโครโฟนได้เลยค่ะ');
           this.startStage3LiveSTT();
         } else if (newStage === 4) {
@@ -2216,7 +2594,6 @@
           SoundEngine.startPulseScheduler(440, 2720);
           this.renderStage();
 
-          // Stage 4 AI Prompt
           await speakAndWait('เจ้าหน้าที่กำลังส่งรถพยาบาลไปค่ะ ระหว่างนี้ช่วยก้มดูหน้าอกผู้บาดเจ็บให้หน่อยค่ะ ผู้ป่วยมีเสียงหายใจเฮือก นานๆ ครั้ง แต่หน้าอกไม่ขยับ เราต้องทำอย่างไรคะ? พูดเลือกข้อหนึ่งถึงสามได้เลยค่ะ');
           this.startStage4VoiceAnswer();
         } else if (newStage === 5) {
@@ -2229,17 +2606,18 @@
           SoundEngine.stopPulseScheduler();
           this.renderStage();
 
-          // Step 1: Wait for AI Intro speech to finish BEFORE metronome starts!
           await speakAndWait('ผู้ป่วยหัวใจหยุดเต้น เริ่มกดหน้าอก ซีพีอาร์ ทันทีค่ะ เตรียมปรบมือตามจังหวะไฟกะพริบนะคะ');
-
-          // Step 2 & 3: Stop STT & Run 3-2-1 Countdown, then start Zero-Drift Metronome
           this.runCprCountdownAndStart();
         } else if (newStage === 6) {
+          // Fix #11: In Stage 6, NO AI voice speech and NO sound effects so real human speakers can talk without audio collision!
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          window.isSystemSpeaking = false;
+          AIVoiceCoach.isSpeaking = false;
+          SoundEngine.stopPulseScheduler();
+
           window.ECGEngine.setMode('ROSC');
           this.updateVitals(88, 99);
-          SoundEngine.startPulseScheduler(660, 680); // ROSC 88 BPM
           this.renderStage();
-          await speakAndWait('ภารกิจกู้ชีพฉุกเฉินสำเร็จอย่างงดงามค่ะ! หัวใจผู้ป่วยกลับมาเต้นเป็นปกติแล้ว ขอเสียงปรบมือให้ทีมกู้ชีพทุกคนด้วยค่ะ!');
         }
       }
 
@@ -2247,7 +2625,7 @@
         const card = document.getElementById('stageMainCard');
         if (!card) return;
 
-        // Stage 1: Scene Safety (Fix #1: Dual Voice + Click Input)
+        // Stage 1: Scene Safety (Voice + Click with Debounced Silence Detection)
         if (this.currentStage === 1) {
           card.innerHTML = `
             <div>
@@ -2310,7 +2688,7 @@
           `;
         }
 
-        // Stage 2: Alert / Shout (Fix #2: Dual-Bar 60fps Decibels + 100% Loudness Gating)
+        // Stage 2: Alert / Shout (Fix #4: User-Adjustable Threshold Slider & Dual-Bar UI)
         else if (this.currentStage === 2) {
           card.innerHTML = `
             <div>
@@ -2323,7 +2701,7 @@
                 เคลื่อนย้ายผู้ป่วยมานอนราบในจุดปลอดภัยแล้ว ตบไหล่เรียกไม่ตอบสนอง!
               </h2>
               <p class="stage-sub-clean">
-                ให้น้องตัวแทนและเพื่อนๆ ทั้งห้อง <strong style="color:var(--amber-warn);">ช่วยกันตะโกนข้อความนี้ออกมาดังๆ พร้อมกันให้ทะลุขีดแดง 80 dB!</strong>
+                ให้น้องตัวแทนและเพื่อนๆ ทั้งห้อง <strong style="color:var(--amber-warn);">ช่วยกันตะโกนข้อความนี้ออกมาดังๆ พร้อมกันให้ทะลุขีดเป้าหมาย!</strong>
               </p>
             </div>
 
@@ -2333,30 +2711,45 @@
                   🗣️ "ช่วยด้วย! มีคนหมดสติ ช่วยโทร 1669 และเอาเครื่อง AED มาด้วย!"
                 </div>
                 <div id="txtSpeechDetectedBadge" class="shout-banner-hint font-technical" style="display:none;">
-                  ✓ ได้ยินคำพูดแล้ว แต่ต้องตะโกนให้ดังเกินขีด 80 dB ด้วย!
+                  ✓ ได้ยินคำพูดแล้ว แต่ต้องตะโกนให้ดังเกินขีดเป้าหมายด้วยค่ะ!
                 </div>
               </div>
 
-              <!-- Bar 1: Live Acoustic Volume (Bounces instantaneously 60fps) -->
+              <!-- Fix #4: Threshold Slider Control -->
+              <div class="threshold-slider-control">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="font-technical" style="font-size:12px; color:#94A3B8;">
+                    🎯 เกณฑ์ความดังเป้าหมาย: <strong id="lblThresholdVal" style="color:#10B981;">${this.stage2ThresholdDb} dB</strong>
+                  </span>
+                  <div style="display:flex; gap:6px;">
+                    <button onclick="GameStateManager.setStage2Threshold(68)" class="preset-pill font-technical ${this.stage2ThresholdDb === 68 ? 'active' : ''}">ห้องเรียน (68 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(72)" class="preset-pill font-technical ${this.stage2ThresholdDb === 72 ? 'active' : ''}">มาตรฐาน (72 dB)</button>
+                    <button onclick="GameStateManager.setStage2Threshold(78)" class="preset-pill font-technical ${this.stage2ThresholdDb === 78 ? 'active' : ''}">หอประชุม (78 dB)</button>
+                  </div>
+                </div>
+                <input type="range" id="sliderStage2Threshold" min="60" max="85" value="${this.stage2ThresholdDb}" oninput="GameStateManager.setStage2Threshold(this.value)" class="slider-clean">
+              </div>
+
+              <!-- Bar 1: Live Acoustic Volume -->
               <div class="meter-block">
                 <div class="meter-header-row">
                   <span class="meter-title font-technical">หลอดวัดความดังเสียงสด (LIVE ACOUSTIC VOLUME)</span>
                   <div style="display:flex; align-items:baseline; gap:8px;">
-                    <span id="txtLiveStatusHint" class="font-technical" style="font-size:12.5px; color:#38BDF8;">เสียงยังเบาเกินไป! ตะโกนให้ดังขึ้นอีก!</span>
+                    <span id="txtLiveStatusHint" class="font-technical" style="font-size:12.5px; color:#38BDF8;">กำลังฟังเสียงพูด...</span>
                     <span id="txtLiveDecibel" class="num-readout meter-value-txt" style="color:#38BDF8;">-- dB</span>
                   </div>
                 </div>
                 <div class="meter-track-container">
                   <div id="liveDbBarFill" class="meter-bar-fill" style="background:#38BDF8;"></div>
-                  <div class="target-line-80"></div>
-                  <span class="target-line-label font-technical">80 dB TARGET</span>
+                  <div id="dynamicTargetLine" class="target-line-dynamic" style="left:${((this.stage2ThresholdDb - 40) / 70) * 100}%;"></div>
+                  <span id="dynamicTargetLabel" class="target-line-label font-technical" style="left:calc(${((this.stage2ThresholdDb - 40) / 70) * 100}% + 6px);">${this.stage2ThresholdDb} dB TARGET</span>
                 </div>
               </div>
 
-              <!-- Bar 2: Sustained Loudness Charge (Fills ONLY when >=80 dB) -->
+              <!-- Bar 2: Sustained Loudness Charge -->
               <div class="meter-block">
                 <div class="meter-header-row">
-                  <span class="meter-title font-technical">หลอดสะสมพลังเสียงกู้ชีพ (ตะโกนต่อเนื่อง >= 80 dB ให้เต็ม 100%)</span>
+                  <span class="meter-title font-technical">หลอดสะสมพลังเสียงกู้ชีพ (ตะโกนต่อเนื่องให้เต็ม 100%)</span>
                   <span id="txtShoutChargePct" class="num-readout meter-value-txt" style="color:#10B981;">0%</span>
                 </div>
                 <div class="meter-track-container" style="height:22px;">
@@ -2364,9 +2757,9 @@
                 </div>
               </div>
 
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
                 <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#94A3B8;">
-                  <span class="font-technical">ความไวไมค์ (Mic Gain):</span>
+                  <span class="font-technical">ความไวไมค์:</span>
                   <span id="txtMicGainLabel" class="num-readout" style="color:#38BDF8; font-weight:700;">1.0x</span>
                   <button onclick="GameStateManager.adjustMicGain(-0.2)" class="nav-btn" style="height:26px; padding:0 8px;">-</button>
                   <button onclick="GameStateManager.adjustMicGain(0.2)" class="nav-btn" style="height:26px; padding:0 8px;">+</button>
@@ -2380,7 +2773,7 @@
           `;
         }
 
-        // Stage 3: 1669 Dispatch (Fix #3: Compact Spacing & speakAndWait)
+        // Stage 3: 1669 Dispatch (Fix #5: Wait for Complete Report Before Auto-Advance)
         else if (this.currentStage === 3) {
           card.innerHTML = `
             <div>
@@ -2413,7 +2806,7 @@
             <div class="voice-transcript-panel">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span class="font-technical" style="font-size:12px; font-weight:700; color:var(--blue-accent);">
-                  🎙️ กำลังฟังเสียงพูด... พูดแจ้งข้อมูลใส่ไมค์ได้เลยค่ะ
+                  🎙️ กำลังฟังเสียงพูด... พูดแจ้งข้อมูลสำคัญใส่ไมค์ได้เลยค่ะ
                 </span>
                 <div style="display:flex; gap:6px;">
                   <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:24px; font-size:10.5px;">[1] พิกัด</button>
@@ -2426,7 +2819,7 @@
               </div>
               <div class="manual-input-box">
                 <input type="text" id="inputManualDispatch" class="input-dispatch-text" placeholder="หรือพิมพ์ข้อมูลที่นี่ แล้วกด Enter..." onkeydown="if(event.key==='Enter') GameStateManager.submitManualDispatch(this.value)">
-                <button onclick="GameStateManager.submitManualDispatch(document.getElementById('inputManualDispatch').value)" class="nav-btn font-technical" style="height:34px;">ส่งข้อมูล</button>
+                <button onclick="GameStateManager.submitManualDispatch(document.getElementById('inputManualDispatch').value)" class="nav-btn font-technical" style="height:32px;">ส่งข้อมูล</button>
               </div>
             </div>
 
@@ -2451,7 +2844,7 @@
           `;
         }
 
-        // Stage 4: Breathing Assessment (Fix #4: Voice-First with 3 Choice Cards)
+        // Stage 4: Breathing Assessment (Fix #6: Debounced Voice Choice)
         else if (this.currentStage === 4) {
           card.innerHTML = `
             <div>
@@ -2506,7 +2899,7 @@
           `;
         }
 
-        // Stage 5: CPR 110 BPM (5A) or AED Voice Clearance (5B)
+        // Stage 5: CPR 110 BPM (5A) or AED (5B)
         else if (this.currentStage === 5) {
           if (this.stage5Phase === 'CPR') {
             card.innerHTML = `
@@ -2520,18 +2913,18 @@
                   ผู้ป่วยหัวใจหยุดเต้น! เริ่มกดหน้าอก CPR ทันที (30 ครั้ง จังหวะ 110 BPM)
                 </h2>
                 <p class="stage-sub-clean">
-                  ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทั้ง 10 กลุ่ม <strong style="color:var(--ecg-green);">ช่วยกันปรบมือให้ตรงจังหวะบีต!</strong> (หรือคลิกวงกลมกลาง / Spacebar)
+                  ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทั้ง 10 กลุ่ม <strong style="color:var(--ecg-green);">ช่วยกันปรบมือให้ตรงจังหวะบีต!</strong> (หรือกด [SPACEBAR] / คลิกวงกลม)
                 </p>
               </div>
 
               <div class="cpr-chamber-clean">
                 <div class="cpr-beat-lane" id="cprBeatLane">
                   <div id="cprCenterTarget" onclick="GameStateManager.handleCprHitManual()" class="cpr-center-target listening-mode font-technical">
-                    ${this.cprActive ? '👏 ตบมือตามจังหวะ!<br><span style="font-size:11px;">คลิกที่นี่</span>' : 'ฟังคำแนะนำ...'}
+                    👏<br>ตบมือ!
                   </div>
                 </div>
 
-                <!-- Live Clap Spike Meter -->
+                <!-- Fix #7: Live Clap Spike Meter & Sensitivity Control -->
                 <div class="clap-meter-row">
                   <div class="clap-meter-label-row font-technical">
                     <span>หลอดวัดแรงปรบมือสด (CLAP SPIKE METER)</span>
@@ -2539,7 +2932,15 @@
                   </div>
                   <div class="clap-meter-track">
                     <div id="clapMeterBarFill" class="clap-meter-fill"></div>
-                    <div class="clap-meter-threshold-line"></div>
+                    <div id="clapThresholdLine" class="clap-meter-threshold-line"></div>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+                    <span class="font-technical" style="font-size:11px; color:#94A3B8;">ความไวตรวจจับ:</span>
+                    <div style="display:flex; gap:4px;">
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.11, 'ไวมาก')" class="preset-pill font-technical">ไวมาก</button>
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.16, 'มาตรฐาน')" class="preset-pill font-technical active">มาตรฐาน</button>
+                      <button onclick="GameStateManager.setCprClapSensitivity(0.24, 'ลดเสียงรบกวน')" class="preset-pill font-technical">ลดเสียงรบกวน</button>
+                    </div>
                   </div>
                 </div>
 
@@ -2558,7 +2959,7 @@
               </div>
             `;
           } else {
-            // Stage 5B: AED Defibrillation Safety (Fix #6: Strict Sequential 750ms Cooldown)
+            // Stage 5B: AED Defibrillation Safety (Fix #8: 2-Phase Ready Signal Cue)
             card.innerHTML = `
               <div>
                 <div class="ai-voice-pill-clean">
@@ -2572,6 +2973,16 @@
                 <p class="stage-sub-clean">
                   ตะโกนออกเสียง 3 คำสั่งตามลำดับเพื่อความปลอดภัยก่อนปล่อยกระแสไฟ (หรือคลิกการ์ดตามลำดับ):
                 </p>
+              </div>
+
+              <!-- Fix #8: Clear Signal Ready Cue Banner -->
+              <div id="aedReadyBanner" class="aed-charging-banner">
+                <span id="txtAedInstructionFeedback" class="font-technical" style="font-size:16px; font-weight:700; color:var(--amber-warn);">
+                  ⚡ เครื่อง เออีดี กำลังชาร์จพลังงาน... (กรุณารอฟังสัญญาณ)
+                </span>
+                <div class="meter-track-container" style="height:8px;">
+                  <div id="aedChargeBarFill" class="meter-bar-fill" style="background:var(--amber-warn); width:15%;"></div>
+                </div>
               </div>
 
               <div class="aed-cards-cluster">
@@ -2593,15 +3004,11 @@
                   <div class="aed-card-instruction font-technical">ทุกคนห้ามแตะตัวคนไข้</div>
                 </div>
               </div>
-
-              <div id="txtAedInstructionFeedback" class="font-technical" style="text-align:center; font-size:16px; font-weight:700; color:var(--amber-warn);">
-                ⏳ รอเครื่อง เออีดี ชาร์จไฟสักครู่...
-              </div>
             `;
           }
         }
 
-        // Stage 6: Broadcast Hero Mission Scoreboard (Fix #6 Redesign)
+        // Stage 6: Broadcast Hero Mission Scoreboard (Fix #11: No AI voice speech)
         else if (this.currentStage === 6) {
           const rankLetter = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
           const rankColor = rankLetter === 'S' ? '#F59E0B' : (rankLetter === 'A+' ? '#38BDF8' : '#10B981');
@@ -2633,7 +3040,7 @@
                     <div class="rosc-badge-txt font-technical">NORMAL SINUS RHYTHM — LIFE SAVED</div>
                     <div class="mini-rosc-vitals font-technical">
                       <span style="font-size:12px; color:#94A3B8;">HR <strong style="color:#10B981;" class="num-readout">88 BPM</strong></span>
-                      <span style="font-size:12px; color:#94A3B8;">SpO2 <strong style="color:#38BDF8;" class="num-readout">99%</strong></span>
+                      <span style="font-size:12px; color:#38BDF8;">SpO2 <strong style="color:#38BDF8;" class="num-readout">99%</strong></span>
                     </div>
                   </div>
 
@@ -2690,7 +3097,6 @@
             </div>
           `;
 
-          // Trigger radial and score counter animations
           setTimeout(() => {
             const circle = document.getElementById('radialScoreCircle');
             if (circle) circle.style.strokeDashoffset = String(dashOffset);
@@ -2708,22 +3114,26 @@
         }
       }
 
-      // Stage 1 Voice Answer Bar
+      // Fix #2: Stage 1 Voice Answer Bar with Debounce
       startStage1VoiceAnswer() {
         MicSensor.ensureMicLive().catch(() => {});
-        MicSensor.startSpeechRecognition((transcript) => {
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 1 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerText = `“${transcript}”`;
+          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
-          const choice = matchVoiceToChoice(transcript, 1);
-          if (choice) {
-            this.handleStage1Choice(choice);
-          }
+          speechDebouncer.feed(transcript, isFinal, (finalText) => {
+            if (this.isStageChoiceLocked) return;
+            const choice = matchVoiceToChoice(finalText, 1);
+            if (choice) {
+              if (box) box.innerHTML = `“<span style="color:#10B981; font-weight:700;">${finalText}</span>” <span style="font-size:11px; color:#10B981;">(ยืนยันคำตอบข้อ ${choice})</span>`;
+              this.handleStage1Choice(choice);
+            }
+          }, 950);
         });
       }
 
-      // Stage 1 Action (Voice or Click)
+      // Stage 1 Action
       async handleStage1Choice(choice) {
         if (this.isStageChoiceLocked) return;
         this.isStageChoiceLocked = true;
@@ -2733,7 +3143,6 @@
         if (choice === 2) {
           if (btn) btn.classList.add('correct');
           SoundEngine.playStageClear();
-          // Explain before moving on
           await speakAndWait('ถูกต้องค่ะ! ต้องประเมินความปลอดภัยของสถานที่เกิดเหตุก่อนเสมอ ก่อนที่จะเข้าไปช่วยผู้บาดเจ็บค่ะ');
           this.setStage(2);
         } else {
@@ -2746,12 +3155,30 @@
         }
       }
 
-      // Stage 2 Mic Tracking (Fix #2: Dual-Bar 60fps & 100% Loudness Gating)
+      // Fix #4: Stage 2 Adjustable Threshold Setter
+      setStage2Threshold(val) {
+        this.stage2ThresholdDb = parseInt(val);
+        const lbl = document.getElementById('lblThresholdVal');
+        if (lbl) lbl.innerText = `${this.stage2ThresholdDb} dB`;
+
+        const slider = document.getElementById('sliderStage2Threshold');
+        if (slider && slider.value != this.stage2ThresholdDb) slider.value = this.stage2ThresholdDb;
+
+        const targetPct = ((this.stage2ThresholdDb - 40) / 70) * 100;
+        const line = document.getElementById('dynamicTargetLine');
+        const lineLbl = document.getElementById('dynamicTargetLabel');
+        if (line) line.style.left = `${targetPct}%`;
+        if (lineLbl) {
+          lineLbl.style.left = `calc(${targetPct}% + 6px)`;
+          lineLbl.innerText = `${this.stage2ThresholdDb} dB TARGET`;
+        }
+      }
+
+      // Stage 2 Mic Tracking
       startStage2Listening() {
         MicSensor.ensureMicLive().catch(() => {});
         this.shoutChargeProgress = 0;
 
-        // Path A: Speech Recognition for keyword hints (Does NOT auto-pass without loud volume!)
         MicSensor.startSpeechRecognition((transcript) => {
           if (this.currentStage !== 2 || this.stage2Completed || window.isSystemSpeaking) return;
           const val = transcript.toLowerCase();
@@ -2761,53 +3188,51 @@
           }
         });
 
-        // Path B: Real-time 60fps Decibel Meter & Sustained Loudness Charge Bar
         const loop = () => {
           if (this.currentStage !== 2 || this.stage2Completed) return;
 
           if (!window.isSystemSpeaking) {
             const { raw, db } = MicSensor.getCalibratedDecibels();
 
-            // Update Bar 1: Live Volume (bounces instantaneously)
             const txtDb = document.getElementById('txtLiveDecibel');
             const txtHint = document.getElementById('txtLiveStatusHint');
             const barLive = document.getElementById('liveDbBarFill');
 
             if (txtDb) txtDb.innerText = `${db} dB`;
 
-            // Scale dB (40 to 110 dB) -> 0% to 100%
             const livePct = Math.min(100, Math.max(0, ((db - 40) / 70) * 100));
             if (barLive) barLive.style.width = `${livePct}%`;
 
-            if (db < 65) {
+            const target = this.stage2ThresholdDb;
+            if (db < target - 7) {
               if (barLive) barLive.style.background = '#38BDF8';
               if (txtDb) txtDb.style.color = '#38BDF8';
               if (txtHint) {
-                txtHint.innerText = 'เสียงยังเบาเกินไป! ตะโกนให้ดังขึ้นอีก!';
+                txtHint.innerText = `อีก ${target - db} dB จะถึงเกณฑ์! ตะโกนให้ดังขึ้นอีก!`;
                 txtHint.style.color = '#38BDF8';
               }
-            } else if (db < 80) {
+            } else if (db < target) {
               if (barLive) barLive.style.background = '#F59E0B';
               if (txtDb) txtDb.style.color = '#F59E0B';
               if (txtHint) {
-                txtHint.innerText = 'เกือบถึงแล้ว! ตะโกนพร้อมกันให้สุดเสียง!';
+                txtHint.innerText = `เกือบถึงแล้ว! อีก ${target - db} dB ตะโกนพร้อมกันให้สุดเสียง!`;
                 txtHint.style.color = '#F59E0B';
               }
             } else {
-              // >= 80 dB Loud Zone
+              // Exceeded target threshold
               if (barLive) barLive.style.background = '#10B981';
               if (txtDb) txtDb.style.color = '#10B981';
               if (txtHint) {
-                txtHint.innerText = '🔥 ดังยอดเยี่ยม! ค้างระดับเสียงไว้!';
+                txtHint.innerText = '🔥 ดังทะลุเกณฑ์แล้ว! ค้างระดับเสียงไว้!';
                 txtHint.style.color = '#10B981';
               }
             }
 
-            // Update Bar 2: Accumulate ONLY when Live Volume >= 80 dB (takes 1.4s)
-            if (db >= 80 || raw >= 0.16) {
-              this.shoutChargeProgress = Math.min(1.0, this.shoutChargeProgress + 0.024); // ~1.4s at 60fps
+            // Accumulate charge when db >= target
+            if (db >= target || raw >= 0.15) {
+              this.shoutChargeProgress = Math.min(1.0, this.shoutChargeProgress + 0.026); // ~1.2s
             } else {
-              this.shoutChargeProgress = Math.max(0, this.shoutChargeProgress - 0.009); // smooth decay
+              this.shoutChargeProgress = Math.max(0, this.shoutChargeProgress - 0.009);
             }
 
             const chargePct = Math.min(100, Math.round(this.shoutChargeProgress * 100));
@@ -2844,7 +3269,6 @@
           txtHint.style.color = '#10B981';
         }
 
-        // Hold for 1.6s so room sees complete state
         setTimeout(() => {
           this.setStage(3);
         }, 1600);
@@ -2860,16 +3284,23 @@
         this.completeStage2();
       }
 
-      // Stage 3 Live Speech-to-Text & Auto-Advance (Fix #3)
+      // Fix #5: Stage 3 Live STT - Wait for Complete Report
       startStage3LiveSTT() {
         const box = document.getElementById('txtLiveTranscript');
         if (box && box.innerText.includes('รอเจ้าหน้าที่')) {
           box.innerText = '🎙️ ไมค์เปิดรับเสียงแล้ว... เชิญพูดแจ้งข้อมูลสำคัญ 4 ข้อได้เลยค่ะ';
         }
-        MicSensor.startSpeechRecognition((transcript) => {
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (window.isSystemSpeaking || this.stage3Locked) return;
           if (box) box.innerText = `“${transcript}”`;
           this.parseDispatchKeywords(transcript);
+
+          // If all 4 items checked, wait for student to finish their sentence!
+          if (this.checklist.location && this.checklist.incident && this.checklist.patient && this.checklist.aed) {
+            speechDebouncer.feed(transcript, isFinal, () => {
+              this.checkStage3AutoAdvance();
+            }, 1200); // 1.2s silence debounce
+          }
         });
       }
 
@@ -2880,6 +3311,7 @@
         this.parseDispatchKeywords(text);
         const input = document.getElementById('inputManualDispatch');
         if (input) input.value = '';
+        this.checkStage3AutoAdvance();
       }
 
       quickFillPreset(presetNum) {
@@ -2902,19 +3334,22 @@
         if (this.stage3Locked || window.isSystemSpeaking) return;
         const val = text.toLowerCase();
         if (val.includes('บูรพา') || val.includes('รพ') || val.includes('สุขุมวิท') || val.includes('หน้า') || val.includes('โรงพยาบาล')) {
+          if (!this.checklist.location) SoundEngine.playPulseBeep(880, 0.04);
           this.checklist.location = true;
         }
         if (val.includes('รถ') || val.includes('ชน') || val.includes('รั้ว') || val.includes('อุบัติเหตุ')) {
+          if (!this.checklist.incident) SoundEngine.playPulseBeep(980, 0.04);
           this.checklist.incident = true;
         }
         if (val.includes('หมดสติ') || val.includes('ไม่หายใจ') || val.includes('ไม่รู้สึกตัว') || val.includes('1') || val.includes('คนเจ็บ')) {
+          if (!this.checklist.patient) SoundEngine.playPulseBeep(1100, 0.04);
           this.checklist.patient = true;
         }
         if (val.includes('aed') || val.includes('เออีดี') || val.includes('กู้ชีพ') || val.includes('รถพยาบาล')) {
+          if (!this.checklist.aed) SoundEngine.playPulseBeep(1200, 0.04);
           this.checklist.aed = true;
         }
         this.refreshChecklistPills();
-        this.checkStage3AutoAdvance();
       }
 
       refreshChecklistPills() {
@@ -2946,30 +3381,33 @@
           SoundEngine.playStageClear();
 
           const box = document.getElementById('txtLiveTranscript');
-          if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ครบ 4 ข้อมูลสำคัญ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
+          if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อเรียบร้อยแล้วค่ะ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
 
-          // Strictly wait for AI to finish speaking before moving to Stage 4!
           await speakAndWait('1669 ได้รับข้อมูลครบถ้วนทั้งสี่ข้อแล้วค่ะ กำลังส่งรถพยาบาลฉุกเฉินและเครื่อง เออีดี ออกเดินทางทันทีค่ะ!');
           this.setStage(4);
         }
       }
 
-      // Stage 4 Voice Answer Bar
+      // Fix #6: Stage 4 Voice Answer Bar with Debounce
       startStage4VoiceAnswer() {
         MicSensor.ensureMicLive().catch(() => {});
-        MicSensor.startSpeechRecognition((transcript) => {
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 4 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerText = `“${transcript}”`;
+          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
-          const choice = matchVoiceToChoice(transcript, 4);
-          if (choice) {
-            this.handleStage4Choice(choice);
-          }
+          speechDebouncer.feed(transcript, isFinal, (finalText) => {
+            if (this.isStageChoiceLocked) return;
+            const choice = matchVoiceToChoice(finalText, 4);
+            if (choice) {
+              if (box) box.innerHTML = `“<span style="color:#10B981; font-weight:700;">${finalText}</span>” <span style="font-size:11px; color:#10B981;">(ยืนยันคำตอบข้อ ${choice})</span>`;
+              this.handleStage4Choice(choice);
+            }
+          }, 950);
         });
       }
 
-      // Stage 4 Action (Voice or Click)
+      // Stage 4 Action
       async handleStage4Choice(choice) {
         if (this.isStageChoiceLocked) return;
         this.isStageChoiceLocked = true;
@@ -2993,9 +3431,20 @@
         }
       }
 
-      // Stage 5A CPR: Countdown -> Zero-Drift Clock & Transient Clap Detector (Fix #5)
+      // Fix #7: Stage 5A CPR Sensitivity Setter
+      setCprClapSensitivity(val, label) {
+        MicSensor.cprClapSensitivity = parseFloat(val);
+        const lbl = document.getElementById('lblClapSensVal');
+        if (lbl) lbl.innerText = `${label} (${val})`;
+        const line = document.getElementById('clapThresholdLine');
+        if (line) line.style.left = `${Math.min(95, Math.max(5, (val / 0.5) * 100))}%`;
+      }
+
+      // Stage 5A CPR: Countdown -> Zero-Drift Clock & Hand Clap Detector
       async runCprCountdownAndStart() {
-        MicSensor.stopSpeechRecognition(); // Stop STT during CPR to free mic for fast transients
+        MicSensor.stopSpeechRecognition();
+        // Re-ensure live mic stream for clapping!
+        await MicSensor.ensureMicLive(2000);
 
         const target = document.getElementById('cprCenterTarget');
         const counts = ['3', '2', '1', 'เริ่ม!'];
@@ -3009,20 +3458,18 @@
           await new Promise(r => setTimeout(r, 600));
         }
 
-        // Start active CPR rhythm
         this.cprActive = true;
         this.cprCount = 0;
         this.cprStartTime = performance.now();
         this.lastPlayedBeatIndex = -1;
 
         if (target) {
-          target.innerHTML = '👏 ตบมือตามจังหวะ!<br><span style="font-size:11px;">คลิกที่นี่</span>';
+          target.innerHTML = '👏<br>ตบมือ!';
           target.className = 'cpr-center-target active-beat font-technical';
         }
         const fb = document.getElementById('txtCprCadenceFeedback');
         if (fb) fb.innerText = 'จังหวะ: 110 BPM (PERFECT RHYTHM)';
 
-        // Start Zero-Drift Metronome Loop & Clap Spike Loop
         this.runZeroDriftCprLoop();
       }
 
@@ -3036,7 +3483,7 @@
           const elapsed = now - this.cprStartTime;
           const currentBeatIndex = Math.floor(elapsed / BEAT_INTERVAL_MS);
 
-          // Zero-Drift Metronome Trigger
+          // Zero-Drift Clock Metronome Trigger
           if (currentBeatIndex > this.lastPlayedBeatIndex) {
             this.lastPlayedBeatIndex = currentBeatIndex;
             SoundEngine.playMetronome110();
@@ -3049,13 +3496,12 @@
             this.spawnBeatMarker();
           }
 
-          // Live Clap Spike Reading & Visual Bar Update
+          // Live Hand Clap Spike Detection
           const { spike, isClap } = MicSensor.getClapSpikeData();
           const barFill = document.getElementById('clapMeterBarFill');
           const txtSpike = document.getElementById('txtClapSpikeVal');
 
-          // Scale spike (0 to 0.28) -> 0% to 100%
-          const fillPct = Math.min(100, Math.round((spike / 0.28) * 100));
+          const fillPct = Math.min(100, Math.round(spike * 100));
           if (barFill) barFill.style.width = `${fillPct}%`;
           if (txtSpike) txtSpike.innerText = spike.toFixed(2);
 
@@ -3077,10 +3523,11 @@
         lane.appendChild(dot);
 
         let pos = 0;
+        const width = lane.clientWidth || 600;
         const glide = () => {
-          pos += 5;
+          pos += 6;
           dot.style.right = `${pos}px`;
-          if (pos > lane.clientWidth + 20) {
+          if (pos > width + 30) {
             dot.remove();
           } else {
             requestAnimationFrame(glide);
@@ -3097,14 +3544,15 @@
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || !this.cprActive) return;
         const now = performance.now();
 
-        // Anti-spam filter (<280ms debounce)
+        // Anti-spam debounce (<260ms)
         if (this.cprBeatTimestamps.length > 0) {
           const intervalFromLastClap = now - this.cprBeatTimestamps[this.cprBeatTimestamps.length - 1];
-          if (intervalFromLastClap < 280) return;
+          if (intervalFromLastClap < 260) return;
         }
 
         this.cprBeatTimestamps.push(now);
         this.cprCount++;
+        SoundEngine.playPulseBeep(420, 0.05); // Subtle compression thud
         window.ECGEngine.triggerCompressionSpike();
 
         const txt = document.getElementById('txtCprCount');
@@ -3125,22 +3573,40 @@
           this.lastAedStepTime = 0;
           this.renderStage();
 
-          // Fix #6: New AI Script with ZERO target keywords!
+          // Fix #8: Clear Signal & Countdown
           speakAndWait('เครื่อง เออีดี ชาร์จไฟพร้อมแล้วค่ะ! ก่อนกดช็อกไฟฟ้า ให้ตัวแทนพูดคำสั่งเตือนความปลอดภัยทั้งสามขั้นตอนบนหน้าจอ เรียงทีละข้อดังๆ เลยค่ะ!').then(() => {
+            // Charging whine completes -> Ready Alert Signal!
             setTimeout(() => {
               this.aedListening = true;
               this.lastAedStepTime = performance.now();
+
+              // Readiness alert cue
+              SoundEngine.playPulseBeep(980, 0.12);
+              setTimeout(() => SoundEngine.playPulseBeep(1200, 0.18), 120);
+
+              const banner = document.getElementById('aedReadyBanner');
+              if (banner) banner.classList.add('ready');
+
               const fbText = document.getElementById('txtAedInstructionFeedback');
-              if (fbText) fbText.innerText = '🎙️ พูดคำสั่งข้อที่ 1: "ฉันถอย!" (หรือคลิกการ์ด 1 ➔ 2 ➔ 3)';
+              if (fbText) {
+                fbText.innerHTML = '🎙️ <span style="color:#10B981;">ไมค์พร้อมแล้ว! พูดคำสั่งที่ 1 ได้เลย: "ฉันถอย!"</span>';
+              }
+              const chargeBar = document.getElementById('aedChargeBarFill');
+              if (chargeBar) {
+                chargeBar.style.width = '100%';
+                chargeBar.style.background = '#10B981';
+              }
+
               const card1 = document.getElementById('aedCard1');
               if (card1) card1.classList.add('waiting');
+
               this.startAedVoiceTracking();
-            }, 900);
+            }, 800);
           });
         }
       }
 
-      // Stage 5B AED Voice Tracking (Fix #6: Strict Sequential 750ms Cooldown)
+      // Stage 5B AED Voice Tracking (Strict 750ms Sequential Cooldown)
       startAedVoiceTracking() {
         MicSensor.startSpeechRecognition((transcript) => {
           if (!this.aedListening || window.isSystemSpeaking) return;
@@ -3166,7 +3632,7 @@
             const { db } = MicSensor.getCalibratedDecibels();
             const now = performance.now();
 
-            if (db >= 82) {
+            if (db >= 78) {
               if (!inBurst) {
                 inBurst = true;
                 burstStart = now;
@@ -3191,12 +3657,12 @@
       triggerAedStep(stepNum) {
         if (!this.aedListening) return;
         const now = performance.now();
-        if (now - this.lastAedStepTime < 750) return; // Strict 750ms cooldown!
+        if (now - this.lastAedStepTime < 750) return;
 
         if (stepNum === 1 && !this.aedSteps.step1) {
           this.aedSteps.step1 = true;
           this.lastAedStepTime = now;
-          SoundEngine.playPulseBeep(880, 0.05);
+          SoundEngine.playPulseBeep(880, 0.06);
           const card1 = document.getElementById('aedCard1');
           if (card1) {
             card1.classList.remove('waiting');
@@ -3205,11 +3671,11 @@
           const card2 = document.getElementById('aedCard2');
           if (card2) card2.classList.add('waiting');
           const fb = document.getElementById('txtAedInstructionFeedback');
-          if (fb) fb.innerText = '🎙️ พูดคำสั่งข้อที่ 2: "คุณถอย!"';
+          if (fb) fb.innerHTML = '🎙️ <span style="color:#10B981;">ยอดเยี่ยม! พูดคำสั่งที่ 2: "คุณถอย!"</span>';
         } else if (stepNum === 2 && this.aedSteps.step1 && !this.aedSteps.step2) {
           this.aedSteps.step2 = true;
           this.lastAedStepTime = now;
-          SoundEngine.playPulseBeep(980, 0.05);
+          SoundEngine.playPulseBeep(980, 0.06);
           const card2 = document.getElementById('aedCard2');
           if (card2) {
             card2.classList.remove('waiting');
@@ -3218,18 +3684,18 @@
           const card3 = document.getElementById('aedCard3');
           if (card3) card3.classList.add('waiting');
           const fb = document.getElementById('txtAedInstructionFeedback');
-          if (fb) fb.innerText = '🎙️ พูดคำสั่งข้อที่ 3: "ทุกคนถอย!"';
+          if (fb) fb.innerHTML = '🎙️ <span style="color:#10B981;">เก่งมาก! พูดคำสั่งที่ 3: "ทุกคนถอย!"</span>';
         } else if (stepNum === 3 && this.aedSteps.step2 && !this.aedSteps.step3) {
           this.aedSteps.step3 = true;
           this.lastAedStepTime = now;
-          SoundEngine.playPulseBeep(1100, 0.05);
+          SoundEngine.playPulseBeep(1100, 0.08);
           const card3 = document.getElementById('aedCard3');
           if (card3) {
             card3.classList.remove('waiting');
             card3.classList.add('active');
           }
           const fb = document.getElementById('txtAedInstructionFeedback');
-          if (fb) fb.innerText = '⚡ ปลดล็อกระบบความปลอดภัยครบทั้ง 3 ขั้นตอน! เตรียมช็อกไฟฟ้า...';
+          if (fb) fb.innerHTML = '⚡ <span style="color:#10B981;">ปลดล็อกความปลอดภัยครบ 3 ขั้นตอน! เตรียมช็อกไฟฟ้า...</span>';
           this.deliverShock();
         }
       }
@@ -3238,7 +3704,6 @@
         this.aedListening = false;
         MicSensor.stopSpeechRecognition();
 
-        // 1.0s delay with 3 green cards visible before discharge
         setTimeout(() => {
           SoundEngine.playWarningTone(750, 0.7);
 
@@ -3273,6 +3738,16 @@
         this.pickRandomTeam();
       }
 
+      openSettingsModal() {
+        const modal = document.getElementById('modalSettings');
+        if (modal) modal.style.display = 'flex';
+      }
+
+      closeSettingsModal() {
+        const modal = document.getElementById('modalSettings');
+        if (modal) modal.style.display = 'none';
+      }
+
       toggleFullscreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(() => {});
@@ -3282,7 +3757,6 @@
       }
 
       bindEvents() {
-        // Init Console
         document.getElementById('btnStartConsole').addEventListener('click', () => {
           try { SoundEngine.initAndResume(); } catch(e) {}
           this.setStage(1);
@@ -3290,32 +3764,20 @@
           MicSensor.ensureMicLive().catch(e => console.warn('Background mic request:', e));
         });
 
-        // Global Keyboard Controls
         window.addEventListener('keydown', (e) => {
-          if (e.target.tagName === 'INPUT') return;
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
 
-          // Fullscreen [F]
           if (e.key === 'f' || e.key === 'F') {
             this.toggleFullscreen();
-          }
-          // Mute [M]
-          else if (e.key === 'm' || e.key === 'M') {
+          } else if (e.key === 'm' || e.key === 'M') {
             SoundEngine.toggleMute();
-          }
-          // Quick Reset [R]
-          else if (e.key === 'r' || e.key === 'R') {
+          } else if (e.key === 'r' || e.key === 'R') {
             this.quickResetGame();
-          }
-          // Skip Forward [Shift + RightArrow]
-          else if (e.shiftKey && e.key === 'ArrowRight') {
+          } else if (e.shiftKey && e.key === 'ArrowRight') {
             if (this.currentStage < 6) this.setStage(this.currentStage + 1);
-          }
-          // Go Back [B]
-          else if (e.key === 'b' || e.key === 'B') {
+          } else if (e.key === 'b' || e.key === 'B') {
             if (this.currentStage > 1) this.setStage(this.currentStage - 1);
-          }
-          // Spacebar: Universal Action Trigger
-          else if (e.code === 'Space') {
+          } else if (e.code === 'Space') {
             e.preventDefault();
             if (this.currentStage === 2) {
               this.advanceStage2Complete();
@@ -3328,9 +3790,7 @@
                 else if (!this.aedSteps.step3) this.triggerAedStep(3);
               }
             }
-          }
-          // Number Keys [1] - [4]
-          else if (['1', '2', '3', '4'].includes(e.key)) {
+          } else if (['1', '2', '3', '4'].includes(e.key)) {
             const num = parseInt(e.key);
             if (this.currentStage === 1) this.handleStage1Choice(num);
             else if (this.currentStage === 3 && num <= 3) this.quickFillPreset(num);
@@ -3346,10 +3806,9 @@
     window.SoundEngine = SoundEngine;
     window.MicSensor = MicSensor;
 
-    // Boot Game Engine on DOMContentLoaded
     window.addEventListener('DOMContentLoaded', () => {
       GameStateManager.init();
-      GameStateManager.pickRandomTeam();
+      AIVoiceCoach.initVoice();
     });
   </script>
 </body>
