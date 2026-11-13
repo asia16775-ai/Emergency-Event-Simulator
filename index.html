@@ -342,10 +342,12 @@
     }
 
     .stage-card-clean {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
+      background: rgba(11, 18, 32, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.25);
       border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.65);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(16, 185, 129, 0.12);
       width: 100%;
       max-width: 1180px;
       padding: 24px 32px;
@@ -2670,7 +2672,7 @@
 
         // 1. Draw Medical ICU Telemetry Grid
         this.ctx.save();
-        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
         this.ctx.lineWidth = 1;
         this.ctx.beginPath();
         for (let x = 0; x < w; x += 25) {
@@ -2684,7 +2686,7 @@
         this.ctx.stroke();
 
         // Major 125px grid lines
-        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.09)';
+        this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
         this.ctx.beginPath();
         for (let x = 0; x < w; x += 125) {
           this.ctx.moveTo(x, 0);
@@ -2700,24 +2702,67 @@
         // Watermark telemetry indicators
         this.ctx.save();
         this.ctx.font = '11px monospace';
-        this.ctx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+        this.ctx.fillStyle = 'rgba(56, 189, 248, 0.28)';
         this.ctx.fillText('ICU TELEMETRY MONITOR // LEAD II (1.0 mV/cm @ 25 mm/s)', 30, 40);
         this.ctx.fillText('BURAPHA MEDICAL SIMULATOR // CONTINUOUS AMBIENT EKG', 30, h - 30);
         this.ctx.restore();
 
         // Advance wave sweep phase
-        this.phase = (this.phase + 2.4) % 20000;
+        this.phase = (this.phase + 2.8) % 20000;
 
-        // 2. Draw Flowing Emerald EKG Wave (Upper Screen: Y ~ 32%)
-        const midY1 = h * 0.32;
-        this.drawEKGLine(midY1, 1.15, '#10B981', 0.9, 75);
+        // Channel 1: Flowing Emerald EKG Wave (Upper Screen: Y ~ 24%)
+        const midY1 = h * 0.24;
+        this.drawEKGLine(midY1, 1.25, '#10B981', 0.95, 80);
 
-        // 3. Draw Flowing Cyan Pleth/SpO2 Wave (Lower Screen: Y ~ 68%)
-        const midY2 = h * 0.68;
-        this.drawPlethLine(midY2, 0.8, '#38BDF8', 0.75, 65);
+        // Channel 2: Flowing Cyan Pleth/SpO2 Wave (Lower Screen: Y ~ 78%)
+        const midY2 = h * 0.78;
+        this.drawPlethLine(midY2, 0.9, '#38BDF8', 0.85, 70);
+
+        // Channel 3: Ambient Amber Capnography / ETCO2 Wave (Across Mid-Screen: Y ~ 51%)
+        const midY3 = h * 0.51;
+        this.drawCapnoLine(midY3, 0.75, '#F59E0B', 0.55, 90);
       }
 
       drawEKGLine(baseY, ampScale, color, alpha, cycleLength) {
+        const w = this.width;
+        this.ctx.save();
+        this.ctx.strokeStyle = color;
+        this.ctx.globalAlpha = alpha;
+        this.ctx.lineWidth = 3.2;
+        this.ctx.shadowBlur = 18;
+        this.ctx.shadowColor = color;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+
+        this.ctx.beginPath();
+        const step = 4;
+        for (let x = 0; x <= w; x += step) {
+          const samplePos = (x + this.phase) % (cycleLength * 4);
+          let offset = 0;
+          const mod = samplePos;
+
+          if (mod >= 10 && mod < 35) {
+            offset = -Math.sin((mod - 10) / 25 * Math.PI) * 11 * ampScale;
+          } else if (mod >= 42 && mod < 47) {
+            offset = 9 * ampScale;
+          } else if (mod >= 47 && mod < 61) {
+            const progress = (mod - 47) / 14;
+            offset = -Math.sin(progress * Math.PI) * 88 * ampScale;
+          } else if (mod >= 61 && mod < 69) {
+            offset = 16 * ampScale;
+          } else if (mod >= 88 && mod < 135) {
+            offset = -Math.sin((mod - 88) / 47 * Math.PI) * 20 * ampScale;
+          }
+
+          const y = baseY + offset;
+          if (x === 0) this.ctx.moveTo(x, y);
+          else this.ctx.lineTo(x, y);
+        }
+        this.ctx.stroke();
+        this.ctx.restore();
+      }
+
+      drawPlethLine(baseY, ampScale, color, alpha, cycleLength) {
         const w = this.width;
         this.ctx.save();
         this.ctx.strokeStyle = color;
@@ -2730,85 +2775,21 @@
 
         this.ctx.beginPath();
         const step = 4;
-        let lastX = 0, lastY = baseY;
-
-        for (let x = 0; x <= w; x += step) {
-          const samplePos = (x + this.phase) % (cycleLength * 4);
-          let offset = 0;
-          const mod = samplePos;
-
-          if (mod >= 10 && mod < 35) {
-            // P wave
-            offset = -Math.sin((mod - 10) / 25 * Math.PI) * 11 * ampScale;
-          } else if (mod >= 42 && mod < 47) {
-            // Q dip
-            offset = 9 * ampScale;
-          } else if (mod >= 47 && mod < 61) {
-            // Sharp R Peak
-            const progress = (mod - 47) / 14;
-            offset = -Math.sin(progress * Math.PI) * 88 * ampScale;
-          } else if (mod >= 61 && mod < 69) {
-            // S dip
-            offset = 16 * ampScale;
-          } else if (mod >= 88 && mod < 135) {
-            // T wave
-            offset = -Math.sin((mod - 88) / 47 * Math.PI) * 20 * ampScale;
-          }
-
-          const y = baseY + offset;
-          if (x === 0) this.ctx.moveTo(x, y);
-          else this.ctx.lineTo(x, y);
-
-          lastX = x;
-          lastY = y;
-        }
-        this.ctx.stroke();
-
-        // Glowing phosphor bead at head of sweep
-        this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.shadowBlur = 18;
-        this.ctx.shadowColor = color;
-        this.ctx.beginPath();
-        this.ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
-        this.ctx.fill();
-
-        this.ctx.restore();
-      }
-
-      drawPlethLine(baseY, ampScale, color, alpha, cycleLength) {
-        const w = this.width;
-        this.ctx.save();
-        this.ctx.strokeStyle = color;
-        this.ctx.globalAlpha = alpha;
-        this.ctx.lineWidth = 2.4;
-        this.ctx.shadowBlur = 12;
-        this.ctx.shadowColor = color;
-        this.ctx.lineCap = 'round';
-        this.ctx.lineJoin = 'round';
-
-        this.ctx.beginPath();
-        const step = 4;
-        let lastX = 0, lastY = baseY;
-
         for (let x = 0; x <= w; x += step) {
           const samplePos = (x + this.phase * 0.9) % (cycleLength * 4);
           let offset = 0;
           const mod = samplePos;
 
           if (mod < 20) {
-            // Rapid systolic rise
             const prog = mod / 20;
             offset = -Math.sin(prog * Math.PI * 0.5) * 45 * ampScale;
           } else if (mod < 40) {
-            // Systolic decline to dicrotic notch
             const prog = (mod - 20) / 20;
             offset = -45 * ampScale + (prog * 20 * ampScale);
           } else if (mod < 55) {
-            // Dicrotic wave bump
             const prog = (mod - 40) / 15;
             offset = -25 * ampScale - Math.sin(prog * Math.PI) * 8 * ampScale;
           } else if (mod < 100) {
-            // Diastolic runoff
             const prog = (mod - 55) / 45;
             offset = -25 * ampScale + (prog * 25 * ampScale);
           }
@@ -2816,24 +2797,48 @@
           const y = baseY + offset;
           if (x === 0) this.ctx.moveTo(x, y);
           else this.ctx.lineTo(x, y);
-
-          lastX = x;
-          lastY = y;
         }
         this.ctx.stroke();
+        this.ctx.restore();
+      }
 
-        this.ctx.fillStyle = '#FFFFFF';
-        this.ctx.shadowBlur = 16;
+      drawCapnoLine(baseY, ampScale, color, alpha, cycleLength) {
+        const w = this.width;
+        this.ctx.save();
+        this.ctx.strokeStyle = color;
+        this.ctx.globalAlpha = alpha;
+        this.ctx.lineWidth = 2.2;
+        this.ctx.shadowBlur = 10;
         this.ctx.shadowColor = color;
-        this.ctx.beginPath();
-        this.ctx.arc(lastX, lastY, 3.5, 0, Math.PI * 2);
-        this.ctx.fill();
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
 
+        this.ctx.beginPath();
+        const step = 5;
+        for (let x = 0; x <= w; x += step) {
+          const samplePos = (x + this.phase * 0.6) % (cycleLength * 4);
+          let offset = 0;
+          const mod = samplePos;
+
+          if (mod >= 10 && mod < 25) {
+            const prog = (mod - 10) / 15;
+            offset = -prog * 30 * ampScale;
+          } else if (mod >= 25 && mod < 65) {
+            offset = -30 * ampScale - Math.sin((mod - 25) / 40 * Math.PI) * 4 * ampScale;
+          } else if (mod >= 65 && mod < 75) {
+            const prog = (mod - 65) / 10;
+            offset = -30 * ampScale + (prog * 30 * ampScale);
+          }
+
+          const y = baseY + offset;
+          if (x === 0) this.ctx.moveTo(x, y);
+          else this.ctx.lineTo(x, y);
+        }
+        this.ctx.stroke();
         this.ctx.restore();
       }
     }
 
-    /* Confetti Particle Burst Engine */
     class ConfettiEngine {
       constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
@@ -2918,36 +2923,37 @@
         this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
         this.mode = 'SINUS';
         this.phase = 0;
-        this.speed = 1.6;
+        this.speed = 2.0;
         this.color = '#10B981';
         this.points = [];
+        this.width = 0;
+        this.height = 0;
         this.maxPoints = 400;
         this.compressionSpikeActive = false;
         this.initCanvas();
       }
 
       initCanvas() {
-        if (!this.canvas || !this.ctx) return;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.startLoop();
+      }
+
+      resize() {
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        if (!this.ctx) return;
         const dpr = window.devicePixelRatio || 1;
         const rect = this.canvas.getBoundingClientRect();
-        this.canvas.width = rect.width * dpr;
-        this.canvas.height = rect.height * dpr;
-        this.ctx.scale(dpr, dpr);
-        this.width = rect.width;
-        this.height = rect.height;
-        this.maxPoints = Math.floor(this.width / 2.2);
-
-        window.addEventListener('resize', () => {
-          const r = this.canvas.getBoundingClientRect();
-          this.canvas.width = r.width * dpr;
-          this.canvas.height = r.height * dpr;
+        if (rect.width > 0 && rect.height > 0) {
+          this.canvas.width = rect.width * dpr;
+          this.canvas.height = rect.height * dpr;
+          this.ctx.setTransform(1, 0, 0, 1, 0, 0);
           this.ctx.scale(dpr, dpr);
-          this.width = r.width;
-          this.height = r.height;
-          this.maxPoints = Math.floor(this.width / 2.2);
-        });
-
-        this.startLoop();
+          this.width = rect.width;
+          this.height = rect.height;
+          this.maxPoints = Math.max(150, Math.floor(this.width / 2.2));
+        }
       }
 
       setMode(mode) {
@@ -2955,35 +2961,35 @@
         const badge = document.getElementById('ecgStatusBadge');
         if (mode === 'SINUS') {
           this.color = '#10B981';
-          this.speed = 1.7;
+          this.speed = 2.0;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical';
             badge.innerText = 'NORMAL SINUS RHYTHM // 76 BPM';
           }
         } else if (mode === 'BRADYCARDIA') {
           this.color = '#FF3B5C';
-          this.speed = 1.0;
+          this.speed = 1.6;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
             badge.innerText = 'CRITICAL // BRADYCARDIA 38 BPM';
           }
         } else if (mode === 'AGONAL') {
           this.color = '#F59E0B';
-          this.speed = 0.7;
+          this.speed = 1.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
             badge.innerText = 'CRITICAL // AGONAL DYING RHYTHM 22 BPM';
           }
         } else if (mode === 'VFIB_COARSE') {
           this.color = '#FF3B5C';
-          this.speed = 2.4;
+          this.speed = 2.6;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
             badge.innerText = 'CARDIAC ARREST // VENTRICULAR FIBRILLATION';
           }
         } else if (mode === 'CPR_COMPRESSION') {
           this.color = '#38BDF8';
-          this.speed = 2.0;
+          this.speed = 2.4;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical';
             badge.innerText = 'CPR ACTIVE // MECHANICAL COMPRESSIONS';
@@ -2996,12 +3002,13 @@
           }
         } else if (mode === 'ROSC') {
           this.color = '#10B981';
-          this.speed = 1.8;
+          this.speed = 2.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical rosc';
             badge.innerText = 'ROSC // NORMAL SINUS 88 BPM';
           }
         }
+        this.resize();
       }
 
       triggerCompressionSpike() {
@@ -3011,80 +3018,92 @@
 
       calcVoltage(p) {
         if (this.compressionSpikeActive) {
-          return (Math.random() - 0.5) * 65;
+          return (Math.random() - 0.5) * 60;
         }
         if (this.mode === 'SINUS' || this.mode === 'ROSC') {
+          const mod = p % 130;
+          if (mod >= 15 && mod < 32) return Math.exp(-Math.pow((mod - 23) / 4, 2)) * 8;
+          if (mod >= 42 && mod < 47) return -Math.exp(-Math.pow((mod - 44.5) / 1.5, 2)) * 6;
+          if (mod >= 47 && mod < 57) return Math.exp(-Math.pow((mod - 52) / 2.2, 2)) * 52;
+          if (mod >= 57 && mod < 63) return -Math.exp(-Math.pow((mod - 60) / 1.8, 2)) * 14;
+          if (mod >= 78 && mod < 105) return Math.exp(-Math.pow((mod - 91) / 7, 2)) * 12;
+          return (Math.random() - 0.5) * 1.5;
+        } else if (this.mode === 'BRADYCARDIA') {
           const mod = p % 200;
           if (mod >= 20 && mod < 40) return Math.exp(-Math.pow((mod - 30) / 5, 2)) * 7;
-          if (mod >= 50 && mod < 56) return -Math.exp(-Math.pow((mod - 53) / 2, 2)) * 6;
-          if (mod >= 56 && mod < 68) return Math.exp(-Math.pow((mod - 62) / 3, 2)) * 48;
-          if (mod >= 68 && mod < 75) return -Math.exp(-Math.pow((mod - 71.5) / 2, 2)) * 14;
-          if (mod >= 95 && mod < 135) return Math.exp(-Math.pow((mod - 115) / 10, 2)) * 11;
-          return (Math.random() - 0.5) * 1.2;
-        } else if (this.mode === 'BRADYCARDIA') {
-          const mod = p % 360;
-          if (mod >= 30 && mod < 50) return Math.exp(-Math.pow((mod - 40) / 6, 2)) * 5;
-          if (mod >= 80 && mod < 86) return -Math.exp(-Math.pow((mod - 83) / 2, 2)) * 5;
-          if (mod >= 86 && mod < 98) return Math.exp(-Math.pow((mod - 92) / 3, 2)) * 42;
-          if (mod >= 98 && mod < 106) return -Math.exp(-Math.pow((mod - 102) / 2.5, 2)) * 12;
-          if (mod >= 135 && mod < 185) return Math.exp(-Math.pow((mod - 160) / 12, 2)) * 8;
+          if (mod >= 55 && mod < 61) return -Math.exp(-Math.pow((mod - 58) / 1.8, 2)) * 6;
+          if (mod >= 61 && mod < 73) return Math.exp(-Math.pow((mod - 67) / 2.5, 2)) * 50;
+          if (mod >= 73 && mod < 80) return -Math.exp(-Math.pow((mod - 76.5) / 2, 2)) * 14;
+          if (mod >= 105 && mod < 145) return Math.exp(-Math.pow((mod - 125) / 9, 2)) * 10;
           return (Math.random() - 0.5) * 1.5;
         } else if (this.mode === 'AGONAL') {
-          const mod = p % 460;
-          if (mod >= 80 && mod < 170) {
-            return Math.sin((mod - 80) / 90 * Math.PI) * 28 + (Math.random() - 0.5) * 3;
+          const mod = p % 300;
+          if (mod >= 50 && mod < 160) {
+            return Math.sin((mod - 50) / 110 * Math.PI) * 35 + (Math.random() - 0.5) * 3;
           }
-          return (Math.random() - 0.5) * 1.8;
+          return (Math.random() - 0.5) * 2;
         } else if (this.mode === 'VFIB_COARSE') {
-          return Math.sin(p * 0.14) * 16 + Math.sin(p * 0.31) * 11 + (Math.random() - 0.5) * 8;
+          return Math.sin(p * 0.16) * 18 + Math.sin(p * 0.33) * 14 + (Math.random() - 0.5) * 8;
         } else if (this.mode === 'CPR_COMPRESSION') {
-          const mod = p % 55;
-          if (mod < 24) return Math.sin(mod / 24 * Math.PI) * 35;
+          const mod = p % 45;
+          if (mod < 20) return Math.sin(mod / 20 * Math.PI) * 38;
           return (Math.random() - 0.5) * 4;
         } else if (this.mode === 'DEFIB_DISCHARGE') {
-          return (Math.random() - 0.5) * 80;
+          return (Math.random() - 0.5) * 85;
         }
         return 0;
       }
 
       startLoop() {
         const render = () => {
-          if (!this.ctx) return;
-          this.phase += this.speed;
-          const yVal = this.calcVoltage(this.phase);
-          this.points.push(yVal);
-          if (this.points.length > this.maxPoints) {
-            this.points.shift();
+          if (!this.canvas) return;
+          if (this.width <= 0 || this.height <= 0) {
+            this.resize();
           }
 
-          this.ctx.clearRect(0, 0, this.width, this.height);
+          if (this.ctx && this.width > 0 && this.height > 0) {
+            this.phase += this.speed;
+            const yVal = this.calcVoltage(this.phase);
+            this.points.push(yVal);
+            if (this.points.length > this.maxPoints) {
+              this.points.shift();
+            }
 
-          const midY = this.height / 2;
-          const stepX = this.width / this.maxPoints;
+            this.ctx.clearRect(0, 0, this.width, this.height);
 
-          this.ctx.beginPath();
-          this.ctx.lineWidth = 2.4;
-          this.ctx.strokeStyle = this.color;
-          this.ctx.lineJoin = 'round';
-          this.ctx.lineCap = 'round';
+            const midY = this.height / 2;
+            const stepX = this.width / this.maxPoints;
 
-          for (let i = 0; i < this.points.length; i++) {
-            const x = i * stepX;
-            const y = midY - this.points[i];
-            if (i === 0) this.ctx.moveTo(x, y);
-            else this.ctx.lineTo(x, y);
-          }
-          this.ctx.stroke();
-
-          // Leading bright dot
-          if (this.points.length > 0) {
-            const lastIdx = this.points.length - 1;
-            const lx = lastIdx * stepX;
-            const ly = midY - this.points[lastIdx];
+            this.ctx.save();
             this.ctx.beginPath();
-            this.ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#FFFFFF';
-            this.ctx.fill();
+            this.ctx.lineWidth = 2.8;
+            this.ctx.strokeStyle = this.color;
+            this.ctx.shadowBlur = 12;
+            this.ctx.shadowColor = this.color;
+            this.ctx.lineJoin = 'round';
+            this.ctx.lineCap = 'round';
+
+            for (let i = 0; i < this.points.length; i++) {
+              const x = i * stepX;
+              const y = midY - this.points[i];
+              if (i === 0) this.ctx.moveTo(x, y);
+              else this.ctx.lineTo(x, y);
+            }
+            this.ctx.stroke();
+
+            // Leading bright neon cursor
+            if (this.points.length > 0) {
+              const lastIdx = this.points.length - 1;
+              const lx = lastIdx * stepX;
+              const ly = midY - this.points[lastIdx];
+              this.ctx.beginPath();
+              this.ctx.arc(lx, ly, 4.5, 0, Math.PI * 2);
+              this.ctx.fillStyle = '#FFFFFF';
+              this.ctx.shadowColor = '#FFFFFF';
+              this.ctx.shadowBlur = 14;
+              this.ctx.fill();
+            }
+            this.ctx.restore();
           }
 
           requestAnimationFrame(render);
@@ -3093,9 +3112,6 @@
       }
     }
 
-    /* ==========================================================================
-       PERSISTENT MIC & WEBAUDIO SENSOR (CLAP DETECTION FIXED - FIX #7)
-       ========================================================================== */
     class MicAudioSensor {
       constructor() {
         this.stream = null;
@@ -3332,6 +3348,11 @@
         this.latestTranscript = '';
       }
 
+      debounce(fn, ms = 800) {
+        if (this.timer) clearTimeout(this.timer);
+        this.timer = setTimeout(fn, ms);
+      }
+
       feed(transcript, isFinal, onDone, debounceMs = 950) {
         this.latestTranscript = transcript;
         if (this.timer) clearTimeout(this.timer);
@@ -3561,7 +3582,10 @@
           const ml = document.getElementById('modalLobby');
           if (ml) { ml.style.display = 'none'; ml.classList.add('hidden-modal'); }
           const bgCanvas = document.getElementById('bgEcgCanvas');
-          if (bgCanvas) bgCanvas.style.opacity = '0.18';
+          if (bgCanvas) bgCanvas.style.opacity = '0.85';
+          if (window.ECGEngine) {
+            setTimeout(() => window.ECGEngine.resize(), 50);
+          }
         }
 
         // Update Nav step pills
@@ -4192,6 +4216,7 @@
         this.stage2SpokeWords = false;
         this.stage2LoudnessPassed = false;
         this.latestStage2Transcript = '';
+        this._stage2Clearing = false;
 
         const updateChips = () => {
           const pillHelp = document.getElementById('chipKwHelp');
@@ -4229,25 +4254,7 @@
             this.stage2SpokeWords = true;
           }
 
-          // Debounced wait for speech to finish!
-          if (this.stage2SpokeWords && this.stage2LoudnessPassed) {
-            const hint = document.getElementById('txtLiveStatusHint');
-            if (hint) {
-              hint.innerText = '🔥 คำพูดถูกต้องและเสียงดังทะลุเกณฑ์แล้ว... (กำลังรอฟังจบประโยค)';
-              hint.style.color = '#10B981';
-            }
-            speechDebouncer.debounce(() => {
-              if (this.currentStage === 2 && !this.stage2Completed && this.stage2SpokeWords && this.stage2LoudnessPassed) {
-                this.completeStage2();
-              }
-            }, 1200);
-          } else if (this.stage2SpokeWords && !this.stage2LoudnessPassed) {
-            const hint = document.getElementById('txtLiveStatusHint');
-            if (hint) {
-              hint.innerText = `⚠️ ได้ยินคำพูดแล้ว แต่เสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้!`;
-              hint.style.color = '#F59E0B';
-            }
-          }
+          this.evalStage2Success();
         });
 
         const loop = () => {
@@ -4258,48 +4265,54 @@
             if (db > this.stage2MaxDbReached) this.stage2MaxDbReached = db;
 
             const txtDb = document.getElementById('txtLiveDecibel');
-            const txtHint = document.getElementById('txtLiveStatusHint');
             const barLive = document.getElementById('liveDbBarFill');
 
             if (txtDb) txtDb.innerText = `${db} dB`;
             const pct = Math.min(100, Math.max(0, ((db - 10) / 75) * 100));
             if (barLive) barLive.style.width = `${pct}%`;
 
-            const target = this.stage2ThresholdDb;
+            const target = this.stage2ThresholdDb || 45;
             if (db >= target) {
               this.stage2LoudnessPassed = true;
               if (barLive) barLive.style.background = '#10B981';
               if (txtDb) txtDb.style.color = '#10B981';
-
-              if (this.stage2SpokeWords) {
-                if (txtHint) {
-                  txtHint.innerText = '🔥 เสียงดังทะลุเกณฑ์และคำพูดถูกต้องแล้ว... (กำลังรอฟังจบประโยค)';
-                  txtHint.style.color = '#10B981';
-                }
-                speechDebouncer.debounce(() => {
-                  if (this.currentStage === 2 && !this.stage2Completed && this.stage2SpokeWords && this.stage2LoudnessPassed) {
-                    this.completeStage2();
-                  }
-                }, 1200);
-              } else {
-                if (txtHint) {
-                  txtHint.innerText = '⚠️ เสียงดังดีมาก! แต่ต้องพูดคำว่า "ช่วยด้วย! มีคนหมดสติ โทร 1669 เอา AED มา" ให้ถูกต้องด้วยค่ะ!';
-                  txtHint.style.color = '#38BDF8';
-                }
-              }
-            } else if (!this.stage2LoudnessPassed) {
-              if (barLive) barLive.style.background = db >= target - 10 ? '#F59E0B' : '#38BDF8';
-              if (txtDb) txtDb.style.color = db >= target - 10 ? '#F59E0B' : '#38BDF8';
-              if (txtHint && !this.stage2SpokeWords) {
-                txtHint.innerText = `ระดับเสียงปัจจุบัน ${db} dB (ต้องการ ${target} dB) ตะโกนให้ดังขึ้นอีก!`;
-                txtHint.style.color = '#94A3B8';
-              }
             }
+
+            this.evalStage2Success();
           }
 
           requestAnimationFrame(loop);
         };
         requestAnimationFrame(loop);
+      }
+
+      evalStage2Success() {
+        if (this.currentStage !== 2 || this.stage2Completed || this._stage2Clearing) return;
+        const txtHint = document.getElementById('txtLiveStatusHint');
+
+        if (this.stage2SpokeWords && this.stage2LoudnessPassed) {
+          this._stage2Clearing = true;
+          if (txtHint) {
+            txtHint.innerText = '🔥 ถูกต้องคำพูดและเสียงดังทะลุเกณฑ์แล้ว! กำลังไปด่านต่อไป...';
+            txtHint.style.color = '#10B981';
+          }
+          // Smooth 700ms success moment then transition!
+          setTimeout(() => {
+            if (this.currentStage === 2 && !this.stage2Completed) {
+              this.completeStage2();
+            }
+          }, 700);
+        } else if (this.stage2SpokeWords && !this.stage2LoudnessPassed) {
+          if (txtHint) {
+            txtHint.innerText = `⚠️ ได้ยินคำพูดครบแล้ว แต่ระดับเสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้ค่ะ!`;
+            txtHint.style.color = '#F59E0B';
+          }
+        } else if (!this.stage2SpokeWords && this.stage2LoudnessPassed) {
+          if (txtHint) {
+            txtHint.innerText = `⚠️ เสียงดังพอแล้ว! ต้องพูดคำว่า "ช่วยด้วย / คนหมดสติ / โทร 1669 / AED" ให้ชัดเจนด้วยค่ะ!`;
+            txtHint.style.color = '#F59E0B';
+          }
+        }
       }
 
       async completeStage2() {

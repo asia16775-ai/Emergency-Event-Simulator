@@ -1,8 +1,24 @@
-# HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.4 Production Ready)
+# HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.5 Production Perfected)
 
 > **“ช่วยให้เป็น เห็นแล้วกล้าทำ”** — คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา (Faculty of Medicine, Burapha University)  
 > ระบบจำลองสถานการณ์กู้ชีพฉุกเฉินและการกู้ชีพขั้นพื้นฐาน (CPR & First Aid) แบบ Interactive สำหรับงาน MDBUU Open House  
 > **Live Deployment:** `https://asia16775-ai.github.io/Emergency-Event-Simulator/`
+
+---
+
+## ⚡ ไฮไลต์การอัปเกรด V6.5 (Instant Stage 2 Transition & Restored Ambient EKG Engine)
+
+1. **🚀 แก้ไขหน้าขอความช่วยเหลือค้าง (Smooth & Guaranteed Stage 2 -> 3 Transition):**
+   - สาเหตุที่ค้าง: เกิดจากตัวเรียก Debouncer ภายใน Event Loop พยายามเรียก method ที่ไม่ตรงชื่อ ทำให้เธรดค้างตรงสถานะ `(กำลังรอฟังจบประโยค)` ไม่ยอมตัดเข้า `completeStage2()`
+   - การแก้ไข: สร้างฟังก์ชันประเมินความสำเร็จสด `evalStage2Success()` ที่ทำงานสอดคล้องกับทั้งระบบตรวจจับคีย์เวิร์ดและหลอดวัดเดซิเบล เมื่อผู้ใช้พูดคีย์เวิร์ดครบและระดับเสียงทะลุเกณฑ์เป้าหมาย จะแสดงสถานะสำเร็จสีเขียวและหน่วงเวลาสั้นๆ 700ms ก่อนตัดเข้าด่าน 3 ทันทีอย่างราบรื่น ไม่ค้างอีกต่อไป
+
+2. **📈 กู้คืนเส้นคลื่น EKG ทั้งมอนิเตอร์บนและ Background แบบเต็มระบบ (Restored & Enhanced EKG Telemetry):**
+   - **มอนิเตอร์สัญญาณชีพด้านบน (`#ecgCanvas`):** แก้ไขบั๊ก Canvas 0x0 ตอนโหลดจากหน้า Lobby ด้วยระบบ Auto-resize ตรวจจับขนาดหน้าจอจริงทันทีที่เข้าสู่ด่าน พร้อมปรับแต่งคลื่น Bradycardia 38 BPM ให้มี R-Peak คมชัดสูง 50px สว่างเรืองแสงสีแดงนีออนพร้อมหัวอ่านไฟวิ่งสีขาวชัดเจน ไม่แบนราบหรือหายไป
+   - **คลื่น EKG วิ่งผ่านฉากหลัง (`#bgEcgCanvas`):** ปรับความสว่างพื้นหลังให้อยู่ที่ `0.85` (จากเดิมที่ถูกลดเหลือ 0.18 จนมืดสนิท) พร้อมเรนเดอร์ 3 คลื่นสัญญาณชีพระดับ ICU ตลอดเวลา:
+     - **คลื่นบน (Y=24%):** Lead II Emerald Sinus Rhythm (`#10B981`) สว่างสดใส มีคลื่น P-Q-R-S-T ครบถ้วน
+     - **คลื่นล่าง (Y=78%):** Cyan Pleth/SpO2 Pulse Wave (`#38BDF8`)
+     - **คลื่นกลาง (Y=51%):** Ambient Amber Capnography (`#F59E0B`)
+   - **การ์ดหน้าจอหลัก Frosted Glassmorphism:** ปรับพื้นหลังการ์ดให้อยู่ในรูปแบบกระจกใสรมควันกึ่งโปร่งแสง พร้อม Backdrop Blur 14px ทำให้มองเห็นเส้นคลื่นหัวใจวิ่งผ่านทะลุหลังการ์ดได้อย่างมีมิติและสวยงามระดับมืออาชีพ
 
 ---
 
