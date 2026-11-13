@@ -4221,25 +4221,26 @@
           const box = document.getElementById('txtStage2LiveTranscript');
           if (box) box.innerHTML = `🎙️ ได้ยินเสียง: <strong style="color:#FFF;">"${transcript}"</strong>`;
 
-          if (val.includes('ช่วย') || val.includes('ช่วยด้วย') || val.includes('ช่วยเหลือ')) {
+          // Category 1: Help
+          if (val.includes('ช่วย') || val.includes('ช่วยด้วย') || val.includes('ช่วยเหลือ') || val.includes('ขอความช่วยเหลือ') || val.includes('ช่วยหน่อย')) {
             this.stage2MatchedKeywords.help = true;
           }
-          if (val.includes('หมดสติ') || val.includes('ไม่รู้สึกตัว') || val.includes('เป็นลม') || val.includes('ไม่ตื่น') || val.includes('คนเจ็บ')) {
+          // Category 2: Unconscious patient
+          if (val.includes('หมดสติ') || val.includes('ไม่รู้สึกตัว') || val.includes('เป็นลม') || val.includes('ไม่ตื่น') || val.includes('คนเจ็บ') || val.includes('คนไข้') || val.includes('สลบ')) {
             this.stage2MatchedKeywords.unconscious = true;
           }
-          if (val.includes('1669') || val.includes('aed') || val.includes('เออีดี') || val.includes('รถพยาบาล') || val.includes('เครื่อง')) {
+          // Category 3: Call 1669 & Bring AED
+          if (val.includes('1669') || val.includes('aed') || val.includes('เออีดี') || val.includes('เอดี') || val.includes('รถพยาบาล') || val.includes('กู้ชีพ') || val.includes('เครื่องช็อก') || val.includes('เครื่องกระตุก')) {
             this.stage2MatchedKeywords.dispatchAed = true;
           }
           updateChips();
 
-          const count = (this.stage2MatchedKeywords.help ? 1 : 0) +
-                        (this.stage2MatchedKeywords.unconscious ? 1 : 0) +
-                        (this.stage2MatchedKeywords.dispatchAed ? 1 : 0);
+          // STRICT VALIDATION: MUST MATCH ALL 3 CATEGORIES!
+          const allThreeMatched = this.stage2MatchedKeywords.help &&
+                                  this.stage2MatchedKeywords.unconscious &&
+                                  this.stage2MatchedKeywords.dispatchAed;
 
-          if (count >= 2 || (this.stage2MatchedKeywords.help && (this.stage2MatchedKeywords.unconscious || this.stage2MatchedKeywords.dispatchAed))) {
-            this.stage2SpokeWords = true;
-          }
-
+          this.stage2SpokeWords = allThreeMatched;
           this.evalStage2Success();
         });
 
@@ -4276,27 +4277,45 @@
         if (this.currentStage !== 2 || this.stage2Completed || this._stage2Clearing) return;
         const txtHint = document.getElementById('txtLiveStatusHint');
 
-        if (this.stage2SpokeWords && this.stage2LoudnessPassed) {
+        // MUST MATCH ALL 3 CHIPS:
+        const allMatched = this.stage2MatchedKeywords.help &&
+                           this.stage2MatchedKeywords.unconscious &&
+                           this.stage2MatchedKeywords.dispatchAed;
+
+        if (allMatched && this.stage2LoudnessPassed) {
           this._stage2Clearing = true;
           if (txtHint) {
-            txtHint.innerText = '🔥 ถูกต้องคำพูดและเสียงดังทะลุเกณฑ์แล้ว! กำลังไปด่านต่อไป...';
+            txtHint.innerText = '🔥 ครบถ้วนทั้ง 3 ข้อกำหนดและเสียงดังทะลุเกณฑ์แล้ว! กำลังไปด่านต่อไป...';
             txtHint.style.color = '#10B981';
           }
-          // Smooth 700ms success moment then transition!
+          // Smooth 800ms cue then transition to Stage 3!
           setTimeout(() => {
             if (this.currentStage === 2 && !this.stage2Completed) {
               this.completeStage2();
             }
-          }, 700);
-        } else if (this.stage2SpokeWords && !this.stage2LoudnessPassed) {
+          }, 800);
+        } else if (!allMatched && this.stage2LoudnessPassed) {
+          const missing = [];
+          if (!this.stage2MatchedKeywords.help) missing.push('1. ช่วยด้วย');
+          if (!this.stage2MatchedKeywords.unconscious) missing.push('2. มีคนหมดสติ');
+          if (!this.stage2MatchedKeywords.dispatchAed) missing.push('3. โทร 1669 / เอา AED มา');
           if (txtHint) {
-            txtHint.innerText = `⚠️ ได้ยินคำพูดครบแล้ว แต่ระดับเสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้ค่ะ!`;
+            txtHint.innerText = `⚠️ เสียงดังพอแล้ว! แต่ยังพูดไม่ครบ ขาด: ${missing.join(', ')} พูดให้ครบทั้ง 3 ข้อค่ะ!`;
             txtHint.style.color = '#F59E0B';
           }
-        } else if (!this.stage2SpokeWords && this.stage2LoudnessPassed) {
+        } else if (allMatched && !this.stage2LoudnessPassed) {
           if (txtHint) {
-            txtHint.innerText = `⚠️ เสียงดังพอแล้ว! ต้องพูดคำว่า "ช่วยด้วย / คนหมดสติ / โทร 1669 / AED" ให้ชัดเจนด้วยค่ะ!`;
+            txtHint.innerText = `⚠️ พูดครบทั้ง 3 ข้อแล้ว แต่ระดับเสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้ค่ะ!`;
             txtHint.style.color = '#F59E0B';
+          }
+        } else {
+          const missing = [];
+          if (!this.stage2MatchedKeywords.help) missing.push('1. ช่วยด้วย');
+          if (!this.stage2MatchedKeywords.unconscious) missing.push('2. คนหมดสติ');
+          if (!this.stage2MatchedKeywords.dispatchAed) missing.push('3. โทร 1669/AED');
+          if (txtHint) {
+            txtHint.innerText = `🎙️ ต้องพูดให้ครบทั้ง 3 ข้อ (${missing.join(' + ')}) และเสียงดังเกินขีดเป้าหมายค่ะ`;
+            txtHint.style.color = '#94A3B8';
           }
         }
       }
