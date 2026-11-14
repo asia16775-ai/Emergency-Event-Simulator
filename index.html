@@ -224,6 +224,107 @@
       color: #0B111A;
     }
 
+    /* Patient Status Face HUD (DOOM-Style Biometric Monitor) */
+    .patient-hud-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 16px;
+      height: 100%;
+      border-right: 2px solid #1E293B;
+      background: rgba(11, 17, 26, 0.95);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+    .patient-hud-photo-wrap {
+      width: 88px;
+      height: 88px;
+      border-radius: 9px;
+      overflow: hidden;
+      position: relative;
+      border: 2.5px solid #F59E0B;
+      background: #0A0F1D;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+      flex-shrink: 0;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    .patient-hud-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+    .patient-hud-scanline {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+    }
+    .patient-hud-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      min-width: 125px;
+    }
+    .patient-hud-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #64748B;
+    }
+    .patient-hud-state {
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #F59E0B;
+      transition: color 0.3s ease;
+      white-space: nowrap;
+    }
+    .patient-hud-badge.warn .patient-hud-photo-wrap {
+      border-color: #F59E0B;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.45);
+    }
+    .patient-hud-badge.warn .patient-hud-state {
+      color: #F59E0B;
+    }
+    .patient-hud-badge.critical .patient-hud-photo-wrap {
+      border-color: #EF4444;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.65);
+      animation: hudCritGlow 1.2s infinite ease-in-out;
+    }
+    .patient-hud-badge.critical .patient-hud-state {
+      color: #EF4444;
+    }
+    .patient-hud-badge.healthy .patient-hud-photo-wrap {
+      border-color: #10B981;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
+    }
+    .patient-hud-badge.healthy .patient-hud-state {
+      color: #10B981;
+    }
+    .patient-hud-badge.damage-flash .patient-hud-photo-wrap {
+      animation: hudDamageShake 0.65s cubic-bezier(.36,.07,.19,.97) both;
+      border-color: #FF0055 !important;
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.95) !important;
+    }
+    @keyframes hudDamageShake {
+      10%, 90% { transform: translate3d(-3px, 0, 0) scale(1.05); }
+      20%, 80% { transform: translate3d(4px, 0, 0) scale(1.06); }
+      30%, 50%, 70% { transform: translate3d(-5px, 0, 0) scale(1.07); }
+      40%, 60% { transform: translate3d(5px, 0, 0) scale(1.06); }
+    }
+    @keyframes hudCritGlow {
+      0%, 100% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.9); }
+    }
+
     /* 118px High-Visibility Realtime Telemetry HUD Ribbon */
     .telemetry-ribbon-bar {
       height: 118px;
@@ -1894,6 +1995,31 @@
       background: rgba(16, 185, 129, 0.18) !important;
       box-shadow: 0 0 35px rgba(16, 185, 129, 0.5) !important;
     }
+    .stage-hint-banner {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1.5px solid #F59E0B;
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+      font-size: 15px;
+      color: #F8FAFC;
+      line-height: 1.5;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+      animation: fadeInBounce 0.35s ease-out;
+    }
+    .shake {
+      animation: shakeAnim 0.5s ease-in-out;
+    }
+    @keyframes shakeAnim {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    @keyframes fadeInBounce {
+      0% { opacity: 0; transform: translateY(-8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
     .game-choice-tile.wrong {
       border-color: #EF4444 !important;
       background: rgba(239, 68, 68, 0.18) !important;
@@ -2024,12 +2150,15 @@
       </div>
       <div class="nav-step-pills">
         <div id="stepPill0" class="nav-step-pill active">เริ่มเกม</div>
-        <div id="stepPill1" class="nav-step-pill">1. ความปลอดภัย</div>
+        <div id="stepPill1" class="nav-step-pill">1. ปลอดภัย</div>
         <div id="stepPill2" class="nav-step-pill">2. ขอความช่วยเหลือ</div>
         <div id="stepPill3" class="nav-step-pill">3. โทร 1669</div>
-        <div id="stepPill4" class="nav-step-pill">4. ประเมินการหายใจ</div>
+        <div id="stepPill4" class="nav-step-pill">4. หายใจเฮือก</div>
         <div id="stepPill5" class="nav-step-pill">5. CPR & AED</div>
-        <div id="stepPill6" class="nav-step-pill">สรุปผล</div>
+        <div id="stepPill6" class="nav-step-pill">6. ล้างแผล</div>
+        <div id="stepPill7" class="nav-step-pill">7. ห้ามเลือด</div>
+        <div id="stepPill8" class="nav-step-pill">8. ดามแขน</div>
+        <div id="stepPill9" class="nav-step-pill">สรุปผล</div>
       </div>
     </div>
 
@@ -2057,6 +2186,18 @@
 
   <!-- 96px Telemetry Waveform Ribbon Bar -->
   <div class="telemetry-ribbon-bar">
+    <!-- Patient Status Face HUD (DOOM-Style Biometric Monitor) -->
+    <div id="patientHudBadge" class="patient-hud-badge">
+      <div class="patient-hud-photo-wrap">
+        <img id="patientHudImg" src="images/patient/patient_s1_dazed.png" alt="Patient Visual Status" class="patient-hud-photo" />
+        <div class="patient-hud-scanline"></div>
+      </div>
+      <div class="patient-hud-meta">
+        <span class="patient-hud-label font-technical">PATIENT STATUS</span>
+        <span id="patientHudTag" class="patient-hud-state font-technical">DAZED // SHOCK</span>
+      </div>
+    </div>
+
     <div class="canvas-ribbon-wrapper">
       <div id="ecgStatusBadge" class="ecg-status-badge font-technical critical">
         CRITICAL // BRADYCARDIA 38 BPM
@@ -2157,6 +2298,21 @@
           🔊 ทดลองฟังเสียง AI นี้
         </button>
       </div>
+      <!-- Voice Source Toggle (AI TTS vs Recorded MP3) -->
+      <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px; padding-top:10px; border-top:1px solid #1E293B;">
+        <label style="font-size:12px; color:#94A3B8; font-weight:600;" class="font-technical">แหล่งที่มาของเสียงพูดแนะนำ:</label>
+        <div style="display:flex; gap:8px;">
+          <button id="btnVoiceSrcAI" onclick="AIVoiceCoach.setVoiceSourceMode('AI')" class="nav-btn font-technical" style="flex:1; border-color:#10B981; color:#10B981; font-weight:700;">
+            🤖 เสียง AI สังเคราะห์
+          </button>
+          <button id="btnVoiceSrcRecorded" onclick="AIVoiceCoach.setVoiceSourceMode('RECORDED')" class="nav-btn font-technical" style="flex:1; border-color:#334155; color:#94A3B8;">
+            🎙️ ไฟล์เสียงคนพากย์จริง
+          </button>
+        </div>
+        <span id="txtVoiceSourceDesc" style="font-size:11px; color:#64748B; line-height:1.4;">
+          ขณะนี้เปิดโหมด: <strong>เสียง AI สังเคราะห์ (Web Speech TTS)</strong> พร้อมใช้งานขึ้น GitHub ได้ทันทีโดยไม่ต้องรอไฟล์อัดเสียงครับ
+        </span>
+      </div>
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #2A384C; padding-top:12px;">
         <button id="btnVolumeBoost" onclick="SoundEngine.toggleVolumeBoost()" class="nav-btn font-technical">
           🔈 เสียงปกติ (100%)
@@ -2251,7 +2407,7 @@
           window.isSystemSpeaking = false;
           AIVoiceCoach.isSpeaking = false;
           this.playIntercomChime();
-          showToast('🔄 รีเซ็ตระดับเสียงและไมค์เต็ม 100% เรียบร้อยแล้วค่ะ');
+          showToast('🔄 รีเซ็ตระดับเสียงและไมค์เต็ม 100% เรียบร้อยแล้วครับ');
         } catch(e) {
           console.warn('Audio reset error:', e);
         }
@@ -2454,6 +2610,7 @@
         this.availableThaiVoices = [];
         this.isEnabled = true;
         this.isVoiceModeEnabled = true;
+        this.voiceSourceMode = 'AI'; // 'AI' (Default Web Speech TTS) or 'RECORDED' (Custom MP3s)
         this.isSpeaking = false;
         this.currentScript = '';
         this.initVoice();
@@ -2506,7 +2663,7 @@
       }
 
       testAuditionVoice() {
-        speakAndWait('สวัสดีค่ะ ยินดีต้อนรับสู่ คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา สายด่วน หนึ่ง หก หก เก้า พร้อมให้คำแนะนำค่ะ');
+        speakAndWait('สวัสดีครับ ยินดีต้อนรับสู่ คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา สายด่วน 1669 พร้อมให้คำแนะนำครับ', 'welcome_audition');
       }
 
       toggleVoiceMode() {
@@ -2521,6 +2678,22 @@
           window.isSystemSpeaking = false;
           this.isSpeaking = false;
           this.updateUi(false, 'โหมดพิธีกรพากย์เอง (ไมค์เปิดพร้อม)');
+        }
+      }
+
+      setVoiceSourceMode(mode) {
+        this.voiceSourceMode = mode;
+        const btnAi = document.getElementById('btnVoiceSrcAI');
+        const btnRec = document.getElementById('btnVoiceSrcRecorded');
+        const desc = document.getElementById('txtVoiceSourceDesc');
+        if (mode === 'AI') {
+          if (btnAi) { btnAi.style.borderColor = '#10B981'; btnAi.style.color = '#10B981'; btnAi.style.fontWeight = '700'; }
+          if (btnRec) { btnRec.style.borderColor = '#334155'; btnRec.style.color = '#94A3B8'; btnRec.style.fontWeight = '400'; }
+          if (desc) desc.innerHTML = 'ขณะนี้เปิดโหมด: <strong>เสียง AI สังเคราะห์ (Web Speech TTS)</strong> พร้อมใช้งานขึ้น GitHub ได้ทันทีโดยไม่ต้องรอไฟล์อัดเสียงครับ';
+        } else {
+          if (btnAi) { btnAi.style.borderColor = '#334155'; btnAi.style.color = '#94A3B8'; btnAi.style.fontWeight = '400'; }
+          if (btnRec) { btnRec.style.borderColor = '#38BDF8'; btnRec.style.color = '#38BDF8'; btnRec.style.fontWeight = '700'; }
+          if (desc) desc.innerHTML = 'ขณะนี้เปิดโหมด: <strong>ไฟล์เสียงคนพากย์จริง (audio/*.mp3)</strong> หากไฟล์ใดยังไม่พบ จะใช้เสียง AI แทนให้อัตโนมัติ';
         }
       }
 
@@ -2555,12 +2728,89 @@
     }
     const AIVoiceCoach = new AIVoiceCoachCore();
 
-    // Mandatory Global speakAndWait(text) Implementation
-    function speakAndWait(text) {
-      return new Promise((resolve) => {
+    // Mandatory Global speakAndWait(text, audioKey) Implementation with Custom Recorded Audio Support
+    const AUDIO_VOICE_MAP = {
+      '01': 'audio/01.mp3', 'welcome_audition': 'audio/01.mp3',
+      '02': 'audio/02.mp3', 'lobby_roll_generic': 'audio/02.mp3',
+      '03': 'audio/03.mp3', 's1_intro': 'audio/03.mp3',
+      '04': 'audio/04.mp3', 's1_correct': 'audio/04.mp3',
+      '05': 'audio/05.mp3', 's1_hint_1': 'audio/05.mp3',
+      '06': 'audio/06.mp3', 's1_hint_3': 'audio/06.mp3',
+      '07': 'audio/07.mp3', 's1_hint_4': 'audio/07.mp3',
+      '08': 'audio/08.mp3', 's2_intro': 'audio/08.mp3',
+      '09': 'audio/09.mp3', 's2_success': 'audio/09.mp3',
+      '10': 'audio/10.mp3', 's3_intro': 'audio/10.mp3',
+      '11': 'audio/11.mp3', 's3_success': 'audio/11.mp3',
+      '12': 'audio/12.mp3', 's4_intro': 'audio/12.mp3',
+      '13': 'audio/13.mp3', 's4_correct': 'audio/13.mp3',
+      '14': 'audio/14.mp3', 's4_hint_1': 'audio/14.mp3',
+      '15': 'audio/15.mp3', 's4_hint_3': 'audio/15.mp3',
+      '16': 'audio/16.mp3', 's5_cpr_intro': 'audio/16.mp3',
+      '17': 'audio/17.mp3', 's5_aed_intro': 'audio/17.mp3',
+      '18': 'audio/18.mp3', 's6_fa_intro_wound': 'audio/18.mp3',
+      '19': 'audio/19.mp3', 's6_fa_correct_nss': 'audio/19.mp3',
+      '20': 'audio/20.mp3', 's6_fa_hint_alcohol': 'audio/20.mp3',
+      '21': 'audio/21.mp3', 's7_fa_intro_bleed': 'audio/21.mp3',
+      '22': 'audio/22.mp3', 's7_fa_correct_gauze': 'audio/22.mp3',
+      '23': 'audio/23.mp3', 's7_fa_hint_cotton': 'audio/23.mp3',
+      '24': 'audio/24.mp3', 's8_fa_intro_splint': 'audio/24.mp3',
+      '25': 'audio/25.mp3', 's8_fa_correct_splint': 'audio/25.mp3',
+      '26': 'audio/26.mp3', 's8_fa_hint_bone': 'audio/26.mp3',
+      '27': 'audio/27.mp3', 's9_final_congrats': 'audio/27.mp3', 's6_final_congrats': 'audio/27.mp3',
+      '101': 'audio/101.mp3', 'lobby_roll_1': 'audio/101.mp3',
+      '102': 'audio/102.mp3', 'lobby_roll_2': 'audio/102.mp3',
+      '103': 'audio/103.mp3', 'lobby_roll_3': 'audio/103.mp3',
+      '104': 'audio/104.mp3', 'lobby_roll_4': 'audio/104.mp3',
+      '105': 'audio/105.mp3', 'lobby_roll_5': 'audio/105.mp3',
+      '106': 'audio/106.mp3', 'lobby_roll_6': 'audio/106.mp3',
+      '107': 'audio/107.mp3', 'lobby_roll_7': 'audio/107.mp3',
+      '108': 'audio/108.mp3', 'lobby_roll_8': 'audio/108.mp3',
+      '109': 'audio/109.mp3', 'lobby_roll_9': 'audio/109.mp3',
+      '110': 'audio/110.mp3', 'lobby_roll_10': 'audio/110.mp3'
+    };
+
+    function playCustomAudioClip(filePath) {
+      return new Promise((resolve, reject) => {
+        const audio = new Audio(filePath);
+        audio.preload = 'auto';
+
+        let hasResolved = false;
+        const cleanup = () => {
+          if (!hasResolved) {
+            hasResolved = true;
+            setTimeout(() => {
+              AIVoiceCoach.releaseGate();
+              resolve(true);
+            }, 450);
+          }
+        };
+
+        audio.onplay = () => {
+          window.isSystemSpeaking = true;
+          AIVoiceCoach.isSpeaking = true;
+          MicSensor.stopSpeechRecognition();
+          AIVoiceCoach.updateUi(true, '🎙️ เสียงพากย์จริงกำลังพูด... (ไมค์พักรับเสียงชั่วคราว)');
+        };
+
+        audio.onended = cleanup;
+        audio.onerror = () => reject(new Error('File not found: ' + filePath));
+
+        // Safety fallback timer
+        setTimeout(() => {
+          if (!hasResolved && !audio.paused) {
+            cleanup();
+          }
+        }, 22000);
+
+        audio.play().catch(reject);
+      });
+    }
+
+    function speakAndWait(text, audioKey = null) {
+      return new Promise(async (resolve) => {
         AIVoiceCoach.currentScript = text;
 
-        if (SoundEngine.isMuted || !('speechSynthesis' in window) || !AIVoiceCoach.isVoiceModeEnabled) {
+        if (SoundEngine.isMuted || !AIVoiceCoach.isVoiceModeEnabled) {
           window.isSystemSpeaking = false;
           AIVoiceCoach.isSpeaking = false;
           AIVoiceCoach.updateUi(false, 'โหมดพิธีกรพากย์ (ไมค์พร้อม)');
@@ -2568,7 +2818,32 @@
           return;
         }
 
-        // Half-Duplex Gate: Stop speech recognition to prevent speaker buffering
+        // 1. Try Custom Recorded Audio Clip IF Mode is RECORDED
+        if (AIVoiceCoach.voiceSourceMode === 'RECORDED' && audioKey && AUDIO_VOICE_MAP[audioKey]) {
+          try {
+            await playCustomAudioClip(AUDIO_VOICE_MAP[audioKey]);
+            resolve();
+            return;
+          } catch(e) {
+            // If custom file not found, seamless fallback to Web Speech Synthesis!
+          }
+        }
+
+        // Also check if generic lobby roll is available for team numbers
+        if (AIVoiceCoach.voiceSourceMode === 'RECORDED' && audioKey && audioKey.startsWith('lobby_roll_') && AUDIO_VOICE_MAP['lobby_roll_generic']) {
+          try {
+            await playCustomAudioClip(AUDIO_VOICE_MAP['lobby_roll_generic']);
+            resolve();
+            return;
+          } catch(e) {}
+        }
+
+        // 2. Web Speech Synthesis Fallback (Male Pitch & Natural Tempo)
+        if (!('speechSynthesis' in window)) {
+          resolve();
+          return;
+        }
+
         window.isSystemSpeaking = true;
         AIVoiceCoach.isSpeaking = true;
         MicSensor.stopSpeechRecognition();
@@ -2579,15 +2854,14 @@
         const utter = new SpeechSynthesisUtterance(phoneticText);
         if (AIVoiceCoach.thaiVoice) utter.voice = AIVoiceCoach.thaiVoice;
         utter.lang = 'th-TH';
-        utter.rate = 0.98; // Natural, calm medical tempo
-        utter.pitch = 1.0;
+        utter.rate = 1.02; // Natural, clear tempo
+        utter.pitch = 0.95; // Male vocal range
         utter.volume = 1.0;
 
         let settled = false;
         const finish = () => {
           if (settled) return;
           settled = true;
-          // Natural 650ms room reverb cooldown before reopening mic
           setTimeout(() => {
             AIVoiceCoach.releaseGate();
             resolve();
@@ -2596,7 +2870,6 @@
 
         const minDurationMs = Math.max(5000, phoneticText.length * 140);
         const safetyTimer = setTimeout(() => {
-          console.warn('Speech safety fallback fired');
           finish();
         }, minDurationMs);
 
@@ -2613,13 +2886,6 @@
       });
     }
 
-    /* ==========================================================================
-       HIGH-DPI CLINICAL ECG ENGINE (BURAPHA MEDICAL ACCURACY - FIX #12)
-       ========================================================================== */
-
-    /* ==========================================================================
-       V6.3 FULLSCREEN AMBIENT EKG BACKGROUND & CONFETTI ENGINE
-       ========================================================================== */
     class BackgroundECGEngine {
       constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
@@ -3238,7 +3504,7 @@
 
       async testMicAccess() {
         const ok = await this.ensureMicLive(true);
-        showToast(ok ? '🎙️ ไมโครโฟนพร้อมใช้งาน รับเสียงชัดเจนค่ะ' : '⚠️ ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ค่ะ');
+        showToast(ok ? '🎙️ ไมโครโฟนพร้อมใช้งาน รับเสียงชัดเจนครับ' : '⚠️ ไม่สามารถเข้าถึงไมค์ได้ กรุณาตรวจสอบสิทธิ์ครับ');
       }
 
       getRawRMS() {
@@ -3427,6 +3693,35 @@
         if (t2.some(k => val.includes(k))) return 2;
         if (t1.some(k => val.includes(k))) return 1;
         if (t3.some(k => val.includes(k))) return 3;
+      } else if (stage === 6) {
+        // First Aid: Wound Cleaning (Choice 2 is correct - Normal Saline / NSS)
+        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "แอลกอฮอล์", "alcohol", "ราดแผล", "หนึ่ง", "1"];
+        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "น้ำเกลือ", "นอร์มอล", "ซาไลน์", "nss", "saline", "ชะล้าง", "สอง", "2"];
+        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "ไฮโดรเจน", "ฟอกแผล", "สาม", "3"];
+        const t4 = ["ข้อ 4", "ข้อสี่", "เบอร์ 4", "เบอร์สี่", "แป้ง", "แป้งเย็น", "ยาผง", "สี่", "4"];
+
+        if (t2.some(k => val.includes(k))) return 2;
+        if (t1.some(k => val.includes(k))) return 1;
+        if (t3.some(k => val.includes(k))) return 3;
+        if (t4.some(k => val.includes(k))) return 4;
+      } else if (stage === 7) {
+        // First Aid: Bleeding Control (Choice 1 is correct - Sterile Gauze Direct Pressure)
+        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "ผ้าก๊อซ", "ผ้ากอซ", "กดแผล", "กดโดยตรง", "พันผ้า", "หนึ่ง", "1"];
+        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "สำลี", "สำลีก้อน", "ขยี้", "สอง", "2"];
+        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "ขันชะเนาะ", "สายรัด", "รัดแขน", "ทูนิเก้", "tourniquet", "สาม", "3"];
+
+        if (t1.some(k => val.includes(k))) return 1;
+        if (t2.some(k => val.includes(k))) return 2;
+        if (t3.some(k => val.includes(k))) return 3;
+      } else if (stage === 8) {
+        // First Aid: Arm Splinting (Choice 2 is correct - Splint above/below joints & Sling 90 deg)
+        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "ดัดกระดูก", "ดึงแขน", "ดัดแขน", "ดึงกระดูก", "หนึ่ง", "1"];
+        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "ดามแขน", "ดามกระดูก", "ข้อต่อ", "ผ้าสามเหลี่ยม", "90 องศา", "เก้าสิบองศา", "สอง", "2"];
+        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "นวด", "คลึง", "บีบ", "คลายกล้ามเนื้อ", "สาม", "3"];
+
+        if (t2.some(k => val.includes(k))) return 2;
+        if (t1.some(k => val.includes(k))) return 1;
+        if (t3.some(k => val.includes(k))) return 3;
       }
       return null;
     }
@@ -3540,7 +3835,7 @@
             try { SoundEngine.playStageClear(); } catch(e) {}
 
             if (callout) {
-              callout.innerHTML = `🎉 กลุ่มตัวแทนที่ได้: <strong style="color:#10B981; font-size:18px;">กลุ่มที่ ${this.selectedTeam}</strong> &bull; ขอเชิญออกมาด้านหน้าได้เลยค่ะ!`;
+              callout.innerHTML = `🎉 กลุ่มตัวแทนที่ได้: <strong style="color:#10B981; font-size:18px;">กลุ่มที่ ${this.selectedTeam}</strong> &bull; ขอเชิญออกมาด้านหน้าได้เลยครับ!`;
             }
 
             if (btn) {
@@ -3553,7 +3848,7 @@
 
             // Thai AI Voice Invitation
             const teamNum = parseInt(this.selectedTeam, 10);
-            speakAndWait(`ได้กลุ่มที่ ${teamNum} ค่ะ! ขอเชิญน้องตัวแทนกลุ่มที่ ${teamNum} ออกมาเตรียมพร้อมกู้ชีพด้านหน้าได้เลยค่ะ!`);
+            speakAndWait(`ได้กลุ่มที่ ${teamNum} ครับ! ขอเชิญน้องตัวแทนกลุ่มที่ ${teamNum} ออกมาเตรียมพร้อมกู้ชีพด้านหน้าได้เลยครับ!`, `lobby_roll_${teamNum}`);
           }
         };
 
@@ -3562,7 +3857,7 @@
 
       startSessionTimer() {
         setInterval(() => {
-          if (this.currentStage >= 1 && this.currentStage <= 5 && this.sessionSeconds > 0) {
+          if (this.currentStage >= 1 && this.currentStage <= 8 && this.sessionSeconds > 0) {
             this.sessionSeconds--;
             const m = Math.floor(this.sessionSeconds / 60);
             const s = this.sessionSeconds % 60;
@@ -3570,6 +3865,23 @@
             if (el) el.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
           }
         }, 1000);
+      }
+
+      updatePatientHud(imgSrc, tagText, stateType = 'warn', isDamageFlash = false) {
+        const badge = document.getElementById('patientHudBadge');
+        const img = document.getElementById('patientHudImg');
+        const tag = document.getElementById('patientHudTag');
+        if (img && imgSrc) img.src = imgSrc;
+        if (tag && tagText) tag.innerText = tagText;
+        if (badge) {
+          badge.className = `patient-hud-badge ${stateType}`;
+          if (isDamageFlash) {
+            badge.classList.remove('damage-flash');
+            void badge.offsetWidth; // trigger reflow
+            badge.classList.add('damage-flash');
+            setTimeout(() => badge.classList.remove('damage-flash'), 680);
+          }
+        }
       }
 
       updateVitals(hr, spo2) {
@@ -3614,7 +3926,7 @@
         }
 
         // Update Nav step pills
-        for (let i = 0; i <= 6; i++) {
+        for (let i = 0; i <= 9; i++) {
           const pill = document.getElementById(`stepPill${i}`);
           if (pill) {
             pill.className = 'nav-step-pill';
@@ -3628,24 +3940,27 @@
           window.ECGEngine.setMode('BRADYCARDIA');
           this.updateVitals(38, 76);
           SoundEngine.startPulseScheduler(540, 1580);
+          this.updatePatientHud('images/patient/patient_s1_dazed.png', 'STAGE 1 // DAZED & SHOCK', 'warn');
           this.renderStage();
 
-          await speakAndWait('เกิดอุบัติเหตุรถชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรงรถ และมีรถวิ่งผ่านด้วยความเร็ว สิ่งแรกที่ต้องทำคืออะไรคะ? พูดว่าเลือกข้อหนึ่งถึงสี่ หรือพูดเนื้อหาคำตอบใส่ไมค์ได้เลยค่ะ');
+          await speakAndWait('เกิดอุบัติเหตุรถชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรงรถ และมีรถวิ่งผ่านด้วยความเร็ว สิ่งแรกที่ต้องทำคืออะไรครับ? พูดเลือกข้อ 1 ถึง 4 หรือพูดคำตอบใส่ไมค์ได้เลยครับ!', 's1_intro');
           this.startStage1VoiceAnswer();
         } else if (newStage === 2) {
           window.ECGEngine.setMode('BRADYCARDIA');
           this.updateVitals(38, 68);
           SoundEngine.startPulseScheduler(540, 1580);
+          this.updatePatientHud('images/patient/patient_s2_unconscious.png', 'STAGE 2 // UNCONSCIOUS (LIMP)', 'critical');
           this.stage2Completed = false;
           this.shoutChargeProgress = 0;
           this.renderStage();
 
-          await speakAndWait('ผู้ป่วยตบไหล่เรียกแล้วไม่ตอบสนองค่ะ! ให้ทุกคนในห้องช่วยกันตะโกนขอความช่วยเหลือออกมาดังๆ ให้เกินขีดความดังเป้าหมายพร้อมกันเลยค่ะ!');
+          await speakAndWait('ผู้ป่วยตบไหล่เรียกแล้วไม่ตอบสนองครับ! ให้ทุกคนในห้องช่วยกันตะโกนขอความช่วยเหลือออกมาดังๆ ให้ครบทั้งสามประโยค และเสียงดังทะลุเกณฑ์เป้าหมายพร้อมกันเลยครับ!', 's2_intro');
           this.startStage2Listening();
         } else if (newStage === 3) {
           window.ECGEngine.setMode('BRADYCARDIA');
           this.updateVitals(38, 62);
           SoundEngine.startPulseScheduler(540, 1580);
+          this.updatePatientHud('images/patient/patient_s3_dispatch.png', 'STAGE 3 // DISPATCH (WAITING 1669)', 'critical');
           this.stage3Locked = false;
           this.checklist = { location: false, incident: false, patient: false, aed: false };
           this.renderStage();
@@ -3653,15 +3968,16 @@
           SoundEngine.playTelephoneRing();
           await new Promise(r => setTimeout(r, 700));
 
-          await speakAndWait('สวัสดีค่ะ สายด่วน 1669 รับสายค่ะ! การโทรแจ้งเหตุฉุกเฉิน ต้องบอกข้อมูลสำคัญสี่ข้อจากเหตุการณ์จริง เชิญตัวแทนพูดแจ้งข้อมูลใส่ไมโครโฟนได้เลยค่ะ');
+          await speakAndWait('สวัสดีครับ สายด่วน 1669 รับสายครับ! การโทรแจ้งเหตุฉุกเฉิน ต้องบอกข้อมูลสำคัญสี่ข้อจากเหตุการณ์จริง เชิญตัวแทนพูดแจ้งข้อมูลใส่ไมโครโฟนได้เลยครับ!', 's3_intro');
           this.startStage3LiveSTT();
         } else if (newStage === 4) {
           window.ECGEngine.setMode('AGONAL');
           this.updateVitals(22, 48);
           SoundEngine.startPulseScheduler(440, 2720);
+          this.updatePatientHud('images/patient/patient_s4_agonal.png', 'STAGE 4 // AGONAL GASP (HYPOXIC)', 'critical');
           this.renderStage();
 
-          await speakAndWait('เจ้าหน้าที่กำลังส่งรถพยาบาลไปค่ะ ระหว่างนี้ช่วยก้มดูหน้าอกผู้บาดเจ็บให้หน่อยค่ะ ผู้ป่วยมีเสียงหายใจเฮือก นานๆ ครั้ง แต่หน้าอกไม่ขยับ เราต้องทำอย่างไรคะ? พูดเลือกข้อหนึ่งถึงสามได้เลยค่ะ');
+          await speakAndWait('เจ้าหน้าที่กำลังส่งรถพยาบาลไปครับ ระหว่างนี้ช่วยก้มดูหน้าอกผู้บาดเจ็บให้หน่อยครับ... ผู้ป่วยมีเสียงหายใจเฮือก นานๆ ครั้ง แต่หน้าอกไม่ขยับเลย เราต้องทำอย่างไรครับ? พูดเลือกข้อ 1 ถึง 3 ได้เลยครับ!', 's4_intro');
           this.startStage4VoiceAnswer();
         } else if (newStage === 5) {
           this.stage5Phase = 'CPR';
@@ -3671,18 +3987,53 @@
           window.ECGEngine.setMode('CPR_COMPRESSION');
           this.updateVitals(0, 40);
           SoundEngine.stopPulseScheduler();
+          this.updatePatientHud('images/patient/patient_s5_cpr.png', 'STAGE 5A // CPR (110 BPM)', 'critical');
           this.renderStage();
 
-          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้น เริ่มกดหน้าอก ซีพีอาร์ ทันทีค่ะ เตรียมปรบมือตามจังหวะไฟกะพริบนะคะ');
+          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้น เริ่มกดหน้าอก ซีพีอาร์ ทันทีครับ! ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทุกกลุ่มช่วยกันปรบมือตามจังหวะไฟกะพริบ 110 บีพีเอ็ม ให้ครบสามสิบครั้งนะครับ!', 's5_cpr_intro');
           this.runCprCountdownAndStart();
         } else if (newStage === 6) {
-          // Fix #4: Congratulatory AI Speech
-          window.ECGEngine.setMode('ROSC');
-          this.updateVitals(88, 99);
+          window.ECGEngine.setMode('SINUS');
+          this.updateVitals(78, 96);
           SoundEngine.stopPulseScheduler();
+          this.updatePatientHud('images/patient/patient_s6_rosc.png', 'STAGE 6 // ROSC (WOUND CLEAN)', 'healthy');
           this.renderStage();
 
-          speakAndWait('ขอแสดงความยินดีกับทีมกู้ชีพทุกคนค่ะ! ภารกิจเสร็จสิ้นสมบูรณ์ สัญญาณชีพของผู้ป่วยกลับมาเป็นปกติแล้วค่ะ ด้วยความกล้าหาญและความร่วมมือของทุกคน ช่วยให้เป็น เห็นแล้วกล้าทำ ขอขอบคุณและยินดีต้อนรับสู่คณะแพทยศาสตร์ มหาวิทยาลัยบูรพาค่ะ!');
+          await speakAndWait('หัวใจของผู้ป่วยกลับมาเต้นแล้วครับ! สัญญาณชีพเริ่มเสถียร แต่ผู้ป่วยมีแผลเปิดขนาดใหญ่และมีเศษดินติดที่ท่อนแขน เราควรใช้อะไรทำความสะอาดแผลเป็นอันดับแรกครับ? พูดเลือกข้อ 1 ถึง 4 หรือพูดคำตอบใส่ไมค์ได้เลยครับ!', '18');
+          this.startStage6VoiceAnswer();
+        } else if (newStage === 7) {
+          window.ECGEngine.setMode('SINUS');
+          this.updateVitals(80, 97);
+          SoundEngine.stopPulseScheduler();
+          this.updatePatientHud('images/patient/patient_s7_hemostasis.png', 'STAGE 7 // HEMOSTASIS (PRESSURE)', 'healthy');
+          this.renderStage();
+
+          await speakAndWait('ยังมีเลือดซึมไหลออกมาจากแผลอย่างต่อเนื่องครับ ขั้นตอนการห้ามเลือดและปิดแผลที่ถูกต้องและปลอดภัยที่สุด เราต้องปฏิบัติอย่างไรครับ? พูดเลือกข้อ 1 ถึง 3 ได้เลยครับ!', '21');
+          this.startStage7VoiceAnswer();
+        } else if (newStage === 8) {
+          window.ECGEngine.setMode('SINUS');
+          this.updateVitals(82, 98);
+          SoundEngine.stopPulseScheduler();
+          this.updatePatientHud('images/patient/patient_s8_splint.png', 'STAGE 8 // SPLINTING (90° SLING)', 'healthy');
+          this.renderStage();
+
+          await speakAndWait('สังเกตเห็นท่อนแขนท่อนล่างของผู้ป่วยบวมและผิดรูป คาดว่ากระดูกอาจหักครับ เราควรทำการดามแขนและประคองข้อต่ออย่างไรให้ถูกต้องครับ? พูดเลือกข้อ 1 ถึง 3 ได้เลยครับ!', '24');
+          this.startStage8VoiceAnswer();
+        } else if (newStage === 9) {
+          window.ECGEngine.setMode('SINUS');
+          this.updateVitals(84, 99);
+          SoundEngine.stopPulseScheduler();
+          this.updatePatientHud('images/patient/patient_s9_saved.png', 'STAGE 9 // MISSION SAVED (STABLE)', 'healthy');
+          this.renderStage();
+
+          if (globalConfetti) {
+            globalConfetti.burst(window.innerWidth / 2, window.innerHeight / 2);
+            setTimeout(() => globalConfetti.burst(window.innerWidth * 0.3, window.innerHeight * 0.4), 400);
+            setTimeout(() => globalConfetti.burst(window.innerWidth * 0.7, window.innerHeight * 0.4), 800);
+          }
+          SoundEngine.playStageClear();
+
+          speakAndWait('ขอแสดงความยินดีกับทีมกู้ชีพทุกคนครับ! รถพยาบาลกู้ชีพมาถึงแล้ว สัญญาณชีพของผู้ป่วยกลับมาเป็นปกติ และได้รับการปฐมพยาบาลบาดแผลอย่างปลอดภัย ด้วยความกล้าหาญและความร่วมมือของทุกคน ช่วยให้เป็น เห็นแล้วกล้าทำ ขอขอบคุณและยินดีต้อนรับสู่คณะแพทยศาสตร์ มหาวิทยาลัยบูรพาครับ!', '27');
         }
       }
 
@@ -3779,7 +4130,7 @@
               </div>
 
               <div id="txtStage2LiveTranscript" class="live-transcript-box font-technical" style="text-align:center; min-height:36px; padding:8px 16px; font-size:15px; color:#38BDF8;">
-                🎙️ รอฟังเสียงพูด... ตะโกนใส่ไมค์ได้เลยค่ะ!
+                🎙️ รอฟังเสียงพูด... ตะโกนใส่ไมค์ได้เลยครับ!
               </div>
 
               <!-- Threshold Slider Control (10–85 dB) -->
@@ -3856,14 +4207,14 @@
               </div>
 
               <h2 class="stage-headline-clean" style="font-size:20px;">
-                เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายค่ะ! การแจ้งเหตุฉุกเฉินต้องบอกข้อมูลสำคัญ 4 ข้อ มีอะไรบ้าง แจ้งได้เลยค่ะ”
+                เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายครับ! การแจ้งเหตุฉุกเฉินต้องบอกข้อมูลสำคัญ 4 ข้อ มีอะไรบ้าง แจ้งได้เลยครับ”
               </h2>
             </div>
 
             <div class="voice-transcript-panel">
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span class="font-technical" style="font-size:12px; font-weight:700; color:var(--blue-accent);">
-                  🎙️ กำลังฟังเสียงพูด... พูดแจ้งข้อมูลสำคัญใส่ไมค์ได้เลยค่ะ
+                  🎙️ กำลังฟังเสียงพูด... พูดแจ้งข้อมูลสำคัญใส่ไมค์ได้เลยครับ
                 </span>
                 <div style="display:flex; gap:6px;">
                   <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:24px; font-size:10.5px;">[1] พิกัด</button>
@@ -4060,8 +4411,151 @@
           }
         }
 
-        // Stage 6: Broadcast Hero Mission Scoreboard (Fix #11: No AI voice speech)
+        // Stage 6: First Aid - Wound Cleaning (Choice 2 is correct)
         else if (this.currentStage === 6) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+
+              <!-- Live Voice Answer Bar -->
+              <div class="voice-answer-bar">
+                <div class="voice-bar-icon">🎙️</div>
+                <div class="voice-bar-text">
+                  <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–4" หรือพูดชื่ออุปกรณ์ล้างแผลใส่ไมค์ได้เลย (หรือคลิกปุ่ม)</div>
+                  <div id="txtLiveVoiceChoice" class="voice-bar-transcript">⏳ กำลังฟังเสียงพูด...</div>
+                </div>
+              </div>
+
+              <h2 class="stage-headline-clean" style="color:#10B981; font-size:26px; margin-top:14px;">
+                ❤️ หัวใจกลับมาเต้นแล้ว สัญญาณชีพเริ่มเสถียร! แต่พบแผลเปิดขนาดใหญ่และมีเศษสิ่งสกปรกติดที่ท่อนแขน:
+              </h2>
+              <p class="stage-sub-clean" style="font-size:16px;">
+                สิ่งใดที่ผู้ช่วยเหลือควรนำมาใช้ล้างทำความสะอาดบาดแผลสดเป็นอันดับแรก? (พูดใส่ไมค์ หรือ คลิกเลือกข้อ)
+              </p>
+            </div>
+
+            <div class="clean-choices-grid-v2">
+              <button id="choice6_1" onclick="GameStateManager.handleStage6Choice(1)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">1</div>
+                <div class="choice-title-v2">แอลกอฮอล์ 70% ราดลงบนแผลสดทันทีเพื่อฆ่าเชื้อ</div>
+              </button>
+
+              <button id="choice6_2" onclick="GameStateManager.handleStage6Choice(2)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout" style="border-color:#10B981; color:#10B981;">2</div>
+                <div class="choice-title-v2">น้ำเกลือปราศจากเชื้อ Normal Saline (NSS) ชะล้างสิ่งสกปรกออก</div>
+              </button>
+
+              <button id="choice6_3" onclick="GameStateManager.handleStage6Choice(3)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">3</div>
+                <div class="choice-title-v2">ไฮโดรเจนเปอร์ออกไซด์เข้มข้นฟอกแผล</div>
+              </button>
+
+              <button id="choice6_4" onclick="GameStateManager.handleStage6Choice(4)" class="game-choice-tile">
+                <div class="choice-badge-v2 num-readout">4</div>
+                <div class="choice-title-v2">โรยแป้งเย็นหรือยาผงห้ามเลือดลงบนแผลสด</div>
+              </button>
+            </div>
+          `;
+        }
+
+        // Stage 7: First Aid - Bleeding Control & Dressing (Choice 1 is correct)
+        else if (this.currentStage === 7) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+
+              <!-- Live Voice Answer Bar -->
+              <div class="voice-answer-bar">
+                <div class="voice-bar-icon">🎙️</div>
+                <div class="voice-bar-text">
+                  <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–3" หรือบอกวิธีห้ามเลือดใส่ไมค์ได้เลย (หรือคลิกการ์ด)</div>
+                  <div id="txtLiveVoiceChoice" class="voice-bar-transcript">⏳ กำลังฟังเสียงพูด...</div>
+                </div>
+              </div>
+
+              <h2 class="stage-headline-clean" style="color:var(--amber-warn); font-size:26px; margin-top:14px;">
+                🩹 ล้างแผลสะอาดแล้ว แต่ยังมีเลือดซึมไหลออกจากบาดแผลอย่างต่อเนื่อง:
+              </h2>
+              <p class="stage-sub-clean" style="font-size:16px;">
+                ขั้นตอนการห้ามเลือดและปิดแผลที่ถูกต้องและปลอดภัยที่สุดคือข้อใด? (พูดใส่ไมค์ หรือ คลิกเลือกข้อ)
+              </p>
+            </div>
+
+            <div class="stage4-choices-row">
+              <button id="choice7_1" onclick="GameStateManager.handleStage7Choice(1)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout" style="border-color:#10B981; color:#10B981;">1</div>
+                <div class="choice-title-v2" style="font-size:20px;">ใช้ผ้าก๊อซสะอาดกดลงบนแผลโดยตรงอย่างต่อเนื่อง แล้วพันผ้าทับ</div>
+              </button>
+
+              <button id="choice7_2" onclick="GameStateManager.handleStage7Choice(2)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">2</div>
+                <div class="choice-title-v2" style="font-size:20px;">ดึงสำลีก้อนมาแปะขยี้ลงบนแผลสดเพื่อซับเลือด</div>
+              </button>
+
+              <button id="choice7_3" onclick="GameStateManager.handleStage7Choice(3)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">3</div>
+                <div class="choice-title-v2" style="font-size:20px;">ใช้สายรัดขันชะเนาะ (Tourniquet) แน่นเหนือแผลทันที</div>
+              </button>
+            </div>
+          `;
+        }
+
+        // Stage 8: First Aid - Arm Splinting & Sling (Choice 2 is correct)
+        else if (this.currentStage === 8) {
+          card.innerHTML = `
+            <div>
+              <div class="ai-voice-pill-clean">
+                <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
+                <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ 🔊 ฟังซ้ำ ]</button>
+              </div>
+
+              <!-- Live Voice Answer Bar -->
+              <div class="voice-answer-bar">
+                <div class="voice-bar-icon">🎙️</div>
+                <div class="voice-bar-text">
+                  <div class="voice-bar-title font-technical">ระบบสั่งการด้วยเสียงทำงานอยู่: พูดว่า "เลือกข้อ 1–3" หรือบอกวิธีดามแขนใส่ไมค์ได้เลย (หรือคลิกการ์ด)</div>
+                  <div id="txtLiveVoiceChoice" class="voice-bar-transcript">⏳ กำลังฟังเสียงพูด...</div>
+                </div>
+              </div>
+
+              <h2 class="stage-headline-clean" style="color:var(--cyan-accent); font-size:26px; margin-top:14px;">
+                🦴 ห้ามเลือดเรียบร้อยแล้ว ตรวจพบท่อนแขนท่อนล่างบวมและโก่งผิดรูป สงสัยกระดูกหัก:
+              </h2>
+              <p class="stage-sub-clean" style="font-size:16px;">
+                หลักการดามกระดูกแขนและการประคองข้อต่อที่ถูกต้องตามหลักการแพทย์คือข้อใด? (พูดใส่ไมค์ หรือ คลิกเลือกข้อ)
+              </p>
+            </div>
+
+            <div class="stage4-choices-row">
+              <button id="choice8_1" onclick="GameStateManager.handleStage8Choice(1)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">1</div>
+                <div class="choice-title-v2" style="font-size:20px;">พยายามดึงและดัดแขนให้กลับมาตรงก่อนดาม</div>
+              </button>
+
+              <button id="choice8_2" onclick="GameStateManager.handleStage8Choice(2)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout" style="border-color:#10B981; color:#10B981;">2</div>
+                <div class="choice-title-v2" style="font-size:20px;">ดามแขนในท่าที่เป็นอยู่ ครอบคลุมข้อบน-ล่าง และคล้องผ้าสามเหลี่ยมศอก 90 องศา</div>
+              </button>
+
+              <button id="choice8_3" onclick="GameStateManager.handleStage8Choice(3)" class="game-choice-tile action-card-stage4">
+                <div class="choice-badge-v2 num-readout">3</div>
+                <div class="choice-title-v2" style="font-size:20px;">บีบนวดและคลึงบริเวณที่บวมเพื่อคลายกล้ามเนื้อ</div>
+              </button>
+            </div>
+          `;
+        }
+
+        // Stage 9: Broadcast Hero Mission Scoreboard (CPR + First Aid Complete)
+        else if (this.currentStage === 9) {
           const rankLetter = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
           const rankColor = rankLetter === 'S' ? '#F59E0B' : (rankLetter === 'A+' ? '#38BDF8' : '#10B981');
           const strokePct = Math.round((this.score / 100) * 440);
@@ -4088,32 +4582,32 @@
                       <div class="rank-points-counter num-readout"><span id="txtScoreCount">0</span> PTS</div>
                     </div>
                   </div>
-                  <div class="hero-title-pill font-technical">CODE BLUE GUARDIAN • ทีมกู้ชีพยอดเยี่ยม</div>
+                  <div class="hero-title-pill font-technical">CODE BLUE & FIRST AID GUARDIAN • ทีมกู้ชีพ & ปฐมพยาบาลยอดเยี่ยม</div>
                   <div class="team-badge-display font-technical">RESCUE SQUAD TEAM ${this.selectedTeam}</div>
                 </div>
 
-                <!-- Right Column: Live Mini ROSC Strip & 4 Tactical Performance Bars -->
+                <!-- Right Column: Live Mini ROSC Strip & 6 Tactical Performance Bars -->
                 <div class="scoreboard-right-stats">
                   <div class="mini-rosc-strip">
-                    <div class="rosc-badge-txt font-technical">NORMAL SINUS RHYTHM — LIFE SAVED</div>
+                    <div class="rosc-badge-txt font-technical">NORMAL SINUS RHYTHM — LIFE SAVED & STABILIZED</div>
                     <div class="mini-rosc-vitals font-technical">
-                      <span style="font-size:12px; color:#94A3B8;">HR <strong style="color:#10B981;" class="num-readout">88 BPM</strong></span>
+                      <span style="font-size:12px; color:#94A3B8;">HR <strong style="color:#10B981;" class="num-readout">84 BPM</strong></span>
                       <span style="font-size:12px; color:#38BDF8;">SpO2 <strong style="color:#38BDF8;" class="num-readout">99%</strong></span>
                     </div>
                   </div>
 
-                  <div class="tactical-stat-bars font-technical">
+                  <div class="tactical-stat-bars font-technical" style="grid-template-columns: repeat(2, 1fr); display: grid; gap: 8px;">
                     <div class="tactical-bar-item">
                       <div class="tactical-label-group">
                         <span class="tactical-name">1. SCENE SAFETY & TRIAGE</span>
-                        <span class="tactical-detail">ประเมินความปลอดภัยก่อนเข้าช่วยเหลือผู้บาดเจ็บ</span>
+                        <span class="tactical-detail">ประเมินความปลอดภัยก่อนเข้าช่วยเหลือ</span>
                       </div>
                       <span class="tactical-grade-badge">100% PERFECT</span>
                     </div>
 
                     <div class="tactical-bar-item">
                       <div class="tactical-label-group">
-                        <span class="tactical-name">2. 1669 EMERGENCY DISPATCH</span>
+                        <span class="tactical-name">2. 1669 DISPATCH</span>
                         <span class="tactical-detail">แจ้งพิกัดและอาการครบ 4 องค์ประกอบสำคัญ</span>
                       </div>
                       <span class="tactical-grade-badge">VERIFIED</span>
@@ -4121,18 +4615,34 @@
 
                     <div class="tactical-bar-item">
                       <div class="tactical-label-group">
-                        <span class="tactical-name">3. CPR CADENCE PRECISION</span>
-                        <span class="tactical-detail">ความแม่นยำจังหวะกดหน้าอก 30 ครั้ง</span>
+                        <span class="tactical-name">3. CPR 110 BPM & AED</span>
+                        <span class="tactical-detail">จังหวะกดหน้าอก 30 ครั้ง & ปล่อยไฟฟ้าความปลอดภัย</span>
                       </div>
-                      <span class="tactical-grade-badge">110 BPM (TARGET)</span>
+                      <span class="tactical-grade-badge">ROSC ACHIEVED</span>
                     </div>
 
                     <div class="tactical-bar-item">
                       <div class="tactical-label-group">
-                        <span class="tactical-name">4. AED DEFIBRILLATION SAFETY</span>
-                        <span class="tactical-detail">คำสั่ง "ฉันถอย คุณถอย ทุกคนถอย" และปล่อยไฟฟ้า</span>
+                        <span class="tactical-name">4. FIRST AID WOUND CARE</span>
+                        <span class="tactical-detail">ล้างแผลสดด้วย Normal Saline (NSS)</span>
                       </div>
-                      <span class="tactical-grade-badge">ROSC ACHIEVED</span>
+                      <span class="tactical-grade-badge">NSS CLEANED</span>
+                    </div>
+
+                    <div class="tactical-bar-item">
+                      <div class="tactical-label-group">
+                        <span class="tactical-name">5. HEMOSTASIS DRESSING</span>
+                        <span class="tactical-detail">ห้ามเลือดด้วยผ้าก๊อซ Direct Pressure กระชับ</span>
+                      </div>
+                      <span class="tactical-grade-badge">GAUZE APPLIED</span>
+                    </div>
+
+                    <div class="tactical-bar-item">
+                      <div class="tactical-label-group">
+                        <span class="tactical-name">6. FRACTURE SPLINTING</span>
+                        <span class="tactical-detail">ดามครอบคลุมข้อบน-ล่าง & คล้องศอก 90°</span>
+                      </div>
+                      <span class="tactical-grade-badge">SLING 90° SECURED</span>
                     </div>
                   </div>
                 </div>
@@ -4141,7 +4651,7 @@
               <!-- Scoreboard Bottom Banner -->
               <div class="scoreboard-bottom-banner">
                 <div class="event-branding-txt font-technical">
-                  MDBUU OPEN HOUSE 2026 • คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
+                  MDBUU OPEN HOUSE 2026/2027 • คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
                   <span class="event-slogan-txt">"ช่วยให้เป็น เห็นแล้วกล้าทำ"</span>
                 </div>
                 <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset font-technical">
@@ -4191,7 +4701,7 @@
         });
       }
 
-      // Stage 1 Action
+      // Stage 1 Action with Educational Hints & Retry System
       async handleStage1Choice(choice) {
         if (this.isStageChoiceLocked) return;
         this.isStageChoiceLocked = true;
@@ -4201,15 +4711,65 @@
         if (choice === 2) {
           if (btn) btn.classList.add('correct');
           SoundEngine.playStageClear();
-          await speakAndWait('ถูกต้องค่ะ! ต้องประเมินความปลอดภัยของสถานที่เกิดเหตุก่อนเสมอ ก่อนที่จะเข้าไปช่วยผู้บาดเจ็บค่ะ');
+          this.updatePatientHud('images/patient/patient_s1_dazed.png', 'STAGE 1 // SECURED & SAFE', 'warn');
+
+          const hintBox = document.getElementById('stage1HintBox');
+          if (hintBox) hintBox.style.display = 'none';
+
+          await speakAndWait(
+            'ถูกต้องแล้วครับ! จำไว้เสมอนะครับ ก่อนจะเข้าไปช่วยใคร เราต้องประเมินความปลอดภัยของสถานที่เกิดเหตุเป็นอันดับแรก เพื่อไม่ให้ตัวเองตกเป็นผู้ประสบภัยอีกคนครับ!',
+            's1_correct'
+          );
           this.setStage(2);
         } else {
-          if (btn) btn.classList.add('wrong');
+          // WRONG ANSWER: Show Hint Banner, Speak Detailed Hint, and Unlock for Retry!
+          if (btn) {
+            btn.classList.add('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 600);
+          }
           SoundEngine.playErrorBuzz();
-          this.score = Math.max(85, this.score - 5);
+          this.score = Math.max(80, this.score - 5);
           this.shakeScreen();
-          await speakAndWait('ยังไม่ถูกต้องค่ะ! ถ้าเข้าไปทันทีโดยไม่ดูความปลอดภัย ตัวเราอาจตกเป็นผู้บาดเจ็บอีกคนได้ค่ะ');
-          this.setStage(2);
+          this.updatePatientHud('images/patient/patient_s1_wrong.png', 'CRITICAL // SMOKE INHALATION & SOOT', 'critical', true);
+
+          let hintText = '';
+          let audioKey = '';
+          let spokenHint = '';
+
+          if (choice === 1) {
+            hintText = 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ ต้องประเมินความปลอดภัยก่อนเสมอ!';
+            audioKey = 's1_hint_1';
+            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่านด้วยความเร็ว ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ครับ สิ่งสำคัญที่สุดเราต้องคำนึงถึงความปลอดภัยของใครเป็นอันดับแรกก่อนครับ? ลองเลือกใหม่อีกครั้งครับ!';
+          } else if (choice === 3) {
+            hintText = 'ห้ามมุดเข้าไปในรถที่มีควันพุ่งเด็ดขาด เพราะเครื่องยนต์อาจเกิดไฟลุกไหม้ได้ ต้องตัดความเสี่ยงดับเครื่องยนต์และกั้นพื้นที่ก่อน!';
+            audioKey = 's1_hint_3';
+            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: ห้ามมุดเข้าไปในรถที่มีควันพุ่งเด็ดขาดครับ เพราะเครื่องยนต์อาจเกิดไฟลุกไหม้ได้ เราต้องตัดความเสี่ยง ดับเครื่องยนต์ และกั้นพื้นที่ให้ปลอดภัยก่อนครับ ลองเลือกใหม่อีกครั้งครับ!';
+          } else if (choice === 4) {
+            hintText = 'การทุบกระจกอาจทำให้เศษกระจกกระเด็นบาดตัวเราและผู้ป่วยจนบาดเจ็บหนักกว่าเดิม ควรตั้งสติและประเมินความปลอดภัยรอบด้านก่อน!';
+            audioKey = 's1_hint_4';
+            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: การทุบกระจกอาจทำให้เศษกระจกกระเด็นบาดตัวเราและผู้ป่วยจนบาดเจ็บหนักกว่าเดิมครับ ควรตั้งสติและประเมินความปลอดภัยรอบด้านก่อนครับ ลองเลือกใหม่อีกครั้งครับ!';
+          }
+
+          // Inject or update Visual Hint Banner
+          let hintBox = document.getElementById('stage1HintBox');
+          if (!hintBox) {
+            hintBox = document.createElement('div');
+            hintBox.id = 'stage1HintBox';
+            hintBox.className = 'stage-hint-banner';
+            const grid = document.querySelector('.clean-choices-grid-v2');
+            if (grid) grid.parentNode.insertBefore(hintBox, grid);
+          }
+          if (hintBox) {
+            hintBox.innerHTML = `💡 <strong style="color:#F59E0B;">คำใบ้จากแพทย์:</strong> ${hintText} <span style="color:#10B981; font-weight:700;">(ลองเลือกคำตอบใหม่อีกครั้งครับ)</span>`;
+            hintBox.style.display = 'block';
+          }
+
+          await speakAndWait(spokenHint, audioKey);
+
+          // UNLOCK SO PLAYER CAN RETRY AND LEARN!
+          this.isStageChoiceLocked = false;
+          this.startStage1VoiceAnswer();
         }
       }
 
@@ -4339,12 +4899,12 @@
           if (!this.stage2MatchedKeywords.unconscious) missing.push('2. มีคนหมดสติ');
           if (!this.stage2MatchedKeywords.dispatchAed) missing.push('3. โทร 1669 / เอา AED มา');
           if (txtHint) {
-            txtHint.innerText = `⚠️ เสียงดังพอแล้ว! แต่ยังพูดไม่ครบ ขาด: ${missing.join(', ')} พูดให้ครบทั้ง 3 ข้อค่ะ!`;
+            txtHint.innerText = `⚠️ เสียงดังพอแล้ว! แต่ยังพูดไม่ครบ ขาด: ${missing.join(', ')} พูดให้ครบทั้ง 3 ข้อครับ!`;
             txtHint.style.color = '#F59E0B';
           }
         } else if (allMatched && !this.stage2LoudnessPassed) {
           if (txtHint) {
-            txtHint.innerText = `⚠️ พูดครบทั้ง 3 ข้อแล้ว แต่ระดับเสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้ค่ะ!`;
+            txtHint.innerText = `⚠️ พูดครบทั้ง 3 ข้อแล้ว แต่ระดับเสียงยังไม่ถึง ${this.stage2ThresholdDb} dB! ตะโกนให้ดังกว่านี้ครับ!`;
             txtHint.style.color = '#F59E0B';
           }
         } else {
@@ -4353,7 +4913,7 @@
           if (!this.stage2MatchedKeywords.unconscious) missing.push('2. คนหมดสติ');
           if (!this.stage2MatchedKeywords.dispatchAed) missing.push('3. โทร 1669/AED');
           if (txtHint) {
-            txtHint.innerText = `🎙️ ต้องพูดให้ครบทั้ง 3 ข้อ (${missing.join(' + ')}) และเสียงดังเกินขีดเป้าหมายค่ะ`;
+            txtHint.innerText = `🎙️ ต้องพูดให้ครบทั้ง 3 ข้อ (${missing.join(' + ')}) และเสียงดังเกินขีดเป้าหมายครับ`;
             txtHint.style.color = '#94A3B8';
           }
         }
@@ -4371,7 +4931,7 @@
           txtHint.style.color = '#10B981';
         }
 
-        await speakAndWait('ยอดเยี่ยมมากค่ะ! ตะโกนขอความช่วยเหลือได้ถูกต้อง ชัดเจน และเสียงดังฟังชัดทุกคนได้ยินค่ะ!');
+        await speakAndWait('ยอดเยี่ยมมากครับ! ตะโกนขอความช่วยเหลือได้ถูกต้อง ชัดเจน ครบถ้วน และเสียงดังฟังชัดทุกคนในห้องได้ยินครับ!', 's2_success');
         this.setStage(3);
       }
 
@@ -4389,7 +4949,7 @@
       startStage3LiveSTT() {
         const box = document.getElementById('txtLiveTranscript');
         if (box && box.innerText.includes('รอเจ้าหน้าที่')) {
-          box.innerText = '🎙️ ไมค์เปิดรับเสียงแล้ว... เชิญพูดแจ้งข้อมูลสำคัญ 4 ข้อได้เลยค่ะ';
+          box.innerText = '🎙️ ไมค์เปิดรับเสียงแล้ว... เชิญพูดแจ้งข้อมูลสำคัญ 4 ข้อได้เลยครับ';
         }
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (window.isSystemSpeaking || this.stage3Locked) return;
@@ -4482,9 +5042,9 @@
           SoundEngine.playStageClear();
 
           const box = document.getElementById('txtLiveTranscript');
-          if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อเรียบร้อยแล้วค่ะ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
+          if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อเรียบร้อยแล้วครับ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
 
-          await speakAndWait('1669 ได้รับข้อมูลครบถ้วนทั้งสี่ข้อแล้วค่ะ กำลังส่งรถพยาบาลฉุกเฉินและเครื่อง เออีดี ออกเดินทางทันทีค่ะ!');
+          await speakAndWait('1669 ได้รับข้อมูลครบถ้วนทั้งสี่ข้อแล้วครับ! กำลังส่งรถพยาบาลกู้ชีพฉุกเฉินและเครื่อง เออีดี ออกเดินทางไปทันทีครับ!', 's3_success');
           this.setStage(4);
         }
       }
@@ -4508,7 +5068,7 @@
         });
       }
 
-      // Stage 4 Action
+      // Stage 4 Action with Educational Hints & Retry System
       async handleStage4Choice(choice) {
         if (this.isStageChoiceLocked) return;
         this.isStageChoiceLocked = true;
@@ -4520,15 +5080,274 @@
           SoundEngine.playStageClear();
           window.ECGEngine.setMode('VFIB_COARSE');
           this.updateVitals(0, 35);
-          await speakAndWait('ถูกต้องค่ะ! การหายใจเฮือก นานๆ ครั้ง ไม่ใช่การหายใจปกติ แต่คือสัญญาณของหัวใจหยุดเต้น ต้องเริ่มกดหน้าอก ซีพีอาร์ ทันทีค่ะ!');
+          this.updatePatientHud('images/patient/patient_s4_agonal.png', 'STAGE 4 // ARREST CONFIRMED -> CPR', 'critical');
+
+          const hintBox = document.getElementById('stage4HintBox');
+          if (hintBox) hintBox.style.display = 'none';
+
+          await speakAndWait(
+            'ถูกต้องที่สุดครับ! การหายใจเฮือก นานๆ ครั้ง ไม่ใช่การหายใจปกติ แต่คือสัญญาณของหัวใจหยุดเต้น ต้องเริ่มกดหน้าอก ซีพีอาร์ ทันทีครับ!',
+            's4_correct'
+          );
           this.setStage(5);
         } else {
-          if (btn) btn.classList.add('wrong');
+          // WRONG ANSWER: Show Hint Banner, Speak Detailed Hint, and Unlock for Retry!
+          if (btn) {
+            btn.classList.add('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 600);
+          }
           SoundEngine.playErrorBuzz();
-          this.score = Math.max(85, this.score - 5);
+          this.score = Math.max(80, this.score - 5);
           this.shakeScreen();
-          await speakAndWait('อันตรายมากค่ะ! การหายใจเฮือกไม่ใช่การหายใจปกติ หากรอช้าสมองจะขาดออกซิเจนถาวร ต้องเริ่ม ซีพีอาร์ ทันทีค่ะ!');
-          this.setStage(5);
+          this.updatePatientHud('images/patient/patient_s4_wrong.png', 'FATAL // SEVERE HYPOXIA & CYANOSIS', 'critical', true);
+
+          let hintText = '';
+          let audioKey = '';
+          let spokenHint = '';
+
+          if (choice === 1) {
+            hintText = 'ผู้ป่วยหมดสติ หน้าอกไม่ขยับ และมีเสียงหายใจเฮือก นี่คือภาวะหัวใจหยุดเต้น! ถ้านั่งรอเฉยๆ สมองจะขาดออกซิเจนจนเสียชีวิต!';
+            audioKey = 's4_hint_1';
+            spokenHint = 'อันตรายมากครับ! คำใบ้คือ: ผู้ป่วยหมดสติ หน้าอกไม่ขยับ และมีเสียงหายใจเฮือก นานๆ ครั้ง นี่ไม่ใช่การหายใจปกติครับ แต่เป็นสัญญาณของหัวใจหยุดเต้นเฉียบพลัน หากนั่งรอเฉยๆ สมองจะขาดออกซิเจนจนเสียชีวิตได้ครับ เราต้องรีบลงมือช่วยปั๊มเลือดทันทีด้วยวิธีไหนครับ? ลองเลือกใหม่อีกครั้งครับ!';
+          } else if (choice === 3) {
+            hintText = 'ยาดมไม่สามารถทำให้หัวใจที่หยุดเต้นกลับมาทำงานได้! ผู้ป่วยไม่มีชีพจรและไม่หายใจ ต้องเริ่มกดหน้าอกกู้ชีพทันที!';
+            audioKey = 's4_hint_3';
+            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: การเอายาดมมาจ่อไม่สามารถทำให้หัวใจที่หยุดเต้นกลับมาทำงานได้ครับ ผู้ป่วยไม่มีชีพจรและไม่หายใจ ต้องเริ่มกดหน้าอกกู้ชีพทันทีครับ ลองเลือกใหม่อีกครั้งครับ!';
+          }
+
+          // Inject or update Visual Hint Banner
+          let hintBox = document.getElementById('stage4HintBox');
+          if (!hintBox) {
+            hintBox = document.createElement('div');
+            hintBox.id = 'stage4HintBox';
+            hintBox.className = 'stage-hint-banner';
+            const row = document.querySelector('.stage4-choices-row');
+            if (row) row.parentNode.insertBefore(hintBox, row);
+          }
+          if (hintBox) {
+            hintBox.innerHTML = `💡 <strong style="color:#F59E0B;">คำใบ้จากแพทย์:</strong> ${hintText} <span style="color:#10B981; font-weight:700;">(ลองเลือกคำตอบใหม่อีกครั้งครับ)</span>`;
+            hintBox.style.display = 'block';
+          }
+
+          await speakAndWait(spokenHint, audioKey);
+
+          // UNLOCK SO PLAYER CAN RETRY AND LEARN!
+          this.isStageChoiceLocked = false;
+          this.startStage4VoiceAnswer();
+        }
+      }
+
+      // Stage 6 Voice Answer & Choice Handlers (First Aid: Wound Cleaning)
+      startStage6VoiceAnswer() {
+        MicSensor.ensureMicLive().catch(() => {});
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
+          if (this.currentStage !== 6 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
+          const box = document.getElementById('txtLiveVoiceChoice');
+          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+
+          speechDebouncer.feed(transcript, isFinal, (finalText) => {
+            if (this.isStageChoiceLocked) return;
+            const choice = matchVoiceToChoice(finalText, 6);
+            if (choice) {
+              if (box) box.innerHTML = `“<span style="color:#10B981; font-weight:700;">${finalText}</span>” <span style="font-size:11px; color:#10B981;">(ยืนยันคำตอบข้อ ${choice})</span>`;
+              this.handleStage6Choice(choice);
+            }
+          }, 950);
+        });
+      }
+
+      async handleStage6Choice(choice) {
+        if (this.isStageChoiceLocked) return;
+        this.isStageChoiceLocked = true;
+        MicSensor.stopSpeechRecognition();
+
+        const btn = document.getElementById(`choice6_${choice}`);
+        if (choice === 2) {
+          if (btn) btn.classList.add('correct');
+          SoundEngine.playStageClear();
+          this.updatePatientHud('images/patient/patient_s6_rosc.png', 'STAGE 6 // NSS WOUND CLEANED', 'healthy');
+
+          const hintBox = document.getElementById('stage6HintBox');
+          if (hintBox) hintBox.style.display = 'none';
+
+          await speakAndWait(
+            'ถูกต้องแล้วครับ! การล้างแผลสดที่ถูกต้อง ต้องใช้น้ำเกลือปราศจากเชื้อ นอร์มอลซาไลน์ ชะล้างสิ่งสกปรกออกครับ และห้ามนำแอลกอฮอล์มาราดลงบนแผลสดโดยเด็ดขาด เพราะจะแสบและทำลายเนื้อเยื่อดีจนแผลหายช้าครับ!',
+            '19'
+          );
+          this.setStage(7);
+        } else {
+          if (btn) {
+            btn.classList.add('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 600);
+          }
+          SoundEngine.playErrorBuzz();
+          this.score = Math.max(80, this.score - 5);
+          this.shakeScreen();
+          this.updatePatientHud('images/patient/patient_s6_wrong.png', 'ACUTE AGONY // CHEMICAL BURN (ALCOHOL)', 'critical', true);
+
+          let hintText = 'แอลกอฮอล์มีไว้สำหรับเช็ดรอบปากแผลเพื่อฆ่าเชื้อเท่านั้น ห้ามราดลงบนแผลสดเด็ดขาดเพราะจะทำลายเซลล์เนื้อเยื่อดีและแสบทรมานมาก ควรใช้น้ำเกลือปราศจากเชื้อ Normal Saline (NSS) ชะล้างแผล';
+          let spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: แอลกอฮอล์มีไว้สำหรับเช็ดรอบปากแผลเพื่อฆ่าเชื้อเท่านั้นครับ หากนำมาราดลงบนแผลสดจะทำลายเซลล์เนื้อเยื่อและแสบทรมานมาก สิ่งใดที่มีความสมดุลและปลอดภัยที่สุดในการชะล้างแผลครับ? ลองเลือกใหม่อีกครั้งครับ!';
+
+          let hintBox = document.getElementById('stage6HintBox');
+          if (!hintBox) {
+            hintBox = document.createElement('div');
+            hintBox.id = 'stage6HintBox';
+            hintBox.className = 'stage-hint-banner';
+            const grid = document.querySelector('.clean-choices-grid-v2');
+            if (grid) grid.parentNode.insertBefore(hintBox, grid);
+          }
+          if (hintBox) {
+            hintBox.innerHTML = `💡 <strong style="color:#F59E0B;">คำใบ้จากแพทย์:</strong> ${hintText} <span style="color:#10B981; font-weight:700;">(ลองเลือกคำตอบใหม่อีกครั้งครับ)</span>`;
+            hintBox.style.display = 'block';
+          }
+
+          await speakAndWait(spokenHint, '20');
+          this.isStageChoiceLocked = false;
+          this.startStage6VoiceAnswer();
+        }
+      }
+
+      // Stage 7 Voice Answer & Choice Handlers (First Aid: Bleeding Control & Dressing)
+      startStage7VoiceAnswer() {
+        MicSensor.ensureMicLive().catch(() => {});
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
+          if (this.currentStage !== 7 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
+          const box = document.getElementById('txtLiveVoiceChoice');
+          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+
+          speechDebouncer.feed(transcript, isFinal, (finalText) => {
+            if (this.isStageChoiceLocked) return;
+            const choice = matchVoiceToChoice(finalText, 7);
+            if (choice) {
+              if (box) box.innerHTML = `“<span style="color:#10B981; font-weight:700;">${finalText}</span>” <span style="font-size:11px; color:#10B981;">(ยืนยันคำตอบข้อ ${choice})</span>`;
+              this.handleStage7Choice(choice);
+            }
+          }, 950);
+        });
+      }
+
+      async handleStage7Choice(choice) {
+        if (this.isStageChoiceLocked) return;
+        this.isStageChoiceLocked = true;
+        MicSensor.stopSpeechRecognition();
+
+        const btn = document.getElementById(`choice7_${choice}`);
+        if (choice === 1) {
+          if (btn) btn.classList.add('correct');
+          SoundEngine.playStageClear();
+          this.updatePatientHud('images/patient/patient_s7_hemostasis.png', 'STAGE 7 // HEMOSTASIS CONTROLLED', 'healthy');
+
+          const hintBox = document.getElementById('stage7HintBox');
+          if (hintBox) hintBox.style.display = 'none';
+
+          await speakAndWait(
+            'ยอดเยี่ยมมากครับ! วิธีห้ามเลือดที่ดีที่สุดคือการใช้ผ้าก๊อซสะอาดกดลงบนบาดแผลโดยตรงอย่างต่อเนื่อง และพันผ้าทับไว้ให้กระชับ ไม่ควรใช้สำลีเพราะเส้นใยจะติดแผลครับ!',
+            '22'
+          );
+          this.setStage(8);
+        } else {
+          if (btn) {
+            btn.classList.add('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 600);
+          }
+          SoundEngine.playErrorBuzz();
+          this.score = Math.max(80, this.score - 5);
+          this.shakeScreen();
+          this.updatePatientHud('images/patient/patient_s7_wrong.png', 'CRITICAL // HYPOVOLEMIC SHOCK (BLEEDING)', 'critical', true);
+
+          let hintText = 'การใช้สำลีจะทำให้เส้นใยติดแผลจนดึงออกยากและติดเชื้อ ส่วนการขันชะเนาะใช้เฉพาะเลือดพุ่งรุนแรงคุกคามชีวิตเท่านั้น วิธีห้ามเลือดเบื้องต้นที่ดีที่สุดคือใช้ผ้าก๊อซสะอาดกดลงบนแผลโดยตรง (Direct Pressure)';
+          let spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: การใช้สายรัดขันชะเนาะใช้เฉพาะกรณีเลือดพุ่งรุนแรงจนคุกคามชีวิตเท่านั้นครับ และการใช้สำลีจะทำให้เส้นใยติดแผลติดเชื้อได้ การห้ามเลือดเบื้องต้นที่ดีที่สุดควรใช้สิ่งใดกดลงบนแผลโดยตรงครับ? ลองเลือกใหม่อีกครั้งครับ!';
+
+          let hintBox = document.getElementById('stage7HintBox');
+          if (!hintBox) {
+            hintBox = document.createElement('div');
+            hintBox.id = 'stage7HintBox';
+            hintBox.className = 'stage-hint-banner';
+            const row = document.querySelector('.stage4-choices-row');
+            if (row) row.parentNode.insertBefore(hintBox, row);
+          }
+          if (hintBox) {
+            hintBox.innerHTML = `💡 <strong style="color:#F59E0B;">คำใบ้จากแพทย์:</strong> ${hintText} <span style="color:#10B981; font-weight:700;">(ลองเลือกคำตอบใหม่อีกครั้งครับ)</span>`;
+            hintBox.style.display = 'block';
+          }
+
+          await speakAndWait(spokenHint, '23');
+          this.isStageChoiceLocked = false;
+          this.startStage7VoiceAnswer();
+        }
+      }
+
+      // Stage 8 Voice Answer & Choice Handlers (First Aid: Arm Splinting & Sling)
+      startStage8VoiceAnswer() {
+        MicSensor.ensureMicLive().catch(() => {});
+        MicSensor.startSpeechRecognition((transcript, isFinal) => {
+          if (this.currentStage !== 8 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
+          const box = document.getElementById('txtLiveVoiceChoice');
+          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+
+          speechDebouncer.feed(transcript, isFinal, (finalText) => {
+            if (this.isStageChoiceLocked) return;
+            const choice = matchVoiceToChoice(finalText, 8);
+            if (choice) {
+              if (box) box.innerHTML = `“<span style="color:#10B981; font-weight:700;">${finalText}</span>” <span style="font-size:11px; color:#10B981;">(ยืนยันคำตอบข้อ ${choice})</span>`;
+              this.handleStage8Choice(choice);
+            }
+          }, 950);
+        });
+      }
+
+      async handleStage8Choice(choice) {
+        if (this.isStageChoiceLocked) return;
+        this.isStageChoiceLocked = true;
+        MicSensor.stopSpeechRecognition();
+
+        const btn = document.getElementById(`choice8_${choice}`);
+        if (choice === 2) {
+          if (btn) btn.classList.add('correct');
+          SoundEngine.playStageClear();
+          this.updatePatientHud('images/patient/patient_s8_splint.png', 'STAGE 8 // ARM SPLINTED & SUPPORTED', 'healthy');
+
+          const hintBox = document.getElementById('stage8HintBox');
+          if (hintBox) hintBox.style.display = 'none';
+
+          await speakAndWait(
+            'ถูกต้องสมบูรณ์แบบครับ! หลักการดามกระดูกคือห้ามดัดกระดูกเด็ดขาด ให้ดามในท่าที่เป็นอยู่โดยครอบคลุมข้อต่อทั้งด้านบนและด้านล่าง แล้วใช้ผ้าสามเหลี่ยมคล้องคอรองรับข้อศอกทำมุม 90 องศาครับ!',
+            '25'
+          );
+          this.setStage(9);
+        } else {
+          if (btn) {
+            btn.classList.add('wrong');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 600);
+          }
+          SoundEngine.playErrorBuzz();
+          this.score = Math.max(80, this.score - 5);
+          this.shakeScreen();
+          this.updatePatientHud('images/patient/patient_s8_wrong.png', 'ACUTE AGONY // BONE & NERVE DISPLACEMENT', 'critical', true);
+
+          let hintText = 'ห้ามดัดกระดูกหรือนวดบริเวณที่หักเด็ดขาด เพราะปลายกระดูกคมอาจตัดเส้นเลือดหรือเส้นประสาทจนพิการ ต้องดามในท่าที่พบ ให้ครอบคลุมข้อศอกและข้อมือ แล้วใช้ผ้าสามเหลี่ยมคล้องคอทำมุม 90 องศา';
+          let spokenHint = 'อันตรายมากครับ! คำใบ้คือ: ห้ามพยายามดึงหรือดัดกระดูกที่หักให้เข้าที่เองโดยเด็ดขาด เพราะอาจทำให้ปลายกระดูกที่คมไปตัดเส้นเลือดหรือเส้นประสาทจนพิการได้ครับ เราควรดามนิ่งๆ และคล้องแขนอย่างไรครับ? ลองเลือกใหม่อีกครั้งครับ!';
+
+          let hintBox = document.getElementById('stage8HintBox');
+          if (!hintBox) {
+            hintBox = document.createElement('div');
+            hintBox.id = 'stage8HintBox';
+            hintBox.className = 'stage-hint-banner';
+            const row = document.querySelector('.stage4-choices-row');
+            if (row) row.parentNode.insertBefore(hintBox, row);
+          }
+          if (hintBox) {
+            hintBox.innerHTML = `💡 <strong style="color:#F59E0B;">คำใบ้จากแพทย์:</strong> ${hintText} <span style="color:#10B981; font-weight:700;">(ลองเลือกคำตอบใหม่อีกครั้งครับ)</span>`;
+            hintBox.style.display = 'block';
+          }
+
+          await speakAndWait(spokenHint, '26');
+          this.isStageChoiceLocked = false;
+          this.startStage8VoiceAnswer();
         }
       }
 
@@ -4688,6 +5507,7 @@
         if (this.cprCount >= 30) {
           this.cprActive = false;
           this.stage5Phase = 'AED';
+          this.updatePatientHud('images/patient/patient_s5_aed.png', 'STAGE 5B // AED DEFIBRILLATION', 'critical');
           window.ECGEngine.setMode('VFIB_COARSE');
           SoundEngine.playAEDCharging();
           this.aedListening = false;
@@ -4695,7 +5515,7 @@
           this.renderStage();
 
           // Fix #8: Clear Signal & Countdown
-          speakAndWait('เครื่อง เออีดี ชาร์จไฟพร้อมแล้วค่ะ! ก่อนกดช็อกไฟฟ้า ให้ตัวแทนพูดคำสั่งเตือนความปลอดภัยทั้งสามขั้นตอนบนหน้าจอ เรียงทีละข้อดังๆ เลยค่ะ!').then(() => {
+          speakAndWait('เครื่อง เออีดี ชาร์จไฟพร้อมแล้วครับ! ก่อนกดช็อกไฟฟ้า ให้ตัวแทนพูดคำสั่งเตือนความปลอดภัยทั้งสามขั้นตอนบนหน้าจอ เรียงทีละข้อดังๆ เลยครับ!', 's5_aed_intro').then(() => {
             // Charging whine completes -> Ready Alert Signal!
             setTimeout(() => {
               this.aedListening = true;
@@ -4831,6 +5651,7 @@
           setTimeout(() => {
             SoundEngine.playAEDShock();
             window.ECGEngine.setMode('DEFIB_DISCHARGE');
+            this.updatePatientHud('images/patient/patient_s5_aed.png', 'STAGE 5B // SHOCK DISCHARGED (200J)', 'critical', true);
             const overlay = document.getElementById('vignetteOverlay');
             if (overlay) overlay.classList.add('flash-discharge');
 
@@ -4854,6 +5675,7 @@
         window.ECGEngine.setMode('SINUS');
         this.updateVitals(76, 98);
         SoundEngine.stopPulseScheduler();
+        this.updatePatientHud('images/patient/patient_s1_dazed.png', 'READY // STANDBY', 'warn');
 
         document.body.classList.add('lobby-mode');
         const modal = document.getElementById('modalLobby');
@@ -4905,7 +5727,7 @@
           } else if (e.key === 'r' || e.key === 'R') {
             this.quickResetGame();
           } else if (e.shiftKey && e.key === 'ArrowRight') {
-            if (this.currentStage < 6) this.setStage(this.currentStage + 1);
+            if (this.currentStage < 9) this.setStage(this.currentStage + 1);
           } else if (e.key === 'b' || e.key === 'B') {
             if (this.currentStage > 1) this.setStage(this.currentStage - 1);
           } else if (e.code === 'Space') {
@@ -4926,6 +5748,9 @@
             if (this.currentStage === 1) this.handleStage1Choice(num);
             else if (this.currentStage === 3 && num <= 3) this.quickFillPreset(num);
             else if (this.currentStage === 4 && num <= 3) this.handleStage4Choice(num);
+            else if (this.currentStage === 6 && num <= 4) this.handleStage6Choice(num);
+            else if (this.currentStage === 7 && num <= 3) this.handleStage7Choice(num);
+            else if (this.currentStage === 8 && num <= 3) this.handleStage8Choice(num);
           }
         });
       }
