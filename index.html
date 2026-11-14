@@ -2266,8 +2266,8 @@
           </div>
         </div>
 
-        <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical" style="margin-top:10px; background:#1E293B; border:1px solid #38BDF8; font-weight:700; padding:10px 22px; border-radius:10px; cursor:pointer;">
-          🎲 [ กดสุ่มกลุ่ม 01–10 (เอฟเฟกต์วงล้อ 3D + เสียง AI) ]
+        <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical" style="margin-top:10px; background:#1E293B; border:1px solid #38BDF8; font-weight:700; padding:10px 24px; border-radius:10px; cursor:pointer; font-size:15px;">
+          🎲 สุ่มเลย!
         </button>
         <div id="txtTeamCallout" style="margin-top:10px; font-size:14px; color:#38BDF8; font-weight:600; min-height:22px;" class="font-technical"></div>
       </div>
@@ -3778,7 +3778,7 @@
         if (btn) {
           btn.disabled = true;
           btn.style.opacity = '0.75';
-          btn.innerText = '🎲 กำลังหมุนสุ่มกลุ่มตัวแทน...';
+          btn.innerText = '🎲 กำลังสุ่ม...';
         }
         if (callout) callout.innerText = '';
         if (viewport) {
@@ -3841,7 +3841,7 @@
             if (btn) {
               btn.disabled = false;
               btn.style.opacity = '1';
-              btn.innerText = '🎲 [ สุ่มกลุ่มใหม่อีกครั้ง ]';
+              btn.innerText = '🎲 สุ่มเลย!';
             }
 
             this.isRandomizingTeam = false;
