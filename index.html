@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.3 Command Console)</title>
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -177,17 +177,19 @@
        ========================================================================== */
     .monitor-header {
       height: 56px;
-      padding: 0 16px;
+      padding: 0 14px;
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       background: #FFFFFF;
       border-bottom: 1.5px solid #E2E8F0;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
       flex-shrink: 0;
       position: relative;
       z-index: 50;
+      width: 100%;
+      box-sizing: border-box;
     }
     .brand-mark {
       display: flex;
@@ -241,10 +243,10 @@
       display: none;
     }
     .nav-step-pill {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       color: #64748B;
-      padding: 5px 8px;
+      padding: 4px 6px;
       border-radius: 7px;
       white-space: nowrap;
       transition: all 0.15s ease;
@@ -267,7 +269,7 @@
     .nav-right-controls {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex-shrink: 0;
     }
     .session-clock-pill {
@@ -276,25 +278,25 @@
       color: #090D16;
       font-family: var(--font-num) !important;
       font-weight: 700;
-      font-size: 11.5px;
-      padding: 4px 8px;
+      font-size: 11px;
+      padding: 3px 6px;
       border-radius: 6px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
     .nav-btn {
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       color: #334155;
       border-radius: 7px;
-      height: 32px;
-      padding: 0 10px;
-      font-size: 12px;
+      height: 30px;
+      padding: 0 8px;
+      font-size: 11.5px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       cursor: pointer;
       box-shadow: 0 1px 2px rgba(15,23,42,0.04);
       transition: all 0.15s ease;
@@ -302,7 +304,7 @@
       flex-shrink: 0 !important;
     }
     .nav-btn-icon-only {
-      width: 32px;
+      width: 30px;
       padding: 0 !important;
       justify-content: center;
     }
@@ -324,17 +326,57 @@
       border-color: #7DD3FC;
     }
 
+    @media (max-width: 1440px) {
+      .monitor-header {
+        gap: 8px;
+        padding: 0 10px;
+      }
+      .brand-badge-mdbuu {
+        display: none;
+      }
+      .nav-step-pill {
+        padding: 3px 5px !important;
+        font-size: 11px !important;
+      }
+      .nav-step-pills {
+        gap: 2px !important;
+      }
+      .nav-right-controls {
+        gap: 3px !important;
+      }
+      .nav-btn {
+        padding: 0 6px !important;
+        font-size: 11px !important;
+        height: 28px !important;
+      }
+      .session-clock-pill {
+        padding: 2px 5px !important;
+        font-size: 10.5px !important;
+      }
+    }
+
+    @media (max-width: 1300px) {
+      .nav-step-pill {
+        padding: 2px 4px !important;
+        font-size: 10.5px !important;
+      }
+      .nav-btn {
+        padding: 0 5px !important;
+        font-size: 10.5px !important;
+      }
+    }
+
         /* ==========================================================================
        02. TOP TELEMETRY BENTO STRIP (PATIENT HUD + ECG + VITALS) (196PX)
        ========================================================================== */
-        .telemetry-ribbon-bar {
+    .telemetry-ribbon-bar {
       max-width: 1380px;
-      margin: 12px auto 0;
+      margin: 8px auto 0;
       width: 96vw;
-      height: 204px;
+      height: clamp(164px, 21vh, 196px);
       display: grid;
-      grid-template-columns: 450px 1fr 250px;
-      gap: 16px;
+      grid-template-columns: 420px 1fr 230px;
+      gap: 12px;
       flex-shrink: 0;
       background: transparent;
       border: none;
@@ -361,8 +403,8 @@
       box-sizing: border-box;
     }
     .patient-hud-photo-wrap {
-      width: 172px;
-      height: 180px;
+      width: clamp(136px, 17vh, 168px);
+      height: 100%;
       border-radius: 14px;
       overflow: hidden;
       border: 2px solid #0F172A;
@@ -664,12 +706,11 @@
        ========================================================================== */
     .stage-viewport {
       max-width: 1380px;
-      margin: 8px auto 14px;
+      margin: 8px auto 10px;
       width: 96vw;
-      height: calc(100vh - 56px - 204px - 36px);
-      min-height: 450px;
-      max-height: 590px;
-      flex: none;
+      flex: 1;
+      min-height: 0;
+      max-height: none;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -679,13 +720,14 @@
       border: 1.5px solid #E2E8F0;
       border-radius: 22px;
       box-shadow: var(--shadow-card);
-      padding: 18px 26px;
+      padding: 14px 22px;
       height: 100%;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 10px;
-      overflow: hidden;
+      gap: 8px;
+      overflow-y: auto;
       box-sizing: border-box;
     }
 
@@ -785,13 +827,24 @@
 
     /* Stage Titles */
     .stage-headline-clean {
-      font-size: clamp(20px, 1.8vw, 24px);
+      font-size: clamp(17px, 1.5vw, 21px);
       font-weight: 800;
       color: #090D16;
-      line-height: 1.35;
+      line-height: 1.3;
       margin-bottom: 4px;
       letter-spacing: -0.01em;
       text-wrap: balance;
+    }
+
+    /* V18.0 Mobile Touch Anti-Zoom & Fast Tap Protection */
+    html, body, .mobile-app-shell, .mobile-tap-rush-circle, .mobile-cpr-heart-pad, .mobile-choice-tap-btn {
+      touch-action: manipulation;
+      -ms-touch-action: manipulation;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-tap-rush-circle, .mobile-cpr-heart-pad {
+      touch-action: none !important;
     }
     .stage-sub-clean {
       font-size: 14.5px;
@@ -1292,16 +1345,37 @@
       animation-delay: 0.35s;
     }
 
-    /* Stage 9 Summary Scoreboard (Compact Fit & Zero Bottom Clipping) */
+    /* V18.0 Stage 9 3-Column Clinical Victory Bento Layout */
+    .stage9-victory-bento-grid {
+      display: grid;
+      grid-template-columns: 230px 1fr 245px;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+      height: calc(100% - 46px);
+      overflow: hidden;
+    }
+    .victory-bento-col {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      min-height: 0;
+      box-sizing: border-box;
+    }
     .hero-scoreboard-container {
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       border-radius: 18px;
-      padding: 14px 20px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       flex: 1;
       min-height: 0;
       overflow: hidden;
@@ -3734,6 +3808,7 @@
         <div class="lobby-telemetry-bar font-technical">
           <div class="lobby-tel-item"><span class="tel-dot active"></span> ไมค์: พร้อม</div>
           <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG: 60 FPS</div>
+          <div class="lobby-tel-item" id="lobbyMqttStatusItem"><span class="tel-dot active" id="lobbyMqttDot" style="background:#059669;"></span> <span id="lobbyMqttStatusTxt">MQTT: ออนไลน์</span></div>
           <div class="lobby-tel-item"><span class="tel-dot active"></span> ROOM PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#0284C7;">----</strong></div>
         </div>
       </div>
@@ -4645,6 +4720,42 @@
         this.topic = '';
         this.handlers = {};
         this.processedMsgKeys = new Set();
+        this.pendingQueue = [];
+        this.mqttBrokerPrimary = 'wss://broker.emqx.io:8084/mqtt';
+        this.mqttBrokerFallback = 'wss://broker.hivemq.com:8884/mqtt';
+        this.activeBrokerUrl = this.mqttBrokerPrimary;
+        this.mqttStatus = 'offline';
+        this.fallbackTimer = null;
+        this.statusListeners = [];
+      }
+
+      onStatus(fn) {
+        if (typeof fn === 'function') this.statusListeners.push(fn);
+      }
+
+      notifyStatus(status) {
+        this.mqttStatus = status;
+        this.statusListeners.forEach(fn => { try { fn(status, this.activeBrokerUrl); } catch(e) {} });
+        this.updateLobbyStatusUI();
+      }
+
+      updateLobbyStatusUI() {
+        const dot = document.getElementById('lobbyMqttDot');
+        const txt = document.getElementById('lobbyMqttStatusTxt');
+        if (!txt) return;
+        if (this.mqttStatus === 'connected') {
+          if (dot) dot.style.background = '#059669';
+          txt.innerText = 'MQTT: ออนไลน์';
+          txt.style.color = '#059669';
+        } else if (this.mqttStatus === 'connecting') {
+          if (dot) dot.style.background = '#D97706';
+          txt.innerText = 'MQTT: กำลังเชื่อมต่อ...';
+          txt.style.color = '#D97706';
+        } else {
+          if (dot) dot.style.background = '#E11D48';
+          txt.innerText = 'MQTT: ออฟไลน์ (Broadcast)';
+          txt.style.color = '#E11D48';
+        }
       }
 
       init(pin, isHost = false, playerInfo = null) {
@@ -4671,13 +4782,14 @@
           console.warn('BroadcastChannel error:', err);
         }
 
-        // 2. Setup MQTT over Secure WebSockets (EMQX Public Broker)
+        // 2. Setup MQTT over Secure WebSockets with Outbox Queue & Fallback Broker
         this.connectMqtt();
       }
 
       connectMqtt() {
         if (typeof mqtt === 'undefined') {
           console.log('[Realtime] MQTT library not present, operating via BroadcastChannel.');
+          this.notifyStatus('offline');
           return;
         }
         try {
@@ -4685,19 +4797,52 @@
             try { this.mqttClient.end(true); } catch(e) {}
           }
 
+          this.notifyStatus('connecting');
+
+          if (this.fallbackTimer) clearTimeout(this.fallbackTimer);
+          // If primary broker does not connect within 4000ms, automatically switch to fallback broker!
+          this.fallbackTimer = setTimeout(() => {
+            if (!this.mqttClient || !this.mqttClient.connected) {
+              if (this.activeBrokerUrl === this.mqttBrokerPrimary) {
+                console.warn('[MQTT] Primary broker timed out. Switching to fallback HiveMQ broker...');
+                this.activeBrokerUrl = this.mqttBrokerFallback;
+                this.connectMqtt();
+              }
+            }
+          }, 4000);
+
           const clientId = 'mdbuu_' + (this.isHost ? 'h_' : 'm_') + Math.random().toString(36).substr(2, 8);
-          this.mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+          this.mqttClient = mqtt.connect(this.activeBrokerUrl, {
             clientId: clientId,
             clean: true,
-            connectTimeout: 8000,
-            reconnectPeriod: 4000
+            connectTimeout: 7000,
+            reconnectPeriod: 3500
           });
 
           this.mqttClient.on('connect', () => {
-            console.log(`[MQTT] Connected for room #${this.sessionPin}`);
+            if (this.fallbackTimer) {
+              clearTimeout(this.fallbackTimer);
+              this.fallbackTimer = null;
+            }
+            console.log(`[MQTT] Connected to ${this.activeBrokerUrl} for room #${this.sessionPin}`);
+            this.notifyStatus('connected');
+
             this.mqttClient.subscribe(this.topic, { qos: 0 }, (err) => {
               if (!err) console.log(`[MQTT] Subscribed to ${this.topic}`);
             });
+
+            // Flush Outbox Queue immediately on connect!
+            if (this.pendingQueue && this.pendingQueue.length > 0) {
+              console.log(`[MQTT] Flushing ${this.pendingQueue.length} queued messages...`);
+              while (this.pendingQueue.length > 0) {
+                const queuedMsg = this.pendingQueue.shift();
+                try {
+                  this.mqttClient.publish(this.topic, JSON.stringify(queuedMsg));
+                } catch(err) {
+                  console.warn('[MQTT] Error publishing queued msg:', err);
+                }
+              }
+            }
           });
 
           this.mqttClient.on('message', (t, payload) => {
@@ -4707,11 +4852,20 @@
             } catch(e) {}
           });
 
+          this.mqttClient.on('close', () => {
+            this.notifyStatus('connecting');
+          });
+
+          this.mqttClient.on('offline', () => {
+            this.notifyStatus('offline');
+          });
+
           this.mqttClient.on('error', (err) => {
             console.warn('[MQTT] Broker notice:', err);
           });
         } catch(err) {
           console.warn('[MQTT] Connection notice:', err);
+          this.notifyStatus('offline');
         }
       }
 
@@ -4737,8 +4891,13 @@
         if (this.channel) {
           try { this.channel.postMessage(msg); } catch(e) {}
         }
+
+        // Outbox Queue: If MQTT is connected, publish immediately; otherwise queue for connect!
         if (this.mqttClient && this.mqttClient.connected) {
           try { this.mqttClient.publish(this.topic, JSON.stringify(msg)); } catch(e) {}
+        } else {
+          if (!this.pendingQueue) this.pendingQueue = [];
+          this.pendingQueue.push(msg);
         }
       }
 
@@ -5083,11 +5242,70 @@
       const dateStr = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
       ctx.fillText(`ออกให้ ณ วันที่ ${dateStr} • CERTIFICATE ID: MDBUU-${group}-${score}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`, 600, 1540);
 
-      // Trigger download
-      const link = document.createElement('a');
-      link.download = `MDBUU_Certificate_${group}_${recipient.replace(/[^a-zA-Z0-9ก-๙]/g, '_')}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      // V18.0 Robust Certificate Download: Blob + Web Share API + Direct Preview Modal
+      const fileName = `MDBUU_Certificate_${group}_${recipient.replace(/[^a-zA-Z0-9ก-๙]/g, '_')}.png`;
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], fileName, { type: 'image/png' });
+
+        // 1. Try Web Share API (native share sheet on iOS Safari & Android Chrome)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: 'เกียรติบัตร HEARTBEAT RUSH MDBUU',
+              text: `เกียรติบัตรการช่วยฟื้นคืนชีพฉุกเฉิน ม.บูรพา สำหรับ ${recipient}`
+            });
+            return;
+          } catch(err) {
+            if (err.name !== 'AbortError') console.warn('Web Share failed, fallback to download:', err);
+          }
+        }
+
+        // 2. Fallback: Trigger anchor download
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = blobUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // 3. Display Direct Image Preview Modal for LINE in-app & mobile browsers
+        showCertificateImageModal(blobUrl, fileName);
+      }, 'image/png');
+    }
+
+    function showCertificateImageModal(blobUrl, fileName) {
+      const existing = document.getElementById('modalCertImagePreview');
+      if (existing) existing.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'modalCertImagePreview';
+      modal.style.cssText = 'position:fixed; inset:0; background:rgba(9,13,22,0.85); backdrop-filter:blur(6px); z-index:99999; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; box-sizing:border-box;';
+      modal.innerHTML = `
+        <div style="background:#FFFFFF; border-radius:16px; max-width:440px; width:100%; max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 12px 36px rgba(0,0,0,0.4);">
+          <div style="padding:12px 16px; border-bottom:1px solid #E2E8F0; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:13.5px; font-weight:800; color:#065F46;">📜 เกียรติบัตรของคุณพร้อมแล้ว!</span>
+            <button onclick="document.getElementById('modalCertImagePreview').remove()" style="border:none; background:#F1F5F9; border-radius:8px; width:28px; height:28px; font-weight:700; cursor:pointer;">✕</button>
+          </div>
+          <div style="flex:1; overflow-y:auto; padding:12px; text-align:center;">
+            <img src="${blobUrl}" alt="Certificate Preview" style="width:100%; height:auto; border-radius:8px; border:1px solid #CBD5E1; box-shadow:0 4px 12px rgba(0,0,0,0.08);" />
+            <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:10px; padding:10px 12px; margin-top:10px; font-size:12px; color:#065F46; line-height:1.45; text-align:left;">
+              ✅ <strong>คำแนะนำสำหรับ iPhone / LINE:</strong> หากรูปไม่ดาวน์โหลดอัตโนมัติ ให้ <strong>แตะค้างที่รูปเกียรติบัตรด้านบน</strong> แล้วเลือก <strong>"บันทึกรูปภาพ" (Save Image)</strong> หรือ "แชร์" เพื่อเก็บภาพลงเครื่องครับ
+            </div>
+          </div>
+          <div style="padding:10px 16px; border-top:1px solid #E2E8F0; display:flex; gap:8px;">
+            <a href="${blobUrl}" download="${fileName}" style="flex:1; background:#065F46; color:#FFFFFF; text-align:center; padding:10px; border-radius:8px; font-size:13px; font-weight:700; text-decoration:none;">
+              📥 ดาวน์โหลดอีกครั้ง
+            </a>
+            <button onclick="document.getElementById('modalCertImagePreview').remove()" style="padding:10px 16px; background:#F1F5F9; border:1px solid #CBD5E1; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">
+              ปิด
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
     class BackgroundECGEngine {
@@ -5861,7 +6079,7 @@
         title: 'การประเมินความปลอดภัยจุดเกิดเหตุ',
         initialStory: 'พบผู้บาดเจ็บติดอยู่ในรถเก๋งที่ชนรั้วข้างทาง มีกลุ่มควันพุ่งออกจากฝากระโปรงรถ',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจสภาพรอบจุดเกิดเหตุและตัวรถก่อนไหมครับ?',
-        inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
+        inspectVoicePrompt: 'พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น "ตรวจดู", "ดูอาการ", "เช็กเลย", "ครับ")',
         inspectSpoken: 'ภารกิจเริ่มขึ้นแล้วครับ! เราขับรถมาเจออุบัติเหตุรถเก๋งชนรั้วข้างทาง มีคนเจ็บฟุบอยู่ในรถ ก่อนจะเข้าไปช่วย ต้องการตรวจสอบสภาพรอบจุดเกิดเหตุก่อนไหมครับ?',
         findingsTitle: 'ผลการสำรวจจุดเกิดเหตุ (Hazard & Scene Assessment)',
         findingsDesc: '⚠️ พบอันตรายวิกฤต: กลุ่มควันสีขาวพุ่งหนาแน่นจากฝากระโปรง เครื่องยนต์ยังไม่ดับ และมีรถวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูง',
@@ -5914,7 +6132,7 @@
         title: 'การตรวจการหายใจเฮือก (Agonal Gasping)',
         initialStory: 'โทรแจ้ง 1669 แล้ว คนไข้นอนนิ่งอยู่บนพื้นถนนในจุดปลอดภัย',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจการหายใจและการขยับของหน้าอกคนไข้ไหมครับ?',
-        inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
+        inspectVoicePrompt: 'พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น "ตรวจดู", "ดูอาการ", "เช็กเลย", "ครับ")',
         inspectSpoken: 'ระหว่างรอรถพยาบาล เจ้าหน้าที่หนึ่งหกหกเก้าให้เราเช็กการหายใจของผู้ป่วยครับ น้องตัวแทนต้องการก้มลงตรวจสอบการขยับของหน้าอกและการหายใจของผู้ป่วยไหมครับ?',
         findingsTitle: 'ผลตรวจการหายใจ (Physical Examination & Airway)',
         findingsDesc: '🫁 ผลตรวจร่างกาย: ได้ยินเสียงหายใจ "เฮือก... ฮึ่ก..." นานๆ ครั้ง แต่หน้าอกไม่ขยับขึ้นลงเลย (ภาวะ Agonal Gasping // หัวใจหยุดเต้น)',
@@ -5957,7 +6175,7 @@
         title: 'การล้างทำความสะอาดบาดแผลสด',
         initialStory: 'คนไข้หัวใจกลับมาเต้นและเริ่มรู้สึกตัวแล้ว สัญญาณชีพเริ่มเสถียร',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจบาดแผลตามร่างกายของคนไข้ไหมครับ?',
-        inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
+        inspectVoicePrompt: 'พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น "ตรวจดู", "ดูอาการ", "เช็กเลย", "ครับ")',
         inspectSpoken: 'หลังช็อกไฟฟ้า หัวใจของผู้ป่วยกลับมาเต้นเป็นปกติและเริ่มรู้สึกตัวแล้ว แต่เราสังเกตเห็นบาดแผลที่แขนของผู้ป่วยครับ ต้องการตรวจสอบบาดแผลที่แขนก่อนไหมครับ?',
         findingsTitle: 'ผลตรวจบาดแผล (Wound Inspection & Assessment)',
         findingsDesc: '🩹 ผลตรวจบาดแผล: พบแผลเปิดขนาดใหญ่ที่ท่อนแขนซ้าย มีเศษดินและทรายปนเปื้อนอยู่ในเนื้อแผลสด',
@@ -6012,7 +6230,7 @@
         title: 'การห้ามเลือดและปิดบาดแผลสด',
         initialStory: 'ล้างเศษดินออกจากแผลสะอาดเรียบร้อยแล้ว',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจลักษณะเลือดที่ไหลออกจากบาดแผลไหมครับ?',
-        inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
+        inspectVoicePrompt: 'พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น "ตรวจดู", "ดูอาการ", "เช็กเลย", "ครับ")',
         inspectSpoken: 'ตอนนี้เราล้างเศษดินออกจากแผลสะอาดแล้ว แต่ดูเหมือนยังมีเลือดไหลออกมาอยู่ครับ ต้องการตรวจสอบลักษณะเลือดที่ไหลออกจากแผลไหมครับ?',
         findingsTitle: 'ผลตรวจเลือดออก (Bleeding Assessment)',
         findingsDesc: '🩸 ผลตรวจบาดแผล: มีเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่อง หากปล่อยไว้จะเสียเลือดมาก',
@@ -6056,7 +6274,7 @@
         title: 'การดามกระดูกและประคองข้อต่อแขน',
         initialStory: 'ห้ามเลือดหยุดไหลและพันแผลเรียบร้อยแล้ว',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจโครงสร้างกระดูกและข้อต่อแขนของคนไข้ไหมครับ?',
-        inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
+        inspectVoicePrompt: 'พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น "ตรวจดู", "ดูอาการ", "เช็กเลย", "ครับ")',
         inspectSpoken: 'เลือดหยุดไหลสนิทแล้วครับ! แต่ผู้ป่วยยังร้องปวดที่ท่อนแขนล่างและขยับแขนไม่ได้ ต้องการตรวจสอบโครงสร้างกระดูกและข้อต่อแขนของผู้ป่วยไหมครับ?',
         findingsTitle: 'ผลตรวจกระดูกและข้อต่อ (Bone & Joint Inspection)',
         findingsDesc: '🦴 ผลตรวจร่างกาย: ท่อนแขนท่อนล่างบวมโตและโก่งผิดรูปชัดเจน ผู้ป่วยร้องปวดเมื่อขยับ สงสัยกระดูกแขนหัก',
@@ -6128,7 +6346,7 @@
         this.stage3Locked = false;
         this.shoutChargeProgress = 0;
         this.isStageChoiceLocked = false;
-        this.cprStrictRhythm = true;
+        this.cprStrictRhythm = false; // V18.0 Default to Forgiving / Standard Friendly Mode
         this.cprHighwayAnimId = null;
         this.aedCurrentStep = 1;
 
@@ -6809,7 +7027,7 @@
                   <div class="inspect-card-title">${data.inspectQuestion}</div>
                   <div class="inspect-voice-callout font-technical">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-                    <span>พูดคำว่า “สำรวจ” เพื่อเปิดโหวตบนมือถือ</span>
+                    <span>พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น “ตรวจสอบ”, “ดูอาการ”, “เช็กเลย”, “ครับ”)</span>
                   </div>
                 </div>
               ` : (isVoting ? `
@@ -7172,12 +7390,14 @@
             const val = finalTranscript.toLowerCase().trim();
             const valNoSpace = val.replace(/\s+/g, '');
 
-            // STEP 1: Broad Natural Responses for Inspection Prompt
+            // STEP 1: Broad Natural Responses for Inspection Prompt (V18.0)
             if (this.decisionSubStep === 'PROMPT_INSPECT') {
               const inspectPhrases = [
-                'สำรวจ', 'ประเมิน', 'ตรวจสอบ', 'ตรวจดู', 'ตรวจเลย', 'ตรวจครับ', 'ตรวจค่ะ', 'เช็ค', 'เช็ก',
-                'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'ดูสภาพ', 'ดูรถ', 'ดูเลย', 'ดูครับ', 'ดูค่ะ',
-                'เข้าไปดู', 'เข้าไปสำรวจ', 'ทำครับ', 'ทำค่ะ', 'ทำเลย', 'เอาเลย', 'ได้เลย', 'ไปดู',
+                'สำรวจ', 'สำรวด', 'สามรวด', 'สํารวจ', 'ประเมิน', 'ตรวจสอบ', 'ตรวจซ่อม', 'ตรวจดู', 'ตรวจเลย',
+                'ตรวจครับ', 'ตรวจค่ะ', 'ตรวจหน่อย', 'เช็ค', 'เช็ก', 'เช็กดู', 'เช็คดู', 'เช็กเลย', 'เช็คเลย',
+                'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'ดูผู้ป่วย', 'ดูสภาพ', 'ดูรถ', 'ดูแขน', 'ดูเลย',
+                'ดูครับ', 'ดูค่ะ', 'ดูหน่อย', 'ขอดู', 'เข้าไปดู', 'เข้าไปสำรวจ', 'เข้าประเมิน', 'เปิดดู',
+                'ทำครับ', 'ทำค่ะ', 'ทำเลย', 'เอาเลย', 'ได้เลย', 'ไปดู', 'เริ่มเลย', 'เริ่มตรวจสอบ', 'สแกน',
                 'ต้องการ', 'ตกลง', 'โอเค', 'ok', 'พร้อม', 'ลุย', 'ใช่', 'ครับ', 'ค่ะ', 'คับ'
               ];
               if (inspectPhrases.some(w => valNoSpace.includes(w))) {
@@ -7197,10 +7417,11 @@
               return;
             }
 
-            // STEP 3: Hero Decision (Confirm Winning Choice, Revote, or Speak Equipment Name Directly)
+            // STEP 3: Hero Decision (Confirm Winning Choice, Revote, or Speak Equipment Name Directly) (V18.0)
             if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
               const revoteWords = [
-                'โหวตใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ', 'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก', 'ไม่ใช้'
+                'โหวตใหม่', 'โหมดใหม่', 'โหวดใหม่', 'หวดใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ',
+                'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก', 'ไม่ใช้', 'ขอใหม่'
               ];
               if (revoteWords.some(w => valNoSpace.includes(w))) {
                 if (box) {
@@ -7220,11 +7441,11 @@
                 return;
               }
 
-              // Check general affirmative confirmation words
+              // Check general affirmative confirmation words (V18.0 expanded)
               const confirmWords = [
-                'ยืนยัน', 'ใช้คำตอบนี้', 'ใช้เลย', 'ใช้อันนี้', 'ใช้ข้อนี้', 'ตกลง', 'ใช่',
-                'เอาอันนี้', 'เอาข้อนี้', 'เอาเลย', 'ทำเลย', 'ทำครับ', 'ทำค่ะ', 'ลุยเลย',
-                'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'เลือกข้อนี้', 'โอเค', 'ok', 'ครับ', 'ค่ะ'
+                'ยืนยัน', 'ยืนยาน', 'ยื่นยัน', 'ยืนยัง', 'ใช้คำตอบนี้', 'ใช้เลย', 'ใช้อันนี้', 'ใช้ข้อนี้',
+                'ตกลง', 'ใช่', 'เอาอันนี้', 'เอาข้อนี้', 'เอาเลย', 'ทำเลย', 'ทำครับ', 'ทำค่ะ', 'ลุยเลย',
+                'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'เลือกข้อนี้', 'สรุปข้อนี้', 'โอเค', 'ok', 'ครับ', 'ค่ะ'
               ];
               if (confirmWords.some(w => valNoSpace.includes(w))) {
                 if (box) {
@@ -7863,10 +8084,25 @@
           console.warn('Certificate canvas QR render failed:', e);
         }
 
-        const link = document.createElement('a');
-        link.download = `MDBUU_Medical_Diploma_Team_${String(this.selectedTeam).padStart(2, '0')}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        const fileName = `MDBUU_Medical_Diploma_Team_${String(this.selectedTeam).padStart(2, '0')}.png`;
+        canvas.toBlob(async (blob) => {
+          if (!blob) return;
+          const file = new File([blob], fileName, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({ files: [file], title: 'เกียรติบัตร HEARTBEAT RUSH MDBUU' });
+              return;
+            } catch(e) { if (e.name !== 'AbortError') console.warn(e); }
+          }
+          const blobUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = fileName;
+          link.href = blobUrl;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showCertificateImageModal(blobUrl, fileName);
+        }, 'image/png');
       }
 
             renderStage() {
@@ -8377,7 +8613,7 @@
                           ⚡ เทสต์กดตรงจังหวะ (+1)
                         </button>
                         <button id="btnCprModeToggle" onclick="GameStateManager.toggleCprStrictMode()" class="nav-btn font-technical" style="height:26px; font-size:10.5px; background:#FFFFFF; color:#0284C7; border:1px solid #BAE6FD; padding:0 10px; cursor:pointer;">
-                          โหมดจังหวะ: เข้มงวด 110 BPM
+                          โหมดจังหวะ: ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM' : 'มาตรฐาน (ยืดหยุ่น)'}
                         </button>
                       </div>
                     </div>
@@ -8754,7 +8990,7 @@
           });
 
           card.innerHTML = `
-            <div class="unified-status-bar" style="margin-bottom: 12px;">
+            <div class="unified-status-bar" style="margin-bottom: 8px;">
               <div class="ai-voice-pill-clean">
                 <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
                 <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังกล่าวแสดงความยินดี...</span>
@@ -8767,136 +9003,139 @@
               </div>
             </div>
 
-            <div class="hero-scoreboard-container">
-              <div class="summary-v10-grid">
-                <!-- Col 1: Radial Score & Team Rank -->
-                <div class="scoreboard-left-emblem">
-                  <div class="radial-gauge-wrapper">
-                    <svg class="radial-gauge-svg" viewBox="0 0 160 160">
-                      <circle class="radial-gauge-bg" cx="80" cy="80" r="70"></circle>
-                      <circle id="radialScoreCircle" class="radial-gauge-progress" cx="80" cy="80" r="70" style="stroke:${rankColor}; stroke-dashoffset: 440;"></circle>
-                    </svg>
-                    <div class="radial-gauge-center">
-                      <div class="rank-letter-display num-readout" style="color:${rankColor};">${rankLetter}</div>
-                      <div class="rank-points-counter num-readout"><span id="txtScoreCount">0</span> PTS</div>
-                    </div>
-                  </div>
-                  <div class="hero-title-pill font-technical">CODE BLUE & FIRST AID GUARDIAN</div>
-                  <div class="team-badge-display font-technical">กลุ่มตัวแทน: กลุ่มที่ ${this.selectedTeam}</div>
+            <!-- V18.0 3-Column Clinical Victory Bento Layout (100% Fit, Zero Overlap) -->
+            <div class="stage9-victory-bento-grid">
+              <!-- Column 1 (230px): Hero Squad Rank Card -->
+              <div class="victory-bento-col font-technical" style="align-items:center; text-align:center;">
+                <div style="font-size:11px; font-weight:800; color:#059669; letter-spacing:0.08em; text-transform:uppercase;">
+                  CLINICAL PERFORMANCE
                 </div>
 
-                <!-- Col 2: Per-Stage Score Breakdown (8 Stages) & Mini ROSC Strip -->
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                  <div class="mini-rosc-strip">
-                    <div class="rosc-badge-txt font-technical">NORMAL SINUS RHYTHM — LIFE SAVED & STABILIZED</div>
-                    <div class="mini-rosc-vitals font-technical">
-                      <span style="font-size:12px; color:#64748B;">HR <strong style="color:#059669;" class="num-readout">84 BPM</strong></span>
-                      &nbsp;&bull;&nbsp;
-                      <span style="font-size:12px; color:#64748B;">SpO2 <strong style="color:#0284C7;" class="num-readout">99%</strong></span>
-                    </div>
-                  </div>
-
-                  <div style="font-size:12px; font-weight:800; color:#090D16;" class="font-technical">
-                    📊 สรุปคะแนนรายด่าน (PER-STAGE CLINICAL BREAKDOWN):
-                  </div>
-
-                  <div class="stage-scores-grid font-technical">
-                    <div class="stage-score-card ${this.stageScores[1] === 15 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">01 ปลอดภัย</span>
-                      <span class="stage-score-val">${this.stageScores[1]} / 15</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[2] === 10 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">02 เรียกช่วย</span>
-                      <span class="stage-score-val">${this.stageScores[2]} / 10</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[3] === 15 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">03 โทร 1669</span>
-                      <span class="stage-score-val">${this.stageScores[3]} / 15</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[4] === 15 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">04 หายใจเฮือก</span>
-                      <span class="stage-score-val">${this.stageScores[4]} / 15</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[5] === 15 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">05 CPR / AED</span>
-                      <span class="stage-score-val">${this.stageScores[5]} / 15</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[6] === 10 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">06 ล้างแผล</span>
-                      <span class="stage-score-val">${this.stageScores[6]} / 10</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[7] === 10 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">07 ห้ามเลือด</span>
-                      <span class="stage-score-val">${this.stageScores[7]} / 10</span>
-                    </div>
-                    <div class="stage-score-card ${this.stageScores[8] === 10 ? 'perfect' : 'penalty'}">
-                      <span class="stage-score-num">08 ดามแขน</span>
-                      <span class="stage-score-val">${this.stageScores[8]} / 10</span>
-                    </div>
-                  </div>
-
-                  <!-- Hall of Fame Daily Leaderboard Table (Top 3 Compact) -->
-                  <div class="leaderboard-box font-technical">
-                    <div class="leaderboard-title">🏆 ตารางคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 3)</div>
-                    <table class="leaderboard-table">
-                      <thead>
-                        <tr>
-                          <th>อันดับ</th>
-                          <th>กลุ่ม</th>
-                          <th>คะแนน</th>
-                          <th>เกรด</th>
-                          <th>เวลา</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        ${top3.length > 0 ? top3.map((entry, idx) => `
-                          <tr class="${entry.team === `กลุ่มที่ ${this.selectedTeam}` ? 'current-team' : ''}">
-                            <td>#${idx + 1}</td>
-                            <td>${entry.team}</td>
-                            <td>${entry.score}</td>
-                            <td>${entry.rank}</td>
-                            <td>${entry.timeStr}</td>
-                          </tr>
-                        `).join('') : `
-                          <tr>
-                            <td colspan="5" style="text-align:center; color:#94A3B8;">กำลังบันทึกคะแนนกลุ่มแรกของวัน...</td>
-                          </tr>
-                        `}
-                      </tbody>
-                    </table>
-                  </div>
-                  <!-- MVP Support Squad Badge -->
-                  <div class="mvp-squad-badge font-technical">
-                    <span>🏆</span>
-                    <span><strong>MVP SUPPORT SQUAD: กลุ่มที่ ${this.mvpGroup}</strong> (ผู้ช่วยกู้ชีพยอดเยี่ยมประจำรอบ)</span>
+                <div class="radial-gauge-wrapper" style="width:116px; height:116px; margin:4px auto;">
+                  <svg class="radial-gauge-svg" viewBox="0 0 140 140" style="width:100%; height:100%;">
+                    <circle class="radial-gauge-bg" cx="70" cy="70" r="54" style="stroke-width:9; stroke:#EEF2F6;"></circle>
+                    <circle id="radialScoreCircle" class="radial-gauge-progress" cx="70" cy="70" r="54" style="stroke-width:9; stroke:${rankColor}; stroke-dasharray:340; stroke-dashoffset:340;"></circle>
+                  </svg>
+                  <div class="radial-gauge-center">
+                    <div class="rank-letter-display num-readout" style="color:${rankColor}; font-size:38px;">${rankLetter}</div>
+                    <div class="rank-points-counter num-readout" style="font-size:12px;"><span id="txtScoreCount">0</span> / 100</div>
                   </div>
                 </div>
 
-                <!-- Col 3: Scannable QR Code Digital Certificate -->
-                <div class="qr-certificate-box font-technical">
-                  <div style="font-size:12px; font-weight:800; color:#090D16;">📲 สแกนรับเกียรติบัตรดิจิทัล</div>
-                  <div style="font-size:11px; color:#64748B;">สแกนด้วยกล้องมือถือเพื่อดาวน์โหลดรูปเกียรติบัตรของกลุ่มคุณ</div>
-                  <div class="qr-canvas-frame">
-                    <canvas id="qrCanvas"></canvas>
-                  </div>
-                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                    เปิดดูเกียรติบัตรบนจอนี้
-                  </button>
-                  <button onclick="GameStateManager.downloadCertificatePng()" class="btn-quick-reset" style="width:100%; height:32px; font-size:11.5px; background:#F8FAFC; color:#0284C7; border:1px solid #BAE6FD;">
-                    📥 บันทึกรูป PNG ลงเครื่อง
-                  </button>
+                <div style="background:#090D16; color:#FFFFFF; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; width:100%; box-sizing:border-box;">
+                  กลุ่มตัวแทน: กลุ่มที่ ${this.selectedTeam}
+                </div>
+
+                <div style="background:#FEF3C7; border:1px solid #FDE68A; color:#92400E; font-size:11px; font-weight:700; padding:4px 8px; border-radius:8px; width:100%; box-sizing:border-box;">
+                  🏆 MVP SQUAD: กลุ่มที่ ${this.mvpGroup}
+                </div>
+
+                <div class="mini-rosc-strip" style="width:100%; padding:6px 8px; box-sizing:border-box; margin:0;">
+                  <div style="font-size:11px; font-weight:800; color:#059669;">ROSC • รอดชีวิต 100%</div>
+                  <div style="font-size:10.5px; color:#64748B;">HR 84 • SpO2 99%</div>
                 </div>
               </div>
 
-              <!-- Footer Banner -->
-              <div class="scoreboard-footer-meta" style="margin-top:12px;">
-                <div class="footer-centerpiece font-technical">
-                  MDBUU OPEN HOUSE 2026/2027 • คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา “ช่วยให้เป็น เห็นแล้วกล้าทำ”
+              <!-- Column 2 (1fr): Clinical Breakdown & Daily Hall of Fame -->
+              <div class="victory-bento-col" style="justify-content:flex-start; gap:8px;">
+                <div style="font-size:12px; font-weight:800; color:#090D16;" class="font-technical">
+                  📊 สรุปคะแนนรายด่าน (PER-STAGE BREAKDOWN):
                 </div>
-                <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset font-technical" title="เริ่มรอบใหม่ทันที [R]">
-                  เริ่มรอบถัดไป (Quick Reset - R)
-                </button>
+
+                <div class="stage-scores-grid font-technical" style="gap:6px; margin:0;">
+                  <div class="stage-score-card ${this.stageScores[1] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">01 ปลอดภัย</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[1]} / 15</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[2] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">02 เรียกช่วย</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[2]} / 10</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[3] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">03 โทร 1669</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[3]} / 15</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[4] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">04 หายใจเฮือก</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[4]} / 15</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[5] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">05 CPR/AED</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[5]} / 15</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[6] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">06 ล้างแผล</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[6]} / 10</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[7] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">07 ห้ามเลือด</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[7]} / 10</span>
+                  </div>
+                  <div class="stage-score-card ${this.stageScores[8] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
+                    <span class="stage-score-num" style="font-size:10px;">08 ดามแขน</span>
+                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[8]} / 10</span>
+                  </div>
+                </div>
+
+                <!-- Daily Hall of Fame Top 3 Table -->
+                <div class="leaderboard-box font-technical" style="margin:0; padding:8px 10px; flex:1; min-height:0; overflow:hidden;">
+                  <div class="leaderboard-title" style="font-size:11px; margin-bottom:4px;">
+                    🏆 ตารางคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 3)
+                  </div>
+                  <table class="leaderboard-table" style="font-size:11px;">
+                    <thead>
+                      <tr>
+                        <th style="padding:3px 6px;">อันดับ</th>
+                        <th style="padding:3px 6px;">กลุ่ม</th>
+                        <th style="padding:3px 6px;">คะแนน</th>
+                        <th style="padding:3px 6px;">เกรด</th>
+                        <th style="padding:3px 6px;">เวลา</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${top3.length > 0 ? top3.map((entry, idx) => {
+                        const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : '🥉');
+                        return `
+                          <tr class="${entry.team === `กลุ่มที่ ${this.selectedTeam}` ? 'current-team' : ''}">
+                            <td style="padding:3px 6px;">${medal} #${idx + 1}</td>
+                            <td style="padding:3px 6px;">${entry.team}</td>
+                            <td style="padding:3px 6px; font-weight:800;">${entry.score}</td>
+                            <td style="padding:3px 6px;">${entry.rank}</td>
+                            <td style="padding:3px 6px;">${entry.timeStr}</td>
+                          </tr>
+                        `;
+                      }).join('') : `
+                        <tr>
+                          <td colspan="5" style="text-align:center; color:#94A3B8; padding:8px;">กำลังบันทึกคะแนนกลุ่มแรกของวัน...</td>
+                        </tr>
+                      `}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Column 3 (245px): Digital Diploma & Action Buttons -->
+              <div class="victory-bento-col font-technical" style="align-items:center; text-align:center;">
+                <div style="font-size:11.5px; font-weight:800; color:#090D16;">
+                  📱 สแกนรับเกียรติบัตรรายบุคคล
+                </div>
+                <div style="font-size:10.5px; color:#64748B;">
+                  สแกนด้วยกล้องมือถือเพื่อรับภาพเกียรติบัตรของคุณ
+                </div>
+
+                <div class="qr-canvas-frame" style="width:124px; height:124px; padding:3px; margin:2px auto;">
+                  <canvas id="qrCanvas" style="width:118px; height:118px;"></canvas>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:6px; width:100%; margin-top:4px;">
+                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert" style="width:100%; height:32px; font-size:11.5px; justify-content:center; padding:0 8px; margin:0;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    📜 เปิดดูเกียรติบัตรกลุ่ม
+                  </button>
+                  <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset" style="width:100%; height:32px; font-size:11.5px; justify-content:center; padding:0 8px; margin:0; background:#090D16; color:#FFFFFF; border:none;" title="เริ่มรอบใหม่ทันที [R]">
+                    🔄 เริ่มรอบถัดไป (Reset - R)
+                  </button>
+                </div>
               </div>
             </div>
           `;
@@ -9902,9 +10141,10 @@
         this.cprStrictRhythm = !this.cprStrictRhythm;
         const btn = document.getElementById('btnCprModeToggle');
         if (btn) {
-          btn.innerText = this.cprStrictRhythm ? 'โหมดจังหวะ: เข้มงวด 110 BPM' : 'โหมดจังหวะ: ช่วยเหลือ (Assist)';
+          btn.innerText = `โหมดจังหวะ: ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM' : 'มาตรฐาน (ยืดหยุ่น)'}`;
           btn.style.color = this.cprStrictRhythm ? '#0284C7' : '#059669';
         }
+        showToast(`สลับเป็นโหมด ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM (±95ms/165ms)' : 'มาตรฐาน (ยืดหยุ่น ±135ms/235ms)'}`);
       }
 
       updateCprAccuracyBar(pct, status) {
@@ -10263,8 +10503,8 @@
 
         if (!this.consumedBeatIndices) this.consumedBeatIndices = new Set();
 
-        // 3. Explicit Test Bypass (Shift+Click or Assist Mode)
-        if (isBypass || !this.cprStrictRhythm) {
+        // 3. Explicit Test Bypass (Shift+Click or Test Button)
+        if (isBypass) {
           this.consumedBeatIndices.add(nearestBeatIdx);
           this.cprCount = Math.min(30, this.cprCount + 1);
           flashTarget('#10B981');
@@ -10285,7 +10525,7 @@
 
         // 4. Anti-Double-Tap on the same beat note
         if (this.consumedBeatIndices.has(nearestBeatIdx)) {
-          this.cprMissCooldownUntil = now + 260;
+          this.cprMissCooldownUntil = now + (this.cprStrictRhythm ? 240 : 160);
           flashTarget('#F59E0B');
           if (badge) {
             badge.className = 'cpr-timing-judge-badge warn font-technical';
@@ -10294,16 +10534,19 @@
           return false;
         }
 
-        // 5. Strict Timing Window: Must hit within ±105ms of the beat note entering the target ring!
-        if (deltaMs <= 105) {
+        // 5. V18.0 Dual-Threshold Timing Windows (Forgiving Standard vs Strict Mode)
+        const perfectWindow = this.cprStrictRhythm ? 95 : 135;
+        const goodWindow = this.cprStrictRhythm ? 165 : 235;
+
+        if (deltaMs <= goodWindow) {
           this.consumedBeatIndices.add(nearestBeatIdx);
           this.cprCount = Math.min(30, this.cprCount + 1);
 
           flashTarget('#10B981');
           window.ECGEngine.triggerCompressionSpike();
 
-          const isPerfect = deltaMs <= 55;
-          const accPct = Math.max(60, Math.round((1 - deltaMs / 120) * 100));
+          const isPerfect = deltaMs <= perfectWindow;
+          const accPct = Math.max(70, Math.round((1 - deltaMs / (goodWindow * 1.2)) * 100));
           this.updateCprAccuracyBar(accPct, isPerfect ? 'PERFECT' : 'GOOD');
 
           if (badge) {
@@ -10312,7 +10555,7 @@
               : 'cpr-timing-judge-badge good font-technical';
             badge.innerText = isPerfect
               ? `✓ PERFECT! ตรงจังหวะเป๊ะ (${Math.round(deltaMs)}ms)`
-              : `✓ GOOD! จังหวะดี (${Math.round(deltaMs)}ms)`;
+              : `✓ GOOD! จังหวะดีมาก (${Math.round(deltaMs)}ms)`;
           }
 
           const txt = document.getElementById('txtCprCount');
@@ -10324,14 +10567,17 @@
           }
           return true;
         } else {
-          // 6. Off-Beat Miss: Lock out for 280ms so button mashing can NEVER pass!
-          this.cprMissCooldownUntil = now + 280;
+          // 6. Off-Beat Miss: Forgiving 180ms cooldown (or 280ms if strict) so rhythm isn't lost
+          const missCooldown = this.cprStrictRhythm ? 280 : 180;
+          this.cprMissCooldownUntil = now + missCooldown;
           flashTarget('#E11D48');
           SoundEngine.playErrorBuzz();
-          this.updateCprAccuracyBar(15, 'MISS');
+          this.updateCprAccuracyBar(25, 'MISS');
           if (badge) {
             badge.className = 'cpr-timing-judge-badge miss font-technical';
-            badge.innerText = '✕ ผิดจังหวะ! กดตอนลูกไฟเข้าวงกลม';
+            badge.innerText = this.cprStrictRhythm
+              ? '✕ ผิดจังหวะ! กดตอนลูกไฟเข้าวงกลม'
+              : '✕ เร็วไปนิด / ช้าไปนิด รอจังหวะบีตถัดไป';
           }
           return false;
         }
@@ -10803,10 +11049,46 @@
             group: state.group
           });
 
-          // Send Join notification to Host
-          RealtimeEngine.send('PLAYER_JOIN', {
-            name: state.name,
-            group: state.group
+          // Setup JOIN_ACK listener & auto-retry handshake (V18.0)
+          state.joinAcked = false;
+          let retryCount = 0;
+
+          const sendJoinPacket = () => {
+            RealtimeEngine.send('PLAYER_JOIN', {
+              name: state.name,
+              group: state.group
+            });
+          };
+
+          // Send immediate join packet
+          sendJoinPacket();
+
+          if (state.joinRetryTimer) clearInterval(state.joinRetryTimer);
+          state.joinRetryTimer = setInterval(() => {
+            if (state.joinAcked || retryCount >= 10) {
+              clearInterval(state.joinRetryTimer);
+              state.joinRetryTimer = null;
+              return;
+            }
+            retryCount++;
+            console.log(`[Mobile Handshake] Auto-retrying PLAYER_JOIN (${retryCount}/10)...`);
+            sendJoinPacket();
+            const badge = document.getElementById('mTxtConnStatus');
+            if (badge && !state.joinAcked) {
+              badge.innerHTML = `<span style="color:#D97706;">🟡 กำลังเชื่อมต่อห้อง... (${retryCount}/10)</span>`;
+            }
+          }, 1500);
+
+          RealtimeEngine.on('JOIN_ACK', (msg) => {
+            state.joinAcked = true;
+            if (state.joinRetryTimer) {
+              clearInterval(state.joinRetryTimer);
+              state.joinRetryTimer = null;
+            }
+            const badge = document.getElementById('mTxtConnStatus');
+            if (badge) {
+              badge.innerHTML = `<span style="color:#059669;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>`;
+            }
           });
 
           updateHeader();
@@ -10819,17 +11101,20 @@
         if (!body) return;
 
         body.innerHTML = `
-          <div class="mobile-card-white font-technical" style="text-align:center; padding:30px 20px;">
-            <div style="width:64px; height:64px; border-radius:999px; background:#ECFDF5; border:2px solid #A7F3D0; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px;">
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:24px 18px;">
+            <div style="width:58px; height:58px; border-radius:999px; background:#ECFDF5; border:2px solid #A7F3D0; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:26px;">
               🫀
             </div>
-            <h3 style="font-size:18px; font-weight:800; color:#090D16; margin:0 0 6px;">
-              เชื่อมต่อห้องสำเร็จแล้ว!
+            <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 4px;">
+              ห้องปฏิบัติการกู้ชีพฉุกเฉิน
             </h3>
-            <div style="font-size:14px; font-weight:700; color:#059669; margin-bottom:12px;">
+            <div style="font-size:14px; font-weight:700; color:#059669; margin-bottom:8px;">
               คุณอยู่ใน: กลุ่มที่ ${state.group} • ${state.name}
             </div>
-            <div style="font-size:12.5px; color:#64748B; line-height:1.5;">
+            <div id="mTxtConnStatus" style="font-size:12px; font-weight:700; margin-bottom:10px;">
+              ${state.joinAcked ? `<span style="color:#059669;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>` : `<span style="color:#D97706;">🟡 กำลังเชื่อมต่อห้อง #${state.pin}...</span>`}
+            </div>
+            <div style="font-size:12px; color:#64748B; line-height:1.45;">
               รอตัวแทนและพี่วิทยากรเริ่มภารกิจหน้าห้อง...<br>
               เมื่อเริ่มด่าน หน้าจอนี้จะเปลี่ยนเป็น <strong>ระบบโหวต / ปั๊มหัวใจ CPR / ช่วยห้ามเลือด</strong> โดยอัตโนมัติครับ!
             </div>
@@ -10848,7 +11133,7 @@
               ด่านที่ ${stageNum} • กำลังสำรวจอาการ
             </h3>
             <div style="font-size:13px; color:#64748B; line-height:1.4;">
-              รอตัวแทนหน้าห้องพูดคำว่า <strong>"สำรวจ"</strong> เพื่อปลดล็อกปุ่มโหวตอุปกรณ์บนมือถือของคุณ...
+              รอตัวแทนหน้าห้องพูดตอบรับเพื่อเริ่มตรวจสอบ... เมื่อเริ่มแล้วปุ่มโหวตอุปกรณ์จะปรากฏบนจอนี้ทันที
             </div>
           </div>
         `;
@@ -10986,7 +11271,7 @@
               ร่วมกันกดปุ่มนี้รัวๆ เพื่อปลดล็อกพิกัดและอาการส่งขึ้นจอใหญ่
             </div>
 
-            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush">
+            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush" ontouchstart="event.preventDefault();">
               <span style="font-size:32px;">⚡</span>
               <span style="font-size:18px; font-weight:900;">กดรัวๆ!</span>
               <span style="font-size:11px; opacity:0.85;">TAP HERE</span>
@@ -11044,7 +11329,7 @@
               แตะให้ตรงจังหวะไฟและเสียงบีต เพื่อช่วยเพิ่มคะแนน CPR ให้กลุ่มของคุณ!
             </div>
 
-            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad">
+            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad" ontouchstart="event.preventDefault();">
               <span style="font-size:34px;">🫀</span>
               <span style="font-size:17px; font-weight:900;">กดจังหวะนี้!</span>
               <span style="font-size:11px; opacity:0.9;">110 BPM</span>
