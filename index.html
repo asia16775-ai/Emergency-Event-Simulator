@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Prompt:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <!-- MQTT over Secure WebSockets (EMQX Public Broker wss://broker.emqx.io:8084/mqtt) -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
   <style>
 /* ==========================================================================
@@ -1226,15 +1228,67 @@
       font-weight: 500;
     }
 
-    /* Stage 9 Summary Scoreboard */
+    /* Clinical AR Laser Scanline & Pathology Callout */
+    .ar-scanline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #38BDF8, #10B981, #38BDF8, transparent);
+      box-shadow: 0 0 18px 4px rgba(16, 185, 129, 0.65);
+      z-index: 8;
+      pointer-events: none;
+      animation: arScanSweep 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes arScanSweep {
+      0% { top: 0%; opacity: 1; }
+      85% { top: 96%; opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+    .ar-pathology-pin {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(9, 13, 22, 0.84);
+      backdrop-filter: blur(8px);
+      color: #FFFFFF;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-left: 4px solid #10B981;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 7;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      animation: toastFade 0.35s ease backwards;
+      animation-delay: 0.35s;
+    }
+
+    /* Stage 9 Summary Scoreboard (Compact Fit & Zero Bottom Clipping) */
     .hero-scoreboard-container {
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
-      border-radius: 20px;
-      padding: 24px 30px;
+      border-radius: 18px;
+      padding: 14px 20px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      justify-content: space-between;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .scoreboard-footer-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #E2E8F0;
+      padding-top: 10px;
+      margin-top: 4px !important;
+      flex-shrink: 0;
     }
     .scoreboard-top-split {
       display: grid;
@@ -2676,22 +2730,24 @@
     /* Stage 9 Summary Grid & Leaderboard */
     .summary-v10-grid {
       display: grid;
-      grid-template-columns: 280px 1fr 280px;
-      gap: 20px;
-      align-items: stretch;
-      margin-top: 10px;
+      grid-template-columns: 230px 1fr 240px;
+      gap: 16px;
+      align-items: center;
+      margin-top: 0;
+      flex: 1;
+      min-height: 0;
     }
     .stage-scores-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-top: 10px;
+      gap: 6px;
+      margin-top: 4px;
     }
     .stage-score-card {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
-      padding: 8px 10px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -2722,13 +2778,13 @@
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       border-radius: 14px;
-      padding: 14px 18px;
+      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 4px;
     }
     .leaderboard-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       color: #090D16;
       display: flex;
@@ -2738,17 +2794,17 @@
     .leaderboard-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11.5px;
     }
     .leaderboard-table th {
       text-align: left;
       color: #64748B;
       font-weight: 700;
-      padding: 4px 6px;
+      padding: 3px 6px;
       border-bottom: 1px solid #E2E8F0;
     }
     .leaderboard-table td {
-      padding: 6px;
+      padding: 3px 6px;
       border-bottom: 1px solid #F1F5F9;
       color: #090D16;
       font-weight: 600;
@@ -2859,6 +2915,618 @@
       background: #1E293B;
       transform: translateY(-1px);
     }
+  
+    /* ==========================================================================
+       V14.0 CO-OP KAHOOT MULTIPLAYER & AUDIENCE CONTROLLER STYLES
+       ========================================================================== */
+    /* Lobby 3-Zone Additions */
+    .lobby-roster-box {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .lobby-roster-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #090D16;
+    }
+    .lobby-roster-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 95px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .player-roster-chip {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      animation: chipPopIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    @keyframes chipPopIn {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .player-roster-chip.bot-chip {
+      border-color: #BAE6FD;
+      background: #F0F9FF;
+      color: #0284C7;
+    }
+    .lobby-qr-join-card {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.04);
+    }
+    .btn-dev-mobile-sim {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #0284C7;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-dev-mobile-sim:hover {
+      background: #E2E8F0;
+      color: #0369A1;
+    }
+    .btn-bot-toggle {
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #059669;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-bot-toggle.active {
+      background: #059669;
+      color: #FFFFFF;
+      border-color: #047857;
+    }
+
+    /* Live Vote Status Board (Choice Step 2: AUDIENCE_VOTING) */
+    .vote-status-board-card {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 4px 20px rgba(15,23,42,0.04);
+      flex: 1;
+      min-height: 0;
+      justify-content: space-between;
+    }
+    .vote-board-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0284C7;
+      background: #F0F9FF;
+      border: 1px solid #BAE6FD;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .live-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #0284C7;
+      box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7);
+      animation: dotPulse 1.4s infinite;
+    }
+    @keyframes dotPulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(2, 132, 199, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+    }
+    .btn-close-vote-clean {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      color: #D97706;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-close-vote-clean:hover {
+      background: #FDE68A;
+      color: #B45309;
+    }
+    .vote-timer-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .vote-timer-clock {
+      font-size: 44px;
+      font-weight: 900;
+      color: #090D16;
+      width: 64px;
+      text-align: center;
+      line-height: 1;
+    }
+    .vote-timer-progress-wrap {
+      flex: 1;
+      height: 14px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .vote-timer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #059669 0%, #38BDF8 100%);
+      border-radius: 999px;
+      width: 100%;
+      transition: width 0.15s linear;
+    }
+    .vote-count-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #475569;
+    }
+    .vote-groups-participation-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .vote-group-status-pill {
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #64748B;
+      transition: all 0.2s;
+    }
+    .vote-group-status-pill.voted {
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+      color: #059669;
+    }
+    .vote-group-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #CBD5E1;
+    }
+    .vote-group-status-pill.voted .vote-group-dot {
+      background: #10B981;
+      box-shadow: 0 0 6px rgba(16,185,129,0.5);
+    }
+
+    /* Hero Decision Card (Step 3: HERO_DECISION) */
+    .hero-decision-card-v14 {
+      background: #FFFFFF;
+      border: 2px solid #059669;
+      border-radius: 18px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 8px 30px rgba(5,150,105,0.08);
+      animation: cardFadeUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+    @keyframes cardFadeUp {
+      0% { transform: translateY(12px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .hero-decision-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #065F46;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      padding: 6px 14px;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+    .winning-choice-display-box {
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .winning-choice-display-box .equipment-icon-wrap.large {
+      width: 58px;
+      height: 58px;
+      background: #ECFDF5;
+      border-color: #A7F3D0;
+    }
+    .choice-equipment-title.large {
+      font-size: 18px;
+      font-weight: 800;
+      color: #090D16;
+    }
+    .hero-action-buttons-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 12px;
+    }
+    .btn-hero-confirm {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #FFFFFF;
+      border: 1px solid #065F46;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(5,150,105,0.25);
+      transition: all 0.15s;
+    }
+    .btn-hero-confirm:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(5,150,105,0.35);
+    }
+    .btn-hero-revote {
+      background: #FFFBEB;
+      color: #D97706;
+      border: 1px solid #FDE68A;
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .btn-hero-revote:hover {
+      background: #FEF3C7;
+      color: #B45309;
+    }
+
+    /* Stage 3 Co-op Tap Rush Styling */
+    .stage3-locked-wrap {
+      background: #F8FAFC;
+      border: 1.5px dashed #CBD5E1;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .stage3-locked-text {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stage3-tap-meter-container {
+      width: 180px;
+      height: 10px;
+      background: #E2E8F0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .stage3-tap-meter-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #38BDF8, #10B981);
+      width: 0%;
+      transition: width 0.12s ease;
+    }
+
+    /* Stage 5B AED Violation Alert Banner */
+    .aed-violation-toast {
+      background: #FFF1F2;
+      border: 1.5px solid #FECDD3;
+      border-left: 5px solid #E11D48;
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #9F1239;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: alertBounce 0.4s ease;
+    }
+    @keyframes alertBounce {
+      0%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-4px); }
+      60% { transform: translateY(2px); }
+    }
+
+    /* Stage 7B Direct Pressure Hold Bar */
+    .pressure-hold-overlay {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pressure-hold-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #090D16;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pressure-gauge-track {
+      height: 16px;
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .pressure-gauge-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #E11D48 0%, #059669 100%);
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Stage 9 MVP Squad Badge */
+    .mvp-squad-badge {
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      border: 1.5px solid #D4AF37;
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #92400E;
+      box-shadow: 0 4px 14px rgba(212,175,55,0.18);
+      margin-top: 6px;
+    }
+
+    /* ==========================================================================
+       MOBILE AUDIENCE CONTROLLER UI (?play=1)
+       ========================================================================== */
+    .mobile-app-shell {
+      min-height: 100vh;
+      width: 100vw;
+      background: #F4F6F9;
+      color: #090D16;
+      font-family: 'IBM Plex Sans Thai', 'Prompt', sans-serif;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .mobile-top-bar {
+      height: 52px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 0 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .mobile-top-bar .user-badge {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #090D16;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mobile-top-bar .pin-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0284C7;
+      background: #F0F9FF;
+      border: 1px solid #BAE6FD;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .mobile-top-bar .score-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: #059669;
+      background: #ECFDF5;
+      border: 1px solid #A7F3D0;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .mobile-content-box {
+      flex: 1;
+      padding: 16px;
+      max-width: 440px;
+      margin: 0 auto;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .mobile-card-white {
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-group-pill-btn {
+      padding: 10px 4px;
+      background: #F8FAFC;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #334155;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .mobile-group-pill-btn.selected {
+      background: #059669;
+      color: #FFFFFF;
+      border-color: #047857;
+      box-shadow: 0 2px 8px rgba(5,150,105,0.25);
+    }
+    .mobile-choice-tap-btn {
+      background: #FFFFFF;
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .mobile-choice-tap-btn:active {
+      transform: scale(0.98);
+      background: #F8FAFC;
+    }
+    .mobile-choice-tap-btn.selected-choice {
+      border-color: #059669;
+      background: #ECFDF5;
+      box-shadow: 0 4px 14px rgba(5,150,105,0.15);
+    }
+    .mobile-tap-rush-circle {
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #38BDF8 0%, #0284C7 100%);
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      border: 6px solid #BAE6FD;
+      box-shadow: 0 8px 30px rgba(2,132,199,0.3);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s;
+    }
+    .mobile-tap-rush-circle:active {
+      transform: scale(0.92);
+      background: radial-gradient(circle, #0284C7 0%, #0369A1 100%);
+    }
+    .mobile-cpr-heart-pad {
+      width: 170px;
+      height: 170px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #10B981 0%, #059669 100%);
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      border: 6px solid #A7F3D0;
+      box-shadow: 0 8px 30px rgba(16,185,129,0.35);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s;
+      animation: heartbeatPulse 0.545s infinite;
+    }
+    .mobile-cpr-heart-pad:active {
+      transform: scale(0.90) !important;
+    }
+    @keyframes heartbeatPulse {
+      0% { transform: scale(1); }
+      15% { transform: scale(1.08); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.05); }
+      60% { transform: scale(1); }
+    }
+    .mobile-aed-danger-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #E11D48;
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      z-index: 9999;
+      animation: aedWarningFlash 0.5s infinite alternate;
+    }
+    @keyframes aedWarningFlash {
+      0% { background: #E11D48; }
+      100% { background: #881337; }
+    }
+
   </style>
 </head>
 <body class="lobby-mode">
@@ -2993,10 +3661,10 @@
     </div>
   </main>
 
-    <!-- Lobby Intro Modal (Flagship 2-Column Command Showcase) -->
+    <!-- Lobby Intro Modal (Flagship 3-Zone Command Showcase V14) -->
   <div id="modalLobby" class="lobby-modal-backdrop">
     <div class="lobby-bento-card">
-      <!-- Left Column: Mission Overview & Live Hardware Telemetry -->
+      <!-- Left Column: Mission Overview & Live Connected Co-Responders Roster -->
       <div class="lobby-col-left">
         <div>
           <div class="lobby-status-ticker font-technical">
@@ -3007,7 +3675,7 @@
             HEARTBEAT RUSH
           </h1>
           <p class="lobby-sub-clean">
-            ระบบจำลองสถานการณ์ฉุกเฉินและการปฐมพยาบาลเบื้องต้น
+            ระบบจำลองสถานการณ์ฉุกเฉินและการปฐมพยาบาลเบื้องต้น (Co-op Multiplayer)
           </p>
           <div class="lobby-motto-pill font-technical">
             “ช่วยให้เป็น เห็นแล้วกล้าทำ” — ฐาน CPR และ Emergency First Aid
@@ -3026,19 +3694,49 @@
           <div class="lobby-proto-item"><span class="proto-num">08</span><span class="proto-name">ดามกระดูกและคล้องแขน</span></div>
         </div>
 
+        <!-- Live Joined Players Wall (Kahoot-style Roster) -->
+        <div class="lobby-roster-box font-technical">
+          <div class="lobby-roster-header">
+            <span>ทีมผู้ช่วยแพทย์ที่เชื่อมต่อแล้ว (LIVE CO-RESPONDERS: <strong id="txtLobbyPlayerCount" style="color:#059669;">0</strong> คน)</span>
+            <span style="font-size:10.5px; color:#64748B;">เรียลไทม์ผ่านมือถือ</span>
+          </div>
+          <div id="lobbyPlayersRoster" class="lobby-roster-chips">
+            <span style="font-size:11px; color:#94A3B8; padding:4px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>
+          </div>
+        </div>
+
         <!-- Bottom System Telemetry Bar -->
         <div class="lobby-telemetry-bar font-technical">
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> ระบบไมค์: พร้อมทำงาน</div>
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG มอนิเตอร์: 60 FPS</div>
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> เวลาภารกิจ: 08:00 นาที</div>
+          <div class="lobby-tel-item"><span class="tel-dot active"></span> ไมค์: พร้อม</div>
+          <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG: 60 FPS</div>
+          <div class="lobby-tel-item"><span class="tel-dot active"></span> ROOM PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#0284C7;">----</strong></div>
         </div>
       </div>
 
-      <!-- Right Column: Split-Flap Randomizer & Launch Console -->
+      <!-- Right Column: Scannable QR Join Card + Team Randomizer + Bot Simulator -->
       <div class="lobby-col-right">
+        <!-- Scannable QR Code Join Card -->
+        <div class="lobby-qr-join-card font-technical">
+          <canvas id="lobbyQrCanvas" width="130" height="130" style="width:110px; height:110px; border-radius:8px; border:1px solid #E2E8F0;"></canvas>
+          <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+            <div style="font-size:11px; font-weight:700; color:#64748B;">สแกนเพื่อร่วมเล่นด้วยมือถือ:</div>
+            <div style="font-size:22px; font-weight:800; color:#0284C7; letter-spacing:0.02em;">
+              PIN: #<span id="txtLobbyPin" class="num-readout">----</span>
+            </div>
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+              <button onclick="GameStateManager.openMobileSimulator()" class="btn-dev-mobile-sim font-technical" title="เปิดหน้าต่างจำลองมือถือขนาด 390x780 ข้างๆ จอนี้">
+                📱 เปิดจอมือถือจำลอง
+              </button>
+              <button id="btnLobbyBotToggle" onclick="GameStateManager.toggleBotSimulator()" class="btn-bot-toggle font-technical" title="จำลองผู้เล่น 25 คนร่วมโหวตและช่วย CPR">
+                🤖 บอท 25 คน: <span id="txtBotStatus">ปิด</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="lobby-team-selector-box">
           <span class="lobby-random-label font-technical">
-            ระบบสุ่มกลุ่มตัวแทนกู้ชีพ (กลุ่ม 01–10)
+            สุ่มทีมตัวแทนหน้าห้อง (กลุ่ม 01–10)
           </span>
 
           <!-- Mechanical Split-Flap Display -->
@@ -3051,7 +3749,7 @@
 
           <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/></svg>
-            สุ่มเลย!
+            สุ่มตัวแทน!
           </button>
           <div id="txtTeamCallout" class="font-technical">กลุ่มตัวแทน: กลุ่มที่ 03</div>
         </div>
@@ -3345,15 +4043,48 @@
         return this.isMuted;
       }
 
+      isMicCurrentlyListening() {
+        if (!window.GameStateManager) return false;
+        const gm = window.GameStateManager;
+        // Mute background pulse beeps whenever STT is running, or during Stage 2 (Shout), Stage 3 (1669), Stage 5 (CPR/AED), or Game Over retry listening
+        return Boolean(
+          (window.MicSensor && window.MicSensor.isSttRunning) ||
+          gm.currentStage === 2 ||
+          gm.currentStage === 3 ||
+          gm.currentStage === 5 ||
+          gm.isGameOver ||
+          !window.isSystemSpeaking
+        );
+      }
+
       startPulseScheduler(freq = 620, intervalMs = 1580) {
         this.stopPulseScheduler();
         this.pulseFreq = freq;
         this.pulseIntervalMs = intervalMs;
         const tick = () => {
-          this.playPulseBeep(this.pulseFreq, 0.08);
+          // Always trigger the 100% silent visual heartbeat pulse on the UI readout
+          this.triggerVisualHeartPulse();
+          // ONLY play audible beep if the microphone is NOT actively listening!
+          if (!this.isMicCurrentlyListening() && !window.isSystemSpeaking) {
+            this.playPulseBeep(this.pulseFreq, 0.06);
+          }
           this.pulseTimer = setTimeout(tick, this.pulseIntervalMs);
         };
         tick();
+      }
+
+      triggerVisualHeartPulse() {
+        const elHr = document.getElementById('txtHeartRate');
+        const dot = document.querySelector('.ecg-status-dot');
+        if (elHr) {
+          elHr.style.transition = 'transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          elHr.style.transform = 'scale(1.12)';
+          setTimeout(() => { if (elHr) elHr.style.transform = 'scale(1)'; }, 140);
+        }
+        if (dot) {
+          dot.style.transform = 'scale(1.45)';
+          setTimeout(() => { if (dot) dot.style.transform = 'scale(1)'; }, 140);
+        }
       }
 
       stopPulseScheduler() {
@@ -3364,6 +4095,7 @@
       }
 
       playPulseBeep(freq = 620, duration = 0.08) {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
@@ -3380,6 +4112,7 @@
       }
 
       playWarningTone(freq = 820, duration = 0.2) {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
@@ -3396,6 +4129,7 @@
       }
 
       playIntercomChime() {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         const freqs = [660, 880];
         freqs.forEach((f, i) => {
@@ -3417,6 +4151,7 @@
       }
 
       playTelephoneRing() {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc1 = this.ctx.createOscillator();
@@ -3435,6 +4170,7 @@
       }
 
       playStageClear() {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         const chords = [523.25, 659.25, 783.99]; // C Major
         chords.forEach((freq, idx) => {
@@ -3456,6 +4192,7 @@
       }
 
       playErrorBuzz() {
+        window.lastSpeakerBeepTime = performance.now();
         if (this.isMuted || !this.ctx || !this.masterGain) return;
         try {
           const osc = this.ctx.createOscillator();
@@ -3821,6 +4558,423 @@
 
         window.speechSynthesis.speak(utter);
       });
+    }
+
+    
+    // =========================================================================
+    // V14.0 REALTIME CO-OP MULTIPLAYER ENGINE (MQTT WEBSOCKETS + BROADCASTCHANNEL)
+    // =========================================================================
+    class RealtimeSyncEngineCore {
+      constructor() {
+        this.sessionPin = '';
+        this.isHost = false;
+        this.playerId = 'host';
+        this.playerName = 'Projector Host';
+        this.playerGroup = 'HOST';
+        this.channel = null;
+        this.mqttClient = null;
+        this.topic = '';
+        this.handlers = {};
+        this.processedMsgKeys = new Set();
+      }
+
+      init(pin, isHost = false, playerInfo = null) {
+        this.sessionPin = String(pin);
+        this.isHost = isHost;
+        if (playerInfo) {
+          this.playerId = playerInfo.id || ('p_' + Math.random().toString(36).substr(2, 8));
+          this.playerName = playerInfo.name || 'ผู้ร่วมกู้ชีพ';
+          this.playerGroup = playerInfo.group || '01';
+        } else {
+          this.playerId = 'host';
+          this.playerName = 'Projector Host';
+          this.playerGroup = 'HOST';
+        }
+
+        this.topic = `mdbuu/heartbeat-rush/room-${this.sessionPin}`;
+
+        // 1. Setup local BroadcastChannel (instant zero-latency sync between tabs/popups)
+        try {
+          if (this.channel) this.channel.close();
+          this.channel = new BroadcastChannel('mdbuu_heartbeat_multiplayer');
+          this.channel.onmessage = (e) => this.handleRawMessage(e.data);
+        } catch(err) {
+          console.warn('BroadcastChannel error:', err);
+        }
+
+        // 2. Setup MQTT over Secure WebSockets (EMQX Public Broker)
+        this.connectMqtt();
+      }
+
+      connectMqtt() {
+        if (typeof mqtt === 'undefined') {
+          console.log('[Realtime] MQTT library not present, operating via BroadcastChannel.');
+          return;
+        }
+        try {
+          if (this.mqttClient) {
+            try { this.mqttClient.end(true); } catch(e) {}
+          }
+
+          const clientId = 'mdbuu_' + (this.isHost ? 'h_' : 'm_') + Math.random().toString(36).substr(2, 8);
+          this.mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+            clientId: clientId,
+            clean: true,
+            connectTimeout: 8000,
+            reconnectPeriod: 4000
+          });
+
+          this.mqttClient.on('connect', () => {
+            console.log(`[MQTT] Connected for room #${this.sessionPin}`);
+            this.mqttClient.subscribe(this.topic, { qos: 0 }, (err) => {
+              if (!err) console.log(`[MQTT] Subscribed to ${this.topic}`);
+            });
+          });
+
+          this.mqttClient.on('message', (t, payload) => {
+            try {
+              const data = JSON.parse(payload.toString());
+              this.handleRawMessage(data);
+            } catch(e) {}
+          });
+
+          this.mqttClient.on('error', (err) => {
+            console.warn('[MQTT] Broker notice:', err);
+          });
+        } catch(err) {
+          console.warn('[MQTT] Connection notice:', err);
+        }
+      }
+
+      on(type, handler) {
+        if (!this.handlers[type]) this.handlers[type] = [];
+        this.handlers[type].push(handler);
+      }
+
+      send(type, payload = {}) {
+        const msg = {
+          pin: this.sessionPin,
+          senderId: this.playerId,
+          name: this.playerName,
+          group: this.playerGroup,
+          type: type,
+          payload: payload,
+          ts: Date.now()
+        };
+
+        const key = `${msg.senderId}_${msg.type}_${msg.ts}`;
+        this.processedMsgKeys.add(key);
+
+        if (this.channel) {
+          try { this.channel.postMessage(msg); } catch(e) {}
+        }
+        if (this.mqttClient && this.mqttClient.connected) {
+          try { this.mqttClient.publish(this.topic, JSON.stringify(msg)); } catch(e) {}
+        }
+      }
+
+      handleRawMessage(msg) {
+        if (!msg || typeof msg !== 'object') return;
+
+        // Anti-Troll PIN validation: ignore foreign room packets unless SESSION_CLOSED
+        if (msg.type !== 'SESSION_CLOSED' && msg.pin !== this.sessionPin) return;
+
+        // Deduplicate
+        const key = `${msg.senderId}_${msg.type}_${msg.ts}`;
+        if (this.processedMsgKeys.has(key)) return;
+        this.processedMsgKeys.add(key);
+        if (this.processedMsgKeys.size > 300) {
+          const it = this.processedMsgKeys.values();
+          for (let i = 0; i < 60; i++) this.processedMsgKeys.delete(it.next().value);
+        }
+
+        const list = this.handlers[msg.type];
+        if (list) {
+          list.forEach(fn => { try { fn(msg); } catch(e) { console.error(e); } });
+        }
+        const allList = this.handlers['*'];
+        if (allList) {
+          allList.forEach(fn => { try { fn(msg); } catch(e) { console.error(e); } });
+        }
+      }
+    }
+
+    const RealtimeEngine = new RealtimeSyncEngineCore();
+    window.RealtimeEngine = RealtimeEngine;
+
+    // =========================================================================
+    // V14.0 SOLO DEV 25-BOT SIMULATOR (REALISTIC THAI STUDENT CO-RESPONDERS)
+    // =========================================================================
+    const BOT_NAMES = [
+      { name: 'หมอเอิร์ธ', group: '01' },
+      { name: 'น้องมายด์', group: '01' },
+      { name: 'ต้นกล้า', group: '02' },
+      { name: 'ข้าวฟ่าง', group: '02' },
+      { name: 'ภูมิ', group: '03' },
+      { name: 'ฟ้าใส', group: '03' },
+      { name: 'วิน', group: '04' },
+      { name: 'พลอย', group: '04' },
+      { name: 'กันต์', group: '05' },
+      { name: 'พิม', group: '05' },
+      { name: 'บอส', group: '06' },
+      { name: 'ไอซ์', group: '06' },
+      { name: 'นัท', group: '07' },
+      { name: 'แพรว', group: '07' },
+      { name: 'เต้', group: '08' },
+      { name: 'มิว', group: '08' },
+      { name: 'อาร์ม', group: '09' },
+      { name: 'เจน', group: '09' },
+      { name: 'โอ๊ค', group: '10' },
+      { name: 'โบว์', group: '10' },
+      { name: 'เบนซ์', group: '03' },
+      { name: 'ปอนด์', group: '05' },
+      { name: 'กิ๊ฟ', group: '07' },
+      { name: 'แทน', group: '08' },
+      { name: 'แนน', group: '10' }
+    ];
+
+    class BotSimulatorCore {
+      constructor() {
+        this.enabled = false;
+        this.botTimers = [];
+      }
+
+      toggle() {
+        if (this.enabled) {
+          this.disable();
+        } else {
+          this.enable();
+        }
+        return this.enabled;
+      }
+
+      enable() {
+        this.enabled = true;
+        this.clearTimers();
+        BOT_NAMES.forEach((b, idx) => {
+          const botId = `bot_${idx + 1}`;
+          GameStateManager.registerPlayer(botId, b.name, b.group, true);
+        });
+        showToast('🤖 เปิดโหมดจำลองผู้เล่น 25 คนเรียบร้อยแล้ว!');
+      }
+
+      disable() {
+        this.enabled = false;
+        this.clearTimers();
+        BOT_NAMES.forEach((b, idx) => {
+          delete GameStateManager.connectedPlayers[`bot_${idx + 1}`];
+        });
+        GameStateManager.refreshLobbyRoster();
+        showToast('ปิดโหมดจำลองบอทแล้ว');
+      }
+
+      clearTimers() {
+        this.botTimers.forEach(t => clearTimeout(t));
+        this.botTimers = [];
+      }
+
+      onAudienceVoting(stageNum, correctChoice) {
+        if (!this.enabled) return;
+        this.clearTimers();
+
+        BOT_NAMES.forEach((b, idx) => {
+          const botId = `bot_${idx + 1}`;
+          // 80% choose correct answer, 20% playful vote for another choice
+          const isCorrect = Math.random() < 0.82;
+          const choice = isCorrect ? correctChoice : ((correctChoice % 4) + 1);
+          // Vote between 1.5s and 5.5s
+          const delay = Math.floor(1500 + Math.random() * 4000);
+          const t = setTimeout(() => {
+            if (GameStateManager.decisionSubStep === 'AUDIENCE_VOTING') {
+              GameStateManager.recordPlayerVote(botId, choice, delay);
+            }
+          }, delay);
+          this.botTimers.push(t);
+        });
+      }
+
+      onStage3TapRush() {
+        if (!this.enabled) return;
+        this.clearTimers();
+
+        // Periodically batch taps from bots to fill 1,000 taps smoothly
+        const interval = setInterval(() => {
+          if (GameStateManager.currentStage !== 3 || GameStateManager.stage3TapCount >= GameStateManager.effectiveTapTarget) {
+            clearInterval(interval);
+            return;
+          }
+          const batch = Math.floor(15 + Math.random() * 25);
+          GameStateManager.handleMobileTapBatch('bot_cluster', batch);
+        }, 320);
+        this.botTimers.push(interval);
+      }
+    }
+
+    const BotSimulator = new BotSimulatorCore();
+    window.BotSimulator = BotSimulator;
+
+    // =========================================================================
+    // V14.0 PERSONALIZED DIPLOMA CANVAS GENERATOR (DOWNLOAD PNG)
+    // =========================================================================
+    function generatePersonalizedCertificatePng(options = {}) {
+      const {
+        recipient = 'คุณหมอเอิร์ธ • กลุ่มที่ 03',
+        group = '03',
+        score = 100,
+        rank = 'S',
+        isMvp = false,
+        stats = 'โหวตถูกต้อง 5/5 ข้อ • ส่งข้อมูล 1669 จำนวน 142 ครั้ง • กด CPR ตรงจังหวะ 30 ครั้ง'
+      } = options;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 1680;
+      const ctx = canvas.getContext('2d');
+
+      // Outer Background (Pristine Swiss Porcelain)
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, 1200, 1680);
+
+      // Certificate Paper Background
+      ctx.fillStyle = '#FAFCFF';
+      ctx.fillRect(40, 40, 1120, 1600);
+
+      // Dual Royal Border (Emerald + Gold Foil)
+      ctx.strokeStyle = '#064E3B';
+      ctx.lineWidth = 14;
+      ctx.strokeRect(50, 50, 1100, 1580);
+
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(68, 68, 1064, 1544);
+
+      // Header Banner: Royal Deep Emerald Gradient
+      const headerGrad = ctx.createLinearGradient(0, 70, 0, 390);
+      headerGrad.addColorStop(0, '#064E3B');
+      headerGrad.addColorStop(0.65, '#042F2E');
+      headerGrad.addColorStop(1, '#0F172A');
+      ctx.fillStyle = headerGrad;
+      ctx.fillRect(72, 72, 1056, 318);
+
+      // Gold Accent Line below Header
+      ctx.fillStyle = '#D4AF37';
+      ctx.fillRect(72, 386, 1056, 6);
+
+      ctx.textAlign = 'center';
+
+      // Header Text
+      ctx.fillStyle = '#FDE68A';
+      ctx.font = 'bold 17px "JetBrains Mono", monospace';
+      ctx.fillText('OFFICIAL CLINICAL CREDENTIAL • MDBUU OPEN HOUSE 2027', 600, 140);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 36px "Prompt", sans-serif';
+      ctx.fillText('คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา', 600, 205);
+
+      ctx.fillStyle = '#A7F3D0';
+      ctx.font = '600 19px "JetBrains Mono", monospace';
+      ctx.fillText('FACULTY OF MEDICINE • BURAPHA UNIVERSITY', 600, 255);
+
+      // Medallion Seal
+      ctx.beginPath();
+      ctx.arc(600, 388, 48, 0, Math.PI * 2);
+      ctx.fillStyle = '#D4AF37';
+      ctx.fill();
+      ctx.strokeStyle = '#996515';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(600, 388, 40, 0, Math.PI * 2);
+      ctx.fillStyle = '#064E3B';
+      ctx.fill();
+
+      // Seal Symbol
+      ctx.fillStyle = '#FDE68A';
+      ctx.font = 'bold 24px "JetBrains Mono", monospace';
+      ctx.fillText('✦ MDBUU ✦', 600, 396);
+
+      // Certificate Body Text
+      ctx.fillStyle = '#0F172A';
+      ctx.font = 'bold 36px "Prompt", sans-serif';
+      ctx.fillText('ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน', 600, 520);
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = '500 22px "Prompt", sans-serif';
+      ctx.fillText('ขอมอบประกาศนียบัตรฉบับนี้ไว้เพื่อแสดงว่า', 600, 580);
+
+      // Recipient Name Highlight Banner
+      ctx.fillStyle = '#ECFDF5';
+      ctx.fillRect(180, 620, 840, 100);
+      ctx.strokeStyle = '#A7F3D0';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(180, 620, 840, 100);
+
+      ctx.fillStyle = '#065F46';
+      ctx.font = 'bold 44px "Prompt", sans-serif';
+      ctx.fillText(recipient, 600, 686);
+
+      if (isMvp) {
+        ctx.fillStyle = '#D97706';
+        ctx.font = 'bold 20px "Prompt", sans-serif';
+        ctx.fillText('🏆 TOP MVP CO-RESPONDER OF THE SESSION (ผู้ช่วยกู้ชีพยอดเยี่ยม)', 600, 760);
+      }
+
+      ctx.fillStyle = '#334155';
+      ctx.font = '500 21px "Prompt", sans-serif';
+      ctx.fillText('ได้ผ่านการฝึกปฏิบัติการช่วยฟื้นคืนชีพขั้นพื้นฐาน (CPR & AED)', 600, 810);
+      ctx.fillText('และการปฐมพยาบาลฉุกเฉินเบื้องต้น ณ ฐานปฏิบัติการแพทย์ฉุกเฉินจำลอง', 600, 845);
+
+      // Personal Achievement Stats Box
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(180, 890, 840, 180);
+      ctx.strokeStyle = '#E2E8F0';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(180, 890, 840, 180);
+
+      ctx.fillStyle = '#0F172A';
+      ctx.font = 'bold 20px "JetBrains Mono", monospace';
+      ctx.fillText('INDIVIDUAL PERFORMANCE RECORD', 600, 930);
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 22px "Prompt", sans-serif';
+      ctx.fillText(`คะแนนรวม: ${score} / 100 คะแนน • GRADE ${rank}`, 600, 975);
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = '500 17px "Prompt", sans-serif';
+      ctx.fillText(stats, 600, 1025);
+
+      // Signature Section
+      ctx.strokeStyle = '#94A3B8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(250, 1340);
+      ctx.lineTo(500, 1340);
+      ctx.moveTo(700, 1340);
+      ctx.lineTo(950, 1340);
+      ctx.stroke();
+
+      ctx.fillStyle = '#0F172A';
+      ctx.font = 'bold 18px "Prompt", sans-serif';
+      ctx.fillText('คณบดีคณะแพทยศาสตร์', 375, 1375);
+      ctx.fillText('ประธานโครงการเปิดบ้านแพทย์ ม.บูรพา', 825, 1375);
+
+      ctx.fillStyle = '#64748B';
+      ctx.font = '15px "Prompt", sans-serif';
+      ctx.fillText('มหาวิทยาลัยบูรพา', 375, 1405);
+      ctx.fillText('MDBUU Open House 2027', 825, 1405);
+
+      // Watermark Footer
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = '14px "JetBrains Mono", monospace';
+      const dateStr = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      ctx.fillText(`ออกให้ ณ วันที่ ${dateStr} • CERTIFICATE ID: MDBUU-${group}-${score}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`, 600, 1540);
+
+      // Trigger download
+      const link = document.createElement('a');
+      link.download = `MDBUU_Certificate_${group}_${recipient.replace(/[^a-zA-Z0-9ก-๙]/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
     }
 
     class BackgroundECGEngine {
@@ -4275,55 +5429,55 @@
 
           this.lastRawPeak = 0;
           this.heldClapPeak = 0;
-          this.prevFrameRms = 0;
-          this.fastAttackSpike = 0;
-          this.sustainedVoiceFrames = 0;
+          this.prevHfEnergy = 0;
+          this.hfOnsetSpike = 0;
 
           processor.onaudioprocess = (e) => {
+            if (window.isSystemSpeaking || (window.lastSpeakerBeepTime && (performance.now() - window.lastSpeakerBeepTime) < 220)) {
+              this.heldClapPeak = 0;
+              return;
+            }
             const input = e.inputBuffer.getChannelData(0);
             let peak = 0;
             let sumSq = 0;
-            let zeroCrossings = 0;
+            let highPassDiffSum = 0;
 
-            for (let i = 0; i < input.length; i++) {
+            for (let i = 1; i < input.length; i++) {
               const sample = input[i];
               const abs = Math.abs(sample);
               if (abs > peak) peak = abs;
               sumSq += sample * sample;
-              if (i > 0 && ((input[i] >= 0 && input[i - 1] < 0) || (input[i] < 0 && input[i - 1] >= 0))) {
-                zeroCrossings++;
-              }
+              // First-difference high-pass filter: isolates sharp percussive transients (claps) from low-frequency voice vowels!
+              const diff = sample - input[i - 1];
+              highPassDiffSum += diff * diff;
             }
 
             const rms = Math.sqrt(sumSq / input.length);
-            const zcr = zeroCrossings / input.length; // Hand claps have high ZCR (> 0.09); vowel speech has low ZCR (< 0.085)
-            const crestFactor = rms > 0.001 ? (peak / rms) : 1.0; // Hand claps have sharp impulse crest (> 2.35)
-            const attackDelta = Math.max(0, peak - this.prevFrameRms * 1.35);
+            const hfRms = Math.sqrt(highPassDiffSum / input.length);
+            const crestFactor = rms > 0.002 ? (peak / rms) : 1.0;
 
-            // Detect if someone is talking/humming continuously (sustained RMS with low ZCR)
-            if (rms > 0.025 && zcr < 0.085 && crestFactor < 2.3) {
-              this.sustainedVoiceFrames = Math.min(20, this.sustainedVoiceFrames + 1);
-            } else {
-              this.sustainedVoiceFrames = Math.max(0, this.sustainedVoiceFrames - 1);
-            }
+            // Spectral ratio: Hand claps have high hfRms relative to total rms (hfRatio > 0.36), whereas human voice vowels have hfRatio < 0.25
+            const hfRatio = rms > 0.003 ? (hfRms / rms) : 0;
 
-            // A true hand clap (or table tap) has a sudden attack jump AND (high ZCR OR high Crest Factor)
-            const isPercussiveTransient = (zcr >= 0.09 || crestFactor >= 2.35 || attackDelta >= 0.04) && this.sustainedVoiceFrames <= 2;
+            // Sudden onset derivative in high-frequency energy
+            const hfAttack = Math.max(0, hfRms - this.prevHfEnergy * 1.25);
+            this.prevHfEnergy = hfRms * 0.6 + this.prevHfEnergy * 0.4;
 
-            if (isPercussiveTransient) {
-              const clapEnergy = Math.max(peak, attackDelta * 1.8);
-              if (clapEnergy > this.heldClapPeak) {
-                this.heldClapPeak = clapEnergy;
+            // Accept if it's a sharp percussive transient (high HF ratio OR high Crest Factor with strong HF attack)
+            const isTrueClapTransient = (hfRatio >= 0.36 && hfAttack >= 0.008) || (crestFactor >= 2.75 && hfRms >= 0.015);
+
+            if (isTrueClapTransient) {
+              const clapStrength = Math.max(hfAttack * 6.5, hfRms * 3.8);
+              if (clapStrength > this.heldClapPeak) {
+                this.heldClapPeak = clapStrength;
               } else {
-                this.heldClapPeak *= 0.82;
+                this.heldClapPeak *= 0.80;
               }
             } else {
-              // Reject sustained vowel talking!
-              this.heldClapPeak *= 0.65;
+              this.heldClapPeak *= 0.60;
             }
 
             this.lastRawPeak = peak;
-            this.prevFrameRms = rms * 0.7 + this.prevFrameRms * 0.3;
           };
 
           const zeroGain = SoundEngine.ctx.createGain();
@@ -4367,6 +5521,9 @@
       }
 
       getCalibratedDecibels() {
+        if (window.lastSpeakerBeepTime && (performance.now() - window.lastSpeakerBeepTime) < 220) {
+          return { raw: 0, db: 38 };
+        }
         const rms = this.getTrueTimeDomainRMS() * (this.gainFactor || 1.5);
         // Noise gate: ambient room silence (rms < 0.012) stays at 38–44 dB
         if (rms < 0.012) return { raw: rms, db: 38 + Math.round(rms * 400) };
@@ -4378,38 +5535,22 @@
         return { raw: rms, db };
       }
 
-      // Continuous sample-level hand clap & transient detector (with Vocal Reject & HF Boost)
+      // Continuous sample-level hand clap & transient detector (High-Frequency Spectral Onset)
       getClapSpikeData() {
         if (!this.processor && !this._isConnecting) {
           this._isConnecting = true;
           this.ensureMicLive(false).finally(() => { this._isConnecting = false; });
         }
-
-        // Also check frequency spectrum from AnalyserNode: Claps have strong high-frequency energy (bins 16..96)
-        let highFreqAvg = 0;
-        let lowFreqAvg = 1;
-        if (this.analyser) {
-          if (!this.byteFreqData) this.byteFreqData = new Uint8Array(this.analyser.frequencyBinCount);
-          this.analyser.getByteFrequencyData(this.byteFreqData);
-          let lowSum = 0, highSum = 0;
-          for (let i = 2; i < 12; i++) lowSum += this.byteFreqData[i]; // Speech fundamental band
-          for (let i = 16; i < 96; i++) highSum += this.byteFreqData[i]; // Clap transient band (1.5kHz - 8kHz)
-          lowFreqAvg = (lowSum / 10) || 1;
-          highFreqAvg = highSum / 80;
+        if (window.isSystemSpeaking || (window.lastSpeakerBeepTime && (performance.now() - window.lastSpeakerBeepTime) < 220)) {
+          return { spike: 0, isClap: false };
         }
 
-        // Reject pure low-frequency vowel speech where low fundamentals dominate high frequencies by > 3.5x
-        const isVowelSpeech = (lowFreqAvg > 95 && highFreqAvg < lowFreqAvg * 0.28) || this.sustainedVoiceFrames > 3;
-
-        const rawTransient = isVowelSpeech ? 0 : (this.heldClapPeak || 0);
-        const hfBoost = (!isVowelSpeech && highFreqAvg > 18) ? (highFreqAvg / 140) : 0;
-        const spike = Math.min(1.0, Math.max(rawTransient * 2.8, hfBoost) * (this.gainFactor || 1.8));
-
-        const threshold = this.cprClapSensitivity || 0.04;
+        const spike = Math.min(1.0, (this.heldClapPeak || 0) * (this.gainFactor || 1.8));
+        const threshold = this.cprClapSensitivity || 0.05;
         const now = performance.now();
         let triggered = false;
 
-        if (!isVowelSpeech && spike >= threshold && (now - this.lastClapTimestamp) > 210) {
+        if (spike >= threshold && (now - this.lastClapTimestamp) > 210) {
           this.lastClapTimestamp = now;
           this.heldClapPeak = 0;
           triggered = true;
@@ -4865,12 +6006,28 @@
 
         // V10: 4-Step Clinical Investigation State Machine
         this.decisionSubStep = 'PROMPT_INSPECT';
-        this.activeHintText = null; // 'PROMPT_INSPECT' | 'SELECT_CARD' | 'CONFIRM_CHOICE'
+        this.activeHintText = null; // 'PROMPT_INSPECT' | 'AUDIENCE_VOTING' | 'HERO_DECISION'
         this.selectedChoiceIndex = null;
         this.isGameOver = false;
 
         // Dual-Screen Host Remote Channel
         this.hostChannel = null;
+
+        // V14: Co-op Kahoot Multiplayer State
+        this.sessionPin = String(Math.floor(1000 + Math.random() * 9000));
+        this.connectedPlayers = {}; // id -> { id, name, group, isBot, score, correctVotes, taps, cprHits, penalties }
+        this.currentVotes = {}; // id -> { choice, speedMs }
+        this.voteCountdownSeconds = 12;
+        this.voteTimerId = null;
+        this.topVotedChoice = null;
+        this.topVotedPercent = 0;
+        this.topVotedCount = 0;
+        this.stage3TapCount = 0;
+        this.effectiveTapTarget = 40;
+        this.stage7PressureHeldMs = 0;
+        this.stage7PressureInterval = null;
+        this.mvpGroup = '01';
+        this.mvpPlayerId = null;
       }
 
       init() {
@@ -4887,6 +6044,142 @@
         } catch(e) {
           console.warn('BroadcastChannel error:', e);
         }
+
+        // Initialize Realtime Co-op Session
+        this.initRealtimeSession();
+      }
+
+      initRealtimeSession() {
+        RealtimeEngine.init(this.sessionPin, true);
+
+        // Render QR Code on Lobby Card
+        setTimeout(() => {
+          this.renderLobbyQrCode();
+          this.refreshLobbyRoster();
+        }, 150);
+
+        // Listen for Realtime Multiplayer events from smartphones
+        RealtimeEngine.on('PLAYER_JOIN', (msg) => {
+          this.registerPlayer(msg.senderId, msg.name, msg.group, false);
+          try { SoundEngine.playPulseBeep(880, 0.05); } catch(e) {}
+          RealtimeEngine.send('JOIN_ACK', {
+            pin: this.sessionPin,
+            stage: this.currentStage,
+            subStep: this.decisionSubStep
+          });
+        });
+
+        RealtimeEngine.on('PLAYER_VOTE', (msg) => {
+          this.recordPlayerVote(msg.senderId, msg.payload.choice, msg.payload.speedMs);
+        });
+
+        RealtimeEngine.on('TAP_BATCH', (msg) => {
+          this.handleMobileTapBatch(msg.senderId, msg.payload.count || 1);
+        });
+
+        RealtimeEngine.on('CPR_BEAT_HIT', (msg) => {
+          this.handleMobileCprHit(msg.senderId, msg.payload.accuracy, msg.payload.deltaMs);
+        });
+
+        RealtimeEngine.on('AED_TOUCH_VIOLATION', (msg) => {
+          this.handleAedTouchViolation(msg.senderId, msg.name, msg.group);
+        });
+
+        RealtimeEngine.on('PRESSURE_HOLD_UPDATE', (msg) => {
+          this.handlePressureHoldUpdate(msg.senderId, msg.payload.holding);
+        });
+      }
+
+      renderLobbyQrCode() {
+        const qrCanvas = document.getElementById('lobbyQrCanvas');
+        const txtPin = document.getElementById('txtLobbyPin');
+        const txtTelPin = document.getElementById('txtLobbyTelPin');
+        if (txtPin) txtPin.innerText = this.sessionPin;
+        if (txtTelPin) txtTelPin.innerText = this.sessionPin;
+
+        if (qrCanvas) {
+          const joinUrl = `${window.location.origin}${window.location.pathname}?play=1&pin=${this.sessionPin}`;
+          renderQrToCanvas(qrCanvas, joinUrl, 130);
+        }
+      }
+
+      openMobileSimulator() {
+        const joinUrl = `${window.location.origin}${window.location.pathname}?play=1&pin=${this.sessionPin}`;
+        window.open(joinUrl, 'MobileCoResponder', 'width=390,height=780,resizable=yes,scrollbars=yes');
+      }
+
+      toggleBotSimulator() {
+        const isEnabled = BotSimulator.toggle();
+        const btn = document.getElementById('btnLobbyBotToggle');
+        const txt = document.getElementById('txtBotStatus');
+        if (btn) btn.classList.toggle('active', isEnabled);
+        if (txt) txt.innerText = isEnabled ? 'เปิด (25 คน)' : 'ปิด';
+      }
+
+      registerPlayer(id, name, group, isBot = false) {
+        this.connectedPlayers[id] = {
+          id: id,
+          name: name || 'ผู้ช่วยแพทย์',
+          group: String(group || '01').padStart(2, '0'),
+          isBot: isBot,
+          score: 0,
+          correctVotes: 0,
+          taps: 0,
+          cprHits: 0,
+          penalties: 0
+        };
+        this.refreshLobbyRoster();
+      }
+
+      refreshLobbyRoster() {
+        const roster = document.getElementById('lobbyPlayersRoster');
+        const countTxt = document.getElementById('txtLobbyPlayerCount');
+        const players = Object.values(this.connectedPlayers);
+        if (countTxt) countTxt.innerText = players.length;
+
+        // Auto-scale Stage 3 tap target
+        this.effectiveTapTarget = Math.max(40, players.length * 40);
+
+        if (roster) {
+          if (players.length === 0) {
+            roster.innerHTML = '<span style="font-size:11px; color:#94A3B8; padding:4px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>';
+          } else {
+            roster.innerHTML = players.map(p => `
+              <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
+                <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
+              </div>
+            `).join('');
+          }
+        }
+      }
+
+      broadcastMultiplayerStageSync() {
+        const cData = CLINICAL_STAGES[this.currentStage];
+        let choiceData = [];
+        if (cData && cData.choices) {
+          choiceData = cData.choices.map(c => ({
+            num: c.num,
+            title: c.title,
+            purpose: c.purpose,
+            iconSvg: c.iconSvg
+          }));
+        }
+
+        RealtimeEngine.send('STAGE_SYNC', {
+          stage: this.currentStage,
+          subStep: this.decisionSubStep,
+          subPhase: this.stage5Phase,
+          instruction: cData ? cData.selectInstruction : '',
+          choices: choiceData,
+          winningChoice: this.topVotedChoice ? {
+            num: this.topVotedChoice.num,
+            title: this.topVotedChoice.title,
+            purpose: this.topVotedChoice.purpose,
+            iconSvg: this.topVotedChoice.iconSvg,
+            pct: this.topVotedPercent,
+            count: this.topVotedCount
+          } : null
+        });
       }
 
       // V6.3: Cinematic 3D Slot Machine Reel with Fast Snappy Deceleration (2.0s) & Confetti Burst
@@ -5252,11 +6545,12 @@
         if (!data) return;
 
         const isInspect = this.decisionSubStep === 'PROMPT_INSPECT';
-        const isSelected = this.decisionSubStep === 'CONFIRM_CHOICE';
+        const isVoting = this.decisionSubStep === 'AUDIENCE_VOTING';
+        const isHeroDecision = this.decisionSubStep === 'HERO_DECISION';
 
-        const selected = isSelected && this.selectedChoiceIndex
-          ? data.choices.find(c => c.num === this.selectedChoiceIndex)
-          : null;
+        const totalPlayers = Math.max(1, Object.keys(this.connectedPlayers).length);
+        const votesCast = Object.keys(this.currentVotes).length;
+        const votePct = Math.min(100, Math.round((votesCast / totalPlayers) * 100));
 
         card.innerHTML = `
           <div class="unified-status-bar">
@@ -5267,17 +6561,26 @@
             </div>
             <div class="voice-answer-bar">
               <span class="mic-live-dot"></span>
-              <span id="txtLiveVoiceChoice" class="voice-bar-transcript font-technical">ไมค์พร้อมรับเสียง</span>
+              <span id="txtLiveVoiceChoice" class="voice-bar-transcript font-technical">
+                ${isHeroDecision ? 'ไมค์พร้อมรับเสียง: พูด "ยืนยัน" หรือ "โหวตใหม่"' : 'ไมค์พร้อมรับเสียง'}
+              </span>
             </div>
           </div>
 
           <div class="stage-body-split">
-            <!-- Left Column: 100% Unobstructed Scene / Wound Photo -->
+            <!-- Left Column: 100% Unobstructed Scene / Wound Photo with AR Scanner -->
             <div class="scene-photo-frame">
               <img id="stageSceneImg" src="images/scenes/scene_s${stageNum}.png" alt="Clinical Scene ${stageNum}" class="scene-photo-img" />
+              ${!isInspect ? `
+                <div class="ar-scanline"></div>
+                <div class="ar-pathology-pin font-technical">
+                  <span class="patient-cam-dot" style="background:#10B981;"></span>
+                  ตรวจพบ: ${data.findingsTitle}
+                </div>
+              ` : ''}
             </div>
 
-            <!-- Right Column: Interactive Step Machine -->
+            <!-- Right Column: Co-op Kahoot Step Machine -->
             <div class="stage-content-col">
               <div>
                 <div class="stage-context-bar">
@@ -5304,30 +6607,81 @@
               </div>
 
               ${isInspect ? `
-                <!-- Step 1: Single Clean CTA Card (Zero Duplicate Question Text) -->
+                <!-- Step 1: Inspection Prompt Card -->
                 <div class="inspect-prompt-card" onclick="GameStateManager.advanceToInspectionFinding()">
                   <div class="inspect-card-badge font-technical">ขั้นตอนที่ 1 • สำรวจประเมินอาการ</div>
                   <div class="inspect-card-title">${data.inspectQuestion}</div>
                   <div class="inspect-voice-callout font-technical">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-                    <span>พูดคำว่า “สำรวจ” เพื่อตรวจสอบ</span>
+                    <span>พูดคำว่า “สำรวจ” เพื่อเปิดโหวตบนมือถือ</span>
+                  </div>
+                </div>
+              ` : (isVoting ? `
+                <!-- Step 2: Live Vote Status Board (Choices are on Mobiles!) -->
+                <div class="vote-status-board-card">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="vote-board-badge font-technical">
+                      <span class="live-pulse-dot"></span>
+                      เปิดรับโหวตจากมือถือทุกคนในห้อง (CO-OP KAHOOT)
+                    </div>
+                    <button onclick="GameStateManager.finishAudienceVoting()" class="btn-close-vote-clean font-technical">
+                      ⏱️ ปิดโหวตทันที
+                    </button>
+                  </div>
+
+                  <div class="vote-timer-row">
+                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec">${this.voteCountdownSeconds}</div>
+                    <div class="vote-timer-progress-wrap">
+                      <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="vote-count-stats font-technical">
+                    <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
+                    <span id="txtVotePct" class="num-readout">${votePct}%</span>
+                  </div>
+
+                  <!-- Live Groups Participation Grid (Groups 01-10) -->
+                  <div class="vote-groups-participation-grid font-technical" id="voteGroupsRoster">
+                    ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(grpNum => {
+                      const grpStr = String(grpNum).padStart(2, '0');
+                      const grpVotes = Object.values(this.currentVotes).filter(v => v.group === grpStr).length;
+                      return `
+                        <div class="vote-group-status-pill ${grpVotes > 0 ? 'voted' : ''}">
+                          <span>กลุ่ม ${grpStr}</span>
+                          <span class="vote-group-dot"></span>
+                        </div>
+                      `;
+                    }).join('')}
                   </div>
                 </div>
               ` : `
-                <!-- Step 2: High-Precision Compact Horizontal Cards (Immediate Action) -->
-                <div class="equipment-choices-grid ${data.choices.length === 4 ? 'grid-4' : 'grid-3'}">
-                  ${data.choices.map(c => `
-                    <button id="choiceBtn_${c.num}" onclick="GameStateManager.selectEquipmentCard(${c.num})" class="equipment-choice-card">
-                      <div class="choice-num-badge font-technical">${c.num}</div>
-                      <div class="equipment-icon-wrap">${c.iconSvg}</div>
-                      <div style="display:flex; flex-direction:column; gap:2px; flex:1; min-width:0;">
-                        <div class="choice-equipment-title">${c.title}</div>
-                        <div style="font-size:12px; color:#64748B; font-weight:500; line-height:1.3;">${c.purpose}</div>
-                      </div>
+                <!-- Step 3: Top-Voted Choice Revealed (Hero Decision) -->
+                <div class="hero-decision-card-v14 font-technical">
+                  <div class="hero-decision-badge">
+                    🏆 มติทีมกู้ชีพในห้อง (ชนะโหวต ${this.topVotedPercent}% • ${this.topVotedCount} คนเลือกข้อนี้)
+                  </div>
+
+                  <div class="winning-choice-display-box">
+                    <div class="equipment-icon-wrap large">${this.topVotedChoice ? this.topVotedChoice.iconSvg : ''}</div>
+                    <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+                      <div class="choice-equipment-title large">${this.topVotedChoice ? this.topVotedChoice.title : ''}</div>
+                      <div style="font-size:13.5px; color:#64748B; font-weight:600; line-height:1.4;">${this.topVotedChoice ? this.topVotedChoice.purpose : ''}</div>
+                    </div>
+                  </div>
+
+                  <div class="hero-action-buttons-row">
+                    <button onclick="GameStateManager.confirmHeroDecision()" class="btn-hero-confirm font-technical">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      1. ใช้คำตอบนี้ (พูด "ยืนยัน")
                     </button>
-                  `).join('')}
+                    <button onclick="GameStateManager.reopenAudienceVoting()" class="btn-hero-revote font-technical">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+                      2. ให้เพื่อนโหวตใหม่ (พูด "โหวตใหม่")
+                    </button>
+                  </div>
                 </div>
-              `}
+              `)}
             </div>
           </div>
         `;
@@ -5335,40 +6689,142 @@
 
       async advanceToInspectionFinding() {
         if (![1, 4, 6, 7, 8].includes(this.currentStage)) return;
-        this.decisionSubStep = 'SELECT_CARD';
+        this.decisionSubStep = 'AUDIENCE_VOTING';
         this.selectedChoiceIndex = null;
+        this.currentVotes = {};
         this.renderStage();
         this.broadcastHostSync();
+        this.broadcastMultiplayerStageSync();
 
         SoundEngine.playPulseBeep(880, 0.08);
         const cData = CLINICAL_STAGES[this.currentStage];
         if (cData) {
           await speakAndWait(cData.findingsSpoken, `s${this.currentStage}_findings`);
         }
+
+        // Start 12-second audience voting countdown
+        this.startVotingCountdown(12);
+
+        // If bot simulator is active, cast automated realistic votes
+        if (BotSimulator.enabled && cData) {
+          BotSimulator.onAudienceVoting(this.currentStage, cData.correctChoice);
+        }
+
         this.startClinicalVoiceTracking(this.currentStage);
+      }
+
+      startVotingCountdown(seconds = 12) {
+        if (this.voteTimerId) clearInterval(this.voteTimerId);
+        this.voteCountdownSeconds = seconds;
+
+        this.voteTimerId = setInterval(() => {
+          this.voteCountdownSeconds--;
+          const txtSec = document.getElementById('txtVoteTimerSec');
+          const bar = document.getElementById('barVoteTimer');
+          if (txtSec) txtSec.innerText = Math.max(0, this.voteCountdownSeconds);
+          if (bar) bar.style.width = `${Math.max(0, (this.voteCountdownSeconds / 12) * 100)}%`;
+
+          if (this.voteCountdownSeconds <= 0) {
+            this.finishAudienceVoting();
+          }
+        }, 1000);
+      }
+
+      finishAudienceVoting() {
+        if (this.voteTimerId) {
+          clearInterval(this.voteTimerId);
+          this.voteTimerId = null;
+        }
+
+        const cData = CLINICAL_STAGES[this.currentStage];
+        if (!cData) return;
+
+        // Tally votes
+        const tallies = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        const votes = Object.values(this.currentVotes);
+        votes.forEach(v => {
+          if (tallies[v.choice] !== undefined) tallies[v.choice]++;
+        });
+
+        let winningNum = cData.correctChoice;
+        let maxCount = -1;
+
+        Object.keys(tallies).forEach(k => {
+          const num = parseInt(k, 10);
+          if (tallies[num] > maxCount) {
+            maxCount = tallies[num];
+            winningNum = num;
+          }
+        });
+
+        // If 0 votes cast, default to correct choice
+        if (votes.length === 0) {
+          winningNum = cData.correctChoice;
+          maxCount = 0;
+        }
+
+        this.topVotedChoice = cData.choices.find(c => c.num === winningNum) || cData.choices[0];
+        this.topVotedCount = Math.max(1, maxCount);
+        this.topVotedPercent = votes.length > 0 ? Math.round((maxCount / votes.length) * 100) : 100;
+
+        this.decisionSubStep = 'HERO_DECISION';
+        this.renderStage();
+        this.broadcastHostSync();
+        this.broadcastMultiplayerStageSync();
+
+        try { SoundEngine.playPulseBeep(1040, 0.1); } catch(e) {}
+      }
+
+      reopenAudienceVoting() {
+        this.advanceToInspectionFinding();
+      }
+
+      recordPlayerVote(playerId, choice, speedMs = 2500) {
+        if (this.decisionSubStep !== 'AUDIENCE_VOTING') return;
+        const player = this.connectedPlayers[playerId];
+        const group = player ? player.group : '01';
+
+        this.currentVotes[playerId] = {
+          choice: choice,
+          speedMs: speedMs,
+          group: group
+        };
+
+        const totalPlayers = Math.max(1, Object.keys(this.connectedPlayers).length);
+        const votesCast = Object.keys(this.currentVotes).length;
+        const votePct = Math.min(100, Math.round((votesCast / totalPlayers) * 100));
+
+        const txtCount = document.getElementById('txtVoteCount');
+        const txtPct = document.getElementById('txtVotePct');
+        if (txtCount) txtCount.innerText = votesCast;
+        if (txtPct) txtPct.innerText = `${votePct}%`;
+
+        // Update group participation pill
+        const roster = document.getElementById('voteGroupsRoster');
+        if (roster) {
+          const pills = roster.querySelectorAll('.vote-group-status-pill');
+          pills.forEach((p, idx) => {
+            const grpStr = String(idx + 1).padStart(2, '0');
+            const hasVote = Object.values(this.currentVotes).some(v => v.group === grpStr);
+            if (hasVote) p.classList.add('voted');
+          });
+        }
+
+        // If 100% of connected players have voted, finish immediately
+        if (votesCast >= totalPlayers && totalPlayers > 1) {
+          setTimeout(() => this.finishAudienceVoting(), 500);
+        }
+      }
+
+      confirmHeroDecision() {
+        if (this.topVotedChoice) {
+          this.executeDecisionOutcome(this.topVotedChoice.num);
+        }
       }
 
       async selectEquipmentCard(choice) {
         if (![1, 4, 6, 7, 8].includes(this.currentStage) || this.isStageChoiceLocked) return;
-        if (this.decisionSubStep === 'PROMPT_INSPECT') {
-          this.decisionSubStep = 'SELECT_CARD';
-          this.renderStage();
-        }
-        this.selectedChoiceIndex = choice;
         await this.executeDecisionOutcome(choice);
-      }
-
-      confirmSelectedChoice() {
-        if (!this.selectedChoiceIndex) return;
-        this.executeDecisionOutcome(this.selectedChoiceIndex);
-      }
-
-      cancelSelectedChoice() {
-        this.decisionSubStep = 'SELECT_CARD';
-        this.selectedChoiceIndex = null;
-        this.renderStage();
-        this.broadcastHostSync();
-        this.startClinicalVoiceTracking(this.currentStage);
       }
 
       async executeDecisionOutcome(choice) {
@@ -5395,10 +6851,21 @@
 
           await speakAndWait(choiceItem.correctSpoken, `s${this.currentStage}_correct`);
 
+          // Award multiplayer MVP points to players who voted for the winning answer
+          const cNum = choiceItem.num;
+          Object.entries(this.currentVotes).forEach(([pId, v]) => {
+            const pl = this.connectedPlayers[pId];
+            if (pl && v.choice === cNum) {
+              pl.correctVotes++;
+              pl.score += 10;
+              if (v.speedMs < 3000) pl.score += 5; // Fast response speed bonus
+            }
+          });
+
           if (this.currentStage === 1) this.setStage(2);
           else if (this.currentStage === 4) this.setStage(5);
           else if (this.currentStage === 6) this.setStage(7);
-          else if (this.currentStage === 7) this.setStage(8);
+          else if (this.currentStage === 7) this.startStage7BDirectPressure();
           else if (this.currentStage === 8) this.setStage(9);
         } else if (choiceItem.type === 'fatal') {
           if (btn) btn.classList.add('wrong');
@@ -5660,12 +7127,22 @@
           this.confirmSelectedChoice();
         } else if (msg.type === 'REMOTE_CANCEL') {
           this.cancelSelectedChoice();
+        } else if (msg.type === 'REMOTE_TOGGLE_BOTS') {
+          this.toggleBotSimulator();
+        } else if (msg.type === 'REMOTE_FINISH_VOTE') {
+          this.finishAudienceVoting();
         } else if (msg.type === 'REMOTE_FORCE_PASS') {
           if (this.currentStage === 2) this.completeStage2();
-          else if (this.currentStage === 5) {
-            if (this.stage5Phase === 'CPR') this.transitionToAED();
-            else this.dischargeDefibrillatorShock();
+          else if (this.currentStage === 3) {
+            this.checklist = { location: true, incident: true, patient: true, aed: true };
+            this.refreshChecklistPills();
+            this.checkStage3AutoAdvance();
+          } else if (this.currentStage === 5) {
+            if (this.stage5Phase === 'CPR') this.skipToAED();
+            else this.deliverShock();
           }
+        } else if (msg.type === 'REMOTE_JUMP_STAGE') {
+          this.jumpToStage(msg.stage);
         } else if (msg.type === 'REMOTE_PREV') {
           if (this.currentStage > 1) this.jumpToStage(this.currentStage - 1);
         } else if (msg.type === 'REMOTE_NEXT') {
@@ -5684,13 +7161,13 @@
   <meta charset="UTF-8">
   <title>จอกรรมการควบคุมระยะไกล // Heartbeat Rush</title>
   <style>
-    body { margin:0; padding:16px; background:#0B0F19; color:#F8FAFC; font-family:'Prompt', -apple-system, sans-serif; box-sizing:border-box; }
+    body { margin:0; padding:16px; background:#0B0F19; color:#059669; font-weight:800; font-family:'Prompt', -apple-system, sans-serif; box-sizing:border-box; }
     h2 { margin:0 0 4px; font-size:17px; color:#38BDF8; font-family:monospace; }
     .status-bar { background:#1E293B; border-radius:10px; padding:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
     .badge { background:#0F172A; border:1px solid #334155; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:700; font-family:monospace; }
     .key-box { background:rgba(2, 132, 199, 0.15); border:1.5px solid #0284C7; border-radius:10px; padding:12px; margin-bottom:14px; font-size:13.5px; }
     .grid-btns { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:14px; }
-    button { background:#1E293B; color:#F8FAFC; border:1.5px solid #334155; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+    button { background:#1E293B; color:#059669; font-weight:800; border:1.5px solid #334155; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
     button:hover { background:#334155; border-color:#64748B; }
     .btn-green { background:#059669; border-color:#10B981; }
     .btn-green:hover { background:#10B981; }
@@ -5722,9 +7199,9 @@
     <button class="btn-green" onclick="send('REMOTE_SELECT_CHOICE', 2)">เลือกข้อ 2 (คำตอบที่ถูก)</button>
     <button onclick="send('REMOTE_SELECT_CHOICE', 3)">เลือกข้อ 3</button>
     <button onclick="send('REMOTE_SELECT_CHOICE', 4)">เลือกข้อ 4</button>
-    <button class="btn-green full-width" onclick="send('REMOTE_CONFIRM')">✓ ยืนยันคำตอบ (Step 4)</button>
-    <button class="full-width" onclick="send('REMOTE_CANCEL')">✕ เปลี่ยนข้อ / ยกเลิก</button>
-    <button class="btn-warn full-width" onclick="send('REMOTE_FORCE_PASS')">🔊 กดผ่านด่านทันที (เสียงตะโกน / CPR)</button>
+    <button class="btn-blue full-width" onclick="send('REMOTE_FINISH_VOTE')">⏱️ ปิดรับโหวตทันที (สรุปมติห้อง)</button>
+    <button class="btn-warn full-width" onclick="send('REMOTE_TOGGLE_BOTS')">🤖 สลับโหมดบอท 25 คน</button>
+    <button class="btn-warn full-width" onclick="send('REMOTE_FORCE_PASS')">🔊 กดผ่านด่านทันที (ตะโกน / 1669 / CPR / AED)</button>
     <button class="btn-danger full-width" onclick="send('REMOTE_RETRY')">↺ รีสตาร์ทด่านนี้ใหม่</button>
   </div>
   <div class="nav-row">
@@ -5732,10 +7209,27 @@
     <button onclick="send('REMOTE_NEXT')">⏭ ถัดไป</button>
     <button onclick="send('REMOTE_RESET')">🔄 รีเซ็ตเริ่มรอบใหม่</button>
   </div>
+  <div style="font-size:12px; color:#94A3B8; margin:14px 0 6px;">ข้ามไปยังด่านโดยตรง (Direct Stage Warp):</div>
+  <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:6px;">
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 1)">ด่าน 1</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 2)">ด่าน 2</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 3)">ด่าน 3</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 4)">ด่าน 4</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 5)">ด่าน 5</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 6)">ด่าน 6</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 7)">ด่าน 7</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 8)">ด่าน 8</button>
+    <button style="padding:8px 4px; font-size:11px;" onclick="send('REMOTE_JUMP_STAGE', 9)">ด่าน 9</button>
+    <button style="padding:8px 4px; font-size:11px; background:#475569;" onclick="send('REMOTE_JUMP_STAGE', 0)">Lobby</button>
+  </div>
   <script>
     const bc = new BroadcastChannel('mdbuu_heartbeat_channel');
     function send(type, choice) {
-      bc.postMessage({ type, choice });
+      if (type === 'REMOTE_JUMP_STAGE') {
+        bc.postMessage({ type, stage: choice });
+      } else {
+        bc.postMessage({ type, choice });
+      }
     }
     bc.onmessage = (e) => {
       const d = e.data;
@@ -6280,8 +7774,14 @@
             </div>
           `;
         }
-        // Stage 3: Dispatch 1669
+        // Stage 3: Dispatch 1669 (Co-op 1,000-Tap Intel Rush)
         else if (this.currentStage === 3) {
+          const tapPct = Math.min(100, Math.round((this.stage3TapCount / this.effectiveTapTarget) * 100));
+          const f1Unlocked = tapPct >= 25;
+          const f2Unlocked = tapPct >= 50;
+          const f3Unlocked = tapPct >= 75;
+          const f4Unlocked = tapPct >= 100;
+
           card.innerHTML = `
             <div class="unified-status-bar">
               <div class="ai-voice-pill-clean">
@@ -6292,7 +7792,9 @@
               <div class="voice-answer-bar">
                 <span class="mic-live-dot"></span>
                 <span class="voice-bar-title font-technical">สายด่วน 1669:</span>
-                <span class="voice-bar-transcript font-technical">พูดแจ้งข้อมูลสำคัญใส่ไมค์</span>
+                <span class="voice-bar-transcript font-technical">
+                  ${f4Unlocked ? 'ปลดล็อกครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลยครับ' : 'ทีมในห้องกดรัวๆ บนมือถือเพื่อปลดล็อกข้อมูล!'}
+                </span>
               </div>
             </div>
 
@@ -6308,25 +7810,42 @@
                   <div class="stage-context-bar">
                     <div class="stage-context-left">
                       <span class="stage-context-num font-technical">ด่านที่ 3 / 8 • การตัดสินใจทางคลินิก</span>
-                      <span class="stage-context-cat">การโทรแจ้งสายด่วนกู้ชีพ 1669</span>
+                      <span class="stage-context-cat">การโทรแจ้งสายด่วนกู้ชีพ 1669 (Co-op Tap Rush)</span>
                     </div>
                     <div class="stage-context-stakes font-technical">
                       ข้อมูลสำคัญ 4 ข้อ
                     </div>
                   </div>
                 </div>
-                <div class="facts-strip-clean" style="margin-bottom:6px;">
-                  <div class="fact-card-clean">
+
+                <!-- Co-op Tap Rush Status Bar -->
+                <div class="stage3-locked-wrap font-technical">
+                  <span class="stage3-locked-text">
+                    ⚡ พลังกดรัวจากมือถือในห้อง: <strong id="txtStage3TapCount" style="color:#0284C7;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> ครั้ง (<span id="txtStage3Pct">${tapPct}%</span>)
+                  </span>
+                  <div class="stage3-tap-meter-container">
+                    <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%;"></div>
+                  </div>
+                </div>
+
+                <div class="facts-strip-clean" style="margin-bottom:6px;" id="stage3FactsStrip">
+                  <div class="fact-card-clean" id="factCard1">
                     <div class="fact-label-clean font-technical">1. พิกัด</div>
-                    <div class="fact-val-clean" style="font-size:12px;">สุขุมวิท หน้า รพ.ม.บูรพา</div>
+                    <div class="fact-val-clean" style="font-size:12px; color:${f1Unlocked ? '#090D16' : '#94A3B8'};">
+                      ${f1Unlocked ? 'สุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอรวมพลังกด 25%'}
+                    </div>
                   </div>
-                  <div class="fact-card-clean">
+                  <div class="fact-card-clean" id="factCard2">
                     <div class="fact-label-clean font-technical">2. เหตุการณ์</div>
-                    <div class="fact-val-clean" style="font-size:12px;">รถเก๋งชนรั้ว มีกลุ่มควัน</div>
+                    <div class="fact-val-clean" style="font-size:12px; color:${f2Unlocked ? '#090D16' : '#94A3B8'};">
+                      ${f2Unlocked ? 'รถเก๋งชนรั้ว มีกลุ่มควัน' : '🔒 รอรวมพลังกด 50%'}
+                    </div>
                   </div>
-                  <div class="fact-card-clean">
+                  <div class="fact-card-clean" id="factCard3">
                     <div class="fact-label-clean font-technical">3. อาการ</div>
-                    <div class="fact-val-clean" style="font-size:12px; color:var(--vital-crimson);">1 ราย หมดสติ ไม่หายใจ</div>
+                    <div class="fact-val-clean" style="font-size:12px; color:${f3Unlocked ? 'var(--vital-crimson)' : '#94A3B8'};">
+                      ${f3Unlocked ? '1 ราย หมดสติ ไม่หายใจ' : '🔒 รอรวมพลังกด 75%'}
+                    </div>
                   </div>
                 </div>
 
@@ -6526,7 +8045,7 @@
 
                     <!-- Right: Feedback Badge + Clap Meter + Presets -->
                     <div class="cpr-judge-console-box">
-                      <div id="cprHitJudgeBadge" class="cpr-judge-badge font-technical" style="width:320px; height:38px; display:flex; align-items:center; justify-content:center; background:#F1F5F9; border:1px solid #E2E8F0; border-radius:8px; font-size:12.5px; font-weight:800; color:#64748B; margin-bottom:6px;">
+                      <div id="cprTimingJudgeBadge" class="cpr-timing-judge-badge standby font-technical" style="width:320px; height:38px; display:flex; align-items:center; justify-content:center; background:#F1F5F9; border:1px solid #E2E8F0; border-radius:8px; font-size:12.5px; font-weight:800; color:#64748B; margin-bottom:6px;">
                         รอเริ่มนับจังหวะ...
                       </div>
                       <!-- Clap Meter -->
@@ -6591,6 +8110,7 @@
                     </p>
                   </div>
 
+                  <div id="aedViolationContainer"></div>
                   <div id="aedReadyBanner" class="aed-charging-banner" style="margin-bottom:8px; padding:10px 14px;">
                     <span id="txtAedInstructionFeedback" class="font-technical" style="font-size:14px; font-weight:700; color:var(--vital-amber);">
                       เครื่อง เออีดี พร้อมปล่อยช็อกไฟฟ้า! กรุณาสั่งคำสั่งที่ 1
@@ -6883,7 +8403,46 @@
           const dashOffset = 440 - strokePct;
 
           const leaderboard = JSON.parse(localStorage.getItem('mdbuu_heartbeat_leaderboard') || '[]');
-          const top5 = leaderboard.slice(0, 5);
+          const top3 = leaderboard.slice(0, 3);
+
+          // Calculate MVP Support Squad based on multiplayer scores
+          const groupScores = {};
+          for (let g = 1; g <= 10; g++) groupScores[String(g).padStart(2, '0')] = 0;
+          let topPlayer = null;
+          let maxPScore = -1;
+
+          Object.values(this.connectedPlayers).forEach(p => {
+            const grp = p.group || '01';
+            const pTotal = (p.correctVotes * 10) + Math.floor(p.taps / 20) + (p.cprHits * 2) - (p.penalties || 0);
+            p.totalScore = pTotal;
+            if (groupScores[grp] !== undefined) groupScores[grp] += pTotal;
+            if (pTotal > maxPScore) {
+              maxPScore = pTotal;
+              topPlayer = p;
+            }
+          });
+
+          let topGroup = this.selectedTeam;
+          let maxGScore = -1;
+          Object.keys(groupScores).forEach(grp => {
+            if (groupScores[grp] > maxGScore) {
+              maxGScore = groupScores[grp];
+              topGroup = grp;
+            }
+          });
+
+          this.mvpGroup = topGroup;
+          this.mvpPlayerId = topPlayer ? topPlayer.id : null;
+
+          // Broadcast certificates to all connected smartphones
+          RealtimeEngine.send('MISSION_COMPLETE_CERTS', {
+            score: this.score,
+            rank: rankLetter,
+            mvpGroup: this.mvpGroup,
+            mvpPlayerId: this.mvpPlayerId,
+            mvpPlayerName: topPlayer ? topPlayer.name : '',
+            leaderboard: top3
+          });
 
           card.innerHTML = `
             <div class="unified-status-bar" style="margin-bottom: 12px;">
@@ -6967,9 +8526,9 @@
                     </div>
                   </div>
 
-                  <!-- Hall of Fame Daily Leaderboard Table -->
+                  <!-- Hall of Fame Daily Leaderboard Table (Top 3 Compact) -->
                   <div class="leaderboard-box font-technical">
-                    <div class="leaderboard-title">🏆 ตารางทำคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 5)</div>
+                    <div class="leaderboard-title">🏆 ตารางคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 3)</div>
                     <table class="leaderboard-table">
                       <thead>
                         <tr>
@@ -6981,7 +8540,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        ${top5.length > 0 ? top5.map((entry, idx) => `
+                        ${top3.length > 0 ? top3.map((entry, idx) => `
                           <tr class="${entry.team === `กลุ่มที่ ${this.selectedTeam}` ? 'current-team' : ''}">
                             <td>#${idx + 1}</td>
                             <td>${entry.team}</td>
@@ -6996,6 +8555,11 @@
                         `}
                       </tbody>
                     </table>
+                  </div>
+                  <!-- MVP Support Squad Badge -->
+                  <div class="mvp-squad-badge font-technical">
+                    <span>🏆</span>
+                    <span><strong>MVP SUPPORT SQUAD: กลุ่มที่ ${this.mvpGroup}</strong> (ผู้ช่วยกู้ชีพยอดเยี่ยมประจำรอบ)</span>
                   </div>
                 </div>
 
@@ -7054,12 +8618,140 @@
       }
 
       // Fix #2: Stage 1 Voice Answer Bar with Debounce
+      
+      handleMobileTapBatch(senderId, count = 1) {
+        if (this.currentStage !== 3) return;
+        this.stage3TapCount += count;
+        const player = this.connectedPlayers[senderId];
+        if (player) player.taps += count;
+
+        const tapPct = Math.min(100, Math.round((this.stage3TapCount / this.effectiveTapTarget) * 100));
+
+        const txtCount = document.getElementById('txtStage3TapCount');
+        const txtPct = document.getElementById('txtStage3Pct');
+        const fill = document.getElementById('stage3TapMeterFill');
+        if (txtCount) txtCount.innerText = this.stage3TapCount;
+        if (txtPct) txtPct.innerText = `${tapPct}%`;
+        if (fill) fill.style.width = `${tapPct}%`;
+
+        // Progressive Unlocks
+        if (tapPct >= 25) {
+          const fc1 = document.getElementById('factCard1');
+          if (fc1) fc1.querySelector('.fact-val-clean').innerHTML = '<span style="color:#090D16;">สุขุมวิท หน้า รพ.ม.บูรพา</span>';
+        }
+        if (tapPct >= 50) {
+          const fc2 = document.getElementById('factCard2');
+          if (fc2) fc2.querySelector('.fact-val-clean').innerHTML = '<span style="color:#090D16;">รถเก๋งชนรั้ว มีกลุ่มควัน</span>';
+        }
+        if (tapPct >= 75) {
+          const fc3 = document.getElementById('factCard3');
+          if (fc3) fc3.querySelector('.fact-val-clean').innerHTML = '<span style="color:var(--vital-crimson);">1 ราย หมดสติ ไม่หายใจ</span>';
+        }
+        if (tapPct >= 100) {
+          if (!this.stage3UnlockedChimePlayed) {
+            this.stage3UnlockedChimePlayed = true;
+            try { SoundEngine.playStageClear(); } catch(e) {}
+            showToast('✓ ปลดล็อกข้อมูลครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลย');
+          }
+        }
+      }
+
+      handleMobileCprHit(senderId, accuracy = 'GOOD', deltaMs = 0) {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished) return;
+        this.cprActive = true;
+
+        const player = this.connectedPlayers[senderId];
+        if (player) {
+          player.cprHits++;
+          player.score += (accuracy === 'PERFECT' ? 3 : 1);
+        }
+
+        // Forward to normal CPR hit attempt
+        this.attemptCprHit(deltaMs);
+      }
+
+      handleAedTouchViolation(senderId, name, group) {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'AED' || !this.aedListening) return;
+
+        const player = this.connectedPlayers[senderId];
+        if (player) player.penalties = (player.penalties || 0) + 2;
+        this.stageScores[5] = Math.max(0, (this.stageScores[5] || 15) - 2);
+
+        const container = document.getElementById('aedViolationContainer');
+        if (container) {
+          container.innerHTML = `
+            <div class="aed-violation-toast font-technical">
+              ⚠️ ระวัง! <strong>${name || 'ผู้เล่น'}</strong> (กลุ่ม ${group || '01'}) เผลอแตะหน้าจอมือถือขณะปล่อยกระแสไฟฟ้า! (-2 คะแนน)
+            </div>
+          `;
+          setTimeout(() => { if (container) container.innerHTML = ''; }, 3500);
+        }
+
+        try { SoundEngine.playErrorBuzz(); } catch(e) {}
+      }
+
+      handlePressureHoldUpdate(senderId, holding = false) {
+        // Track co-op holding
+      }
+
+      startStage7BDirectPressure() {
+        this.decisionSubStep = 'DIRECT_PRESSURE';
+        this.renderStage();
+        this.broadcastHostSync();
+        this.broadcastMultiplayerStageSync();
+
+        const card = document.getElementById('stageMainCard');
+        if (card) {
+          const col = card.querySelector('.stage-content-col');
+          if (col) {
+            col.innerHTML = `
+              <div class="pressure-hold-overlay font-technical">
+                <div class="pressure-hold-title">
+                  <span class="live-pulse-dot" style="background:#E11D48;"></span>
+                  🩸 กดนิ้วค้างไว้พร้อมกันบนหน้าจอมือถือเพื่อห้ามเลือด! (CO-OP DIRECT PRESSURE)
+                </div>
+                <div style="font-size:13px; color:#475569;">
+                  ให้ทุกคนในห้องกดนิ้วค้างไว้บนหน้าจอมือถือพร้อมกัน 3.5 วินาที เพื่อสร้างแรงกดแผลสม่ำเสมอ
+                </div>
+                <div class="pressure-gauge-track">
+                  <div class="pressure-gauge-fill" id="pressureGaugeFill"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748B;">
+                  <span>แรงกดห้ามเลือด: <strong id="txtPressurePct" style="color:#E11D48;">0%</strong></span>
+                  <span>เป้าหมาย: กดค้าง 3.5 วินาที</span>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        let heldMs = 0;
+        const totalMs = 3500;
+        const interval = setInterval(() => {
+          heldMs += 100;
+          const pct = Math.min(100, Math.round((heldMs / totalMs) * 100));
+          const fill = document.getElementById('pressureGaugeFill');
+          const txt = document.getElementById('txtPressurePct');
+          if (fill) fill.style.width = `${pct}%`;
+          if (txt) txt.innerText = `${pct}%`;
+
+          if (heldMs >= totalMs) {
+            clearInterval(interval);
+            try { SoundEngine.playStageClear(); } catch(e) {}
+            showToast('✓ เลือดหยุดไหลสนิทแล้ว! สำเร็จยอดเยี่ยม');
+            setTimeout(() => {
+              this.setStage(8);
+            }, 1200);
+          }
+        }, 100);
+      }
+
       startStage1VoiceAnswer() {
         MicSensor.ensureMicLive().catch(() => {});
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 1 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -7200,7 +8892,7 @@
           this.latestStage2Transcript = transcript;
 
           const box = document.getElementById('txtStage2LiveTranscript');
-          if (box) box.innerHTML = `ได้ยินเสียง: <strong style="color:#FFF;">"${transcript}"</strong>`;
+          if (box) box.innerHTML = `ได้ยินเสียง: <strong style="color:#059669; font-weight:800;">"${transcript}"</strong>`;
 
           // Category 1: Help
           if (val.includes('ช่วย') || val.includes('ช่วยด้วย') || val.includes('ช่วยเหลือ') || val.includes('ขอความช่วยเหลือ') || val.includes('ช่วยหน่อย')) {
@@ -7466,7 +9158,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 4 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -7555,7 +9247,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 6 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -7626,7 +9318,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 7 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -7697,7 +9389,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 8 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#F8FAFC;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -8112,6 +9804,7 @@
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return;
 
         const now = performance.now();
+        if (!this.cprStartTime) this.cprStartTime = now - 545;
         const elapsed = now - this.cprStartTime;
         if (elapsed < 80) return;
 
@@ -8143,7 +9836,6 @@
           this.cprCount = Math.min(30, this.cprCount + 1);
           flashTarget('#10B981');
           window.ECGEngine.triggerCompressionSpike();
-          SoundEngine.playPulseBeep(440, 0.05);
 
           if (badge) {
             badge.className = 'cpr-timing-judge-badge good font-technical';
@@ -8177,7 +9869,6 @@
 
           flashTarget('#10B981');
           window.ECGEngine.triggerCompressionSpike();
-          SoundEngine.playPulseBeep(520, 0.05);
 
           const isPerfect = deltaMs <= 75;
           if (badge) {
@@ -8390,6 +10081,11 @@
       }
 
       quickResetGame() {
+        // Broadcast session closed to lock previous phones
+        if (RealtimeEngine) {
+          RealtimeEngine.send('SESSION_CLOSED', { pin: this.sessionPin });
+        }
+
         this.currentStage = 0;
         this.score = 100;
         this.sessionSeconds = 480;
@@ -8397,10 +10093,17 @@
         this.cprActive = false;
         this.checklist = { location: false, incident: false, patient: false, aed: false };
         this.aedSteps = { step1: false, step2: false, step3: false };
+        this.stage3TapCount = 0;
+        this.currentVotes = {};
+        this.connectedPlayers = {};
         window.ECGEngine.setMode('SINUS');
         this.updateVitals(76, 98);
         SoundEngine.stopPulseScheduler();
         this.updatePatientHud('images/patient/patient_s1_dazed.png', 'READY // STANDBY', 'warn');
+
+        // Generate brand new 4-digit PIN for next round
+        this.sessionPin = String(Math.floor(1000 + Math.random() * 9000));
+        RealtimeEngine.init(this.sessionPin, true);
 
         document.body.classList.add('lobby-mode');
         const modal = document.getElementById('modalLobby');
@@ -8412,6 +10115,14 @@
         if (bgCanvas) {
           bgCanvas.style.display = 'block';
           bgCanvas.style.opacity = '1';
+        }
+
+        this.renderLobbyQrCode();
+        this.refreshLobbyRoster();
+
+        // If bot simulator was enabled, re-populate bots for next round
+        if (BotSimulator.enabled) {
+          BotSimulator.enable();
         }
 
         this.pickRandomTeam();
@@ -8497,6 +10208,640 @@
     window.MicSensor = MicSensor;
 
 
+    
+    // =========================================================================
+    // V14.0 MOBILE CO-RESPONDER CONTROLLER APP (?play=1&pin=XXXX)
+    // =========================================================================
+    function initMobileController(initialPin) {
+      let state = {
+        pin: initialPin || '',
+        name: localStorage.getItem('mdbuu_player_name') || '',
+        group: localStorage.getItem('mdbuu_player_group') || '01',
+        playerId: localStorage.getItem('mdbuu_player_id') || ('p_' + Math.random().toString(36).substr(2, 8)),
+        joined: false,
+        score: 0,
+        correctVotes: 0,
+        taps: 0,
+        cprHits: 0,
+        penalties: 0,
+        currentStage: 0,
+        currentSubStep: '',
+        hasVotedThisRound: false,
+        votedChoice: null,
+        voteTimer: null,
+        tapBatchCount: 0,
+        tapBatchTimer: null,
+        isMvp: false
+      };
+
+      localStorage.setItem('mdbuu_player_id', state.playerId);
+
+      // Render Base Mobile Shell
+      document.body.innerHTML = `
+        <div class="mobile-app-shell">
+          <header class="mobile-top-bar font-technical">
+            <div class="user-badge" id="mTopUserBadge">
+              <span style="color:#059669;">●</span>
+              <span id="mTxtUserName">ทีมผู้ช่วยแพทย์</span>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span class="pin-badge" id="mTxtPinBadge">PIN: #${state.pin || '----'}</span>
+              <span class="score-badge" id="mTxtScoreBadge">⭐ 0 PTS</span>
+            </div>
+          </header>
+
+          <main class="mobile-content-box" id="mobileAppBody">
+            <!-- Dynamic Sub-Screens Injected Here -->
+          </main>
+        </div>
+      `;
+
+      function updateHeader() {
+        const u = document.getElementById('mTxtUserName');
+        const p = document.getElementById('mTxtPinBadge');
+        const s = document.getElementById('mTxtScoreBadge');
+        if (u) u.innerText = state.joined ? `กลุ่ม ${state.group} • ${state.name}` : 'ยังไม่ได้ลงทะเบียน';
+        if (p) p.innerText = `PIN: #${state.pin || '----'}`;
+        if (s) s.innerText = `⭐ ${state.score} PTS`;
+      }
+
+      function renderCheckin() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="margin-top:10px;">
+            <div style="font-size:10px; color:#059669; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;">
+              MDBUU OPEN HOUSE 2027 • CO-RESPONDER
+            </div>
+            <h2 style="font-size:20px; font-weight:800; color:#090D16; margin:0;">
+              ลงทะเบียนร่วมกู้ชีพ
+            </h2>
+            <div style="font-size:12.5px; color:#64748B; line-height:1.4;">
+              ร่วมตอบคำถาม โหวตอุปกรณ์ ปั๊มหัวใจ CPR และรับเกียรติบัตรระบุชื่อของคุณทันทีเมื่อจบภารกิจ!
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
+              <label style="font-size:12px; font-weight:700; color:#334155;">รหัสห้อง (Room PIN):</label>
+              <input type="number" id="mInputPin" value="${state.pin}" class="font-technical" placeholder="4 หลัก เช่น 1234" style="height:42px; border:1.5px solid #CBD5E1; border-radius:10px; padding:0 12px; font-size:18px; font-weight:800; color:#0284C7; letter-spacing:0.06em;">
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <label style="font-size:12px; font-weight:700; color:#334155;">ชื่อเล่น / นามเรียกขาน:</label>
+              <input type="text" id="mInputName" value="${state.name}" placeholder="เช่น หมอเอิร์ธ, น้องมายด์" style="height:42px; border:1.5px solid #CBD5E1; border-radius:10px; padding:0 12px; font-size:15px; font-weight:700; color:#090D16;">
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="font-size:12px; font-weight:700; color:#334155;">เลือกกลุ่มที่สังกัด (กลุ่ม 01–10):</label>
+              <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:6px;" id="mGroupPillsGrid">
+                ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => {
+                  const s = String(n).padStart(2, '0');
+                  return `<button class="mobile-group-pill-btn ${s === state.group ? 'selected' : ''}" data-group="${s}">กลุ่ม ${s}</button>`;
+                }).join('')}
+              </div>
+            </div>
+
+            <button id="mBtnJoin" class="btn-start-console-clean font-technical" style="width:100%; height:46px; border-radius:12px; font-size:15px; font-weight:800; margin-top:8px;">
+              🚀 เข้าร่วมภารกิจกู้ชีพ
+            </button>
+          </div>
+        `;
+
+        // Group selection logic
+        const grid = document.getElementById('mGroupPillsGrid');
+        if (grid) {
+          grid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.mobile-group-pill-btn');
+            if (!btn) return;
+            grid.querySelectorAll('.mobile-group-pill-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            state.group = btn.getAttribute('data-group');
+          });
+        }
+
+        // Join button logic
+        document.getElementById('mBtnJoin').onclick = () => {
+          const pinVal = document.getElementById('mInputPin').value.trim();
+          const nameVal = document.getElementById('mInputName').value.trim();
+          if (!pinVal || pinVal.length < 4) {
+            alert('กรุณากรอกรหัสห้อง PIN ให้ครบ 4 หลักครับ');
+            return;
+          }
+          if (!nameVal) {
+            alert('กรุณากรอกชื่อเล่นของคุณด้วยครับ');
+            return;
+          }
+
+          state.pin = pinVal;
+          state.name = nameVal;
+          state.joined = true;
+          localStorage.setItem('mdbuu_player_name', state.name);
+          localStorage.setItem('mdbuu_player_group', state.group);
+
+          // Connect Realtime
+          RealtimeEngine.init(state.pin, false, {
+            id: state.playerId,
+            name: state.name,
+            group: state.group
+          });
+
+          // Send Join notification to Host
+          RealtimeEngine.send('PLAYER_JOIN', {
+            name: state.name,
+            group: state.group
+          });
+
+          updateHeader();
+          renderLobbyWaiting();
+        };
+      }
+
+      function renderLobbyWaiting() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:30px 20px;">
+            <div style="width:64px; height:64px; border-radius:999px; background:#ECFDF5; border:2px solid #A7F3D0; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px;">
+              🫀
+            </div>
+            <h3 style="font-size:18px; font-weight:800; color:#090D16; margin:0 0 6px;">
+              เชื่อมต่อห้องสำเร็จแล้ว!
+            </h3>
+            <div style="font-size:14px; font-weight:700; color:#059669; margin-bottom:12px;">
+              คุณอยู่ใน: กลุ่มที่ ${state.group} • ${state.name}
+            </div>
+            <div style="font-size:12.5px; color:#64748B; line-height:1.5;">
+              รอตัวแทนและพี่วิทยากรเริ่มภารกิจหน้าห้อง...<br>
+              เมื่อเริ่มด่าน หน้าจอนี้จะเปลี่ยนเป็น <strong>ระบบโหวต / ปั๊มหัวใจ CPR / ช่วยห้ามเลือด</strong> โดยอัตโนมัติครับ!
+            </div>
+          </div>
+        `;
+      }
+
+      function renderInspectWaiting(stageNum) {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:30px 20px;">
+            <div style="font-size:32px; margin-bottom:8px;">🔍</div>
+            <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 6px;">
+              ด่านที่ ${stageNum} • กำลังสำรวจอาการ
+            </h3>
+            <div style="font-size:13px; color:#64748B; line-height:1.4;">
+              รอตัวแทนหน้าห้องพูดคำว่า <strong>"สำรวจ"</strong> เพื่อปลดล็อกปุ่มโหวตอุปกรณ์บนมือถือของคุณ...
+            </div>
+          </div>
+        `;
+      }
+
+      function renderChoiceVoting(stageNum, choices, instruction) {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+        state.hasVotedThisRound = false;
+        state.votedChoice = null;
+        const startTime = performance.now();
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:11px; font-weight:800; color:#0284C7; background:#F0F9FF; border:1px solid #BAE6FD; padding:3px 10px; border-radius:999px;">
+                ⚡ เปิดโหวตด่านที่ ${stageNum} (CO-OP VOTE)
+              </span>
+              <span id="mTxtVoteTimer" style="font-size:14px; font-weight:900; color:#E11D48;" class="num-readout">12s</span>
+            </div>
+
+            <h3 style="font-size:15px; font-weight:800; color:#090D16; margin:8px 0 2px; line-height:1.35;">
+              ${instruction || 'เลือกอุปกรณ์หรือวิธีการรักษาที่ถูกต้อง:'}
+            </h3>
+            <div style="font-size:11.5px; color:#64748B; margin-bottom:10px;">
+              แตะตัวเลือกที่ถูกต้องให้เร็วที่สุดเพื่อรับคะแนนโบนัสความเร็ว!
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;" id="mChoicesList">
+              ${choices.map(c => `
+                <button class="mobile-choice-tap-btn font-technical" data-choice="${c.num}">
+                  <div class="choice-num-badge num-readout" style="width:28px; height:28px; font-size:13px;">${c.num}</div>
+                  <div style="display:flex; flex-direction:column; gap:2px; flex:1; min-width:0;">
+                    <div style="font-size:14px; font-weight:800; color:#090D16; line-height:1.25;">${c.title}</div>
+                    <div style="font-size:11.5px; color:#64748B; line-height:1.3;">${c.purpose}</div>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+
+            <div id="mVoteConfirmFeedback" style="display:none; margin-top:10px; padding:10px; background:#ECFDF5; border:1px solid #A7F3D0; border-radius:10px; text-align:center; font-size:12.5px; font-weight:800; color:#065F46;">
+              ✓ ส่งผลโหวตข้อ <span id="mTxtVotedNum">X</span> เรียบร้อยแล้ว! (+10 คะแนนถ้าถูกต้อง)
+            </div>
+          </div>
+        `;
+
+        // Handle Voting Clicks
+        const list = document.getElementById('mChoicesList');
+        if (list) {
+          list.addEventListener('click', (e) => {
+            if (state.hasVotedThisRound) return;
+            const btn = e.target.closest('.mobile-choice-tap-btn');
+            if (!btn) return;
+
+            const choiceNum = parseInt(btn.getAttribute('data-choice'), 10);
+            state.hasVotedThisRound = true;
+            state.votedChoice = choiceNum;
+            const speedMs = Math.round(performance.now() - startTime);
+
+            // Highlight chosen
+            list.querySelectorAll('.mobile-choice-tap-btn').forEach(b => b.classList.remove('selected-choice'));
+            btn.classList.add('selected-choice');
+
+            // Haptic vibration
+            if (navigator.vibrate) navigator.vibrate(25);
+
+            // Send vote to Host
+            RealtimeEngine.send('PLAYER_VOTE', {
+              choice: choiceNum,
+              speedMs: speedMs
+            });
+
+            const fb = document.getElementById('mVoteConfirmFeedback');
+            const numEl = document.getElementById('mTxtVotedNum');
+            if (numEl) numEl.innerText = choiceNum;
+            if (fb) fb.style.display = 'block';
+          });
+        }
+      }
+
+      function renderHeroDecisionWaiting() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:24px 20px;">
+            <div style="font-size:32px; margin-bottom:8px;">🏆</div>
+            <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 6px;">
+              ปิดรับโหวตแล้ว!
+            </h3>
+            <div style="font-size:13px; color:#475569; line-height:1.4;">
+              มติของพวกเราถูกสรุปขึ้นจอใหญ่เรียบร้อยแล้ว<br>
+              รอตัวแทนหน้าห้องตัดสินใจว่าจะ <strong>"ยืนยัน"</strong> หรือ <strong>"ขอโหวตใหม่"</strong> ครับ
+            </div>
+          </div>
+        `;
+      }
+
+      function renderStage2Shout() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:24px 16px;">
+            <div style="font-size:11px; font-weight:800; color:#E11D48; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:10px;">
+              📢 ด่านที่ 2 • ตะโกนขอความช่วยเหลือ (SHOUT 76+ dB)
+            </div>
+            <div style="font-size:12.5px; color:#64748B; margin-bottom:14px;">
+              ช่วยตัวแทนหน้าห้องตะโกนประโยคนี้พร้อมกันให้ดังสนั่นห้อง!
+            </div>
+            <div style="background:#0F172A; color:#F8FAFC; border-radius:14px; padding:18px 14px; font-size:16px; font-weight:800; line-height:1.5; border:2px solid #38BDF8;">
+              “ช่วยด้วย! มีคนหมดสติ ช่วยโทร 1669 และเอา AED มาด้วย!”
+            </div>
+          </div>
+        `;
+      }
+
+      function renderStage3TapRush() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        let localTaps = 0;
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:20px 16px;">
+            <div style="font-size:11px; font-weight:800; color:#0284C7; background:#F0F9FF; border:1px solid #BAE6FD; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+              ⚡ ด่านที่ 3 • CO-OP INTEL RUSH (1,000 TAPS)
+            </div>
+            <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 4px;">
+              กดรัวๆ เพื่อส่งข้อมูลเหตุฉุกเฉิน!
+            </h3>
+            <div style="font-size:12px; color:#64748B;">
+              ร่วมกันกดปุ่มนี้รัวๆ เพื่อปลดล็อกพิกัดและอาการส่งขึ้นจอใหญ่
+            </div>
+
+            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush">
+              <span style="font-size:32px;">⚡</span>
+              <span style="font-size:18px; font-weight:900;">กดรัวๆ!</span>
+              <span style="font-size:11px; opacity:0.85;">TAP HERE</span>
+            </div>
+
+            <div style="font-size:13px; font-weight:800; color:#0284C7;">
+              คุณกดไปแล้ว: <strong id="mTxtLocalTaps" class="num-readout" style="font-size:18px;">0</strong> ครั้ง
+            </div>
+          </div>
+        `;
+
+        const btn = document.getElementById('mBtnTapRush');
+        const txt = document.getElementById('mTxtLocalTaps');
+
+        function flushTaps() {
+          if (state.tapBatchCount > 0) {
+            RealtimeEngine.send('TAP_BATCH', { count: state.tapBatchCount });
+            state.tapBatchCount = 0;
+          }
+        }
+
+        if (btn) {
+          btn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            localTaps++;
+            state.taps++;
+            state.tapBatchCount++;
+            if (txt) txt.innerText = localTaps;
+            if (navigator.vibrate) navigator.vibrate(15);
+
+            if (!state.tapBatchTimer) {
+              state.tapBatchTimer = setTimeout(() => {
+                flushTaps();
+                state.tapBatchTimer = null;
+              }, 250);
+            }
+          });
+        }
+      }
+
+      function renderStage5ACpr() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        let localCprHits = 0;
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:18px 16px;">
+            <div style="font-size:11px; font-weight:800; color:#059669; background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+              🫀 ด่านที่ 5A • จังหวะปั๊มหัวใจ 110 BPM
+            </div>
+            <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 2px;">
+              แตะตามจังหวะชีพจร 110 ครั้ง/นาที
+            </h3>
+            <div style="font-size:11.5px; color:#64748B;">
+              แตะให้ตรงจังหวะไฟและเสียงบีต เพื่อช่วยเพิ่มคะแนน CPR ให้กลุ่มของคุณ!
+            </div>
+
+            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad">
+              <span style="font-size:34px;">🫀</span>
+              <span style="font-size:17px; font-weight:900;">กดจังหวะนี้!</span>
+              <span style="font-size:11px; opacity:0.9;">110 BPM</span>
+            </div>
+
+            <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:#059669; min-height:20px;">
+              แตะปุ่มรูปหัวใจตามจังหวะได้เลย!
+            </div>
+          </div>
+        `;
+
+        const pad = document.getElementById('mBtnCprPad');
+        const fb = document.getElementById('mTxtCprFeedback');
+        const BEAT_INTERVAL = 545.45; // 110 BPM
+        let lastBeatTime = performance.now();
+
+        if (pad) {
+          pad.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            const now = performance.now();
+            const delta = Math.abs((now - lastBeatTime) % BEAT_INTERVAL);
+            const isPerfect = delta <= 120 || delta >= (BEAT_INTERVAL - 120);
+
+            localCprHits++;
+            state.cprHits++;
+            state.score += (isPerfect ? 3 : 1);
+            updateHeader();
+
+            if (navigator.vibrate) navigator.vibrate(35);
+
+            if (fb) {
+              fb.innerText = isPerfect ? '✓ PERFECT! ตรงจังหวะ 110 BPM เป๊ะ (+3)' : '✓ GOOD! ปั๊มต่อเนื่องดีมาก (+1)';
+              fb.style.color = isPerfect ? '#059669' : '#0284C7';
+            }
+
+            RealtimeEngine.send('CPR_BEAT_HIT', {
+              accuracy: isPerfect ? 'PERFECT' : 'GOOD',
+              deltaMs: Math.round(delta)
+            });
+          });
+        }
+      }
+
+      function renderStage5BAed() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-aed-danger-screen font-technical" id="mAedDangerPad">
+            <div style="font-size:52px; margin-bottom:12px;">⚡</div>
+            <h1 style="font-size:24px; font-weight:900; margin:0 0 10px;">
+              ห้ามแตะหน้าจอมือถือเด็ดขาด!
+            </h1>
+            <div style="font-size:15px; font-weight:700; line-height:1.5; max-width:320px; opacity:0.95;">
+              เครื่อง เออีดี กำลังเตรียมปล่อยกระแสไฟฟ้าช็อก 200J<br>
+              <strong>(CLEAR! ถอยห่างจากตัวผู้ป่วย)</strong>
+            </div>
+            <div style="font-size:12px; margin-top:20px; background:rgba(0,0,0,0.3); padding:8px 16px; border-radius:999px;">
+              ⚠️ หากแตะหน้าจอขณะนี้ จะถูกหัก 2 คะแนน!
+            </div>
+          </div>
+        `;
+
+        const danger = document.getElementById('mAedDangerPad');
+        if (danger) {
+          danger.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            state.penalties += 2;
+            state.score = Math.max(0, state.score - 2);
+            updateHeader();
+
+            alert('⚠️ คุณเผลอแตะหน้าจอมือถือขณะปล่อยกระแสไฟฟ้า AED! โดนหัก 2 คะแนน');
+
+            RealtimeEngine.send('AED_TOUCH_VIOLATION', {
+              name: state.name,
+              group: state.group
+            });
+          }, { once: true });
+        }
+      }
+
+      function renderStage7BPresure() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:22px 16px;">
+            <div style="font-size:11px; font-weight:800; color:#E11D48; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
+              🩸 ด่านที่ 7B • กดห้ามเลือดโดยตรง (DIRECT PRESSURE)
+            </div>
+            <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 4px;">
+              กดนิ้วค้างไว้บนปุ่มนี้พร้อมกัน 3.5 วินาที
+            </h3>
+            <div style="font-size:12px; color:#64748B; margin-bottom:14px;">
+              อย่าเพิ่งปล่อยมือจนกว่าเลือดจะหยุดไหล!
+            </div>
+
+            <div style="width:160px; height:160px; border-radius:999px; background:#FFF1F2; border:6px solid #FECDD3; margin:0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer;" id="mBtnHoldPressure">
+              <span style="font-size:32px;">🩸</span>
+              <span style="font-size:16px; font-weight:900; color:#E11D48;" id="mTxtHoldStatus">กดค้างไว้!</span>
+            </div>
+          </div>
+        `;
+
+        const btn = document.getElementById('mBtnHoldPressure');
+        const txt = document.getElementById('mTxtHoldStatus');
+        if (btn) {
+          btn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            btn.style.background = '#ECFDF5';
+            btn.style.borderColor = '#A7F3D0';
+            if (txt) { txt.innerText = 'กำลังกดแผล...'; txt.style.color = '#059669'; }
+            RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: true });
+          });
+          btn.addEventListener('pointerup', (e) => {
+            e.preventDefault();
+            btn.style.background = '#FFF1F2';
+            btn.style.borderColor = '#FECDD3';
+            if (txt) { txt.innerText = 'กดค้างไว้!'; txt.style.color = '#E11D48'; }
+            RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: false });
+          });
+        }
+      }
+
+      function renderStage9Certificate(certData) {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        const score = certData ? certData.score : (state.score || 100);
+        const rank = certData ? certData.rank : 'S';
+        const isMvp = (certData && certData.mvpPlayerId === state.playerId) || state.isMvp;
+        const statsSummary = `โหวตถูกต้อง ${state.correctVotes}/5 ข้อ • ส่งข้อมูล 1669 จำนวน ${state.taps} ครั้ง • ปั๊ม CPR แม่นยำ ${state.cprHits} ครั้ง`;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:20px 16px;">
+            <div style="font-size:10px; color:#D4AF37; font-weight:800; letter-spacing:0.12em;">
+              OFFICIAL CLINICAL CREDENTIAL • MDBUU OPEN HOUSE 2027
+            </div>
+            <h2 style="font-size:18px; font-weight:800; color:#064E3B; margin:4px 0 2px;">
+              คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
+            </h2>
+            <div style="font-size:11px; color:#64748B; margin-bottom:12px;">
+              ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน
+            </div>
+
+            <div style="background:#ECFDF5; border:1.5px solid #A7F3D0; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+              <div style="font-size:12px; color:#64748B;">ขอมอบประกาศนียบัตรให้แก่:</div>
+              <div style="font-size:22px; font-weight:900; color:#065F46; margin:4px 0;">
+                คุณ${state.name} • กลุ่มที่ ${state.group}
+              </div>
+              ${isMvp ? `
+                <div style="font-size:12px; font-weight:800; color:#D97706; margin-top:4px;">
+                  🥇 TOP MVP CO-RESPONDER OF THE SESSION!
+                </div>
+              ` : ''}
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:10px 8px; margin-bottom:12px;">
+              <div>
+                <div style="font-size:10px; color:#64748B;">คะแนนรวม</div>
+                <div style="font-size:16px; font-weight:900; color:#090D16;" class="num-readout">${score} / 100</div>
+              </div>
+              <div>
+                <div style="font-size:10px; color:#64748B;">เกรด</div>
+                <div style="font-size:16px; font-weight:900; color:#059669;" class="num-readout">GRADE ${rank}</div>
+              </div>
+              <div>
+                <div style="font-size:10px; color:#64748B;">สถานะ</div>
+                <div style="font-size:14px; font-weight:800; color:#0284C7;">รอดชีวิต</div>
+              </div>
+            </div>
+
+            <button id="mBtnDownloadCert" class="btn-start-console-clean font-technical" style="width:100%; height:46px; border-radius:12px; font-size:14.5px; font-weight:800; justify-content:center; background:linear-gradient(135deg, #065F46 0%, #047857 100%); border-color:#D4AF37;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              📥 บันทึกรูปเกียรติบัตรชื่อของคุณ (PNG)
+            </button>
+          </div>
+        `;
+
+        document.getElementById('mBtnDownloadCert').onclick = () => {
+          generatePersonalizedCertificatePng({
+            recipient: `คุณ${state.name} • กลุ่มที่ ${state.group}`,
+            group: state.group,
+            score: score,
+            rank: rank,
+            isMvp: isMvp,
+            stats: statsSummary
+          });
+        };
+      }
+
+      function renderSessionClosed() {
+        const body = document.getElementById('mobileAppBody');
+        if (!body) return;
+
+        body.innerHTML = `
+          <div class="mobile-card-white font-technical" style="text-align:center; padding:30px 16px;">
+            <div style="font-size:36px; margin-bottom:8px;">🏁</div>
+            <h3 style="font-size:18px; font-weight:800; color:#090D16; margin:0 0 6px;">
+              สิ้นสุดภารกิจรอบนี้แล้ว
+            </h3>
+            <div style="font-size:13px; color:#64748B; line-height:1.4; margin-bottom:16px;">
+              ขอบคุณที่ร่วมปฏิบัติการช่วยฟื้นคืนชีพกับคณะแพทยศาสตร์ มหาวิทยาลัยบูรพา!
+            </div>
+            <a href="${window.location.pathname}?play=1" style="display:inline-block; padding:10px 20px; background:#059669; color:#FFFFFF; border-radius:10px; text-decoration:none; font-weight:800; font-size:13.5px;">
+              🔄 เข้าร่วมรอบถัดไป
+            </a>
+          </div>
+        `;
+      }
+
+      // Setup Realtime Sync Handlers on Mobile
+      RealtimeEngine.on('STAGE_SYNC', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        state.currentStage = d.stage;
+        state.currentSubStep = d.subStep;
+
+        if (d.stage === 0) {
+          renderLobbyWaiting();
+        } else if ([1, 4, 6, 7, 8].includes(d.stage)) {
+          if (d.subStep === 'PROMPT_INSPECT') {
+            renderInspectWaiting(d.stage);
+          } else if (d.subStep === 'AUDIENCE_VOTING') {
+            renderChoiceVoting(d.stage, d.choices || [], d.instruction);
+          } else if (d.subStep === 'HERO_DECISION') {
+            renderHeroDecisionWaiting();
+          } else if (d.subStep === 'DIRECT_PRESSURE') {
+            renderStage7BPresure();
+          }
+        } else if (d.stage === 2) {
+          renderStage2Shout();
+        } else if (d.stage === 3) {
+          renderStage3TapRush();
+        } else if (d.stage === 5) {
+          if (d.subPhase === 'CPR') {
+            renderStage5ACpr();
+          } else {
+            renderStage5BAed();
+          }
+        }
+      });
+
+      RealtimeEngine.on('MISSION_COMPLETE_CERTS', (msg) => {
+        if (!state.joined) return;
+        renderStage9Certificate(msg.payload);
+      });
+
+      RealtimeEngine.on('SESSION_CLOSED', () => {
+        if (!state.joined) return;
+        renderSessionClosed();
+      });
+
+      // Initial View: Checkin or Lobby
+      renderCheckin();
+    }
+
     function checkMobileCertificateView() {
       const params = new URLSearchParams(window.location.search);
       if (params.get('cert') === '1') {
@@ -8576,8 +10921,20 @@
       return false;
     }
 
-        window.addEventListener('DOMContentLoaded', () => {
-      if (checkMobileCertificateView()) return;
+        function checkMobileView() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('play') === '1') {
+        initMobileController(params.get('pin'));
+        return true;
+      }
+      if (params.get('cert') === '1') {
+        return checkMobileCertificateView();
+      }
+      return false;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (checkMobileView()) return;
       GameStateManager.init();
       AIVoiceCoach.initVoice();
     });
