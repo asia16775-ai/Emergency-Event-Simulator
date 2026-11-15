@@ -177,12 +177,12 @@
        01. CLINICAL HEADER & HORIZONTAL STEPPER (HEIGHT: 58PX)
        ========================================================================== */
     .monitor-header {
-      height: 56px;
-      padding: 0 14px;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
+      height: 52px;
+      padding: 0 12px;
+      display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 8px;
       background: #FFFFFF;
       border-bottom: 1.5px solid #E2E8F0;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
@@ -195,13 +195,13 @@
     .brand-mark {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       flex-shrink: 0;
     }
     .brand-icon-box {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
       background: #090D16;
       display: flex;
       align-items: center;
@@ -209,20 +209,20 @@
       flex-shrink: 0;
     }
     .brand-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #090D16;
       white-space: nowrap;
     }
     .brand-badge-mdbuu {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
-      padding: 2px 7px;
+      padding: 2px 6px;
       background: #F1F5F9;
       color: #475569;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
+      border-radius: 5px;
+      letter-spacing: 0.04em;
       border: 1px solid #E2E8F0;
       white-space: nowrap;
     }
@@ -237,18 +237,22 @@
       align-items: center;
       justify-content: center;
       gap: 3px;
-      overflow: visible;
-      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      flex: 1;
+      min-width: 0;
+      padding: 0 4px;
     }
     .nav-step-pills::-webkit-scrollbar {
       display: none;
     }
     .nav-step-pill {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       color: #64748B;
-      padding: 4px 6px;
-      border-radius: 7px;
+      padding: 3px 6px;
+      border-radius: 6px;
       white-space: nowrap;
       transition: all 0.15s ease;
       background: transparent;
@@ -280,20 +284,21 @@
       font-family: var(--font-num) !important;
       font-weight: 700;
       font-size: 11px;
-      padding: 3px 6px;
+      padding: 3px 7px;
       border-radius: 6px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
     }
     .nav-btn {
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       color: #334155;
-      border-radius: 7px;
-      height: 30px;
-      padding: 0 8px;
-      font-size: 11.5px;
+      border-radius: 6px;
+      height: 28px;
+      padding: 0 7px;
+      font-size: 11px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
@@ -305,7 +310,7 @@
       flex-shrink: 0 !important;
     }
     .nav-btn-icon-only {
-      width: 30px;
+      width: 28px;
       padding: 0 !important;
       justify-content: center;
     }
@@ -329,41 +334,41 @@
 
     @media (max-width: 1440px) {
       .monitor-header {
-        gap: 8px;
-        padding: 0 10px;
+        gap: 6px;
+        padding: 0 8px;
       }
       .brand-badge-mdbuu {
         display: none;
       }
-      .nav-step-pill {
-        padding: 3px 5px !important;
-        font-size: 11px !important;
+      .brand-title {
+        font-size: 13px;
       }
-      .nav-step-pills {
-        gap: 2px !important;
+      .session-clock-pill .clock-lbl {
+        display: none;
       }
-      .nav-right-controls {
-        gap: 3px !important;
+      .audio-reset-btn .btn-txt {
+        display: none;
       }
       .nav-btn {
-        padding: 0 6px !important;
-        font-size: 11px !important;
-        height: 28px !important;
+        padding: 0 5px !important;
+        gap: 3px !important;
       }
-      .session-clock-pill {
-        padding: 2px 5px !important;
-        font-size: 10.5px !important;
-      }
-    }
-
-    @media (max-width: 1300px) {
       .nav-step-pill {
         padding: 2px 4px !important;
         font-size: 10.5px !important;
       }
-      .nav-btn {
-        padding: 0 5px !important;
-        font-size: 10.5px !important;
+    }
+
+    @media (max-width: 1250px) {
+      #btnVoiceModeToggle .btn-txt {
+        display: none;
+      }
+      .host-remote-btn .btn-txt {
+        font-size: 10.5px;
+      }
+      .nav-step-pill {
+        padding: 2px 3px !important;
+        font-size: 10px !important;
       }
     }
 
@@ -373,49 +378,53 @@
     .telemetry-ribbon-bar {
       width: 97vw;
       max-width: 2400px;
-      margin: 8px auto 0;
-      height: clamp(138px, 16.5vh, 176px);
+      margin: 6px auto 0;
+      height: clamp(148px, 18vh, 178px);
       display: grid;
-      grid-template-columns: clamp(360px, 28vw, 460px) 1fr clamp(210px, 17vw, 270px);
-      gap: clamp(10px, 1vw, 16px);
+      grid-template-columns: clamp(340px, 27vw, 440px) 1fr clamp(200px, 16vw, 250px);
+      gap: clamp(8px, 1vw, 14px);
       flex-shrink: 0;
       background: transparent;
       border: none;
       box-shadow: none;
-      overflow: visible;
+      overflow: hidden;
       box-sizing: border-box;
     }
 
-    /* Column 1: Patient HUD Card - Split Medical Camera Module (450px x 204px) */
+    /* Column 1: Patient HUD Card - Split Medical Camera Module */
     .patient-hud-badge {
       width: 100%;
       height: 100%;
+      max-height: 100%;
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
-      border-radius: 20px;
-      padding: 10px;
+      border-radius: 16px;
+      padding: 8px 10px;
       display: flex;
-      gap: 16px;
+      gap: 12px;
       align-items: stretch;
       box-shadow: var(--shadow-card);
       flex-shrink: 0;
       transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
       position: relative;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .patient-hud-photo-wrap {
-      width: clamp(136px, 17vh, 168px);
+      width: clamp(100px, 13vh, 135px);
       height: 100%;
-      border-radius: 14px;
+      max-height: 100%;
+      border-radius: 12px;
       overflow: hidden;
       border: 2px solid #0F172A;
-      box-shadow: 0 6px 16px rgba(15,23,42,0.12);
+      box-shadow: 0 4px 12px rgba(15,23,42,0.12);
       flex-shrink: 0;
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
       background: #090D16;
+      box-sizing: border-box;
     }
     .patient-hud-photo {
       width: 100%;
@@ -425,18 +434,18 @@
     }
     .patient-cam-live-badge {
       position: absolute;
-      top: 8px;
-      left: 8px;
+      top: 6px;
+      left: 6px;
       background: rgba(9, 13, 22, 0.78);
       backdrop-filter: blur(4px);
       color: #FFFFFF;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 6px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       z-index: 5;
       letter-spacing: 0.04em;
     }
@@ -450,75 +459,83 @@
     }
     .patient-hud-meta {
       flex: 1;
+      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 4px 4px 4px 0;
+      padding: 0;
       overflow: hidden;
       min-width: 0;
+      box-sizing: border-box;
     }
     .patient-hud-top-group {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1px;
     }
     .patient-hud-label {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #64748B;
       text-transform: uppercase;
+      line-height: 1.1;
     }
     .patient-hud-stage-name {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 800;
       color: #090D16;
-      line-height: 1.25;
+      line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .patient-hud-state {
-      font-size: 12.5px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 4px 8px;
+      border-radius: 8px;
       display: block;
       width: 100%;
       box-sizing: border-box;
-      line-height: 1.35;
+      line-height: 1.25;
       background: var(--bg-muted);
       color: var(--text-slate);
       border: 1px solid var(--border-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .patient-hud-micro-footer {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 5px;
       width: 100%;
     }
     .micro-pill {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      padding: 5px 8px;
+      border-radius: 6px;
+      padding: 3px 6px;
       display: flex;
       flex-direction: column;
       gap: 1px;
       min-width: 0;
     }
     .micro-lbl {
-      font-size: 9.5px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748B;
+      line-height: 1.1;
     }
     .micro-val {
-      font-size: 11.5px;
+      font-size: 10.5px;
       font-weight: 800;
       color: #090D16;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.1;
     }
     .hud-reaction-badge {
       position: absolute;
@@ -708,7 +725,7 @@
     .stage-viewport {
       width: 97vw;
       max-width: 2400px;
-      margin: 8px auto 10px;
+      margin: 6px auto 8px;
       flex: 1;
       min-height: 0;
       max-height: none;
@@ -3687,30 +3704,30 @@
     <div class="nav-right-controls">
       <div class="session-clock-pill font-technical">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        SESSION <span id="txtSessionClock" class="num-readout">08:00</span>
+        <span class="clock-lbl">SESSION</span> <span id="txtSessionClock" class="num-readout">08:00</span>
       </div>
-            <button id="btnHostRemote" onclick="GameStateManager.openHostRemote()" class="nav-btn font-technical host-remote-btn" style="background:#0F172A; color:#38BDF8; border-color:#0284C7; font-weight:700;" title="เปิดหน้าต่างจอกรรมการควบคุมระยะไกล (Dual-Screen)">
+      <button id="btnHostRemote" onclick="GameStateManager.openHostRemote()" class="nav-btn font-technical host-remote-btn" style="background:#0F172A; color:#38BDF8; border-color:#0284C7; font-weight:700;" title="เปิดหน้าต่างจอกรรมการควบคุมระยะไกล (Dual-Screen)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        จอกรรมการ
+        <span class="btn-txt">จอกรรมการ</span>
       </button>
       <button id="btnDisplayScaleMode" onclick="GameStateManager.cycleDisplayScaleMode()" class="nav-btn font-technical" title="ปรับขนาดการแสดงผลให้เหมาะกับจอทีวีหรือห้องประชุม">
-        🖥️ จอ: อัตโนมัติ
+        🖥️ 100%
       </button>
       <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn" title="รีเซ็ตระดับเสียงและไมค์ให้ดังเต็มที่ทันที">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        รีเซ็ตไมค์
+        <span class="btn-txt">รีเซ็ต</span>
       </button>
       <button id="btnVoiceModeToggle" onclick="AIVoiceCoach.toggleVoiceMode()" class="nav-btn font-technical" title="เปิด/ปิดเสียง AI บรรยาย">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-        AI: เปิด
+        <span class="btn-txt">AI</span>
       </button>
-      <button onclick="GameStateManager.openSettingsModal()" class="nav-btn font-technical nav-btn-icon-only" title="ตั้งค่าเสียง">
+      <button onclick="GameStateManager.openSettingsModal()" class="nav-btn font-technical nav-btn-icon-only" title="ตั้งค่าเสียงและขนาดจอ">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <button onclick="SoundEngine.toggleMute()" class="nav-btn font-technical" title="Mute Toggle [M]">
+      <button onclick="SoundEngine.toggleMute()" class="nav-btn font-technical nav-btn-icon-only" title="Mute Toggle [M]">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
       </button>
-      <button onclick="GameStateManager.toggleFullscreen()" class="nav-btn font-technical" title="Fullscreen [F]">
+      <button onclick="GameStateManager.toggleFullscreen()" class="nav-btn font-technical nav-btn-icon-only" title="Fullscreen [F]">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
       </button>
     </div>
@@ -11124,12 +11141,12 @@
         const btn = document.getElementById("btnDisplayScaleMode");
         if (btn) {
           const shortLabels = {
-            auto: "🖥️ จอ: อัตโนมัติ (" + Math.round(scale * 100) + "%)",
-            laptop: "🖥️ จอ: 100%",
-            tv: "🖥️ จอ: ทีวี 115%",
-            hall: "🖥️ จอ: ห้องประชุม 130%"
+            auto: "🖥️ " + Math.round(scale * 100) + "%",
+            laptop: "🖥️ 100%",
+            tv: "🖥️ 115%",
+            hall: "🖥️ 130%"
           };
-          btn.innerText = shortLabels[this.displayScaleMode] || "🖥️ จอ: อัตโนมัติ";
+          btn.innerText = shortLabels[this.displayScaleMode] || "🖥️ 100%";
         }
 
         // Update settings modal buttons if present
