@@ -3640,6 +3640,22 @@
   <!-- Fullscreen Vignette Overlay -->
   <div id="vignetteOverlay"></div>
 
+  <!-- V19.0 Fullscreen Cinematic 200J Defibrillation Layer -->
+  <div id="aedShockCinemaOverlay" style="position:fixed; inset:0; z-index:99998; pointer-events:none; display:none; flex-direction:column; align-items:center; justify-content:center; background:transparent;">
+    <canvas id="aedShockCanvas" style="position:absolute; inset:0; width:100vw; height:100vh; pointer-events:none;"></canvas>
+    <div id="aedShockBanner" style="position:relative; z-index:10; background:rgba(9,13,22,0.92); border:2px solid #38BDF8; box-shadow:0 0 50px rgba(56,189,248,0.5), inset 0 0 30px rgba(56,189,248,0.25); border-radius:20px; padding:28px 48px; text-align:center; backdrop-filter:blur(10px); transform:scale(0.85); opacity:0; transition:all 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+      <div style="font-size:14px; font-weight:800; letter-spacing:0.25em; color:#38BDF8; font-family:var(--font-technical); text-transform:uppercase; margin-bottom:4px;">
+        ⚡ HIGH-VOLTAGE DEFIBRILLATION
+      </div>
+      <div id="aedShockTitle" style="font-size:42px; font-weight:900; color:#FFFFFF; font-family:var(--font-technical); text-shadow:0 0 25px rgba(56,189,248,0.8); line-height:1.2; margin-bottom:6px;">
+        ⚡ SHOCK DELIVERED • 200J
+      </div>
+      <div id="aedShockSub" style="font-size:16px; font-weight:700; color:#A7F3D0; font-family:var(--font-technical);">
+        กำลังวิเคราะห์การกลับมาเต้นของหัวใจ (ROSC)...
+      </div>
+    </div>
+  </div>
+
     <!-- Header: Clinical ICU Telemetry Navigation -->
   <header class="monitor-header">
     <div class="brand-mark">
@@ -4686,14 +4702,24 @@
           }, 650);
         };
 
-        const minDurationMs = Math.max(5000, phoneticText.length * 140);
-        const safetyTimer = setTimeout(() => {
+        const tryFinish = () => {
+          if (settled) return;
+          // V19.0: Check if Web Speech API is still physically vocalizing!
+          if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            setTimeout(tryFinish, 200);
+            return;
+          }
           finish();
+        };
+
+        const minDurationMs = Math.max(5000, phoneticText.length * 150);
+        const safetyTimer = setTimeout(() => {
+          tryFinish();
         }, minDurationMs);
 
         utter.onend = () => {
           clearTimeout(safetyTimer);
-          finish();
+          setTimeout(finish, 200);
         };
         utter.onerror = () => {
           clearTimeout(safetyTimer);
@@ -6434,7 +6460,7 @@
         });
 
         RealtimeEngine.on('CPR_BEAT_HIT', (msg) => {
-          this.handleMobileCprHit(msg.senderId, msg.payload.accuracy, msg.payload.deltaMs);
+          this.handleMobileCprHit(msg.senderId, msg.payload);
         });
 
         RealtimeEngine.on('AED_TOUCH_VIOLATION', (msg) => {
@@ -6558,6 +6584,8 @@
           stage: this.currentStage,
           subStep: this.decisionSubStep,
           subPhase: this.stage5Phase,
+          cprState: this.cprPhaseState || 'INTRO',
+          cprEpochStart: this.cprEpochStart || 0,
           instruction: cData ? cData.selectInstruction : '',
           choices: choiceData,
           winningChoice: this.topVotedChoice ? {
@@ -6869,9 +6897,11 @@
           this.startClinicalVoiceTracking(4);
         } else if (newStage === 5) {
           this.stage5Phase = 'CPR';
+          this.cprPhaseState = 'INTRO'; // V19.0: 'INTRO' | 'COUNTDOWN' | 'ACTIVE'
           this.cprActive = false;
           this.cprCanHit = false;
           this.cprStartTime = 0;
+          this.cprEpochStart = 0;
           this.cprMissCooldownUntil = 0;
           this.cprCount = 0;
           this.cprFinished = false;
@@ -6886,6 +6916,7 @@
           this.broadcastMultiplayerStageSync();
 
           await speakAndWait('ผู้ป่วยหัวใจหยุดเต้นแล้วครับ! เราต้องกดหน้าอกด้วยความเร็วหนึ่งร้อยสิบครั้งต่อนาที ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทุกคนในห้องกดปุ่มหัวใจบนจอมือถือให้ตรงจังหวะบีตจนครบสามสิบครั้งนะครับ เตรียมตัว...', 's5_cpr_intro');
+          if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
           await this.runCprCountdownAndStart();
         } else if (newStage === 6) {
           window.ECGEngine.setMode('SINUS');
@@ -7069,17 +7100,7 @@
                     }).join('')}
                   </div>
 
-                  <!-- Solo Test Vote Bar -->
-                  <div style="display:flex; align-items:center; justify-content:space-between; padding-top:8px; border-top:1px dashed #E2E8F0; font-size:11.5px; color:#64748B;" class="font-technical">
-                    <span>🧪 ทดสอบกดโหวตทันที (Solo Test):</span>
-                    <div style="display:flex; gap:6px;">
-                      ${data.choices.map(c => `
-                        <button onclick="GameStateManager.castSoloTestVote(${c.num})" class="nav-btn font-technical" style="height:26px; padding:0 10px; font-size:11.5px; font-weight:700; ${c.num === data.correctChoice ? 'border-color:#A7F3D0; color:#059669; background:#ECFDF5;' : ''}">
-                          โหวตข้อ ${c.num} ${c.num === data.correctChoice ? '✓' : ''}
-                        </button>
-                      `).join('')}
-                    </div>
-                  </div>
+
                 </div>
               ` : `
                 <!-- Step 3: Top-Voted Choice Revealed (Hero Decision) -->
@@ -8351,69 +8372,58 @@
                   <div class="stage-context-stakes font-technical">ข้อมูลสำคัญ 4 ข้อ</div>
                 </div>
 
-                <!-- Co-op Tap Rush Status Bar + Solo Test Buttons -->
-                <div class="stage3-locked-wrap font-technical" style="padding:8px 12px; margin-bottom:2px;">
-                  <span class="stage3-locked-text" style="font-size:11.5px;">
-                    ⚡ พลังกดรัว: <strong id="txtStage3TapCount" style="color:#0284C7;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> (<span id="txtStage3Pct">${tapPct}%</span>)
+                <!-- Co-op Tap Rush Status Bar (No Spoilers / Cheats) -->
+                <div class="stage3-locked-wrap font-technical" style="padding:8px 12px; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
+                  <span class="stage3-locked-text" style="font-size:12px; font-weight:700;">
+                    ⚡ พลังกดรัวมือถือ: <strong id="txtStage3TapCount" style="color:#0284C7; font-size:13.5px;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> ครั้ง (<span id="txtStage3Pct" class="num-readout">${tapPct}%</span>)
                   </span>
-                  <div style="display:flex; align-items:center; gap:6px;">
-                    <div class="stage3-tap-meter-container" style="width:100px; height:8px;">
-                      <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%;"></div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div class="stage3-tap-meter-container" style="width:130px; height:9px; background:#E2E8F0; border-radius:6px; overflow:hidden;">
+                      <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%; height:100%; background:linear-gradient(90deg, #0284C7, #10B981); transition:width 0.15s ease;"></div>
                     </div>
-                    <button ${canTapAttr} onclick="GameStateManager.handleMobileTapBatch('host_test', Math.ceil(GameStateManager.effectiveTapTarget * 0.25))" class="nav-btn font-technical" style="height:22px; padding:0 7px; font-size:10.5px; background:#F0F9FF; color:#0284C7; border-color:#BAE6FD;">
-                      +25%
-                    </button>
-                    <button ${canTapAttr} onclick="GameStateManager.handleMobileTapBatch('host_test', GameStateManager.effectiveTapTarget)" class="nav-btn font-technical" style="height:22px; padding:0 8px; font-size:10.5px; background:#ECFDF5; color:#059669; border-color:#A7F3D0; font-weight:700;">
-                      🔓 ปลดล็อก 100%
-                    </button>
                   </div>
                 </div>
 
-                <!-- 4-Card Facts Strip -->
-                <div class="facts-strip-clean" style="grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:2px;" id="stage3FactsStrip">
-                  <div class="fact-card-clean" id="factCard1" style="padding:8px 10px;">
-                    <div class="fact-label-clean font-technical" style="font-size:10px;">1. พิกัดจุดเกิดเหตุ</div>
-                    <div class="fact-val-clean" style="font-size:11.5px; color:${f1Unlocked ? '#090D16' : '#94A3B8'};">
+                <!-- 4-Card Facts Strip (V19.0: 2x2 Grid with 17px Bold Readouts) -->
+                <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:2px;" id="stage3FactsStrip">
+                  <div class="fact-card-clean" id="factCard1" style="padding:10px 14px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
+                    <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f1Unlocked ? 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอกด 25%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard2" style="padding:8px 10px;">
-                    <div class="fact-label-clean font-technical" style="font-size:10px;">2. เหตุการณ์</div>
-                    <div class="fact-val-clean" style="font-size:11.5px; color:${f2Unlocked ? '#090D16' : '#94A3B8'};">
-                      ${f2Unlocked ? 'รถเก๋งชนรั้ว มีควันพุ่ง' : '🔒 รอกด 50%'}
+                  <div class="fact-card-clean" id="factCard2" style="padding:10px 14px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
+                    <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
+                      ${f2Unlocked ? 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง' : '🔒 รอกด 50%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard3" style="padding:8px 10px;">
-                    <div class="fact-label-clean font-technical" style="font-size:10px;">3. อาการผู้ป่วย</div>
-                    <div class="fact-val-clean" style="font-size:11.5px; color:${f3Unlocked ? 'var(--vital-crimson)' : '#94A3B8'};">
-                      ${f3Unlocked ? '1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
+                  <div class="fact-card-clean" id="factCard3" style="padding:10px 14px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">3. อาการผู้ป่วย</div>
+                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#E11D48;' : 'font-size:13px; color:#94A3B8;'}">
+                      ${f3Unlocked ? 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard4" style="padding:8px 10px;">
-                    <div class="fact-label-clean font-technical" style="font-size:10px;">4. สิ่งที่ต้องการ</div>
-                    <div class="fact-val-clean" style="font-size:11.5px; color:${f4Unlocked ? '#059669' : '#94A3B8'};">
-                      ${f4Unlocked ? 'ขอรถกู้ชีพ + เครื่อง AED' : '🔒 รอกด 100%'}
+                  <div class="fact-card-clean" id="factCard4" style="padding:10px 14px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
+                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#059669;' : 'font-size:13px; color:#94A3B8;'}">
+                      ${f4Unlocked ? 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED' : '🔒 รอกด 100%'}
                     </div>
                   </div>
                 </div>
 
-                <h2 class="stage-headline-clean" style="font-size:15.5px; margin:0; line-height:1.3;">
+                <h2 class="stage-headline-clean" style="font-size:18.5px; font-weight:800; margin:4px 0 2px 0; line-height:1.35;">
                   เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายครับ! แจ้งข้อมูลสำคัญทั้ง 4 ข้อให้เจ้าหน้าที่ทราบได้เลยครับ”
                 </h2>
 
-                <!-- Compact Voice Transcript & Manual Input Panel -->
+                <!-- Compact Voice Transcript & Manual Input Panel (Zero-Spoiler) -->
                 <div class="voice-transcript-panel" style="padding:8px 12px; margin:0;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="font-technical" style="font-size:11px; font-weight:700; color:#0284C7;">
-                      🎙️ พูดแจ้งข้อมูลใส่ไมค์ (หรือกดปุ่มลัดด้านขวา):
+                    <span class="font-technical" style="font-size:11.5px; font-weight:700; color:#0284C7;">
+                      🎙️ พูดแจ้งข้อมูลใส่ไมค์:
                     </span>
-                    <div style="display:flex; gap:4px;">
-                      <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[1] พิกัด</button>
-                      <button onclick="GameStateManager.quickFillPreset(2)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[2] รถชน</button>
-                      <button onclick="GameStateManager.quickFillPreset(3)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[3] หมดสติ+AED</button>
-                    </div>
                   </div>
-                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:12px;">
+                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:12.5px;">
                     ${this.stage3CanTap ? 'ไมค์เปิดรับเสียงแล้ว... แจ้งข้อมูลสำคัญ 4 ข้อได้เลย' : 'รอเจ้าหน้าที่ 1669 พูดจบสักครู่...'}
                   </div>
                   <div class="manual-input-box" style="margin-top:4px;">
@@ -8422,23 +8432,23 @@
                   </div>
                 </div>
 
-                <!-- 4 Checklist Pills (Guaranteed Visible & Unclipped) -->
+                <!-- 4 Checklist Pills (Zero Spoilers until answered!) -->
                 <div class="checklist-pills-row font-technical" style="gap:8px; margin-top:2px;">
                   <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean ${this.checklist.location ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">1. พิกัด รพ.บูรพา</div>
+                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.location ? '✓ 1. พิกัด: หน้า รพ.ม.บูรพา' : '1. พิกัดจุดเกิดเหตุ'}</div>
                   </div>
                   <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean ${this.checklist.incident ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">2. เหตุการณ์ รถชน</div>
+                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.incident ? '✓ 2. เหตุการณ์: รถเก๋งชนรั้ว' : '2. ลักษณะเหตุการณ์'}</div>
                   </div>
                   <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean ${this.checklist.patient ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">3. อาการ หมดสติ</div>
+                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.patient ? '✓ 3. อาการ: หมดสติ ไม่หายใจ' : '3. อาการผู้ป่วย'}</div>
                   </div>
                   <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean ${this.checklist.aed ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">4. ขอรถกู้ชีพ + AED</div>
+                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.aed ? '✓ 4. ต้องการ: รถกู้ชีพ + AED' : '4. สิ่งที่ต้องการ'}</div>
                   </div>
                 </div>
               </div>
@@ -9186,22 +9196,36 @@
         if (txtPct) txtPct.innerText = `${tapPct}%`;
         if (fill) fill.style.width = `${tapPct}%`;
 
-        // Progressive 4-Fact Unlocks
+        // Progressive 4-Fact Unlocks (V19.0: 17px Bold, 1.35 Line-Height, Cyan Focus)
+        const updateFactCardUI = (cardId, unlocked, text, color) => {
+          const fc = document.getElementById(cardId);
+          if (!fc) return;
+          if (unlocked) {
+            fc.style.background = '#F0F9FF';
+            fc.style.borderColor = '#0284C7';
+            fc.style.boxShadow = '0 2px 8px rgba(2, 132, 199, 0.12)';
+            const valEl = fc.querySelector('.fact-val-clean');
+            if (valEl) {
+              valEl.style.fontSize = '17px';
+              valEl.style.fontWeight = '800';
+              valEl.style.lineHeight = '1.35';
+              valEl.style.color = color;
+              valEl.innerText = text;
+            }
+          }
+        };
+
         if (tapPct >= 25) {
-          const fc1 = document.getElementById('factCard1');
-          if (fc1) fc1.querySelector('.fact-val-clean').innerHTML = '<span style="color:#090D16;">สุขุมวิท หน้า รพ.ม.บูรพา</span>';
+          updateFactCardUI('factCard1', true, 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา', '#090D16');
         }
         if (tapPct >= 50) {
-          const fc2 = document.getElementById('factCard2');
-          if (fc2) fc2.querySelector('.fact-val-clean').innerHTML = '<span style="color:#090D16;">รถเก๋งชนรั้ว มีกลุ่มควัน</span>';
+          updateFactCardUI('factCard2', true, 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง', '#090D16');
         }
         if (tapPct >= 75) {
-          const fc3 = document.getElementById('factCard3');
-          if (fc3) fc3.querySelector('.fact-val-clean').innerHTML = '<span style="color:var(--vital-crimson);">1 ราย หมดสติ ไม่หายใจ</span>';
+          updateFactCardUI('factCard3', true, 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ', '#E11D48');
         }
         if (tapPct >= 100) {
-          const fc4 = document.getElementById('factCard4');
-          if (fc4) fc4.querySelector('.fact-val-clean').innerHTML = '<span style="color:#059669;">ขอรถกู้ชีพ + เครื่อง AED</span>';
+          updateFactCardUI('factCard4', true, 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED', '#059669');
 
           if (!this.stage3UnlockedChimePlayed) {
             this.stage3UnlockedChimePlayed = true;
@@ -9218,21 +9242,48 @@
         }
       }
 
-      handleMobileCprHit(senderId, accuracy = 'GOOD', deltaMs = 0) {
-        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || !this.cprCanHit || this.cprFinished) return;
-        const now = performance.now();
-        // Aggregate multiple phones hitting the same beat within 240ms
-        if (this.lastGlobalCprBeatTime && (now - this.lastGlobalCprBeatTime) < 240) return;
-        this.lastGlobalCprBeatTime = now;
+      handleMobileCprHit(senderId, payload = {}) {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprPhaseState !== 'ACTIVE' || !this.cprCanHit || this.cprFinished) return;
+        const accuracy = typeof payload === 'string' ? payload : (payload.accuracy || 'GOOD');
+        const beatIndex = payload.beatIndex !== undefined ? payload.beatIndex : -1;
 
-        // NEVER pass isBypass = true! Check against the actual 110 BPM note highway on the Host:
-        const hitSuccess = this.attemptCprHit('mobile', false);
-        if (hitSuccess) {
+        if (accuracy === 'PERFECT' || accuracy === 'GOOD') {
+          // De-duplicate multiple hits on the same beat note across all mobiles
+          if (!this.mobileHitsPerBeat) this.mobileHitsPerBeat = {};
+          if (beatIndex >= 0) {
+            this.mobileHitsPerBeat[beatIndex] = (this.mobileHitsPerBeat[beatIndex] || 0) + 1;
+            if (this.mobileHitsPerBeat[beatIndex] > 3) return; // Cap at 3 increments per beat
+          }
+
+          // V19.0: Count CPR compression directly (+1) without network latency penalty!
+          this.cprCount = Math.min(30, this.cprCount + 1);
+          window.ECGEngine.triggerCompressionSpike();
+
+          const isPerfect = accuracy === 'PERFECT';
+          this.updateCprAccuracyBar(isPerfect ? 100 : 85, accuracy);
+
+          const badge = document.getElementById('cprTimingJudgeBadge');
           const player = this.connectedPlayers[senderId];
           if (player) {
             player.cprHits++;
-            player.score += 2;
+            player.score += (isPerfect ? 3 : 1);
           }
+          if (badge) {
+            badge.className = isPerfect
+              ? 'cpr-timing-judge-badge perfect font-technical'
+              : 'cpr-timing-judge-badge good font-technical';
+            const pName = player ? player.name : 'ผู้เล่น';
+            badge.innerText = `✓ ${pName} กดตรงจังหวะ! (${this.cprCount}/30)`;
+          }
+
+          const txt = document.getElementById('txtCprCount');
+          if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
+
+          if (this.cprCount >= 30) {
+            this.cprFinished = true;
+            this.transitionFrom5ATo5B();
+          }
+          this.broadcastMultiplayerStageSync();
         }
       }
 
@@ -9768,17 +9819,21 @@
       }
 
       refreshChecklistPills() {
-        const setPill = (id, checked) => {
+        const setPill = (id, checked, uncheckedLabel, checkedLabel) => {
           const el = document.getElementById(id);
           if (el) {
             if (checked) el.classList.add('checked');
             else el.classList.remove('checked');
+            const txt = el.querySelector('.chk-pill-text');
+            if (txt) {
+              txt.innerText = checked ? checkedLabel : uncheckedLabel;
+            }
           }
         };
-        setPill('chkPillLoc', this.checklist.location);
-        setPill('chkPillInc', this.checklist.incident);
-        setPill('chkPillPat', this.checklist.patient);
-        setPill('chkPillAed', this.checklist.aed);
+        setPill('chkPillLoc', this.checklist.location, '1. พิกัดจุดเกิดเหตุ', '✓ 1. พิกัด: หน้า รพ.ม.บูรพา');
+        setPill('chkPillInc', this.checklist.incident, '2. ลักษณะเหตุการณ์', '✓ 2. เหตุการณ์: รถเก๋งชนรั้ว');
+        setPill('chkPillPat', this.checklist.patient, '3. อาการผู้ป่วย', '✓ 3. อาการ: หมดสติ ไม่หายใจ');
+        setPill('chkPillAed', this.checklist.aed, '4. สิ่งที่ต้องการ', '✓ 4. ต้องการ: รถกู้ชีพ + AED');
       }
 
       toggleChecklistItem(itemKey) {
@@ -10167,8 +10222,10 @@
 
       async runCprCountdownAndStart() {
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return;
+        this.cprPhaseState = 'COUNTDOWN';
         this.cprCanHit = false;
         MicSensor.stopSpeechRecognition();
+        this.broadcastMultiplayerStageSync();
 
         const drumLabel = document.getElementById('txtDrumLabel');
         const drumSub = document.getElementById('txtDrumSub');
@@ -10182,6 +10239,7 @@
           badge.innerText = '⏳ เตรียมพร้อม... 3';
         }
         SoundEngine.playPulseBeep(520, 0.08);
+        RealtimeEngine.send('CPR_COUNTDOWN_STEP', { count: 3 });
         await new Promise(r => setTimeout(r, 1000));
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
 
@@ -10193,6 +10251,7 @@
           badge.innerText = '⏳ เตรียมพร้อม... 2';
         }
         SoundEngine.playPulseBeep(520, 0.08);
+        RealtimeEngine.send('CPR_COUNTDOWN_STEP', { count: 2 });
         await new Promise(r => setTimeout(r, 1000));
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
 
@@ -10204,10 +10263,17 @@
           badge.innerText = '⏳ เตรียมพร้อม... 1';
         }
         SoundEngine.playPulseBeep(520, 0.08);
+        RealtimeEngine.send('CPR_COUNTDOWN_STEP', { count: 1 });
         await new Promise(r => setTimeout(r, 1000));
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
 
-        // GO!
+        // GO! Active CPR Phase
+        this.cprPhaseState = 'ACTIVE';
+        this.cprEpochStart = Date.now(); // Wall-Clock UTC epoch for phase-locked sync
+        this.cprStartTime = performance.now();
+        this.cprCanHit = true;
+        this.cprActive = true;
+
         if (drumLabel) drumLabel.innerText = 'ตบตอนนี้!';
         if (drumSub) drumSub.innerText = '[SPACE]';
         if (badge) {
@@ -10216,15 +10282,20 @@
         }
         SoundEngine.playPulseBeep(880, 0.16);
 
-        this.cprCanHit = true;
-        this.cprActive = true;
         const pad = document.getElementById('btnCprDrumPad');
         if (pad) {
           pad.style.opacity = '1';
           pad.style.cursor = 'pointer';
         }
-        this.startCprRhythmEngine();
+
+        // Send CPR_START_SYNC to all mobiles!
+        RealtimeEngine.send('CPR_START_SYNC', {
+          cprState: 'ACTIVE',
+          bpm: 110,
+          epochStart: this.cprEpochStart
+        });
         this.broadcastMultiplayerStageSync();
+        this.startCprRhythmEngine();
       }
 
       startCprRhythmEngine() {
@@ -10739,16 +10810,17 @@
 
         SoundEngine.playWarningTone(750, 0.7);
 
+        // V19.0: Send Realtime Surge Sync to all connected mobile smartphones!
+        RealtimeEngine.send('AED_SHOCK_SURGE', { joules: 200 });
+
         setTimeout(() => {
           SoundEngine.playAEDShock();
           window.ECGEngine.setMode('DEFIB_DISCHARGE');
           this.updatePatientHud('images/patient/patient_s5_aed.png', 'STAGE 5B • SHOCK DISCHARGED (200J)', 'critical', true);
-          const overlay = document.getElementById('vignetteOverlay');
-          if (overlay) {
-            overlay.classList.remove('flash-discharge');
-            void overlay.offsetWidth; // Force reflow
-            overlay.classList.add('flash-discharge');
-          }
+
+          // Trigger Fullscreen Cinematic Procedural Lightning & Shockwave Surge
+          this.runCinematicAedShock();
+
           document.body.classList.add('aed-shock-jolt');
           setTimeout(() => document.body.classList.remove('aed-shock-jolt'), 600);
 
@@ -10756,7 +10828,6 @@
           if (fb) fb.innerHTML = '<span style="color:#10B981; font-weight:800; font-size:15px;">⚡ ปล่อยกระแสไฟฟ้า 200 J สำเร็จ! หัวใจกลับมาเต้นปกติ (ROSC)</span>';
 
           setTimeout(() => {
-            if (overlay) overlay.classList.remove('flash-discharge');
             window.ECGEngine.setMode('SINUS');
             this.updateVitals(82, 98);
             this.updatePatientHud('images/patient/patient_s6_rosc.png', 'STAGE 6 // ROSC (WOUND CLEAN)', 'healthy');
@@ -10766,8 +10837,160 @@
             setTimeout(() => {
               this.setStage(6);
             }, 2000);
-          }, 800);
+          }, 1400);
         }, 700);
+      }
+
+      // =========================================================================
+      // V19.0 CINEMATIC PROCEDURAL LIGHTNING & SHOCKWAVE DEFIBRILLATION ENGINE
+      // =========================================================================
+      runCinematicAedShock() {
+        const overlay = document.getElementById('aedShockCinemaOverlay');
+        const canvas = document.getElementById('aedShockCanvas');
+        const banner = document.getElementById('aedShockBanner');
+        const title = document.getElementById('aedShockTitle');
+        const sub = document.getElementById('aedShockSub');
+        if (!overlay || !canvas) return;
+
+        overlay.style.display = 'flex';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+
+        // Reset Banner
+        if (banner) {
+          banner.style.opacity = '1';
+          banner.style.transform = 'scale(1)';
+          banner.style.borderColor = '#38BDF8';
+          banner.style.boxShadow = '0 0 50px rgba(56,189,248,0.5), inset 0 0 30px rgba(56,189,248,0.25)';
+        }
+        if (title) {
+          title.innerHTML = '⚡ SHOCK DELIVERED • 200J';
+          title.style.color = '#FFFFFF';
+        }
+        if (sub) {
+          sub.innerHTML = 'กำลังวิเคราะห์การกลับมาเต้นของหัวใจ (ROSC)...';
+          sub.style.color = '#A7F3D0';
+        }
+
+        const startT = performance.now();
+        const duration = 1400;
+
+        // Origin points: Left & Right AED pads arcing to center chest
+        const pLeft = { x: W * 0.22, y: H * 0.42 };
+        const pRight = { x: W * 0.78, y: H * 0.58 };
+        const pCenter = { x: W * 0.50, y: H * 0.50 };
+
+        // Helper to draw realistic jagged lightning bolt
+        const drawBolt = (x1, y1, x2, y2, displace, mainColor, glowColor, lineWidth) => {
+          if (displace < 7) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = mainColor;
+            ctx.lineWidth = lineWidth;
+            ctx.shadowColor = glowColor;
+            ctx.shadowBlur = 18;
+            ctx.stroke();
+            ctx.restore();
+            return;
+          }
+          const midX = (x1 + x2) / 2 + (Math.random() - 0.5) * displace;
+          const midY = (y1 + y2) / 2 + (Math.random() - 0.5) * displace;
+          drawBolt(x1, y1, midX, midY, displace / 2, mainColor, glowColor, lineWidth);
+          drawBolt(midX, midY, x2, y2, displace / 2, mainColor, glowColor, lineWidth);
+        };
+
+        const animFrame = () => {
+          const elapsed = performance.now() - startT;
+          if (elapsed > duration) {
+            ctx.clearRect(0, 0, W, H);
+            if (banner) {
+              banner.style.opacity = '0';
+              banner.style.transform = 'scale(0.9)';
+            }
+            setTimeout(() => { overlay.style.display = 'none'; }, 400);
+            return;
+          }
+
+          ctx.clearRect(0, 0, W, H);
+
+          // PHASE 1: 0 - 180ms (Instant White & Cyan Flash Surge)
+          if (elapsed < 180) {
+            const flashAlpha = 1 - (elapsed / 180);
+            ctx.fillStyle = `rgba(255, 255, 255, ${flashAlpha * 0.85})`;
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = `rgba(56, 189, 248, ${flashAlpha * 0.45})`;
+            ctx.fillRect(0, 0, W, H);
+          }
+
+          // PHASE 2: 100 - 1100ms (High-Voltage Electric Arcs & Shockwave Rings)
+          if (elapsed >= 80 && elapsed < 1100) {
+            // Draw 4-6 crackling jagged lightning arcs converging on center
+            for (let i = 0; i < 3; i++) {
+              drawBolt(pLeft.x, pLeft.y, pCenter.x, pCenter.y, 65, '#FFFFFF', '#38BDF8', 3.5);
+              drawBolt(pRight.x, pRight.y, pCenter.x, pCenter.y, 65, '#FFFFFF', '#38BDF8', 3.5);
+            }
+
+            // Expanding Plasma Shockwave Rings
+            const ringProgress = ((elapsed - 80) % 350) / 350;
+            for (let r = 1; r <= 3; r++) {
+              const rad = (ringProgress * 320) + (r * 60);
+              const alpha = Math.max(0, 1 - (rad / 500));
+              ctx.save();
+              ctx.beginPath();
+              ctx.arc(pCenter.x, pCenter.y, rad, 0, Math.PI * 2);
+              ctx.strokeStyle = `rgba(56, 189, 248, ${alpha * 0.6})`;
+              ctx.lineWidth = 3;
+              ctx.shadowColor = '#0EA5E9';
+              ctx.shadowBlur = 15;
+              ctx.stroke();
+              ctx.restore();
+            }
+
+            // Center Heart Energy Core
+            ctx.save();
+            const coreGrad = ctx.createRadialGradient(pCenter.x, pCenter.y, 5, pCenter.x, pCenter.y, 90);
+            coreGrad.addColorStop(0, '#FFFFFF');
+            coreGrad.addColorStop(0.4, '#38BDF8');
+            coreGrad.addColorStop(1, 'rgba(14, 165, 233, 0)');
+            ctx.fillStyle = coreGrad;
+            ctx.beginPath();
+            ctx.arc(pCenter.x, pCenter.y, 90, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // PHASE 3: 800 - 1400ms (Emerald Green ROSC Pulse)
+          if (elapsed >= 800) {
+            const roscAlpha = Math.min(1, (elapsed - 800) / 300);
+            if (banner) {
+              banner.style.borderColor = '#10B981';
+              banner.style.boxShadow = `0 0 50px rgba(16, 185, 129, ${roscAlpha * 0.6}), inset 0 0 30px rgba(16, 185, 129, 0.3)`;
+            }
+            if (title) {
+              title.innerHTML = '⚡ SHOCK 200J • ROSC DETECTED';
+              title.style.color = '#34D399';
+            }
+            if (sub) {
+              sub.innerHTML = '💚 ROSC DETECTED • ชีพจรกลับมาเต้นปกติ (88 BPM)';
+              sub.style.color = '#A7F3D0';
+            }
+
+            // Gentle green aura
+            ctx.save();
+            ctx.fillStyle = `rgba(16, 185, 129, ${0.12 * roscAlpha})`;
+            ctx.fillRect(0, 0, W, H);
+            ctx.restore();
+          }
+
+          requestAnimationFrame(animFrame);
+        };
+
+        requestAnimationFrame(animFrame);
       }
 
       quickResetGame() {
@@ -11312,69 +11535,109 @@
         }
       }
 
-      function renderStage5ACpr() {
+      function renderStage5ACpr(cprState = 'INTRO', epochStart = null) {
         const body = document.getElementById('mobileAppBody');
         if (!body) return;
 
-        let localCprHits = 0;
+        if (epochStart) state.cprEpochStart = epochStart;
+        state.cprMobilePhase = cprState || 'INTRO';
+
+        const isIntro = state.cprMobilePhase === 'INTRO';
+        const isCountdown = state.cprMobilePhase === 'COUNTDOWN';
+        const isActive = state.cprMobilePhase === 'ACTIVE';
+
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:18px 16px;">
-            <div style="font-size:11px; font-weight:800; color:#059669; background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
-              🫀 ด่านที่ 5A • จังหวะปั๊มหัวใจ 110 BPM
+            <div id="mCprPhaseBadge" style="font-size:11px; font-weight:800; color:${isActive ? '#059669' : '#D97706'}; background:${isActive ? '#ECFDF5' : '#FFFBEB'}; border:1px solid ${isActive ? '#A7F3D0' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+              ${isActive ? '🫀 ด่านที่ 5A • จังหวะปั๊มหัวใจ 110 BPM' : (isCountdown ? '⏳ กำลังนับถอยหลังเตรียมเริ่ม...' : '⏳ กรุณาฟังคำแนะนำสักครู่...')}
             </div>
-            <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 2px;">
-              แตะตามจังหวะชีพจร 110 ครั้ง/นาที
+            <h3 id="mCprTitle" style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 2px;">
+              ${isActive ? 'แตะตามจังหวะชีพจร 110 ครั้ง/นาที' : (isCountdown ? 'เตรียมวางมือบนหน้าจอ...' : 'รอสัญญาณเริ่มจากจอใหญ่')}
             </h3>
-            <div style="font-size:11.5px; color:#64748B;">
-              แตะให้ตรงจังหวะไฟและเสียงบีต เพื่อช่วยเพิ่มคะแนน CPR ให้กลุ่มของคุณ!
+            <div id="mCprSub" style="font-size:11.5px; color:#64748B;">
+              ${isActive ? 'แตะให้ตรงจังหวะไฟและเสียงบีต เพื่อช่วยเพิ่มคะแนน CPR ให้กลุ่มของคุณ!' : 'ฟังคำแนะนำจาก AI และน้องตัวแทนหน้าห้อง'}
             </div>
 
-            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad" ontouchstart="event.preventDefault();">
+            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad" ontouchstart="event.preventDefault();" style="opacity:${isActive ? '1' : '0.45'}; cursor:${isActive ? 'pointer' : 'not-allowed'}; pointer-events:${isActive ? 'auto' : 'none'};">
               <span style="font-size:34px;">🫀</span>
-              <span style="font-size:17px; font-weight:900;">กดจังหวะนี้!</span>
+              <span id="mTxtPadPrompt" style="font-size:17px; font-weight:900;">${isActive ? 'กดจังหวะนี้!' : 'รอเริ่ม...'}</span>
               <span style="font-size:11px; opacity:0.9;">110 BPM</span>
             </div>
 
             <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:#059669; min-height:20px;">
-              แตะปุ่มรูปหัวใจตามจังหวะได้เลย!
+              ${isActive ? 'แตะปุ่มรูปหัวใจตามจังหวะได้เลย!' : 'ปุ่มจะปลดล็อกอัตโนมัติเมื่อเริ่มนับจังหวะครับ'}
             </div>
           </div>
         `;
 
         const pad = document.getElementById('mBtnCprPad');
         const fb = document.getElementById('mTxtCprFeedback');
-        const BEAT_INTERVAL = 545.45; // 110 BPM
-        let lastBeatTime = performance.now();
+        const CPR_BEAT_MS = 60000 / 110; // 545.4545ms
+
+        // Phase-Locked rAF Heart Pulse Engine
+        if (state.cprRafId) cancelAnimationFrame(state.cprRafId);
+        const animateHeartBeat = () => {
+          if (state.currentStage !== 5) return;
+          if (state.cprMobilePhase === 'ACTIVE' && state.cprEpochStart) {
+            const elapsed = Date.now() - state.cprEpochStart;
+            const phase = ((elapsed % CPR_BEAT_MS) / CPR_BEAT_MS);
+            if (pad) {
+              const scale = 1.0 + (0.12 * Math.sin(phase * Math.PI));
+              pad.style.transform = `scale(${scale.toFixed(3)})`;
+              if (phase <= 0.18 || phase >= 0.82) {
+                pad.style.boxShadow = '0 0 25px rgba(225, 29, 72, 0.6)';
+              } else {
+                pad.style.boxShadow = '0 4px 14px rgba(225, 29, 72, 0.25)';
+              }
+            }
+          }
+          state.cprRafId = requestAnimationFrame(animateHeartBeat);
+        };
+        state.cprRafId = requestAnimationFrame(animateHeartBeat);
 
         if (pad) {
           pad.addEventListener('pointerdown', (e) => {
             e.preventDefault();
-            const now = performance.now();
-            // 350ms cooldown per phone to prevent packet spam
-            if (state.lastMobileCprSendTime && (now - state.lastMobileCprSendTime) < 350) {
-              return;
+            if (state.cprMobilePhase !== 'ACTIVE') return;
+
+            const now = Date.now();
+            if (state.lastMobileCprSendTime && (now - state.lastMobileCprSendTime) < 250) {
+              return; // 250ms anti-mash cooldown
             }
             state.lastMobileCprSendTime = now;
 
-            const delta = Math.abs((now - lastBeatTime) % BEAT_INTERVAL);
-            const isPerfect = delta <= 120 || delta >= (BEAT_INTERVAL - 120);
+            const epoch = state.cprEpochStart || now;
+            const elapsed = now - epoch;
+            const nearestBeatIdx = Math.round(elapsed / CPR_BEAT_MS);
+            const deltaMs = Math.abs(elapsed - (nearestBeatIdx * CPR_BEAT_MS));
 
-            localCprHits++;
-            state.cprHits++;
-            state.score += (isPerfect ? 3 : 1);
-            updateHeader();
+            // Forgiving hit windows on mobile
+            const isPerfect = deltaMs <= 135;
+            const isGood = deltaMs <= 220;
 
-            if (navigator.vibrate) navigator.vibrate(35);
+            if (isGood) {
+              state.cprHits++;
+              state.score += (isPerfect ? 3 : 1);
+              updateHeader();
 
-            if (fb) {
-              fb.innerText = isPerfect ? '✓ PERFECT! ตรงจังหวะ 110 BPM เป๊ะ (+3)' : '✓ GOOD! ปั๊มต่อเนื่องดีมาก (+1)';
-              fb.style.color = isPerfect ? '#059669' : '#0284C7';
+              if (navigator.vibrate) navigator.vibrate(45);
+
+              if (fb) {
+                fb.innerText = isPerfect ? '✓ PERFECT! ตรงจังหวะ 110 BPM เป๊ะ (+3)' : '✓ GOOD! ปั๊มจังหวะดีมาก (+1)';
+                fb.style.color = isPerfect ? '#059669' : '#0284C7';
+              }
+
+              RealtimeEngine.send('CPR_BEAT_HIT', {
+                accuracy: isPerfect ? 'PERFECT' : 'GOOD',
+                deltaMs: Math.round(deltaMs),
+                beatIndex: nearestBeatIdx
+              });
+            } else {
+              if (fb) {
+                fb.innerText = '✕ เร็วไปนิด / ช้าไปนิด รอจังหวะถัดไปครับ';
+                fb.style.color = '#D97706';
+              }
             }
-
-            RealtimeEngine.send('CPR_BEAT_HIT', {
-              accuracy: isPerfect ? 'PERFECT' : 'GOOD',
-              deltaMs: Math.round(delta)
-            });
           });
         }
       }
@@ -11576,7 +11839,7 @@
           renderStage3TapRush();
         } else if (d.stage === 5) {
           if (d.subPhase === 'CPR') {
-            renderStage5ACpr();
+            renderStage5ACpr(d.cprState || 'INTRO', d.cprEpochStart || null);
           } else {
             renderStage5BAed();
           }
@@ -11595,6 +11858,25 @@
         }
       });
 
+      // V19.0: Realtime CPR Synchronization Listeners
+      RealtimeEngine.on('CPR_START_SYNC', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        state.cprEpochStart = d.epochStart || Date.now();
+        state.cprMobilePhase = 'ACTIVE';
+        renderStage5ACpr('ACTIVE', state.cprEpochStart);
+      });
+
+      RealtimeEngine.on('CPR_COUNTDOWN_STEP', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        state.cprMobilePhase = 'COUNTDOWN';
+        const badge = document.getElementById('mCprPhaseBadge');
+        const prompt = document.getElementById('mTxtPadPrompt');
+        if (badge) badge.innerText = `⏳ เตรียมพร้อม... ${d.count}`;
+        if (prompt) prompt.innerText = `${d.count}...`;
+      });
+
       RealtimeEngine.on('MISSION_COMPLETE_CERTS', (msg) => {
         if (!state.joined) return;
         renderStage9Certificate(msg.payload);
@@ -11603,6 +11885,31 @@
       RealtimeEngine.on('SESSION_CLOSED', () => {
         if (!state.joined) return;
         renderSessionClosed();
+      });
+
+      // V19.0: Fullscreen Mobile Shock Surge Reaction
+      RealtimeEngine.on('AED_SHOCK_SURGE', (msg) => {
+        if (!state.joined) return;
+        if (navigator.vibrate) navigator.vibrate([120, 60, 220]);
+
+        const shockDiv = document.createElement('div');
+        shockDiv.id = 'mAedShockFlashOverlay';
+        shockDiv.style.cssText = 'position:fixed; inset:0; z-index:99999; background:radial-gradient(circle, #FFFFFF 25%, #0284C7 80%, #090D16 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; box-sizing:border-box; transition:opacity 0.6s ease;';
+        shockDiv.innerHTML = `
+          <div style="font-size:64px; margin-bottom:12px; filter:drop-shadow(0 0 20px #38BDF8);">⚡</div>
+          <div style="font-size:26px; font-weight:900; color:#FFFFFF; text-shadow:0 0 25px #38BDF8; margin-bottom:8px;">
+            ปล่อยกระแสไฟ 200J สำเร็จ!
+          </div>
+          <div style="font-size:15px; font-weight:800; color:#A7F3D0; text-shadow:0 0 10px rgba(167,243,208,0.5);">
+            💚 หัวใจกลับมาเต้นปกติแล้ว (ROSC)
+          </div>
+        `;
+        document.body.appendChild(shockDiv);
+
+        setTimeout(() => {
+          shockDiv.style.opacity = '0';
+          setTimeout(() => { shockDiv.remove(); }, 600);
+        }, 1600);
       });
 
       // Initial View: Checkin or Lobby
