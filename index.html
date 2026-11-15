@@ -79,6 +79,7 @@
       /* Motion Curves */
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-tactile: cubic-bezier(0.2, 0, 0, 1);
+      --ui-scale: 1;
     }
 
     *, *::before, *::after, button, input, textarea, select {
@@ -370,13 +371,13 @@
        02. TOP TELEMETRY BENTO STRIP (PATIENT HUD + ECG + VITALS) (196PX)
        ========================================================================== */
     .telemetry-ribbon-bar {
-      max-width: 1380px;
+      width: 97vw;
+      max-width: 2400px;
       margin: 8px auto 0;
-      width: 96vw;
-      height: clamp(164px, 21vh, 196px);
+      height: clamp(138px, 16.5vh, 176px);
       display: grid;
-      grid-template-columns: 420px 1fr 230px;
-      gap: 12px;
+      grid-template-columns: clamp(360px, 28vw, 460px) 1fr clamp(210px, 17vw, 270px);
+      gap: clamp(10px, 1vw, 16px);
       flex-shrink: 0;
       background: transparent;
       border: none;
@@ -680,7 +681,7 @@
       gap: 4px;
     }
     .vital-number {
-      font-size: 40px;
+      font-size: calc(clamp(34px, 2.8vw, 52px) * var(--ui-scale));
       font-weight: 800;
       line-height: 1;
       letter-spacing: -0.04em;
@@ -705,9 +706,9 @@
        03. PRIMARY STAGE VIEWPORT & MAIN CARD
        ========================================================================== */
     .stage-viewport {
-      max-width: 1380px;
+      width: 97vw;
+      max-width: 2400px;
       margin: 8px auto 10px;
-      width: 96vw;
       flex: 1;
       min-height: 0;
       max-height: none;
@@ -736,8 +737,8 @@
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
-      padding: 5px 12px;
-      margin-bottom: 6px;
+      padding: 5px 14px;
+      margin-bottom: 4px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -771,7 +772,7 @@
     .v-bar:nth-child(5) { animation-delay: 0.6s; }
 
     .voice-pill-text-clean {
-      font-size: 13px;
+      font-size: calc(13.5px * var(--ui-scale));
       font-weight: 600;
       color: #334155;
     }
@@ -827,11 +828,11 @@
 
     /* Stage Titles */
     .stage-headline-clean {
-      font-size: clamp(17px, 1.5vw, 21px);
+      font-size: calc(clamp(19px, 1.85vw, 30px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
-      line-height: 1.3;
-      margin-bottom: 4px;
+      line-height: 1.32;
+      margin-bottom: 6px;
       letter-spacing: -0.01em;
       text-wrap: balance;
     }
@@ -1348,8 +1349,8 @@
     /* V18.0 Stage 9 3-Column Clinical Victory Bento Layout */
     .stage9-victory-bento-grid {
       display: grid;
-      grid-template-columns: 230px 1fr 245px;
-      gap: 12px;
+      grid-template-columns: clamp(240px, 20vw, 310px) 1fr clamp(250px, 21vw, 320px);
+      gap: 16px;
       flex: 1;
       min-height: 0;
       height: calc(100% - 46px);
@@ -1806,8 +1807,8 @@
        ========================================================================== */
     .stage-body-split {
       display: grid;
-      grid-template-columns: 43% 57%;
-      gap: 24px;
+      grid-template-columns: 42% 58%;
+      gap: clamp(18px, 2vw, 32px);
       align-items: stretch;
       margin-top: 4px;
       flex: 1;
@@ -1989,11 +1990,10 @@
       box-shadow: 0 0 30px rgba(16, 185, 129, 0.8) !important;
     }
     .cpr-timing-judge-badge {
-      width: 320px;
-      height: 38px;
-      min-width: 320px;
-      max-width: 320px;
-      font-size: 13.5px;
+      width: 100%;
+      height: 44px;
+      max-width: 420px;
+      font-size: calc(15px * var(--ui-scale));
       font-weight: 700;
       padding: 0 12px;
       border-radius: 9px;
@@ -2106,7 +2106,7 @@
       color: #FFFFFF;
     }
     .aed-phrase-large {
-      font-size: clamp(17px, 1.3vw, 21px);
+      font-size: calc(clamp(22px, 2vw, 32px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
       line-height: 1.25;
@@ -2118,7 +2118,7 @@
       color: #065F46;
     }
     .aed-status-callout {
-      font-size: 12px;
+      font-size: calc(13.5px * var(--ui-scale));
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 6px;
@@ -2155,7 +2155,7 @@
       text-transform: uppercase;
     }
     .shout-phrase-hero {
-      font-size: 20px;
+      font-size: calc(clamp(22px, 2.1vw, 34px) * var(--ui-scale));
       font-weight: 800;
       color: #FFFFFF;
       line-height: 1.35;
@@ -2181,7 +2181,7 @@
       box-shadow: 0 2px 0 #059669;
     }
     .stage2-kw-tile .kw-text {
-      font-size: 13.5px;
+      font-size: calc(15px * var(--ui-scale));
       font-weight: 700;
       color: #334155;
     }
@@ -2248,7 +2248,7 @@
       gap: 16px;
     }
     .cpr-count-num {
-      font-size: 32px;
+      font-size: calc(clamp(36px, 3.2vw, 54px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
       line-height: 1;
@@ -2427,11 +2427,13 @@
       background: #FFFFFF;
       border: 2px dashed #0284C7;
       border-radius: 16px;
-      padding: 22px 24px;
-      margin: 12px 0 16px;
+      padding: clamp(20px, 2.4vh, 32px);
+      margin: 8px 0 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      flex: 1;
+      justify-content: center;
+      gap: 16px;
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);
@@ -2447,26 +2449,26 @@
       align-items: center;
       align-self: flex-start;
       gap: 6px;
-      padding: 4px 12px;
+      padding: 5px 14px;
       border-radius: 999px;
       background: #E0F2FE;
       color: #0369A1;
-      font-size: 11.5px;
+      font-size: calc(13px * var(--ui-scale));
       font-weight: 800;
       letter-spacing: 0.04em;
     }
     .inspect-card-title {
-      font-size: 19px;
+      font-size: calc(clamp(20px, 1.9vw, 30px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
-      line-height: 1.35;
+      line-height: 1.38;
     }
     .inspect-voice-callout {
       background: #090D16;
       color: #38BDF8;
       border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 14.5px;
+      padding: 14px 20px;
+      font-size: calc(clamp(15px, 1.35vw, 21px) * var(--ui-scale));
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -3176,10 +3178,11 @@
       gap: 16px;
     }
     .vote-timer-clock {
-      font-size: 44px;
+      font-size: calc(clamp(48px, 4vw, 72px) * var(--ui-scale));
       font-weight: 900;
       color: #090D16;
-      width: 64px;
+      width: auto;
+      min-width: 72px;
       text-align: center;
       line-height: 1;
     }
@@ -3203,7 +3206,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13.5px;
+      font-size: calc(13px * var(--ui-scale));
       font-weight: 700;
       color: #475569;
     }
@@ -3220,7 +3223,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 11.5px;
+      font-size: calc(13px * var(--ui-scale));
       font-weight: 700;
       color: #64748B;
       transition: all 0.2s;
@@ -3286,7 +3289,7 @@
       border-color: #A7F3D0;
     }
     .choice-equipment-title.large {
-      font-size: 18px;
+      font-size: calc(clamp(20px, 1.8vw, 28px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
     }
@@ -3300,8 +3303,8 @@
       color: #FFFFFF;
       border: 1px solid #065F46;
       border-radius: 12px;
-      padding: 14px 20px;
-      font-size: 15px;
+      padding: 16px 22px;
+      font-size: calc(16px * var(--ui-scale));
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -3320,8 +3323,8 @@
       color: #D97706;
       border: 1px solid #FDE68A;
       border-radius: 12px;
-      padding: 14px 20px;
-      font-size: 14px;
+      padding: 16px 22px;
+      font-size: calc(16px * var(--ui-scale));
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -3690,6 +3693,9 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         จอกรรมการ
       </button>
+      <button id="btnDisplayScaleMode" onclick="GameStateManager.cycleDisplayScaleMode()" class="nav-btn font-technical" title="ปรับขนาดการแสดงผลให้เหมาะกับจอทีวีหรือห้องประชุม">
+        🖥️ จอ: อัตโนมัติ
+      </button>
       <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn" title="รีเซ็ตระดับเสียงและไมค์ให้ดังเต็มที่ทันที">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         รีเซ็ตไมค์
@@ -3897,6 +3903,17 @@
           ทดลองฟังเสียง AI นี้
         </button>
       </div>
+      <!-- Display Scale Mode (V20.0) -->
+      <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px; padding-top:10px; border-top:1px solid #E2E8F0;">
+        <label style="font-size:12px; color:#64748B; font-weight:600;" class="font-technical">ขนาดหน้าจอการแสดงผล (Display Scale):</label>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px;">
+          <button id="btnScaleAuto" onclick="GameStateManager.setDisplayScaleMode('auto')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">อัตโนมัติ</button>
+          <button id="btnScaleLaptop" onclick="GameStateManager.setDisplayScaleMode('laptop')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">โน้ตบุ๊ก 100%</button>
+          <button id="btnScaleTv" onclick="GameStateManager.setDisplayScaleMode('tv')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">จอทีวี 115%</button>
+          <button id="btnScaleHall" onclick="GameStateManager.setDisplayScaleMode('hall')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">ห้องประชุม 130%</button>
+        </div>
+      </div>
+
       <!-- Voice Source Toggle (AI TTS vs Recorded MP3) -->
       <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px; padding-top:10px; border-top:1px solid #E2E8F0;">
         <label style="font-size:12px; color:#64748B; font-weight:600;" class="font-technical">แหล่งที่มาของเสียงพูดแนะนำ:</label>
@@ -6400,10 +6417,12 @@
         this.stage7PressureInterval = null;
         this.mvpGroup = '01';
         this.mvpPlayerId = null;
+        this.displayScaleMode = 'auto';
       }
 
       init() {
         document.body.classList.add('lobby-mode');
+        this.initDisplayScaleSystem();
         this.startSessionTimer();
         window.ECGEngine = new ECGCanvasEngine('ecgCanvas');
         globalBgEcg = new BackgroundECGEngine('bgEcgCanvas');
@@ -7113,7 +7132,7 @@
                     <div class="equipment-icon-wrap large">${this.topVotedChoice ? this.topVotedChoice.iconSvg : ''}</div>
                     <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
                       <div class="choice-equipment-title large">${this.topVotedChoice ? this.topVotedChoice.title : ''}</div>
-                      <div style="font-size:13.5px; color:#64748B; font-weight:600; line-height:1.4;">${this.topVotedChoice ? this.topVotedChoice.purpose : ''}</div>
+                      <div style="font-size:calc(15px * var(--ui-scale)); color:#64748B; font-weight:600; line-height:1.4;">${this.topVotedChoice ? this.topVotedChoice.purpose : ''}</div>
                     </div>
                   </div>
 
@@ -8290,7 +8309,7 @@
                     <span>ระดับความดังเสียงไมโครโฟน (LIVE ACOUSTIC METER)</span>
                     <div style="display:flex; align-items:center; gap:8px;">
                       <span id="txtLiveStatusHint" style="font-size:11.5px; color:#64748B;">รอเสียงตะโกน...</span>
-                      <span id="txtLiveDecibel" style="color:#0284C7; font-weight:800; font-size:14px;">0 dB</span>
+                      <span id="txtLiveDecibel" style="color:#0284C7; font-weight:800; font-size:calc(18px * var(--ui-scale));">0 dB</span>
                     </div>
                   </div>
                   <div class="meter-track-container" style="height:32px; border-radius:10px; background:#EEF2F6; position:relative; overflow:hidden; border:1.5px solid #CBD5E1;">
@@ -8385,28 +8404,28 @@
                 </div>
 
                 <!-- 4-Card Facts Strip (V19.0: 2x2 Grid with 17px Bold Readouts) -->
-                <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:2px;" id="stage3FactsStrip">
+                <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:4px; flex:1;" id="stage3FactsStrip">
                   <div class="fact-card-clean" id="factCard1" style="padding:10px 14px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
-                    <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
+                    <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#090D16;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
                       ${f1Unlocked ? 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอกด 25%'}
                     </div>
                   </div>
                   <div class="fact-card-clean" id="factCard2" style="padding:10px 14px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
-                    <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
+                    <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#090D16;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
                       ${f2Unlocked ? 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง' : '🔒 รอกด 50%'}
                     </div>
                   </div>
                   <div class="fact-card-clean" id="factCard3" style="padding:10px 14px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">3. อาการผู้ป่วย</div>
-                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#E11D48;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">3. อาการผู้ป่วย</div>
+                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#E11D48;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
                       ${f3Unlocked ? 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
                     </div>
                   </div>
                   <div class="fact-card-clean" id="factCard4" style="padding:10px 14px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:11px; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
-                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:17px; font-weight:800; line-height:1.35; color:#059669;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
+                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#059669;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
                       ${f4Unlocked ? 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED' : '🔒 รอกด 100%'}
                     </div>
                   </div>
@@ -8423,7 +8442,7 @@
                       🎙️ พูดแจ้งข้อมูลใส่ไมค์:
                     </span>
                   </div>
-                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:12.5px;">
+                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:calc(14.5px * var(--ui-scale));">
                     ${this.stage3CanTap ? 'ไมค์เปิดรับเสียงแล้ว... แจ้งข้อมูลสำคัญ 4 ข้อได้เลย' : 'รอเจ้าหน้าที่ 1669 พูดจบสักครู่...'}
                   </div>
                   <div class="manual-input-box" style="margin-top:4px;">
@@ -8436,19 +8455,19 @@
                 <div class="checklist-pills-row font-technical" style="gap:8px; margin-top:2px;">
                   <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean ${this.checklist.location ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.location ? '✓ 1. พิกัด: หน้า รพ.ม.บูรพา' : '1. พิกัดจุดเกิดเหตุ'}</div>
+                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.location ? '✓ 1. พิกัด: หน้า รพ.ม.บูรพา' : '1. พิกัดจุดเกิดเหตุ'}</div>
                   </div>
                   <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean ${this.checklist.incident ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.incident ? '✓ 2. เหตุการณ์: รถเก๋งชนรั้ว' : '2. ลักษณะเหตุการณ์'}</div>
+                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.incident ? '✓ 2. เหตุการณ์: รถเก๋งชนรั้ว' : '2. ลักษณะเหตุการณ์'}</div>
                   </div>
                   <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean ${this.checklist.patient ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.patient ? '✓ 3. อาการ: หมดสติ ไม่หายใจ' : '3. อาการผู้ป่วย'}</div>
+                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.patient ? '✓ 3. อาการ: หมดสติ ไม่หายใจ' : '3. อาการผู้ป่วย'}</div>
                   </div>
                   <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean ${this.checklist.aed ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:12px;">${this.checklist.aed ? '✓ 4. ต้องการ: รถกู้ชีพ + AED' : '4. สิ่งที่ต้องการ'}</div>
+                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.aed ? '✓ 4. ต้องการ: รถกู้ชีพ + AED' : '4. สิ่งที่ต้องการ'}</div>
                   </div>
                 </div>
               </div>
@@ -8584,7 +8603,7 @@
 
                   <!-- High-Contrast Beat Highway Track -->
                   <div style="background:#0F172A; border-radius:14px; padding:6px; box-shadow:0 4px 14px rgba(15,23,42,0.15);">
-                    <canvas id="cprHighwayCanvas" width="700" height="92" style="width:100%; height:92px; border-radius:10px; display:block; background:#0F172A;"></canvas>
+                    <canvas id="cprHighwayCanvas" width="700" height="120" style="width:100%; height:clamp(96px, 13vh, 135px); border-radius:10px; display:block; background:#0F172A;"></canvas>
                   </div>
 
                   <!-- Bottom Split Controls Row -->
@@ -9027,7 +9046,7 @@
                     <circle id="radialScoreCircle" class="radial-gauge-progress" cx="70" cy="70" r="54" style="stroke-width:9; stroke:${rankColor}; stroke-dasharray:340; stroke-dashoffset:340;"></circle>
                   </svg>
                   <div class="radial-gauge-center">
-                    <div class="rank-letter-display num-readout" style="color:${rankColor}; font-size:38px;">${rankLetter}</div>
+                    <div class="rank-letter-display num-readout" style="color:${rankColor}; font-size:calc(44px * var(--ui-scale));">${rankLetter}</div>
                     <div class="rank-points-counter num-readout" style="font-size:12px;"><span id="txtScoreCount">0</span> / 100</div>
                   </div>
                 </div>
@@ -9055,35 +9074,35 @@
                 <div class="stage-scores-grid font-technical" style="gap:6px; margin:0;">
                   <div class="stage-score-card ${this.stageScores[1] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">01 ปลอดภัย</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[1]} / 15</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[1]} / 15</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[2] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">02 เรียกช่วย</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[2]} / 10</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[2]} / 10</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[3] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">03 โทร 1669</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[3]} / 15</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[3]} / 15</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[4] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">04 หายใจเฮือก</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[4]} / 15</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[4]} / 15</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[5] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">05 CPR/AED</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[5]} / 15</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[5]} / 15</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[6] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">06 ล้างแผล</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[6]} / 10</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[6]} / 10</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[7] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">07 ห้ามเลือด</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[7]} / 10</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[7]} / 10</span>
                   </div>
                   <div class="stage-score-card ${this.stageScores[8] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
                     <span class="stage-score-num" style="font-size:10px;">08 ดามแขน</span>
-                    <span class="stage-score-val" style="font-size:12px;">${this.stageScores[8]} / 10</span>
+                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[8]} / 10</span>
                   </div>
                 </div>
 
@@ -9092,7 +9111,7 @@
                   <div class="leaderboard-title" style="font-size:11px; margin-bottom:4px;">
                     🏆 ตารางคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 3)
                   </div>
-                  <table class="leaderboard-table" style="font-size:11px;">
+                  <table class="leaderboard-table" style="font-size:calc(13px * var(--ui-scale));">
                     <thead>
                       <tr>
                         <th style="padding:3px 6px;">อันดับ</th>
@@ -9133,8 +9152,8 @@
                   สแกนด้วยกล้องมือถือเพื่อรับภาพเกียรติบัตรของคุณ
                 </div>
 
-                <div class="qr-canvas-frame" style="width:124px; height:124px; padding:3px; margin:2px auto;">
-                  <canvas id="qrCanvas" style="width:118px; height:118px;"></canvas>
+                <div class="qr-canvas-frame" style="width:146px; height:146px; padding:3px; margin:2px auto;">
+                  <canvas id="qrCanvas" style="width:140px; height:140px;"></canvas>
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:6px; width:100%; margin-top:4px;">
@@ -11039,6 +11058,105 @@
         }
 
         this.pickRandomTeam();
+      }
+
+      // =========================================================================
+      // V20.0 ADAPTIVE DISPLAY SCALING ENGINE (AUTO / LAPTOP / TV / HALL)
+      // =========================================================================
+      initDisplayScaleSystem() {
+        this.displayScaleMode = localStorage.getItem("mdbuu_display_scale") || "auto";
+        this.applyDisplayScale();
+        window.addEventListener("resize", () => {
+          if (this.displayScaleMode === "auto") {
+            this.applyDisplayScale();
+          }
+        });
+      }
+
+      cycleDisplayScaleMode() {
+        const order = ["auto", "laptop", "tv", "hall"];
+        const nextIdx = (order.indexOf(this.displayScaleMode) + 1) % order.length;
+        this.displayScaleMode = order[nextIdx];
+        localStorage.setItem("mdbuu_display_scale", this.displayScaleMode);
+        this.applyDisplayScale();
+
+        const labels = {
+          auto: "อัตโนมัติตามขนาดจอ",
+          laptop: "โน้ตบุ๊ก (100%)",
+          tv: "จอทีวี (115%)",
+          hall: "จอห้องประชุมใหญ่ (130%)"
+        };
+        showToast("🖥️ เปลี่ยนขนาดแสดงผลเป็น: " + labels[this.displayScaleMode]);
+      }
+
+      setDisplayScaleMode(mode) {
+        this.displayScaleMode = mode;
+        localStorage.setItem("mdbuu_display_scale", this.displayScaleMode);
+        this.applyDisplayScale();
+
+        const labels = {
+          auto: "อัตโนมัติตามขนาดจอ",
+          laptop: "โน้ตบุ๊ก (100%)",
+          tv: "จอทีวี (115%)",
+          hall: "จอห้องประชุมใหญ่ (130%)"
+        };
+        showToast("🖥️ เปลี่ยนขนาดแสดงผลเป็น: " + labels[this.displayScaleMode]);
+      }
+
+      applyDisplayScale() {
+        let scale = 1.0;
+        const w = window.innerWidth;
+
+        if (this.displayScaleMode === "auto") {
+          if (w >= 2100) scale = 1.28;
+          else if (w >= 1550) scale = 1.12;
+          else scale = 1.0;
+        } else if (this.displayScaleMode === "tv") {
+          scale = 1.15;
+        } else if (this.displayScaleMode === "hall") {
+          scale = 1.30;
+        } else {
+          scale = 1.0;
+        }
+
+        document.documentElement.style.setProperty("--ui-scale", String(scale));
+
+        const btn = document.getElementById("btnDisplayScaleMode");
+        if (btn) {
+          const shortLabels = {
+            auto: "🖥️ จอ: อัตโนมัติ (" + Math.round(scale * 100) + "%)",
+            laptop: "🖥️ จอ: 100%",
+            tv: "🖥️ จอ: ทีวี 115%",
+            hall: "🖥️ จอ: ห้องประชุม 130%"
+          };
+          btn.innerText = shortLabels[this.displayScaleMode] || "🖥️ จอ: อัตโนมัติ";
+        }
+
+        // Update settings modal buttons if present
+        ["btnScaleAuto", "btnScaleLaptop", "btnScaleTv", "btnScaleHall"].forEach(id => {
+          const b = document.getElementById(id);
+          if (!b) return;
+          const modeKey = id.replace("btnScale", "").toLowerCase();
+          const isActive = (modeKey === "auto" && this.displayScaleMode === "auto") ||
+                           (modeKey === "laptop" && this.displayScaleMode === "laptop") ||
+                           (modeKey === "tv" && this.displayScaleMode === "tv") ||
+                           (modeKey === "hall" && this.displayScaleMode === "hall");
+          if (isActive) {
+            b.style.borderColor = "#0284C7";
+            b.style.color = "#0284C7";
+            b.style.background = "#F0F9FF";
+            b.style.fontWeight = "700";
+          } else {
+            b.style.borderColor = "#E2E8F0";
+            b.style.color = "#64748B";
+            b.style.background = "#FFFFFF";
+            b.style.fontWeight = "600";
+          }
+        });
+
+        if (window.ECGEngine) {
+          setTimeout(() => window.ECGEngine.resize(), 60);
+        }
       }
 
       openSettingsModal() {
