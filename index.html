@@ -3697,7 +3697,7 @@
         <!-- Live Joined Players Wall (Kahoot-style Roster) -->
         <div class="lobby-roster-box font-technical">
           <div class="lobby-roster-header">
-            <span>ทีมผู้ช่วยแพทย์ที่เชื่อมต่อแล้ว (LIVE CO-RESPONDERS: <strong id="txtLobbyPlayerCount" style="color:#059669;">0</strong> คน)</span>
+            <span>ทีมผู้ช่วยแพทย์ที่เชื่อมต่อแล้ว (LIVE CO-RESPONDERS: <strong id="txtLobbyPlayerCount" style="color:#059669;">0</strong> / 100 คน)</span>
             <span style="font-size:10.5px; color:#64748B;">เรียลไทม์ผ่านมือถือ</span>
           </div>
           <div id="lobbyPlayersRoster" class="lobby-roster-chips">
@@ -3727,8 +3727,8 @@
               <button onclick="GameStateManager.openMobileSimulator()" class="btn-dev-mobile-sim font-technical" title="เปิดหน้าต่างจำลองมือถือขนาด 390x780 ข้างๆ จอนี้">
                 📱 เปิดจอมือถือจำลอง
               </button>
-              <button id="btnLobbyBotToggle" onclick="GameStateManager.toggleBotSimulator()" class="btn-bot-toggle font-technical" title="จำลองผู้เล่น 25 คนร่วมโหวตและช่วย CPR">
-                🤖 บอท 25 คน: <span id="txtBotStatus">ปิด</span>
+              <button id="btnLobbyBotToggle" onclick="GameStateManager.toggleBotSimulator()" class="btn-bot-toggle font-technical" title="จำลองผู้เล่น 25 หรือ 100 คนร่วมโหวตและช่วย CPR">
+                🤖 บอท: <span id="txtBotStatus">ปิด</span>
               </button>
             </div>
           </div>
@@ -4683,9 +4683,9 @@
         const key = `${msg.senderId}_${msg.type}_${msg.ts}`;
         if (this.processedMsgKeys.has(key)) return;
         this.processedMsgKeys.add(key);
-        if (this.processedMsgKeys.size > 300) {
+        if (this.processedMsgKeys.size > 2000) {
           const it = this.processedMsgKeys.values();
-          for (let i = 0; i < 60; i++) this.processedMsgKeys.delete(it.next().value);
+          for (let i = 0; i < 400; i++) this.processedMsgKeys.delete(it.next().value);
         }
 
         const list = this.handlers[msg.type];
@@ -4703,69 +4703,112 @@
     window.RealtimeEngine = RealtimeEngine;
 
     // =========================================================================
-    // V14.0 SOLO DEV 25-BOT SIMULATOR (REALISTIC THAI STUDENT CO-RESPONDERS)
+    // V15.0 SOLO DEV 25/100-BOT SIMULATOR (REALISTIC THAI STUDENT CO-RESPONDERS)
     // =========================================================================
-    const BOT_NAMES = [
-      { name: 'หมอเอิร์ธ', group: '01' },
-      { name: 'น้องมายด์', group: '01' },
-      { name: 'ต้นกล้า', group: '02' },
-      { name: 'ข้าวฟ่าง', group: '02' },
-      { name: 'ภูมิ', group: '03' },
-      { name: 'ฟ้าใส', group: '03' },
-      { name: 'วิน', group: '04' },
-      { name: 'พลอย', group: '04' },
-      { name: 'กันต์', group: '05' },
-      { name: 'พิม', group: '05' },
-      { name: 'บอส', group: '06' },
-      { name: 'ไอซ์', group: '06' },
-      { name: 'นัท', group: '07' },
-      { name: 'แพรว', group: '07' },
-      { name: 'เต้', group: '08' },
-      { name: 'มิว', group: '08' },
-      { name: 'อาร์ม', group: '09' },
-      { name: 'เจน', group: '09' },
-      { name: 'โอ๊ค', group: '10' },
-      { name: 'โบว์', group: '10' },
-      { name: 'เบนซ์', group: '03' },
-      { name: 'ปอนด์', group: '05' },
-      { name: 'กิ๊ฟ', group: '07' },
-      { name: 'แทน', group: '08' },
-      { name: 'แนน', group: '10' }
+    const BOT_NAMES_100 = [
+      // Group 01 (10 students)
+      { name: 'หมอเอิร์ธ', group: '01' }, { name: 'น้องมายด์', group: '01' }, { name: 'โอ๊ค', group: '01' }, { name: 'แพรว', group: '01' }, { name: 'กอล์ฟ', group: '01' },
+      { name: 'บิว', group: '01' }, { name: 'นนท์', group: '01' }, { name: 'มินต์', group: '01' }, { name: 'อาร์ม', group: '01' }, { name: 'พลอย', group: '01' },
+      // Group 02 (10 students)
+      { name: 'ต้นกล้า', group: '02' }, { name: 'ข้าวฟ่าง', group: '02' }, { name: 'เต้', group: '02' }, { name: 'แป้ง', group: '02' }, { name: 'วิน', group: '02' },
+      { name: 'ไอซ์', group: '02' }, { name: 'บาส', group: '02' }, { name: 'เนย', group: '02' }, { name: 'นัท', group: '02' }, { name: 'กานต์', group: '02' },
+      // Group 03 (10 students)
+      { name: 'ภูมิ', group: '03' }, { name: 'ฟ้าใส', group: '03' }, { name: 'เบนซ์', group: '03' }, { name: 'ฝน', group: '03' }, { name: 'ต้อม', group: '03' },
+      { name: 'ออม', group: '03' }, { name: 'กาย', group: '03' }, { name: 'ใบเตย', group: '03' }, { name: 'ท็อป', group: '03' }, { name: 'ฟ้า', group: '03' },
+      // Group 04 (10 students)
+      { name: 'หมอพีช', group: '04' }, { name: 'น้องปริม', group: '04' }, { name: 'บอส', group: '04' }, { name: 'วิว', group: '04' }, { name: 'มาร์ค', group: '04' },
+      { name: 'จูน', group: '04' }, { name: 'พีท', group: '04' }, { name: 'แตงโม', group: '04' }, { name: 'ต้น', group: '04' }, { name: 'ก้อย', group: '04' },
+      // Group 05 (10 students)
+      { name: 'กันต์', group: '05' }, { name: 'พิม', group: '05' }, { name: 'ปอนด์', group: '05' }, { name: 'ตาล', group: '05' }, { name: 'แบงค์', group: '05' },
+      { name: 'ดรีม', group: '05' }, { name: 'เจมส์', group: '05' }, { name: 'ผึ้ง', group: '05' }, { name: 'นิว', group: '05' }, { name: 'แก้ม', group: '05' },
+      // Group 06 (10 students)
+      { name: 'หมอตังค์', group: '06' }, { name: 'น้องมุก', group: '06' }, { name: 'ฟิว', group: '06' }, { name: 'ปอปอนด์', group: '06' }, { name: 'กัปตัน', group: '06' },
+      { name: 'เบลล์', group: '06' }, { name: 'คิว', group: '06' }, { name: 'แนนซี่', group: '06' }, { name: 'ริว', group: '06' }, { name: 'กล้วย', group: '06' },
+      // Group 07 (10 students)
+      { name: 'กิ๊ฟ', group: '07' }, { name: 'น้องอิงค์', group: '07' }, { name: 'โจ้', group: '07' }, { name: 'ดิว', group: '07' }, { name: 'หมิว', group: '07' },
+      { name: 'เต๋า', group: '07' }, { name: 'โมเดล', group: '07' }, { name: 'ปิง', group: '07' }, { name: 'เชอรี่', group: '07' }, { name: 'เกม', group: '07' },
+      // Group 08 (10 students)
+      { name: 'แทน', group: '08' }, { name: 'น้องฟ้า', group: '08' }, { name: 'มิว', group: '08' }, { name: 'อ้น', group: '08' }, { name: 'จ๋า', group: '08' },
+      { name: 'ไบรท์', group: '08' }, { name: 'ข้าวหอม', group: '08' }, { name: 'กานต์', group: '08' }, { name: 'แพร', group: '08' }, { name: 'โดม', group: '08' },
+      // Group 09 (10 students)
+      { name: 'อาร์ม', group: '09' }, { name: 'เจน', group: '09' }, { name: 'ชิน', group: '09' }, { name: 'ลูกหว้า', group: '09' }, { name: 'มิกซ์', group: '09' },
+      { name: 'เฟิร์น', group: '09' }, { name: 'โอม', group: '09' }, { name: 'แอม', group: '09' }, { name: 'จอย', group: '09' }, { name: 'เบน', group: '09' },
+      // Group 10 (10 students)
+      { name: 'แนน', group: '10' }, { name: 'โบว์', group: '10' }, { name: 'พัตเตอร์', group: '10' }, { name: 'เต้นท์', group: '10' }, { name: 'ปอย', group: '10' },
+      { name: 'ไกด์', group: '10' }, { name: 'ปุยฝ้าย', group: '10' }, { name: 'นน', group: '10' }, { name: 'ลูกแพร', group: '10' }, { name: 'บอม', group: '10' }
     ];
+    const BOT_NAMES = BOT_NAMES_100.slice(0, 25);
 
     class BotSimulatorCore {
       constructor() {
         this.enabled = false;
+        this.mode = 'off'; // 'off' -> '25' -> '100' -> 'off'
         this.botTimers = [];
       }
 
       toggle() {
-        if (this.enabled) {
-          this.disable();
+        if (this.mode === 'off') {
+          this.enable(25);
+        } else if (this.mode === '25') {
+          this.enable(100);
         } else {
-          this.enable();
+          this.disable();
         }
-        return this.enabled;
+        return this.mode;
       }
 
-      enable() {
-        this.enabled = true;
+      enable(count = 25) {
         this.clearTimers();
-        BOT_NAMES.forEach((b, idx) => {
+        this.enabled = true;
+        this.mode = count === 100 ? '100' : '25';
+
+        // Clear existing bots first
+        Object.keys(GameStateManager.connectedPlayers).forEach(k => {
+          if (k.startsWith('bot_')) delete GameStateManager.connectedPlayers[k];
+        });
+
+        const botsToUse = this.mode === '100' ? BOT_NAMES_100 : BOT_NAMES_100.slice(0, 25);
+        botsToUse.forEach((b, idx) => {
           const botId = `bot_${idx + 1}`;
           GameStateManager.registerPlayer(botId, b.name, b.group, true);
         });
-        showToast('🤖 เปิดโหมดจำลองผู้เล่น 25 คนเรียบร้อยแล้ว!');
+
+        this.updateButtonLabel();
+        GameStateManager.refreshLobbyRoster();
+        showToast(`🤖 เปิดโหมดจำลองผู้เล่น ${botsToUse.length} คนเรียบร้อยแล้ว!`);
       }
 
       disable() {
-        this.enabled = false;
         this.clearTimers();
-        BOT_NAMES.forEach((b, idx) => {
-          delete GameStateManager.connectedPlayers[`bot_${idx + 1}`];
+        this.enabled = false;
+        this.mode = 'off';
+
+        Object.keys(GameStateManager.connectedPlayers).forEach(k => {
+          if (k.startsWith('bot_')) delete GameStateManager.connectedPlayers[k];
         });
+
+        this.updateButtonLabel();
         GameStateManager.refreshLobbyRoster();
         showToast('ปิดโหมดจำลองบอทแล้ว');
+      }
+
+      updateButtonLabel() {
+        const btn = document.getElementById('btnLobbyBotToggle');
+        if (btn) {
+          const txt = document.getElementById('txtBotStatus');
+          if (txt) {
+            if (this.mode === '100') {
+              txt.innerText = '100 คน';
+              txt.style.color = '#0284C7';
+            } else if (this.mode === '25') {
+              txt.innerText = '25 คน';
+              txt.style.color = '#059669';
+            } else {
+              txt.innerText = 'ปิด';
+              txt.style.color = '';
+            }
+          }
+        }
       }
 
       clearTimers() {
@@ -4777,13 +4820,14 @@
         if (!this.enabled) return;
         this.clearTimers();
 
-        BOT_NAMES.forEach((b, idx) => {
+        const botsToUse = this.mode === '100' ? BOT_NAMES_100 : BOT_NAMES_100.slice(0, 25);
+        botsToUse.forEach((b, idx) => {
           const botId = `bot_${idx + 1}`;
-          // 80% choose correct answer, 20% playful vote for another choice
+          // 82% choose correct answer, 18% playful vote for another choice
           const isCorrect = Math.random() < 0.82;
           const choice = isCorrect ? correctChoice : ((correctChoice % 4) + 1);
-          // Vote between 1.5s and 5.5s
-          const delay = Math.floor(1500 + Math.random() * 4000);
+          // Vote between 1.2s and 5.8s
+          const delay = Math.floor(1200 + Math.random() * 4600);
           const t = setTimeout(() => {
             if (GameStateManager.decisionSubStep === 'AUDIENCE_VOTING') {
               GameStateManager.recordPlayerVote(botId, choice, delay);
@@ -4797,15 +4841,17 @@
         if (!this.enabled) return;
         this.clearTimers();
 
-        // Periodically batch taps from bots to fill 1,000 taps smoothly
+        const batchSize = this.mode === '100' ? 50 : 20;
+        const intervalMs = this.mode === '100' ? 240 : 300;
+
         const interval = setInterval(() => {
           if (GameStateManager.currentStage !== 3 || GameStateManager.stage3TapCount >= GameStateManager.effectiveTapTarget) {
             clearInterval(interval);
             return;
           }
-          const batch = Math.floor(15 + Math.random() * 25);
+          const batch = Math.floor(batchSize * (0.8 + Math.random() * 0.4));
           GameStateManager.handleMobileTapBatch('bot_cluster', batch);
-        }, 320);
+        }, intervalMs);
         this.botTimers.push(interval);
       }
     }
@@ -5605,7 +5651,7 @@
         };
 
         this.recognition.onend = () => {
-          if (this.isSttRunning && !window.isSystemSpeaking && (window.GameStateManager && [1, 2, 3, 4, 5].includes(window.GameStateManager.currentStage))) {
+          if (this.isSttRunning && !window.isSystemSpeaking && (window.GameStateManager && [1, 2, 3, 4, 5, 6, 7, 8].includes(window.GameStateManager.currentStage))) {
             if (window.GameStateManager.currentStage === 5 && window.GameStateManager.stage5Phase === 'CPR') {
               return; // STT is OFF during CPR
             }
@@ -5737,11 +5783,11 @@
         initialStory: 'พบผู้บาดเจ็บติดอยู่ในรถเก๋งที่ชนรั้วข้างทาง มีกลุ่มควันพุ่งออกจากฝากระโปรงรถ',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจสภาพรอบจุดเกิดเหตุและตัวรถก่อนไหมครับ?',
         inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
-        inspectSpoken: 'เกิดอุบัติเหตุรถชนรั้วข้างทาง มีควันพุ่งออกจากฝากระโปรงรถครับ ต้องการสำรวจสภาพรอบจุดเกิดเหตุก่อนไหมครับ? พูดคำว่า สำรวจ ได้เลยครับ',
+        inspectSpoken: 'ภารกิจเริ่มขึ้นแล้วครับ! เราขับรถมาเจออุบัติเหตุรถเก๋งชนรั้วข้างทาง มีคนเจ็บฟุบอยู่ในรถ ก่อนจะบุกเข้าไปช่วย น้องตัวแทนหน้าห้องต้องการสำรวจความปลอดภัยรอบจุดเกิดเหตุก่อนไหมครับ? พูดใส่ไมค์ว่า สำรวจ ได้เลยครับ!',
         findingsTitle: 'ผลการสำรวจจุดเกิดเหตุ (Hazard & Scene Assessment)',
         findingsDesc: '⚠️ พบอันตรายวิกฤต: กลุ่มควันสีขาวพุ่งหนาแน่นจากฝากระโปรง เครื่องยนต์ยังไม่ดับ และมีรถวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูง',
         cleanFindings: 'กลุ่มควันสีขาวพุ่งหนาแน่นจากฝากระโปรง เครื่องยนต์ยังไม่ดับ และมีรถวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูง',
-        findingsSpoken: 'จากการสำรวจ พบกลุ่มควันพุ่งจากห้องเครื่อง และมีรถวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูงครับ จะเลือกใช้อุปกรณ์หรือวิธีใดเข้าช่วยเหลือ พูดเลือกข้อ 1 ถึง 4 ได้เลยครับ',
+        findingsSpoken: 'จากการสำรวจ พบกลุ่มควันพุ่งออกจากฝากระโปรงรถ เครื่องยนต์ยังไม่ดับ และมีรถคันอื่นวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูงครับ! เพื่อนๆ ในห้องครับ ดูตัวเลือกในมือถือแล้วกดโหวตช่วยเพื่อนเลยครับว่าสิ่งแรกที่เราต้องทำคือข้อไหน!',
         selectInstruction: 'สิ่งแรกที่ผู้ช่วยเหลือต้องปฏิบัติก่อนเข้าประเมินผู้ป่วยคือข้อใด?',
         correctChoice: 2,
         answerKey: 'ข้อ 2 (กรวยกั้นพื้นที่ + ดับเครื่องยนต์)',
@@ -5857,7 +5903,7 @@
             title: 'ขวดน้ำเกลือปราศจากเชื้อ (0.9% NSS)',
             purpose: 'ใช้น้ำเกลือปราศจากเชื้อชะล้างเศษดินและสิ่งสกปรกโดยไม่ทำลายเนื้อเยื่อ',
             type: 'correct',
-            correctSpoken: 'ยอดเยี่ยมมากครับ! น้ำเกลือปราศจากเชื้อ 0.9% Normal Saline เป็นสารละลายที่มีความเข้มข้นเท่ากับของเหลวในร่างกาย ไม่ทำลายเนื้อเยื่อ และเหมาะที่สุดในการชะล้างสิ่งสกปรกออกจากแผลสดครับ!',
+            correctSpoken: 'ถูกต้องครับ! การล้างแผลสดต้องใช้น้ำเกลือปราศจากเชื้อ นอร์มอลซาไลน์ ชะล้างสิ่งสกปรกออก เพราะมีความสมดุลกับเนื้อเยื่อร่างกาย ไม่แสบ และไม่ทำลายเซลล์เนื้อเยื่อดีเหมือนแอลกอฮอล์ครับ!',
             iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v4h-4z"/><rect x="6" y="6" width="12" height="16" rx="3"/><path d="M12 10a2.5 2.5 0 0 1 2.5 2.5c0 1.5-2.5 4.5-2.5 4.5s-2.5-3-2.5-4.5A2.5 2.5 0 0 1 12 10z"/></svg>`
           },
           {
@@ -5888,11 +5934,11 @@
         initialStory: 'ล้างเศษดินออกจากแผลสะอาดเรียบร้อยแล้ว',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจลักษณะเลือดที่ไหลออกจากบาดแผลไหมครับ?',
         inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
-        inspectSpoken: 'ล้างแผลสะอาดแล้วครับ ต้องการสำรวจลักษณะเลือดที่ไหลออกจากบาดแผลไหมครับ? พูดคำว่า สำรวจ ได้เลยครับ',
+        inspectSpoken: 'ตอนนี้เราล้างเศษดินออกจากแผลสะอาดแล้ว แต่ดูเหมือนยังมีเลือดไหลออกมาอยู่ครับ น้องตัวแทนต้องการสำรวจลักษณะเลือดที่ไหลออกจากแผลไหมครับ? พูดคำว่า สำรวจ ได้เลยครับ!',
         findingsTitle: 'ผลตรวจเลือดออก (Bleeding Assessment)',
         findingsDesc: '🩸 ผลตรวจบาดแผล: มีเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่อง หากปล่อยไว้จะเสียเลือดมาก',
         cleanFindings: 'มีเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่อง หากปล่อยไว้จะเสียเลือดมาก',
-        findingsSpoken: 'มีเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่องครับ ขั้นตอนการห้ามเลือดและปิดแผลที่ถูกต้องและปลอดภัยที่สุด เราต้องเลือกใช้อุปกรณ์ใด พูดเลือกข้อ 1 ถึง 3 ได้เลยครับ',
+        findingsSpoken: 'ตรวจพบเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่องครับ! ถ้าปล่อยไว้คนไข้จะเสียเลือดมาก เพื่อนๆ ในห้องกดโหวตในมือถือเลยครับว่าเราจะใช้อุปกรณ์และวิธีใดห้ามเลือด!',
         selectInstruction: 'ขั้นตอนการห้ามเลือดที่ถูกต้องและปลอดภัยที่สุดคือข้อใด?',
         correctChoice: 2,
         answerKey: 'ข้อ 2 (ผ้าก๊อซ Direct Pressure กดแผลโดยตรง)',
@@ -5932,11 +5978,11 @@
         initialStory: 'ห้ามเลือดหยุดไหลและพันแผลเรียบร้อยแล้ว',
         inspectQuestion: 'คุณต้องการเข้าไปสำรวจโครงสร้างกระดูกและข้อต่อแขนของคนไข้ไหมครับ?',
         inspectVoicePrompt: 'พูดคำว่า “สำรวจ” เพื่อตรวจสอบ',
-        inspectSpoken: 'ห้ามเลือดเรียบร้อยแล้วครับ ต้องการสำรวจโครงสร้างกระดูกและข้อต่อแขนของคนไข้ไหมครับ? พูดคำว่า สำรวจ ได้เลยครับ',
+        inspectSpoken: 'เลือดหยุดไหลสนิทแล้วครับ! แต่ผู้ป่วยยังร้องปวดที่ท่อนแขนล่างและขยับแขนไม่ได้ น้องตัวแทนต้องการสำรวจโครงสร้างกระดูกแขนของผู้ป่วยไหมครับ? พูดคำว่า สำรวจ ได้เลยครับ!',
         findingsTitle: 'ผลตรวจกระดูกและข้อต่อ (Bone & Joint Inspection)',
         findingsDesc: '🦴 ผลตรวจร่างกาย: ท่อนแขนท่อนล่างบวมโตและโก่งผิดรูปชัดเจน ผู้ป่วยร้องปวดเมื่อขยับ สงสัยกระดูกแขนหัก',
         cleanFindings: 'ท่อนแขนท่อนล่างบวมโตและโก่งผิดรูปชัดเจน ผู้ป่วยร้องปวดเมื่อขยับ สงสัยกระดูกแขนหัก',
-        findingsSpoken: 'ท่อนแขนท่อนล่างบวมโตและโก่งผิดรูปชัดเจน สงสัยกระดูกแขนหักครับ เราควรทำการดามแขนและประคองข้อต่ออย่างไรให้ถูกต้อง พูดเลือกข้อ 1 ถึง 3 ได้เลยครับ',
+        findingsSpoken: 'พบว่าท่อนแขนล่างบวมโตและโก่งผิดรูปชัดเจน สงสัยว่ากระดูกแขนหักครับ! ด่านสุดท้ายแล้ว เพื่อนๆ ในห้องกดโหวตวิธีดามกระดูกและประคองข้อต่อที่ถูกต้องส่งมาให้ตัวแทนเลยครับ!',
         selectInstruction: 'หลักการดามกระดูกแขนและการประคองข้อต่อที่ถูกต้องคือข้อใด?',
         correctChoice: 2,
         answerKey: 'ข้อ 2 (ดามไม้ครอบคลุมข้อ + คล้องคอ 90°)',
@@ -6038,6 +6084,13 @@
         globalConfetti = new ConfettiEngine('confettiCanvas');
         this.bindEvents();
 
+        // 2.5-Second Continuous Host Stage Sync Heartbeat (Recovers reconnecting/lagging phones)
+        setInterval(() => {
+          if (this.currentStage >= 0) {
+            this.broadcastMultiplayerStageSync();
+          }
+        }, 2500);
+
         try {
           this.hostChannel = new BroadcastChannel('mdbuu_heartbeat_channel');
           this.hostChannel.onmessage = (e) => this.handleHostRemoteMessage(e.data);
@@ -6065,8 +6118,11 @@
           RealtimeEngine.send('JOIN_ACK', {
             pin: this.sessionPin,
             stage: this.currentStage,
-            subStep: this.decisionSubStep
+            subStep: this.decisionSubStep,
+            subPhase: this.stage5Phase
           });
+          // Immediately broadcast active stage sync to catch up newly joined player
+          this.broadcastMultiplayerStageSync();
         });
 
         RealtimeEngine.on('PLAYER_VOTE', (msg) => {
@@ -6137,19 +6193,52 @@
         const players = Object.values(this.connectedPlayers);
         if (countTxt) countTxt.innerText = players.length;
 
-        // Auto-scale Stage 3 tap target
-        this.effectiveTapTarget = Math.max(40, players.length * 40);
+        // Auto-scale Stage 3 tap target up to 100 players:
+        // 1 player = 40 taps, 25 players = 1,000 taps, 100 players = 2,500 taps
+        this.effectiveTapTarget = players.length <= 1 ? 40 : Math.min(2500, Math.max(200, players.length * 25));
 
-        if (roster) {
-          if (players.length === 0) {
-            roster.innerHTML = '<span style="font-size:11px; color:#94A3B8; padding:4px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>';
-          } else {
-            roster.innerHTML = players.map(p => `
-              <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
-                <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
-              </div>
-            `).join('');
-          }
+        if (!roster) return;
+
+        if (players.length === 0) {
+          roster.innerHTML = '<span style="font-size:11px; color:#94A3B8; padding:4px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>';
+          return;
+        }
+
+        if (players.length > 20) {
+          // 10-Group Live Count Grid
+          const groupCounts = {};
+          for (let g = 1; g <= 10; g++) groupCounts[String(g).padStart(2, '0')] = 0;
+          players.forEach(p => {
+            const grp = p.group || '01';
+            groupCounts[grp] = (groupCounts[grp] || 0) + 1;
+          });
+
+          const groupGridHtml = `
+            <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:4px; margin-bottom:8px; width:100%;">
+              ${Object.entries(groupCounts).map(([grp, cnt]) => `
+                <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:3px 6px; font-size:10.5px; display:flex; justify-content:space-between; align-items:center;">
+                  <span style="color:#64748B; font-weight:700;">กล. ${grp}</span>
+                  <span style="color:#0284C7; font-weight:800;">${cnt} คน</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+
+          // Feed of the most recent 12 joined players
+          const recentPlayers = players.slice(-12).reverse();
+          const chipsHtml = recentPlayers.map(p => `
+            <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
+              <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
+            </div>
+          `).join('');
+
+          roster.innerHTML = groupGridHtml + `<div style="display:flex; flex-wrap:wrap; gap:4px; max-height:85px; overflow-y:auto; width:100%;">${chipsHtml}</div>`;
+        } else {
+          roster.innerHTML = players.map(p => `
+            <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
+              <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
+            </div>
+          `).join('');
         }
       }
 
@@ -6268,7 +6357,7 @@
 
             // Thai AI Voice Invitation
             const teamNum = parseInt(this.selectedTeam, 10);
-            speakAndWait(`ได้กลุ่มที่ ${teamNum} ครับ! ขอเชิญน้องตัวแทนกลุ่มที่ ${teamNum} ออกมาเตรียมพร้อมกู้ชีพด้านหน้าได้เลยครับ!`, `lobby_roll_${teamNum}`);
+            speakAndWait(`ได้กลุ่มที่ ${teamNum} ครับ! ขอเชิญฮีโร่ตัวแทนจากกลุ่มที่ ${teamNum} ออกมาประจำการหน้าห้องได้เลยครับ ส่วนเพื่อนๆ ทุกคนในห้อง สแกนคิวอาร์โค้ดบนจอเพื่อเข้าสู่ระบบผู้ช่วยแพทย์ได้เลยครับ!`, `lobby_roll_${teamNum}`);
           }
         };
 
@@ -6387,6 +6476,9 @@
         speechDebouncer.clear();
         MicSensor.stopSpeechRecognition();
 
+        // Bulletproof Multiplayer Stage Sync across all stages 0-9
+        this.broadcastMultiplayerStageSync();
+
         if (newStage > 0) {
           document.body.classList.remove('lobby-mode');
           const ml = document.getElementById('modalLobby');
@@ -6418,6 +6510,7 @@
           this.selectedChoiceIndex = null;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           await speakAndWait(CLINICAL_STAGES[1].inspectSpoken, 's1_intro');
           this.startClinicalVoiceTracking(1);
@@ -6431,8 +6524,9 @@
           this.shoutHoldMs = 0;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
-          await speakAndWait('ผู้ป่วยตบไหล่เรียกแล้วไม่ตอบสนองครับ! ให้ทุกคนในห้องช่วยกันตะโกนขอความช่วยเหลือออกมาดังๆ ให้ครบทั้งสามประโยค และเสียงดังทะลุเกณฑ์เป้าหมายพร้อมกันเลยครับ!', 's2_intro');
+          await speakAndWait('ตอนนี้เราเคลื่อนย้ายผู้ป่วยมานอนราบในจุดปลอดภัยแล้ว แต่ตบไหล่เรียกเท่าไหร่ก็ไม่ตอบสนองครับ! เราต้องตะโกนขอความช่วยเหลือและตามระบบกู้ชีพ ทุกคนในห้องครับ ดูบทพูดบนจอและในมือถือ แล้วช่วยกันตะโกนพร้อมกันดังๆ ให้ทะลุเจ็ดสิบหกเดซิเบลเลยครับ เอาเลย!', 's2_intro');
           this.startStage2Listening();
         } else if (newStage === 3) {
           window.ECGEngine.setMode('BRADYCARDIA');
@@ -6443,11 +6537,12 @@
           this.checklist = { location: false, incident: false, patient: false, aed: false };
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           SoundEngine.playTelephoneRing();
           await new Promise(r => setTimeout(r, 700));
 
-          await speakAndWait('สวัสดีครับ สายด่วน 1669 รับสายครับ! การโทรแจ้งเหตุฉุกเฉิน ต้องบอกข้อมูลสำคัญสี่ข้อจากเหตุการณ์จริง เชิญตัวแทนพูดแจ้งข้อมูลใส่ไมโครโฟนได้เลยครับ!', 's3_intro');
+          await speakAndWait('สายด่วนหนึ่งหกหกเก้ารับสายแล้วครับ! แต่ข้อมูลที่เกิดเหตุทั้งสี่ข้อยังถูกล็อกอยู่ เพื่อนๆ ในห้องครับ ช่วยกันกดปุ่มสายฟ้าบนจอมือถือรัวๆ เพื่อส่งข้อมูลขึ้นจอใหญ่ให้ตัวแทนหน้าห้องอ่านแจ้งเจ้าหน้าที่เลยครับ กดรัวๆ เลยครับ!', 's3_intro');
           this.startStage3LiveSTT();
         } else if (newStage === 4) {
           window.ECGEngine.setMode('AGONAL');
@@ -6458,6 +6553,7 @@
           this.selectedChoiceIndex = null;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           await speakAndWait(CLINICAL_STAGES[4].inspectSpoken, 's4_intro');
           this.startClinicalVoiceTracking(4);
@@ -6474,8 +6570,9 @@
           this.updatePatientHud('images/patient/patient_s5_cpr.png', 'ด่านที่ 5A • CPR (110 BPM)', 'critical');
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
-          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้น เริ่มกดหน้าอก ซีพีอาร์ ทันทีครับ! ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทุกกลุ่มช่วยกันปรบมือตามจังหวะไฟกะพริบ 110 บีพีเอ็ม ให้ครบสามสิบครั้งนะครับ!', 's5_cpr_intro');
+          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้นแล้วครับ! เราต้องกดหน้าอกด้วยความเร็วหนึ่งร้อยสิบครั้งต่อนาที ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทุกคนในห้องกดปุ่มหัวใจบนจอมือถือให้ตรงจังหวะบีตจนครบสามสิบครั้งนะครับ เตรียมตัว...', 's5_cpr_intro');
           await this.runCprCountdownAndStart();
         } else if (newStage === 6) {
           window.ECGEngine.setMode('SINUS');
@@ -6486,6 +6583,7 @@
           this.selectedChoiceIndex = null;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           await speakAndWait(CLINICAL_STAGES[6].inspectSpoken, 's6_intro');
           this.startClinicalVoiceTracking(6);
@@ -6498,6 +6596,7 @@
           this.selectedChoiceIndex = null;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           await speakAndWait(CLINICAL_STAGES[7].inspectSpoken, 's7_intro');
           this.startClinicalVoiceTracking(7);
@@ -6510,6 +6609,7 @@
           this.selectedChoiceIndex = null;
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           await speakAndWait(CLINICAL_STAGES[8].inspectSpoken, 's8_intro');
           this.startClinicalVoiceTracking(8);
@@ -6522,6 +6622,7 @@
           this.saveLeaderboardEntry();
           this.renderStage();
           this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
 
           if (globalConfetti) {
             globalConfetti.burst(window.innerWidth / 2, window.innerHeight / 2);
@@ -6530,7 +6631,7 @@
           }
           SoundEngine.playStageClear();
 
-          speakAndWait('ขอแสดงความยินดีกับทีมกู้ชีพทุกคนครับ! รถพยาบาลกู้ชีพมาถึงแล้ว สัญญาณชีพของผู้ป่วยกลับมาเป็นปกติ และได้รับการปฐมพยาบาลบาดแผลอย่างปลอดภัย ด้วยความกล้าหาญและความร่วมมือของทุกคน ช่วยให้เป็น เห็นแล้วกล้าทำ ขอขอบคุณและยินดีต้อนรับสู่คณะแพทยศาสตร์ มหาวิทยาลัยบูรพาครับ!', '27');
+          speakAndWait('ภารกิจเสร็จสิ้นสมบูรณ์ครับ! ขอปรบมือให้ฮีโร่ตัวแทนหน้าห้องและทีมผู้ช่วยแพทย์ทุกคนในห้องนี้ครับ วันนี้ทุกคนได้พิสูจน์แล้วว่า ช่วยให้เป็น เห็นแล้วกล้าทำ ตอนนี้เกียรติบัตรดิจิทัลที่มีชื่อของแต่ละคนถูกส่งเข้าสู่มือถือของทุกคนเรียบร้อยแล้ว กดบันทึกรูปเก็บไว้เป็นที่ระลึกได้เลยครับ ยินดีต้อนรับสู่คณะแพทยศาสตร์ มหาวิทยาลัยบูรพาครับ!', 's9_final_congrats');
         }
       }
 
@@ -6773,6 +6874,15 @@
         this.broadcastMultiplayerStageSync();
 
         try { SoundEngine.playPulseBeep(1040, 0.1); } catch(e) {}
+
+        const winTitle = this.topVotedChoice ? this.topVotedChoice.title : '';
+        speakAndWait(
+          `ปิดโหวตแล้วครับ! เสียงส่วนใหญ่ในห้อง ${this.topVotedPercent} เปอร์เซ็นต์ เลือกข้อที่ ${this.topVotedChoice.num} ${winTitle} ครับ น้องตัวแทนหน้าห้องจะใช้คำตอบนี้เลยไหมครับ? ถ้าใช้ พูดคำว่า ยืนยัน หรือถ้าอยากให้เพื่อนเลือกใหม่ พูดว่า โหวตใหม่ ได้เลยครับ!`
+        ).then(() => {
+          if (this.currentStage === cData.stageNum && this.decisionSubStep === 'HERO_DECISION') {
+            this.startClinicalVoiceTracking(this.currentStage);
+          }
+        });
       }
 
       reopenAudienceVoting() {
@@ -6902,7 +7012,7 @@
         }
       }
 
-            startClinicalVoiceTracking(stageNum) {
+      startClinicalVoiceTracking(stageNum) {
         MicSensor.ensureMicLive().catch(() => {});
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== stageNum || this.isStageChoiceLocked || window.isSystemSpeaking) return;
@@ -6910,45 +7020,74 @@
 
           const box = document.getElementById('txtLiveVoiceChoice');
           if (box) {
-            box.innerHTML = `ได้ยิน: <span style="color:#059669; font-weight:700;">"${transcript}"</span>`;
+            box.innerHTML = `ได้ยิน: <span style="color:#059669; font-weight:800;">"${transcript}"</span>`;
           }
 
+          // STEP 1: Waiting for Hero to say "สำรวจ"
           if (this.decisionSubStep === 'PROMPT_INSPECT') {
-            const inspectWords = ['สำรวจ', 'ประเมิน', 'ตรวจสอบ', 'ดูอาการ', 'ดูแผล', 'ดูคนไข้', 'โอเค', 'ครับ', 'ค่ะ', 'พร้อม', 'ลุย'];
+            const inspectWords = [
+              'สำรวจ', 'ประเมิน', 'ตรวจสอบ', 'ตรวจดู', 'เช็คอาการ', 'เช็กอาการ',
+              'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'โอเค', 'พร้อม', 'ลุย'
+            ];
             if (inspectWords.some(w => val.includes(w))) {
               this.advanceToInspectionFinding();
             }
             return;
           }
 
-          if (this.decisionSubStep === 'SELECT_CARD') {
-            const choice = matchVoiceToChoice(transcript, stageNum);
-            if (choice) {
-              this.selectEquipmentCard(choice);
+          // STEP 2: While Audience is voting on phones, Hero can also say "ปิดโหวต" or pick directly if 0 phones connected
+          if (this.decisionSubStep === 'AUDIENCE_VOTING') {
+            if (val.includes('ปิดโหวต') || val.includes('สรุปผล')) {
+              this.finishAudienceVoting();
+              return;
+            }
+            // If playing solo with 0 phones connected, allow Hero to speak Choice 1-4 directly
+            if (Object.keys(this.connectedPlayers).length === 0) {
+              const directChoice = matchVoiceToChoice(transcript, stageNum);
+              if (directChoice) {
+                this.recordPlayerVote('hero_direct', directChoice, 1000);
+                this.finishAudienceVoting();
+              }
             }
             return;
           }
 
-          if (this.decisionSubStep === 'CONFIRM_CHOICE') {
-            const confirmWords = ['ยืนยัน', 'ตกลง', 'ใช่', 'เอาอันนี้', 'ทำเลย', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้'];
-            const cancelWords = ['เปลี่ยน', 'ยกเลิก', 'ไม่เอา', 'เลือกใหม่', 'cancel', 'เปลี่ยนข้อ'];
+          // STEP 3: Top-Voted Choice is on Projector -> Hero says "ยืนยัน" or "โหวตใหม่"
+          if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
+            const confirmWords = [
+              'ยืนยัน', 'ใช้คำตอบนี้', 'ตกลง', 'ใช่', 'เอาอันนี้', 'เอาข้อนี้',
+              'ทำเลย', 'ลุยเลย', 'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'โอเค'
+            ];
+            const revoteWords = [
+              'โหวตใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ', 'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก'
+            ];
 
             if (confirmWords.some(w => val.includes(w))) {
-              this.confirmSelectedChoice();
-            } else if (cancelWords.some(w => val.includes(w))) {
-              this.cancelSelectedChoice();
-            } else {
-              const newChoice = matchVoiceToChoice(transcript, stageNum);
-              if (newChoice && newChoice !== this.selectedChoiceIndex) {
-                this.selectEquipmentCard(newChoice);
+              if (box) {
+                box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="color:#059669;">(✓ ยืนยันคำตอบ!)</span>`;
               }
+              this.confirmHeroDecision();
+              return;
+            }
+
+            if (revoteWords.some(w => val.includes(w))) {
+              if (box) {
+                box.innerHTML = `“<span style="color:#D97706; font-weight:800;">${transcript}</span>” <span style="color:#D97706;">(↺ เปิดโหวตใหม่!)</span>`;
+              }
+              this.reopenAudienceVoting();
+              return;
+            }
+
+            // Also allow Hero to override by speaking a specific choice number ("เลือกข้อ 2")
+            const overrideChoice = matchVoiceToChoice(transcript, stageNum);
+            if (overrideChoice) {
+              this.executeDecisionOutcome(overrideChoice);
             }
           }
         });
       }
 
-      // =========================================================================
-      // CODE BLUE // GAME OVER SYSTEM & CHECKPOINT RETRY
+            // CODE BLUE // GAME OVER SYSTEM & CHECKPOINT RETRY
       // =========================================================================
       triggerGameOver(fatalReason, stageNum) {
         this.isGameOver = true;
@@ -6986,6 +7125,7 @@
         const modal = document.getElementById('modalGameOver');
         if (modal) modal.style.display = 'flex';
 
+        this.broadcastMultiplayerStageSync();
         speakAndWait(`เกิดภาวะวิกฤตถึงแก่ชีวิตครับ! ${fatalReason} พูดว่า ลองใหม่ หรือกด Spacebar เพื่อย้อนกลับไปแก้ไขด่านนี้ครับ!`, `game_over_${stageNum}`);
 
         MicSensor.startSpeechRecognition((transcript) => {
@@ -7023,6 +7163,7 @@
         this.decisionSubStep = 'SELECT_CARD';
         this.selectedChoiceIndex = null;
         this.renderStage();
+        this.broadcastMultiplayerStageSync();
         this.startClinicalVoiceTracking(this.currentStage);
       }
 
@@ -8652,6 +8793,7 @@
             this.stage3UnlockedChimePlayed = true;
             try { SoundEngine.playStageClear(); } catch(e) {}
             showToast('✓ ปลดล็อกข้อมูลครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลย');
+            speakAndWait('ข้อมูลทั้งสี่ข้อขึ้นจอครบแล้วครับ! น้องตัวแทนหน้าห้อง พูดแจ้งพิกัด เหตุการณ์ อาการคนไข้ และขอรถกู้ชีพพร้อมเครื่อง เออีดี ใส่ไมค์ได้เลยครับ!', 's3_unlocked');
           }
         }
       }
@@ -8666,8 +8808,13 @@
           player.score += (accuracy === 'PERFECT' ? 3 : 1);
         }
 
-        // Forward to normal CPR hit attempt
-        this.attemptCprHit(deltaMs);
+        // Aggregate incoming mobile CPR hits within a 260ms global beat window
+        // (So if 80 students tap together on the 110 BPM beat, Host increments +1 per beat cycle)
+        const now = performance.now();
+        if (!this.lastGlobalCprBeatTime || (now - this.lastGlobalCprBeatTime) >= 260) {
+          this.lastGlobalCprBeatTime = now;
+          this.attemptCprHit('mobile', true);
+        }
       }
 
       handleAedTouchViolation(senderId, name, group) {
@@ -9030,7 +9177,7 @@
           txtHint.style.color = '#10B981';
         }
 
-        await speakAndWait('ยอดเยี่ยมมากครับ! ตะโกนขอความช่วยเหลือได้ถูกต้อง ชัดเจน ครบถ้วน และเสียงดังฟังชัดทุกคนในห้องได้ยินครับ!', 's2_success');
+        await speakAndWait('เสียงดังฟังชัดและครบถ้วนยอดเยี่ยมมากครับ! มีคนได้ยินและกำลังวิ่งไปเอาเครื่อง เออีดี มาช่วยเราแล้ว ขั้นตอนต่อไปรีบโทรแจ้งหนึ่งหกหกเก้ากันเลยครับ!', 's2_success');
         this.setStage(3);
       }
 
@@ -9147,7 +9294,7 @@
           const box = document.getElementById('txtLiveTranscript');
           if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อเรียบร้อยแล้วครับ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
 
-          await speakAndWait('1669 ได้รับข้อมูลครบถ้วนทั้งสี่ข้อแล้วครับ! กำลังส่งรถพยาบาลกู้ชีพฉุกเฉินและเครื่อง เออีดี ออกเดินทางไปทันทีครับ!', 's3_success');
+          await speakAndWait('ศูนย์สั่งการหนึ่งหกหกเก้าได้รับข้อมูลครบทั้งสี่ข้อแล้วครับ! ตอนนี้รถพยาบาลกู้ชีพฉุกเฉินกำลังออกเดินทางมาหาเราทันทีครับ!', 's3_success');
           this.setStage(4);
         }
       }
@@ -9930,8 +10077,9 @@
           this.aedListening = false;
           this.lastAedStepTime = 0;
           this.renderStage();
+          this.broadcastMultiplayerStageSync();
 
-          speakAndWait('เครื่อง เออีดี ชาร์จไฟพร้อมแล้วครับ! ก่อนกดช็อกไฟฟ้า ให้ตัวแทนพูดคำสั่งเตือนความปลอดภัยทั้งสามขั้นตอนบนหน้าจอ เรียงทีละข้อดังๆ เลยครับ!', 's5_aed_intro').then(() => {
+          speakAndWait('กดหน้าอกครบสามสิบครั้งแล้ว และเครื่อง เออีดี ชาร์จไฟสองร้อยจูลพร้อมช็อกไฟฟ้าแล้วครับ! ทุกคนในห้องห้ามแตะหน้าจอมือถือเด็ดขาดนะครับ! ส่วนน้องตัวแทนหน้าห้อง ให้พูดคำสั่งความปลอดภัยสามขั้นตอนเรียงทีละข้อดังๆ เริ่มจากคำว่า ฉันถอย ได้เลยครับ!', 's5_aed_intro').then(() => {
             setTimeout(() => {
               this.aedListening = true;
               this.lastAedStepTime = performance.now();
@@ -10173,6 +10321,8 @@
             } else if ([1, 4, 6, 7, 8].includes(this.currentStage)) {
               if (this.decisionSubStep === 'PROMPT_INSPECT') {
                 this.advanceToInspectionFinding();
+              } else if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
+                this.confirmHeroDecision();
               }
             } else if (this.currentStage === 2) {
               this.advanceStage2Complete();
@@ -10226,11 +10376,13 @@
         penalties: 0,
         currentStage: 0,
         currentSubStep: '',
+        lastRenderedKey: '',
         hasVotedThisRound: false,
         votedChoice: null,
         voteTimer: null,
         tapBatchCount: 0,
         tapBatchTimer: null,
+        lastMobileCprSendTime: 0,
         isMvp: false
       };
 
@@ -10457,11 +10609,14 @@
             // Haptic vibration
             if (navigator.vibrate) navigator.vibrate(25);
 
-            // Send vote to Host
-            RealtimeEngine.send('PLAYER_VOTE', {
-              choice: choiceNum,
-              speedMs: speedMs
-            });
+            // Send vote to Host with 0-120ms anti-collision jitter
+            const voteJitterMs = Math.floor(Math.random() * 120);
+            setTimeout(() => {
+              RealtimeEngine.send('PLAYER_VOTE', {
+                choice: choiceNum,
+                speedMs: speedMs
+              });
+            }, voteJitterMs);
 
             const fb = document.getElementById('mVoteConfirmFeedback');
             const numEl = document.getElementById('mTxtVotedNum');
@@ -10560,7 +10715,7 @@
               state.tapBatchTimer = setTimeout(() => {
                 flushTaps();
                 state.tapBatchTimer = null;
-              }, 250);
+              }, 400); // 400ms batching window for 100 players
             }
           });
         }
@@ -10604,6 +10759,12 @@
           pad.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             const now = performance.now();
+            // 350ms cooldown per phone to prevent packet spam
+            if (state.lastMobileCprSendTime && (now - state.lastMobileCprSendTime) < 350) {
+              return;
+            }
+            state.lastMobileCprSendTime = now;
+
             const delta = Math.abs((now - lastBeatTime) % BEAT_INTERVAL);
             const isPerfect = delta <= 120 || delta >= (BEAT_INTERVAL - 120);
 
@@ -10797,9 +10958,12 @@
       }
 
       // Setup Realtime Sync Handlers on Mobile
-      RealtimeEngine.on('STAGE_SYNC', (msg) => {
-        if (!state.joined) return;
-        const d = msg.payload || {};
+      function applyStageSync(d) {
+        if (!state.joined || !d) return;
+        const syncKey = `${d.stage}_${d.subStep || ''}_${d.subPhase || ''}`;
+        if (state.lastRenderedKey === syncKey) return; // Idempotent: don't wipe active inputs if already rendered!
+        state.lastRenderedKey = syncKey;
+
         state.currentStage = d.stage;
         state.currentSubStep = d.subStep;
 
@@ -10825,6 +10989,18 @@
           } else {
             renderStage5BAed();
           }
+        }
+      }
+
+      RealtimeEngine.on('STAGE_SYNC', (msg) => {
+        applyStageSync(msg.payload || {});
+      });
+
+      RealtimeEngine.on('JOIN_ACK', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        if (d.stage && d.stage > 0) {
+          applyStageSync(d);
         }
       });
 
