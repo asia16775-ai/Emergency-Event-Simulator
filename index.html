@@ -5786,55 +5786,67 @@
        ========================================================================== */
     function matchVoiceToChoice(transcript, stage) {
       if (!transcript) return null;
-      const val = transcript.toLowerCase().trim();
+      const val = transcript.toLowerCase().replace(/\s+/g, '').trim();
+
+      // Helper: Only match bare numbers if prefixed with ข้อ/เบอร์/ตัวเลือก/ช้อย OR if the entire utterance is just the number
+      const isExplicitNumber = (numDigit, thaiWord) => {
+        if (val === numDigit || val === thaiWord || val === `${numDigit}ครับ` || val === `${numDigit}ค่ะ` || val === `${thaiWord}ครับ` || val === `${thaiWord}ค่ะ`) {
+          return true;
+        }
+        const prefixes = ['ข้อ', 'ข้อที่', 'เบอร์', 'ตัวเลือก', 'ตัวเลือกที่', 'ช้อยส์', 'ช้อย', 'เลือกข้อ', 'เอาข้อ', 'ตอบข้อ'];
+        return prefixes.some(p => val.includes(`${p}${numDigit}`) || val.includes(`${p}${thaiWord}`));
+      };
 
       if (stage === 1) {
-        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "กระชาก", "ดึงออกมา", "รีบวิ่ง", "หนึ่ง", "1"];
-        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "ประเมินความปลอดภัย", "ดูความปลอดภัย", "ดับเครื่อง", "ไฟฉุกเฉิน", "ปลอดภัยก่อน", "สอง", "2"];
-        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "พันแผล", "ห้ามเลือด", "ทำแผล", "สาม", "3"];
-        const t4 = ["ข้อ 4", "ข้อสี่", "เบอร์ 4", "เบอร์สี่", "เคาะกระจก", "สี่", "4"];
+        const kw2 = ['ประเมินความปลอดภัย', 'ความปลอดภัย', 'ดูความปลอดภัย', 'ดับเครื่อง', 'กุญแจ', 'ไฟฉุกเฉิน', 'ปลอดภัย', 'กรวย', 'กั้นพื้นที่', 'กั้นรถ'];
+        const kw1 = ['กระชาก', 'ดึงออกมา', 'ดึงคนเจ็บ', 'รีบวิ่ง', 'เปิดประตู'];
+        const kw3 = ['พันแผล', 'ห้ามเลือด', 'ทำแผล', 'ชุดทำแผล', 'มุดเข้า'];
+        const kw4 = ['ทุบกระจก', 'ก้อนหิน', 'หินทุบ', 'เคาะกระจก', 'ระบายควัน'];
 
-        if (t2.some(k => val.includes(k))) return 2;
-        if (t1.some(k => val.includes(k))) return 1;
-        if (t3.some(k => val.includes(k))) return 3;
-        if (t4.some(k => val.includes(k))) return 4;
+        if (kw2.some(k => val.includes(k)) || isExplicitNumber('2', 'สอง')) return 2;
+        if (kw1.some(k => val.includes(k)) || isExplicitNumber('1', 'หนึ่ง')) return 1;
+        if (kw3.some(k => val.includes(k)) || isExplicitNumber('3', 'สาม')) return 3;
+        if (kw4.some(k => val.includes(k)) || isExplicitNumber('4', 'สี่')) return 4;
       } else if (stage === 4) {
-        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "ยังหายใจอยู่", "รอรถพยาบาล", "ทำแผลไปพลาง", "หนึ่ง", "1"];
-        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "ไม่หายใจ", "หายใจเฮือก", "หัวใจหยุดเต้น", "กดหน้าอก", "ปั๊มหัวใจ", "ทำซีพีอาร์", "cpr", "สอง", "2"];
-        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "ยาดม", "นอนตะแคง", "สาม", "3"];
+        const kw2 = ['ไม่หายใจ', 'หายใจเฮือก', 'หัวใจหยุดเต้น', 'กดหน้าอก', 'ปั๊มหัวใจ', 'ซีพีอาร์', 'cpr', 'สองมือกด', 'กึ่งกลางหน้าอก'];
+        const kw1 = ['นั่งพัก', 'จัดท่านั่ง', 'รอรถพยาบาล', 'เฝ้าดูอาการ'];
+        const kw3 = ['ยาดม', 'นอนตะแคง', 'จับนอนตะแคง', 'ดมยา'];
 
-        if (t2.some(k => val.includes(k))) return 2;
-        if (t1.some(k => val.includes(k))) return 1;
-        if (t3.some(k => val.includes(k))) return 3;
+        if (kw2.some(k => val.includes(k)) || isExplicitNumber('2', 'สอง')) return 2;
+        if (kw1.some(k => val.includes(k)) || isExplicitNumber('1', 'หนึ่ง')) return 1;
+        if (kw3.some(k => val.includes(k)) || isExplicitNumber('3', 'สาม')) return 3;
       } else if (stage === 6) {
-        // First Aid: Wound Cleaning (Choice 2 is correct - Normal Saline / NSS)
-        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "แอลกอฮอล์", "alcohol", "ราดแผล", "หนึ่ง", "1"];
-        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "น้ำเกลือ", "นอร์มอล", "ซาไลน์", "nss", "saline", "ชะล้าง", "สอง", "2"];
-        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "ไฮโดรเจน", "ฟอกแผล", "สาม", "3"];
-        const t4 = ["ข้อ 4", "ข้อสี่", "เบอร์ 4", "เบอร์สี่", "แป้ง", "แป้งเย็น", "ยาผง", "สี่", "4"];
+        const kw2 = ['น้ำเกลือ', 'นอร์มอล', 'ซาไลน์', 'nss', 'saline', 'ชะล้าง', '0.9', 'ล้างแผลด้วยน้ำเกลือ'];
+        const kw1 = ['แอลกอฮอล์', 'alcohol', 'ราดฆ่าเชื้อ', '70%'];
+        const kw3 = ['ไฮโดรเจน', 'เปอร์ออกไซด์', 'ฟอกแผล'];
+        const kw4 = ['แป้ง', 'แป้งเย็น', 'ยาผง', 'โรยแผล'];
 
-        if (t2.some(k => val.includes(k))) return 2;
-        if (t1.some(k => val.includes(k))) return 1;
-        if (t3.some(k => val.includes(k))) return 3;
-        if (t4.some(k => val.includes(k))) return 4;
+        if (kw2.some(k => val.includes(k)) || isExplicitNumber('2', 'สอง')) return 2;
+        if (kw1.some(k => val.includes(k)) || isExplicitNumber('1', 'หนึ่ง')) return 1;
+        if (kw3.some(k => val.includes(k)) || isExplicitNumber('3', 'สาม')) return 3;
+        if (kw4.some(k => val.includes(k)) || isExplicitNumber('4', 'สี่')) return 4;
       } else if (stage === 7) {
-        // First Aid: Bleeding Control (Choice 2 is correct - Sterile Gauze Direct Pressure)
-        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "เชือก", "สายไฟ", "สายรัด", "รัดแขน", "ขันชะเนาะ", "ทูนิเก้", "tourniquet", "หนึ่ง", "1"];
-        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "ผ้าก๊อซ", "ผ้ากอซ", "ผ้าสะอาด", "กดแผล", "กดโดยตรง", "ไดเร็ค", "direct", "สอง", "2"];
-        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "สำลี", "ขยี้", "ปล่อยเลือด", "ลดความดัน", "เลือดไหล", "สาม", "3"];
+        const kw2 = [
+          'ผ้าก๊อซ', 'ผ้ากอซ', 'ผ้าก๊อช', 'ผ้ากอต', 'ผ้าก๊อต', 'ผ้ากอส', 'ก๊อซ', 'กอซ', 'ก๊อช', 'กอต',
+          'ผ้ายืด', 'ผ้าสะอาด', 'กดแผล', 'กดโดยตรง', 'กดทับ', 'พันแผล', 'ไดเร็ค', 'direct', 'ห้ามเลือดโดยตรง'
+        ];
+        const kw1 = ['เชือก', 'สายไฟ', 'สายรัด', 'รัดแขน', 'ขันชะเนาะ', 'ทูนิเก้', 'tourniquet', 'รัดเหนือแผล'];
+        const kw3 = ['สำลี', 'ขยี้', 'ปล่อยเลือด', 'ลดความดัน', 'ปล่อยให้เลือดไหล'];
 
-        if (t2.some(k => val.includes(k))) return 2;
-        if (t1.some(k => val.includes(k))) return 1;
-        if (t3.some(k => val.includes(k))) return 3;
+        if (kw2.some(k => val.includes(k)) || isExplicitNumber('2', 'สอง')) return 2;
+        if (kw1.some(k => val.includes(k)) || isExplicitNumber('1', 'หนึ่ง')) return 1;
+        if (kw3.some(k => val.includes(k)) || isExplicitNumber('3', 'สาม')) return 3;
       } else if (stage === 8) {
-        // First Aid: Arm Splinting (Choice 2 is correct - Splint above/below joints & Sling 90 deg)
-        const t1 = ["ข้อ 1", "ข้อหนึ่ง", "เบอร์ 1", "เบอร์หนึ่ง", "ดัดกระดูก", "ดึงแขน", "ดัดแขน", "ดึงกระดูก", "หนึ่ง", "1"];
-        const t2 = ["ข้อ 2", "ข้อสอง", "เบอร์ 2", "เบอร์สอง", "ดามแขน", "ดามกระดูก", "ข้อต่อ", "ผ้าสามเหลี่ยม", "90 องศา", "เก้าสิบองศา", "สอง", "2"];
-        const t3 = ["ข้อ 3", "ข้อสาม", "เบอร์ 3", "เบอร์สาม", "นวด", "คลึง", "บีบ", "คลายกล้ามเนื้อ", "สาม", "3"];
+        const kw2 = [
+          'ไม้ดาม', 'แผ่นไม้', 'ดามแขน', 'ดามกระดูก', 'ดามไม้', 'ท่าที่เป็นอยู่', 'ครอบคลุม',
+          'ข้อต่อ', 'ข้อศอก', 'ข้อมือ', 'ผ้าสามเหลี่ยม', 'ผ้าสาม', 'สามเหลี่ยม', 'คล้องคอ', 'คล้องแขน', '90', 'เก้าสิบ'
+        ];
+        const kw1 = ['ดัดกระดูก', 'ดึงแขน', 'ดัดแขน', 'ดึงกระดูก', 'ดัดให้ตรง', 'ดึงให้ตรง'];
+        const kw3 = ['นวด', 'คลึง', 'บีบนวด', 'คลายกล้ามเนื้อ'];
 
-        if (t2.some(k => val.includes(k))) return 2;
-        if (t1.some(k => val.includes(k))) return 1;
-        if (t3.some(k => val.includes(k))) return 3;
+        if (kw2.some(k => val.includes(k)) || isExplicitNumber('2', 'สอง')) return 2;
+        if (kw1.some(k => val.includes(k)) || isExplicitNumber('1', 'หนึ่ง')) return 1;
+        if (kw3.some(k => val.includes(k)) || isExplicitNumber('3', 'สาม')) return 3;
       }
       return null;
     }
@@ -6604,6 +6616,9 @@
           SoundEngine.startPulseScheduler(540, 1580);
           this.updatePatientHud('images/patient/patient_s3_dispatch.png', 'ด่านที่ 3 • DISPATCH (WAITING 1669)', 'critical');
           this.stage3Locked = false;
+          this.stage3CanTap = false; // Lock tap buttons while 1669 officer speaks intro
+          this.stage3UnlockedChimePlayed = false;
+          this.stage3TapCount = 0;
           this.checklist = { location: false, incident: false, patient: false, aed: false };
           this.renderStage();
           this.broadcastHostSync();
@@ -6613,6 +6628,10 @@
           await new Promise(r => setTimeout(r, 700));
 
           await speakAndWait('สายด่วนหนึ่งหกหกเก้ารับสายแล้วครับ! เพื่อนๆ ในห้องครับ ช่วยกันกดปุ่มสายฟ้าบนจอมือถือรัวๆ เพื่อส่งข้อมูลที่เกิดเหตุทั้งสี่ข้อขึ้นจอใหญ่ให้ตัวแทนหน้าห้องอ่านแจ้งเจ้าหน้าที่เลยครับ!', 's3_intro');
+          if (this.currentStage !== 3) return;
+          this.stage3CanTap = true;
+          this.renderStage();
+          this.broadcastMultiplayerStageSync();
           if (BotSimulator.enabled) {
             BotSimulator.onStage3TapRush();
           }
@@ -6869,6 +6888,17 @@
                       2. ให้เพื่อนโหวตใหม่ (พูด "โหวตใหม่")
                     </button>
                   </div>
+
+                  <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; padding-top:8px; border-top:1px dashed #E2E8F0; font-size:11.5px; color:#64748B;">
+                    <span>หรือพูดชื่ออุปกรณ์ / คลิกเลือกข้อโดยตรง:</span>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                      ${data.choices.map(c => `
+                        <button id="choiceBtn_${c.num}" onclick="GameStateManager.executeDecisionOutcome(${c.num})" class="nav-btn font-technical" style="height:26px; padding:0 10px; font-size:11.5px; font-weight:700;">
+                          ข้อ ${c.num}
+                        </button>
+                      `).join('')}
+                    </div>
+                  </div>
                 </div>
               `)}
             </div>
@@ -7108,77 +7138,103 @@
           this.updatePatientHud(wrongFaces[this.currentStage] || 'images/patient/patient_s1_wrong.png', 'CLINICAL PENALTY // -5 PTS', 'critical', true);
 
           await speakAndWait(choiceItem.voiceHint, `s${this.currentStage}_hint_${choice}`);
+          // Reset cleanly back to HERO_DECISION with the correct choice ready (or allow speaking any choice 1-4)
           this.isStageChoiceLocked = false;
-          this.decisionSubStep = 'SELECT_CARD';
-          this.selectedChoiceIndex = null;
+          this.decisionSubStep = 'HERO_DECISION';
+          if (cData) {
+            this.topVotedChoice = cData.choices.find(c => c.num === cData.correctChoice) || cData.choices[0];
+          }
           this.renderStage();
+          this.broadcastHostSync();
+          this.broadcastMultiplayerStageSync();
           this.startClinicalVoiceTracking(this.currentStage);
         }
       }
 
       startClinicalVoiceTracking(stageNum) {
+        speechDebouncer.clear();
         MicSensor.ensureMicLive().catch(() => {});
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== stageNum || this.isStageChoiceLocked || window.isSystemSpeaking) return;
-          const val = transcript.toLowerCase().trim();
+          const cleanRaw = transcript.trim();
+          if (!cleanRaw) return;
 
           const box = document.getElementById('txtLiveVoiceChoice');
           if (box) {
-            box.innerHTML = `ได้ยิน: <span style="color:#059669; font-weight:800;">"${transcript}"</span>`;
+            box.innerHTML = `กำลังฟัง: <span style="color:#0284C7; font-weight:800;">"${cleanRaw}"</span> <span style="font-size:11px; color:#64748B;">(พูดให้จบประโยค...)</span>`;
           }
 
-          // STEP 1: Waiting for Hero to say "สำรวจ"
-          if (this.decisionSubStep === 'PROMPT_INSPECT') {
-            const inspectWords = [
-              'สำรวจ', 'ประเมิน', 'ตรวจสอบ', 'ตรวจดู', 'เช็คอาการ', 'เช็กอาการ',
-              'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'โอเค', 'พร้อม', 'ลุย'
-            ];
-            if (inspectWords.some(w => val.includes(w))) {
-              this.advanceToInspectionFinding();
-            }
-            return;
-          }
+          // Wait for player to finish speaking (750ms silence for Step 1, 950ms silence for Step 3)
+          const waitMs = this.decisionSubStep === 'PROMPT_INSPECT' ? 750 : 950;
 
-          // STEP 2: While Audience is voting on phones, Hero can only say "ปิดโหวต" or "สรุปผล" (NO auto-ghost votes)
-          if (this.decisionSubStep === 'AUDIENCE_VOTING') {
-            if (val.includes('ปิดโหวต') || val.includes('สรุปผล')) {
-              this.finishAudienceVoting();
-            }
-            return;
-          }
+          speechDebouncer.feed(cleanRaw, isFinal, (finalTranscript) => {
+            if (this.currentStage !== stageNum || this.isStageChoiceLocked || window.isSystemSpeaking) return;
+            const val = finalTranscript.toLowerCase().trim();
+            const valNoSpace = val.replace(/\s+/g, '');
 
-          // STEP 3: Top-Voted Choice is on Projector -> Hero says "ยืนยัน" or "โหวตใหม่"
-          if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
-            const confirmWords = [
-              'ยืนยัน', 'ใช้คำตอบนี้', 'ตกลง', 'ใช่', 'เอาอันนี้', 'เอาข้อนี้',
-              'ทำเลย', 'ลุยเลย', 'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'โอเค'
-            ];
-            const revoteWords = [
-              'โหวตใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ', 'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก'
-            ];
-
-            if (confirmWords.some(w => val.includes(w))) {
-              if (box) {
-                box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="color:#059669;">(✓ ยืนยันคำตอบ!)</span>`;
+            // STEP 1: Broad Natural Responses for Inspection Prompt
+            if (this.decisionSubStep === 'PROMPT_INSPECT') {
+              const inspectPhrases = [
+                'สำรวจ', 'ประเมิน', 'ตรวจสอบ', 'ตรวจดู', 'ตรวจเลย', 'ตรวจครับ', 'ตรวจค่ะ', 'เช็ค', 'เช็ก',
+                'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'ดูสภาพ', 'ดูรถ', 'ดูเลย', 'ดูครับ', 'ดูค่ะ',
+                'เข้าไปดู', 'เข้าไปสำรวจ', 'ทำครับ', 'ทำค่ะ', 'ทำเลย', 'เอาเลย', 'ได้เลย', 'ไปดู',
+                'ต้องการ', 'ตกลง', 'โอเค', 'ok', 'พร้อม', 'ลุย', 'ใช่', 'ครับ', 'ค่ะ', 'คับ'
+              ];
+              if (inspectPhrases.some(w => valNoSpace.includes(w))) {
+                if (box) {
+                  box.innerHTML = `ได้ยิน: <span style="color:#059669; font-weight:800;">"${finalTranscript}"</span> <span style="color:#059669;">(✓ เริ่มตรวจสอบ!)</span>`;
+                }
+                this.advanceToInspectionFinding();
               }
-              this.confirmHeroDecision();
               return;
             }
 
-            if (revoteWords.some(w => val.includes(w))) {
-              if (box) {
-                box.innerHTML = `“<span style="color:#D97706; font-weight:800;">${transcript}</span>” <span style="color:#D97706;">(↺ เปิดโหวตใหม่!)</span>`;
+            // STEP 2: Audience Voting
+            if (this.decisionSubStep === 'AUDIENCE_VOTING') {
+              if (valNoSpace.includes('ปิดโหวต') || valNoSpace.includes('สรุปผล') || valNoSpace.includes('หมดเวลา')) {
+                this.finishAudienceVoting();
               }
-              this.reopenAudienceVoting();
               return;
             }
 
-            // Also allow Hero to override by speaking a specific choice number ("เลือกข้อ 2")
-            const overrideChoice = matchVoiceToChoice(transcript, stageNum);
-            if (overrideChoice) {
-              this.executeDecisionOutcome(overrideChoice);
+            // STEP 3: Hero Decision (Confirm Winning Choice, Revote, or Speak Equipment Name Directly)
+            if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
+              const revoteWords = [
+                'โหวตใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ', 'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก', 'ไม่ใช้'
+              ];
+              if (revoteWords.some(w => valNoSpace.includes(w))) {
+                if (box) {
+                  box.innerHTML = `“<span style="color:#D97706; font-weight:800;">${finalTranscript}</span>” <span style="color:#D97706;">(↺ เปิดโหวตใหม่!)</span>`;
+                }
+                this.reopenAudienceVoting();
+                return;
+              }
+
+              // Check if player spoke a specific choice's equipment or number (e.g., "ผ้าก๊อซ", "แผ่นไม้ดามกับผ้าสามเหลี่ยม", "ข้อ 2")
+              const spokenChoiceNum = matchVoiceToChoice(finalTranscript, stageNum);
+              if (spokenChoiceNum) {
+                if (box) {
+                  box.innerHTML = `“<span style="color:#059669; font-weight:800;">${finalTranscript}</span>” <span style="color:#059669;">(✓ เลือกข้อที่ ${spokenChoiceNum}!)</span>`;
+                }
+                this.executeDecisionOutcome(spokenChoiceNum);
+                return;
+              }
+
+              // Check general affirmative confirmation words
+              const confirmWords = [
+                'ยืนยัน', 'ใช้คำตอบนี้', 'ใช้เลย', 'ใช้อันนี้', 'ใช้ข้อนี้', 'ตกลง', 'ใช่',
+                'เอาอันนี้', 'เอาข้อนี้', 'เอาเลย', 'ทำเลย', 'ทำครับ', 'ทำค่ะ', 'ลุยเลย',
+                'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'เลือกข้อนี้', 'โอเค', 'ok', 'ครับ', 'ค่ะ'
+              ];
+              if (confirmWords.some(w => valNoSpace.includes(w))) {
+                if (box) {
+                  box.innerHTML = `“<span style="color:#059669; font-weight:800;">${finalTranscript}</span>” <span style="color:#059669;">(✓ ยืนยันคำตอบ!)</span>`;
+                }
+                this.confirmHeroDecision();
+                return;
+              }
             }
-          }
+          }, waitMs);
         });
       }
 
@@ -7255,9 +7311,14 @@
         }
 
         this.isStageChoiceLocked = false;
-        this.decisionSubStep = 'SELECT_CARD';
+        this.decisionSubStep = 'HERO_DECISION';
+        const cData = CLINICAL_STAGES[this.currentStage];
+        if (cData) {
+          this.topVotedChoice = cData.choices.find(c => c.num === cData.correctChoice) || cData.choices[0];
+        }
         this.selectedChoiceIndex = null;
         this.renderStage();
+        this.broadcastHostSync();
         this.broadcastMultiplayerStageSync();
         this.startClinicalVoiceTracking(this.currentStage);
       }
@@ -8020,9 +8081,10 @@
           const f2Unlocked = tapPct >= 50;
           const f3Unlocked = tapPct >= 75;
           const f4Unlocked = tapPct >= 100;
+          const canTapAttr = this.stage3CanTap ? '' : 'disabled style="opacity:0.45; cursor:not-allowed;"';
 
           card.innerHTML = `
-            <div class="unified-status-bar">
+            <div class="unified-status-bar" style="margin-bottom:4px;">
               <div class="ai-voice-pill-clean">
                 <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
                 <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังพูดแนะนำ...</span>
@@ -8032,110 +8094,115 @@
                 <span class="mic-live-dot"></span>
                 <span class="voice-bar-title font-technical">สายด่วน 1669:</span>
                 <span class="voice-bar-transcript font-technical">
-                  ${f4Unlocked ? 'ปลดล็อกครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลยครับ' : 'ทีมในห้องกดรัวๆ บนมือถือเพื่อปลดล็อกข้อมูล!'}
+                  ${f4Unlocked ? 'ปลดล็อกครบ 4 ข้อแล้ว! พูดแจ้งข้อมูลใส่ไมค์ได้เลย' : (this.stage3CanTap ? 'กดรัวๆ บนมือถือเพื่อปลดล็อกข้อมูล!' : 'รอฟังเจ้าหน้าที่ 1669 สักครู่...')}
                 </span>
               </div>
             </div>
 
-            <div class="stage-body-split">
-              <!-- Left Column: Photorealistic Live-Action Scene -->
+            <div class="stage-body-split" style="gap:18px;">
+              <!-- Left Column: Scene Photo -->
               <div class="scene-photo-frame">
                 <img id="stageSceneImg" src="images/scenes/scene_s3.png" alt="Scene 3: 1669 Dispatch" class="scene-photo-img" />
               </div>
 
-              <!-- Right Column: Dispatch Data & Inputs -->
-              <div class="stage-content-col">
-                <div>
-                  <div class="stage-context-bar">
-                    <div class="stage-context-left">
-                      <span class="stage-context-num font-technical">ด่านที่ 3 / 8 • การตัดสินใจทางคลินิก</span>
-                      <span class="stage-context-cat">การโทรแจ้งสายด่วนกู้ชีพ 1669 (Co-op Tap Rush)</span>
-                    </div>
-                    <div class="stage-context-stakes font-technical">
-                      ข้อมูลสำคัญ 4 ข้อ
-                    </div>
+              <!-- Right Column: Compact Zero-Overflow Dispatch Console -->
+              <div class="stage-content-col" style="justify-content:flex-start; gap:6px;">
+                <div class="stage-context-bar" style="margin-bottom:2px; padding-bottom:4px;">
+                  <div class="stage-context-left">
+                    <span class="stage-context-num font-technical">ด่านที่ 3 / 8 • แจ้งเหตุ 1669</span>
+                    <span class="stage-context-cat">การโทรแจ้งสายด่วนกู้ชีพ 1669 (Co-op Tap Rush)</span>
                   </div>
+                  <div class="stage-context-stakes font-technical">ข้อมูลสำคัญ 4 ข้อ</div>
                 </div>
 
                 <!-- Co-op Tap Rush Status Bar + Solo Test Buttons -->
-                <div class="stage3-locked-wrap font-technical">
-                  <span class="stage3-locked-text">
-                    ⚡ พลังกดรัวจากมือถือในห้อง: <strong id="txtStage3TapCount" style="color:#0284C7;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> ครั้ง (<span id="txtStage3Pct">${tapPct}%</span>)
+                <div class="stage3-locked-wrap font-technical" style="padding:8px 12px; margin-bottom:2px;">
+                  <span class="stage3-locked-text" style="font-size:11.5px;">
+                    ⚡ พลังกดรัว: <strong id="txtStage3TapCount" style="color:#0284C7;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> (<span id="txtStage3Pct">${tapPct}%</span>)
                   </span>
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <div class="stage3-tap-meter-container" style="width:130px;">
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <div class="stage3-tap-meter-container" style="width:100px; height:8px;">
                       <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%;"></div>
                     </div>
-                    <button onclick="GameStateManager.handleMobileTapBatch('host_test', Math.ceil(GameStateManager.effectiveTapTarget * 0.25))" class="nav-btn font-technical" style="height:24px; padding:0 8px; font-size:11px; background:#F0F9FF; color:#0284C7; border-color:#BAE6FD;" title="กดเพิ่มทีละ 25%">
+                    <button ${canTapAttr} onclick="GameStateManager.handleMobileTapBatch('host_test', Math.ceil(GameStateManager.effectiveTapTarget * 0.25))" class="nav-btn font-technical" style="height:22px; padding:0 7px; font-size:10.5px; background:#F0F9FF; color:#0284C7; border-color:#BAE6FD;">
                       +25%
                     </button>
-                    <button onclick="GameStateManager.handleMobileTapBatch('host_test', GameStateManager.effectiveTapTarget)" class="nav-btn font-technical" style="height:24px; padding:0 8px; font-size:11px; background:#ECFDF5; color:#059669; border-color:#A7F3D0; font-weight:700;" title="ปลดล็อกข้อมูลครบ 100% ทันทีเพื่อเทสต์ไมค์">
-                      🔓 ปลดล็อก 100% (Test)
+                    <button ${canTapAttr} onclick="GameStateManager.handleMobileTapBatch('host_test', GameStateManager.effectiveTapTarget)" class="nav-btn font-technical" style="height:22px; padding:0 8px; font-size:10.5px; background:#ECFDF5; color:#059669; border-color:#A7F3D0; font-weight:700;">
+                      🔓 ปลดล็อก 100%
                     </button>
                   </div>
                 </div>
 
-                <div class="facts-strip-clean" style="margin-bottom:6px;" id="stage3FactsStrip">
-                  <div class="fact-card-clean" id="factCard1">
-                    <div class="fact-label-clean font-technical">1. พิกัด</div>
-                    <div class="fact-val-clean" style="font-size:12px; color:${f1Unlocked ? '#090D16' : '#94A3B8'};">
-                      ${f1Unlocked ? 'สุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอรวมพลังกด 25%'}
+                <!-- 4-Card Facts Strip -->
+                <div class="facts-strip-clean" style="grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:2px;" id="stage3FactsStrip">
+                  <div class="fact-card-clean" id="factCard1" style="padding:8px 10px;">
+                    <div class="fact-label-clean font-technical" style="font-size:10px;">1. พิกัดจุดเกิดเหตุ</div>
+                    <div class="fact-val-clean" style="font-size:11.5px; color:${f1Unlocked ? '#090D16' : '#94A3B8'};">
+                      ${f1Unlocked ? 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอกด 25%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard2">
-                    <div class="fact-label-clean font-technical">2. เหตุการณ์</div>
-                    <div class="fact-val-clean" style="font-size:12px; color:${f2Unlocked ? '#090D16' : '#94A3B8'};">
-                      ${f2Unlocked ? 'รถเก๋งชนรั้ว มีกลุ่มควัน' : '🔒 รอรวมพลังกด 50%'}
+                  <div class="fact-card-clean" id="factCard2" style="padding:8px 10px;">
+                    <div class="fact-label-clean font-technical" style="font-size:10px;">2. เหตุการณ์</div>
+                    <div class="fact-val-clean" style="font-size:11.5px; color:${f2Unlocked ? '#090D16' : '#94A3B8'};">
+                      ${f2Unlocked ? 'รถเก๋งชนรั้ว มีควันพุ่ง' : '🔒 รอกด 50%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard3">
-                    <div class="fact-label-clean font-technical">3. อาการ</div>
-                    <div class="fact-val-clean" style="font-size:12px; color:${f3Unlocked ? 'var(--vital-crimson)' : '#94A3B8'};">
-                      ${f3Unlocked ? '1 ราย หมดสติ ไม่หายใจ' : '🔒 รอรวมพลังกด 75%'}
+                  <div class="fact-card-clean" id="factCard3" style="padding:8px 10px;">
+                    <div class="fact-label-clean font-technical" style="font-size:10px;">3. อาการผู้ป่วย</div>
+                    <div class="fact-val-clean" style="font-size:11.5px; color:${f3Unlocked ? 'var(--vital-crimson)' : '#94A3B8'};">
+                      ${f3Unlocked ? '1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
+                    </div>
+                  </div>
+                  <div class="fact-card-clean" id="factCard4" style="padding:8px 10px;">
+                    <div class="fact-label-clean font-technical" style="font-size:10px;">4. สิ่งที่ต้องการ</div>
+                    <div class="fact-val-clean" style="font-size:11.5px; color:${f4Unlocked ? '#059669' : '#94A3B8'};">
+                      ${f4Unlocked ? 'ขอรถกู้ชีพ + เครื่อง AED' : '🔒 รอกด 100%'}
                     </div>
                   </div>
                 </div>
 
-                <h2 class="stage-headline-clean" style="font-size:17px; margin-bottom:6px;">
-                  เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายครับ! การแจ้งเหตุฉุกเฉินต้องบอกข้อมูลสำคัญ 4 ข้อ มีอะไรบ้าง แจ้งได้เลยครับ”
+                <h2 class="stage-headline-clean" style="font-size:15.5px; margin:0; line-height:1.3;">
+                  เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายครับ! แจ้งข้อมูลสำคัญทั้ง 4 ข้อให้เจ้าหน้าที่ทราบได้เลยครับ”
                 </h2>
 
-                <div class="voice-transcript-panel" style="padding:10px 14px; margin-top:4px;">
+                <!-- Compact Voice Transcript & Manual Input Panel -->
+                <div class="voice-transcript-panel" style="padding:8px 12px; margin:0;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="font-technical" style="font-size:11.5px; font-weight:700; color:#0284C7;">
-                      กำลังฟังเสียงพูด... พูดแจ้งข้อมูลใส่ไมค์ได้เลยครับ
+                    <span class="font-technical" style="font-size:11px; font-weight:700; color:#0284C7;">
+                      🎙️ พูดแจ้งข้อมูลใส่ไมค์ (หรือกดปุ่มลัดด้านขวา):
                     </span>
                     <div style="display:flex; gap:4px;">
-                      <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:24px; font-size:10.5px; padding:0 6px;">[1] พิกัด</button>
-                      <button onclick="GameStateManager.quickFillPreset(2)" class="nav-btn" style="height:24px; font-size:10.5px; padding:0 6px;">[2] รถชน</button>
-                      <button onclick="GameStateManager.quickFillPreset(3)" class="nav-btn" style="height:24px; font-size:10.5px; padding:0 6px;">[3] หมดสติ+AED</button>
+                      <button onclick="GameStateManager.quickFillPreset(1)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[1] พิกัด</button>
+                      <button onclick="GameStateManager.quickFillPreset(2)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[2] รถชน</button>
+                      <button onclick="GameStateManager.quickFillPreset(3)" class="nav-btn" style="height:22px; font-size:10px; padding:0 6px;">[3] หมดสติ+AED</button>
                     </div>
                   </div>
-                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:36px; padding:6px 10px; font-size:12px;">
-                    รอเจ้าหน้าที่ 1669 พูดจบสักครู่...
+                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:12px;">
+                    ${this.stage3CanTap ? 'ไมค์เปิดรับเสียงแล้ว... แจ้งข้อมูลสำคัญ 4 ข้อได้เลย' : 'รอเจ้าหน้าที่ 1669 พูดจบสักครู่...'}
                   </div>
-                  <div class="manual-input-box" style="margin-top:6px;">
-                    <input type="text" id="inputManualDispatch" class="input-dispatch-text font-technical" style="height:30px; font-size:12px;" placeholder="หรือพิมพ์ข้อมูลที่นี่ แล้วกด Enter..." onkeydown="if(event.key==='Enter') GameStateManager.submitManualDispatch(this.value)">
-                    <button onclick="GameStateManager.submitManualDispatch(document.getElementById('inputManualDispatch').value)" class="nav-btn font-technical" style="height:30px; font-size:11px;">ส่งข้อมูล</button>
+                  <div class="manual-input-box" style="margin-top:4px;">
+                    <input type="text" id="inputManualDispatch" class="input-dispatch-text font-technical" style="height:28px; font-size:12px; padding:4px 10px;" placeholder="หรือพิมพ์แจ้งเหตุที่นี่ แล้วกด Enter..." onkeydown="if(event.key==='Enter') GameStateManager.submitManualDispatch(this.value)">
+                    <button onclick="GameStateManager.submitManualDispatch(document.getElementById('inputManualDispatch').value)" class="nav-btn font-technical" style="height:28px; font-size:11px;">ส่งข้อมูล</button>
                   </div>
                 </div>
 
-                <div class="checklist-pills-row font-technical" style="margin-top:8px;">
-                  <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean">
+                <!-- 4 Checklist Pills (Guaranteed Visible & Unclipped) -->
+                <div class="checklist-pills-row font-technical" style="gap:8px; margin-top:2px;">
+                  <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean ${this.checklist.location ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text">1. พิกัด รพ.บูรพา</div>
+                    <div class="chk-pill-text" style="font-size:12px;">1. พิกัด รพ.บูรพา</div>
                   </div>
-                  <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean">
+                  <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean ${this.checklist.incident ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text">2. เหตุการณ์ รถชน</div>
+                    <div class="chk-pill-text" style="font-size:12px;">2. เหตุการณ์ รถชน</div>
                   </div>
-                  <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean">
+                  <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean ${this.checklist.patient ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text">3. อาการ หมดสติ</div>
+                    <div class="chk-pill-text" style="font-size:12px;">3. อาการ หมดสติ</div>
                   </div>
-                  <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean">
+                  <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean ${this.checklist.aed ? 'checked' : ''}" style="padding:8px 10px;">
                     <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text">4. ขอรถกู้ชีพ + AED</div>
+                    <div class="chk-pill-text" style="font-size:12px;">4. ขอรถกู้ชีพ + AED</div>
                   </div>
                 </div>
               </div>
@@ -8863,7 +8930,11 @@
       
       handleMobileTapBatch(senderId, count = 1) {
         if (this.currentStage !== 3) return;
-        this.stage3TapCount += count;
+        if (!this.stage3CanTap) {
+          showToast('⏳ รอเจ้าหน้าที่ 1669 พูดจบก่อนเริ่มกดครับ!');
+          return;
+        }
+        this.stage3TapCount = Math.min(this.effectiveTapTarget, this.stage3TapCount + count);
         const player = this.connectedPlayers[senderId];
         if (player) player.taps += count;
 
@@ -8876,7 +8947,7 @@
         if (txtPct) txtPct.innerText = `${tapPct}%`;
         if (fill) fill.style.width = `${tapPct}%`;
 
-        // Progressive Unlocks
+        // Progressive 4-Fact Unlocks
         if (tapPct >= 25) {
           const fc1 = document.getElementById('factCard1');
           if (fc1) fc1.querySelector('.fact-val-clean').innerHTML = '<span style="color:#090D16;">สุขุมวิท หน้า รพ.ม.บูรพา</span>';
@@ -8890,11 +8961,20 @@
           if (fc3) fc3.querySelector('.fact-val-clean').innerHTML = '<span style="color:var(--vital-crimson);">1 ราย หมดสติ ไม่หายใจ</span>';
         }
         if (tapPct >= 100) {
+          const fc4 = document.getElementById('factCard4');
+          if (fc4) fc4.querySelector('.fact-val-clean').innerHTML = '<span style="color:#059669;">ขอรถกู้ชีพ + เครื่อง AED</span>';
+
           if (!this.stage3UnlockedChimePlayed) {
             this.stage3UnlockedChimePlayed = true;
             try { SoundEngine.playStageClear(); } catch(e) {}
             showToast('✓ ปลดล็อกข้อมูลครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลย');
-            speakAndWait('ข้อมูลทั้งสี่ข้อขึ้นจอครบแล้วครับ! น้องตัวแทนหน้าห้อง แจ้งพิกัด เหตุการณ์ อาการคนไข้ และขอรถกู้ชีพพร้อมเครื่อง เออีดี กับเจ้าหน้าที่ได้เลยครับ!', 's3_unlocked');
+
+            // CRITICAL FIX: Restart startStage3LiveSTT() immediately after speakAndWait finishes!
+            speakAndWait('ข้อมูลทั้งสี่ข้อขึ้นจอครบแล้วครับ! น้องตัวแทนหน้าห้อง แจ้งพิกัด เหตุการณ์ อาการคนไข้ และขอรถกู้ชีพพร้อมเครื่อง เออีดี กับเจ้าหน้าที่ได้เลยครับ!', 's3_unlocked').then(() => {
+              if (this.currentStage === 3 && !this.stage3Locked) {
+                this.startStage3LiveSTT();
+              }
+            });
           }
         }
       }
@@ -8938,59 +9018,139 @@
       }
 
       handlePressureHoldUpdate(senderId, holding = false) {
-        // Track co-op holding
+        if (!this.activePressureHolders) this.activePressureHolders = new Set();
+        if (holding) {
+          this.activePressureHolders.add(senderId);
+        } else {
+          this.activePressureHolders.delete(senderId);
+        }
+      }
+
+      setHostPressureHolding(isHolding) {
+        this.hostHoldingPressure = Boolean(isHolding);
+        const btn = document.getElementById('btnHostPressureHold');
+        if (btn) {
+          btn.style.transform = isHolding ? 'scale(0.96)' : 'scale(1)';
+          btn.style.background = isHolding ? '#059669' : '#E11D48';
+          btn.innerText = isHolding ? '🩸 กำลังกดห้ามเลือดค้างไว้... (อย่าเพิ่งปล่อย!)' : '🩸 กดปุ่มนี้ค้างไว้เพื่อห้ามเลือด (หรือกด Spacebar ค้าง)';
+        }
       }
 
       startStage7BDirectPressure() {
         this.decisionSubStep = 'DIRECT_PRESSURE';
+        this.hostHoldingPressure = false;
+        if (!this.activePressureHolders) this.activePressureHolders = new Set();
+        this.activePressureHolders.clear();
+        if (this.stage7PressureInterval) {
+          clearInterval(this.stage7PressureInterval);
+          this.stage7PressureInterval = null;
+        }
+
         this.renderStage();
         this.broadcastHostSync();
         this.broadcastMultiplayerStageSync();
+
+        // If Bot Simulator is active, bots start holding after 800ms
+        if (BotSimulator.enabled) {
+          setTimeout(() => {
+            if (this.currentStage === 7 && this.decisionSubStep === 'DIRECT_PRESSURE') {
+              this.handlePressureHoldUpdate('bot_squad', true);
+            }
+          }, 800);
+        }
 
         const card = document.getElementById('stageMainCard');
         if (card) {
           const col = card.querySelector('.stage-content-col');
           if (col) {
             col.innerHTML = `
-              <div class="pressure-hold-overlay font-technical">
+              <div class="pressure-hold-overlay font-technical" style="gap:14px;">
                 <div class="pressure-hold-title">
                   <span class="live-pulse-dot" style="background:#E11D48;"></span>
-                  🩸 กดนิ้วค้างไว้พร้อมกันบนหน้าจอมือถือเพื่อห้ามเลือด! (CO-OP DIRECT PRESSURE)
+                  🩸 ด่านที่ 7B • กดบาดแผลค้างไว้เพื่อห้ามเลือด! (DIRECT PRESSURE)
                 </div>
-                <div style="font-size:13px; color:#475569;">
-                  ให้ทุกคนในห้องกดนิ้วค้างไว้บนหน้าจอมือถือพร้อมกัน 3.5 วินาที เพื่อสร้างแรงกดแผลสม่ำเสมอ
+                <div style="font-size:13.5px; color:#475569; line-height:1.45;">
+                  ให้เพื่อนๆ ในห้องกดนิ้วค้างไว้บนปุ่มในมือถือ (หรือตัวแทนกดปุ่มด้านล่างค้างไว้) ต่อเนื่อง <strong>3.5 วินาที</strong> จนกว่าหลอดห้ามเลือดจะเต็ม 100%!
                 </div>
-                <div class="pressure-gauge-track">
-                  <div class="pressure-gauge-fill" id="pressureGaugeFill"></div>
+                <div class="pressure-gauge-track" style="height:22px;">
+                  <div class="pressure-gauge-fill" id="pressureGaugeFill" style="width:0%;"></div>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:#64748B;">
-                  <span>แรงกดห้ามเลือด: <strong id="txtPressurePct" style="color:#E11D48;">0%</strong></span>
-                  <span>เป้าหมาย: กดค้าง 3.5 วินาที</span>
+                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#64748B;">
+                  <span>แรงกดห้ามเลือดสะสม: <strong id="txtPressurePct" style="color:#E11D48; font-size:16px;">0%</strong></span>
+                  <span id="txtPressureHoldersCount">รอการกดค้าง...</span>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:4px;">
+                  <button id="btnHostPressureHold"
+                    onpointerdown="GameStateManager.setHostPressureHolding(true)"
+                    onpointerup="GameStateManager.setHostPressureHolding(false)"
+                    onpointerleave="GameStateManager.setHostPressureHolding(false)"
+                    class="btn-hero-confirm font-technical"
+                    style="flex:1; background:#E11D48; border-color:#BE123C; font-size:15px; padding:14px 20px; user-select:none;">
+                    🩸 กดปุ่มนี้ค้างไว้เพื่อห้ามเลือด (หรือกด Spacebar ค้าง)
+                  </button>
+                  <button onclick="GameStateManager.completeStage7BDirectPressure()" class="nav-btn font-technical" style="height:auto; padding:0 14px; font-size:12px;">
+                    ข้าม (Test) →
+                  </button>
                 </div>
               </div>
             `;
           }
         }
 
-        let heldMs = 0;
+        this.stage7PressureHeldMs = 0;
         const totalMs = 3500;
-        const interval = setInterval(() => {
-          heldMs += 100;
-          const pct = Math.min(100, Math.round((heldMs / totalMs) * 100));
+
+        this.stage7PressureInterval = setInterval(() => {
+          if (this.currentStage !== 7 || this.decisionSubStep !== 'DIRECT_PRESSURE') {
+            clearInterval(this.stage7PressureInterval);
+            this.stage7PressureInterval = null;
+            return;
+          }
+
+          const mobileHoldCount = this.activePressureHolders ? this.activePressureHolders.size : 0;
+          const isHolding = mobileHoldCount > 0 || this.hostHoldingPressure;
+
+          if (isHolding) {
+            this.stage7PressureHeldMs = Math.min(totalMs, this.stage7PressureHeldMs + 100);
+          } else {
+            // Slowly decay if released before 100%
+            this.stage7PressureHeldMs = Math.max(0, this.stage7PressureHeldMs - 50);
+          }
+
+          const pct = Math.min(100, Math.round((this.stage7PressureHeldMs / totalMs) * 100));
           const fill = document.getElementById('pressureGaugeFill');
           const txt = document.getElementById('txtPressurePct');
-          if (fill) fill.style.width = `${pct}%`;
-          if (txt) txt.innerText = `${pct}%`;
+          const statusTxt = document.getElementById('txtPressureHoldersCount');
 
-          if (heldMs >= totalMs) {
-            clearInterval(interval);
-            try { SoundEngine.playStageClear(); } catch(e) {}
-            showToast('✓ เลือดหยุดไหลสนิทแล้ว! สำเร็จยอดเยี่ยม');
-            setTimeout(() => {
-              this.setStage(8);
-            }, 1200);
+          if (fill) fill.style.width = `${pct}%`;
+          if (txt) {
+            txt.innerText = `${pct}%`;
+            txt.style.color = isHolding ? '#059669' : '#E11D48';
+          }
+          if (statusTxt) {
+            statusTxt.innerText = isHolding
+              ? `✓ กำลังกดห้ามเลือดอย่างต่อเนื่อง... (${(this.stage7PressureHeldMs / 1000).toFixed(1)} / 3.5 วินาที)`
+              : '⚠️ กรุณากดปุ่มค้างไว้ ห้ามปล่อยมือ!';
+            statusTxt.style.color = isHolding ? '#059669' : '#D97706';
+          }
+
+          if (this.stage7PressureHeldMs >= totalMs) {
+            this.completeStage7BDirectPressure();
           }
         }, 100);
+      }
+
+      completeStage7BDirectPressure() {
+        if (this.stage7PressureInterval) {
+          clearInterval(this.stage7PressureInterval);
+          this.stage7PressureInterval = null;
+        }
+        this.hostHoldingPressure = false;
+        try { SoundEngine.playStageClear(); } catch(e) {}
+        showToast('✓ เลือดหยุดไหลสนิทแล้ว! สำเร็จยอดเยี่ยม');
+        setTimeout(() => {
+          if (this.currentStage === 7) this.setStage(8);
+        }, 900);
       }
 
       startStage1VoiceAnswer() {
@@ -9293,20 +9453,25 @@
 
       // Fix #5: Stage 3 Live STT - Wait for Complete Report
       startStage3LiveSTT() {
+        if (this.currentStage !== 3 || this.stage3Locked) return;
         const box = document.getElementById('txtLiveTranscript');
-        if (box && box.innerText.includes('รอเจ้าหน้าที่')) {
-          box.innerText = 'ไมค์เปิดรับเสียงแล้ว... แจ้งข้อมูลสำคัญ 4 ข้อได้เลย';
+        if (box) {
+          box.innerHTML = '<span style="color:#059669; font-weight:700;">🎙️ ไมค์เปิดรับเสียงแล้ว! พูดแจ้งข้อมูลทั้ง 4 ข้อได้เลยครับ...</span>';
         }
+        MicSensor.ensureMicLive().catch(() => {});
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
-          if (window.isSystemSpeaking || this.stage3Locked) return;
-          if (box) box.innerText = `“${transcript}”`;
+          if (this.currentStage !== 3 || window.isSystemSpeaking || this.stage3Locked) return;
+          if (box) {
+            box.innerHTML = `ได้ยิน: <strong style="color:#0284C7;">“${transcript}”</strong> <span style="font-size:11px; color:#64748B;">(พูดต่อให้ครบ 4 ข้อ...)</span>`;
+          }
+          // Tick checklist items in real time as keywords are spoken
           this.parseDispatchKeywords(transcript);
 
-          // If all 4 items checked, wait for student to finish their sentence!
+          // Once all 4 checklist items are ticked, wait 1100ms for the student to finish their sentence before advancing!
           if (this.checklist.location && this.checklist.incident && this.checklist.patient && this.checklist.aed) {
             speechDebouncer.feed(transcript, isFinal, () => {
               this.checkStage3AutoAdvance();
-            }, 1200); // 1.2s silence debounce
+            }, 1100);
           }
         });
       }
@@ -10449,6 +10614,8 @@
             e.preventDefault();
             if (this.isGameOver) {
               this.retryCurrentStage();
+            } else if (this.currentStage === 7 && this.decisionSubStep === 'DIRECT_PRESSURE') {
+              this.setHostPressureHolding(true);
             } else if ([1, 4, 6, 7, 8].includes(this.currentStage)) {
               if (this.decisionSubStep === 'PROMPT_INSPECT') {
                 this.advanceToInspectionFinding();
@@ -10479,6 +10646,12 @@
             }
           }
         });
+
+        window.addEventListener('keyup', (e) => {
+          if (e.code === 'Space' && this.currentStage === 7 && this.decisionSubStep === 'DIRECT_PRESSURE') {
+            this.setHostPressureHolding(false);
+          }
+        });
       }
     }
 
@@ -10487,6 +10660,8 @@
     window.AIVoiceCoach = AIVoiceCoach;
     window.SoundEngine = SoundEngine;
     window.MicSensor = MicSensor;
+    window.matchVoiceToChoice = matchVoiceToChoice;
+    window.speechDebouncer = speechDebouncer;
 
 
     
