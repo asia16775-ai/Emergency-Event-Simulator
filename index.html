@@ -3729,9 +3729,78 @@
       transform: scale(0.92);
       background: radial-gradient(circle, #0284C7 0%, #0369A1 100%);
     }
+    /* V26.1 Stage 5A Host Ready-Check Overlay over CPR Highway */
+    .cpr-ready-overlay {
+      position: absolute;
+      inset: 6px;
+      z-index: 12;
+      border-radius: 10px;
+      background: rgba(9, 13, 22, 0.94);
+      backdrop-filter: blur(8px);
+      border: 2px solid #38BDF8;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #FFFFFF;
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.28);
+    }
+    .cpr-ready-overlay.is-waiting {
+      border-color: #10B981;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18), 0 8px 24px rgba(5, 150, 105, 0.32);
+    }
+    .btn-cpr-ready-start {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: #FFFFFF;
+      border: 1.5px solid #34D399;
+      border-radius: 11px;
+      padding: 11px 18px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .btn-cpr-ready-start:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+    }
+    .btn-cpr-ready-start:active {
+      transform: translateY(1px);
+    }
+
+    /* V26.1 Mobile CPR Approach Ring & Anti-Mash Feedback */
+    .mobile-cpr-pad-stage {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 14px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-cpr-approach-ring {
+      position: absolute;
+      width: 156px;
+      height: 156px;
+      border-radius: 999px;
+      border: 4px solid #38BDF8;
+      pointer-events: none;
+      opacity: 0;
+      will-change: transform, border-color;
+    }
+    .mobile-cpr-approach-ring.in-window {
+      border-color: #10B981;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.55);
+    }
     .mobile-cpr-heart-pad {
-      width: 170px;
-      height: 170px;
+      position: relative;
+      z-index: 2;
+      width: 156px;
+      height: 156px;
       border-radius: 999px;
       background: radial-gradient(circle, #10B981 0%, #059669 100%);
       color: #FFFFFF;
@@ -3739,13 +3808,17 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 20px auto;
+      margin: 0;
       border: 6px solid #A7F3D0;
-      box-shadow: 0 8px 30px rgba(16,185,129,0.35);
+      box-shadow: 0 8px 26px rgba(16,185,129,0.32);
       cursor: pointer;
       user-select: none;
-      transition: transform 0.08s;
-      animation: heartbeatPulse 0.545s infinite;
+      transition: background 0.1s ease, border-color 0.1s ease;
+    }
+    .mobile-cpr-heart-pad.miss-flash {
+      background: radial-gradient(circle, #F43F5E 0%, #BE123C 100%) !important;
+      border-color: #FECDD3 !important;
+      box-shadow: 0 0 24px rgba(225, 29, 72, 0.55) !important;
     }
     .mobile-cpr-heart-pad:active {
       transform: scale(0.90) !important;
@@ -6570,6 +6643,8 @@
         this.stageMistakes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
         this.deathCount = 0;
         this.cprCount = 0;
+        this.cprTargetCount = 60;
+        this.lastCprTapTime = 0;
         this.cprActive = false;
         this.cprCanHit = false;
         this.cprStartTime = 0;
@@ -6591,7 +6666,7 @@
         this.stage3Locked = false;
         this.shoutChargeProgress = 0;
         this.isStageChoiceLocked = false;
-        this.cprStrictRhythm = false; // V18.0 Default to Forgiving / Standard Friendly Mode
+        this.cprStrictRhythm = true; // V26.1 Strict Anti-Mash 110 BPM Mode Default
         this.cprHighwayAnimId = null;
         this.aedCurrentStep = 1;
 
@@ -6615,7 +6690,7 @@
         this.topVotedPercent = 0;
         this.topVotedCount = 0;
         this.stage3TapCount = 0;
-        this.effectiveTapTarget = 40;
+        this.effectiveTapTarget = 80;
         this.stage7PressureHeldMs = 0;
         this.stage7PressureInterval = null;
         this.mvpGroup = '01';
@@ -6749,15 +6824,21 @@
         this.refreshLobbyRoster();
       }
 
+      calculateStage3TapTarget(playerCount) {
+        const n = Math.max(1, playerCount || 0);
+        if (n === 1) return 80;
+        if (n <= 5) return n * 60;
+        if (n <= 30) return n * 45;
+        return Math.min(3000, n * 35);
+      }
+
       refreshLobbyRoster() {
         const roster = document.getElementById('lobbyPlayersRoster');
         const countTxt = document.getElementById('txtLobbyPlayerCount');
         const players = Object.values(this.connectedPlayers);
         if (countTxt) countTxt.innerText = players.length;
 
-        // Auto-scale Stage 3 tap target up to 100 players:
-        // 1 player = 40 taps, 25 players = 1,000 taps, 100 players = 2,500 taps
-        this.effectiveTapTarget = players.length <= 1 ? 40 : Math.min(2500, Math.max(200, players.length * 25));
+        this.effectiveTapTarget = this.calculateStage3TapTarget(players.length);
 
         if (!roster) return;
 
@@ -6822,6 +6903,10 @@
           subPhase: this.stage5Phase,
           cprState: this.cprPhaseState || 'INTRO',
           cprEpochStart: this.cprEpochStart || 0,
+          cprTarget: this.cprTargetCount || 60,
+          stage3CanTap: Boolean(this.stage3CanTap),
+          stage3Target: this.effectiveTapTarget || 80,
+          stage3Completed: Boolean(this.stage3TapCount >= (this.effectiveTapTarget || 80)),
           instruction: cData ? cData.selectInstruction : '',
           choices: choiceData,
           winningChoice: this.topVotedChoice ? {
@@ -7110,9 +7195,10 @@
           SoundEngine.startPulseScheduler(540, 1580);
           this.updatePatientHud('images/patient/patient_s3_dispatch.png', 'ด่านที่ 3 • DISPATCH (WAITING 1669)', 'critical');
           this.stage3Locked = false;
-          this.stage3CanTap = false; // Lock tap buttons while 1669 officer speaks intro
+          this.stage3CanTap = false; // Lock mobile & host tap buttons strictly until AI finishes speaking!
           this.stage3UnlockedChimePlayed = false;
           this.stage3TapCount = 0;
+          this.effectiveTapTarget = this.calculateStage3TapTarget(Object.keys(this.connectedPlayers).length);
           this.checklist = { location: false, incident: false, patient: false, aed: false };
           this.renderStage();
           this.broadcastHostSync();
@@ -7126,6 +7212,10 @@
           this.stage3CanTap = true;
           this.renderStage();
           this.broadcastMultiplayerStageSync();
+          RealtimeEngine.send('STAGE3_TAP_UNLOCK', {
+            canTap: true,
+            target: this.effectiveTapTarget
+          });
           if (BotSimulator.enabled) {
             BotSimulator.onStage3TapRush();
           }
@@ -7145,13 +7235,15 @@
           this.startClinicalVoiceTracking(4);
         } else if (newStage === 5) {
           this.stage5Phase = 'CPR';
-          this.cprPhaseState = 'INTRO'; // V19.0: 'INTRO' | 'COUNTDOWN' | 'ACTIVE'
+          this.cprPhaseState = 'INTRO'; // V26.1: 'INTRO' | 'WAITING_READY' | 'COUNTDOWN' | 'ACTIVE'
           this.cprActive = false;
           this.cprCanHit = false;
           this.cprStartTime = 0;
           this.cprEpochStart = 0;
           this.cprMissCooldownUntil = 0;
+          this.lastCprTapTime = 0;
           this.cprCount = 0;
+          this.mobileHitsPerBeat = {};
           this.cprFinished = false;
           this.cprTransitioning = false;
           this.lastPlayedBeatIndex = -1;
@@ -7163,9 +7255,9 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
-          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้นแล้วครับ! เราต้องกดหน้าอกด้วยความเร็วหนึ่งร้อยสิบครั้งต่อนาที ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ทุกคนในห้องกดปุ่มหัวใจบนจอมือถือให้ตรงจังหวะบีตจนครบสามสิบครั้งนะครับ เตรียมตัว...', 's5_cpr_intro');
-          if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
-          await this.runCprCountdownAndStart();
+          await speakAndWait('ผู้ป่วยหัวใจหยุดเต้นแล้วครับ! ขอเชิญน้องตัวแทนเดินออกไปเตรียมปั๊มหัวใจที่หุ่นหน้าห้องเลยครับ คุกเข่าข้างลำตัว วางส้นมือกึ่งกลางหน้าอก แขนเหยียดตรง ส่วนเพื่อนๆ ในห้องเตรียมมือถือให้พร้อมช่วยกดตามจังหวะ 110 ครั้งต่อนาทีจนครบหกสิบครั้งนะครับ เมื่อน้องตัวแทนจัดท่าที่หุ่นเสร็จแล้ว พูดใส่ไมค์ดังๆ ว่า พร้อมแล้ว เพื่อเริ่มนับถอยหลังได้เลยครับ!', 's5_cpr_intro');
+          if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprPhaseState !== 'INTRO') return;
+          this.enterStage5CprReadyWait();
         } else if (newStage === 6) {
           window.ECGEngine.setMode('SINUS');
           this.updateVitals(78, 96);
@@ -8004,7 +8096,7 @@
         if (cData) keyText = cData.answerKey;
         else if (this.currentStage === 2) keyText = 'ตะโกน 3 วลีให้เสียงดังทะลุ ' + this.stage2ThresholdDb + ' dB';
         else if (this.currentStage === 3) keyText = 'แจ้งพิกัด + รถชน + หมดสติ + ขอรถ/AED';
-        else if (this.currentStage === 5) keyText = this.stage5Phase === 'CPR' ? 'กดจังหวะ 110 BPM ครบ 30 ครั้ง' : 'ฉันถอย, คุณถอย, ทุกคนถอย + ปล่อย Shock';
+        else if (this.currentStage === 5) keyText = this.stage5Phase === 'CPR' ? `รอตัวแทนพูด "พร้อมแล้ว" -> ปั๊ม 110 BPM ครบ ${this.cprTargetCount} ครั้ง` : 'ฉันถอย, คุณถอย, ทุกคนถอย + ปล่อย Shock';
 
         this.hostChannel.postMessage({
           type: 'SYNC_STATE',
@@ -8019,13 +8111,21 @@
       handleHostRemoteMessage(msg) {
         if (!msg) return;
         if (msg.type === 'REMOTE_INSPECT') {
-          this.advanceToInspectionFinding();
+          if (this.currentStage === 5 && this.stage5Phase === 'CPR' && (this.cprPhaseState === 'WAITING_READY' || this.cprPhaseState === 'INTRO')) {
+            this.confirmCprReadyAndStart();
+          } else {
+            this.advanceToInspectionFinding();
+          }
         } else if (msg.type === 'REMOTE_SELECT_CHOICE') {
           if ([1, 4, 6, 7, 8].includes(this.currentStage)) {
             this.selectEquipmentCard(msg.choice);
           }
         } else if (msg.type === 'REMOTE_CONFIRM') {
-          this.confirmHeroDecision();
+          if (this.currentStage === 5 && this.stage5Phase === 'CPR' && (this.cprPhaseState === 'WAITING_READY' || this.cprPhaseState === 'INTRO')) {
+            this.confirmCprReadyAndStart();
+          } else {
+            this.confirmHeroDecision();
+          }
         } else if (msg.type === 'REMOTE_CANCEL') {
           this.reopenAudienceVoting();
         } else if (msg.type === 'REMOTE_TOGGLE_BOTS') {
@@ -8973,16 +9073,32 @@
                       </button>
                     </div>
                     <h2 class="stage-headline-clean" style="margin:0 0 2px 0; font-size:19px;">
-                      ผู้ป่วยหัวใจหยุดเต้น! เริ่มกดหน้าอก CPR ทันที (30 ครั้ง จังหวะ 110 BPM)
+                      ผู้ป่วยหัวใจหยุดเต้น! ตัวแทนปั๊มหัวใจหุ่นหน้าห้อง + เพื่อนกดตามจังหวะ (${this.cprTargetCount} ครั้ง • 110 BPM)
                     </h2>
                     <p class="stage-sub-clean" style="margin:0; font-size:13px;">
-                      ให้น้องตัวแทนกดหน้าอกหุ่น และให้เพื่อนๆ ในห้อง <strong style="color:#059669;">ช่วยกันปรบมือ/กดปุ่มให้ตรงจังหวะบีต!</strong> (หรือกด [SPACEBAR])
+                      ให้น้องตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง เสร็จแล้วพูด <strong style="color:#059669;">“พร้อมแล้ว”</strong> เพื่อเริ่มนับ 3-2-1 และให้เพื่อนในห้องช่วยกดให้ตรงจังหวะบีต!
                     </p>
                   </div>
 
-                  <!-- High-Contrast Beat Highway Track -->
-                  <div style="background:#0F172A; border-radius:14px; padding:6px; box-shadow:0 4px 14px rgba(15,23,42,0.15);">
+                  <!-- High-Contrast Beat Highway Track + Representative Ready-Check Overlay -->
+                  <div style="position:relative; background:#0F172A; border-radius:14px; padding:6px; box-shadow:0 4px 14px rgba(15,23,42,0.15);">
                     <canvas id="cprHighwayCanvas" width="700" height="120" style="width:100%; height:clamp(96px, 13vh, 135px); border-radius:10px; display:block; background:#0F172A;"></canvas>
+                    <div id="cprReadyOverlay" class="cpr-ready-overlay font-technical ${this.cprPhaseState === 'WAITING_READY' ? 'is-waiting' : ''}" style="display:${(this.cprPhaseState === 'INTRO' || this.cprPhaseState === 'WAITING_READY') ? 'flex' : 'none'};">
+                      <div style="display:flex; flex-direction:column; gap:4px; min-width:0; flex:1;">
+                        <div id="txtCprReadyBadge" style="font-size:11px; font-weight:800; letter-spacing:0.06em; color:${this.cprPhaseState === 'WAITING_READY' ? '#34D399' : '#38BDF8'};">
+                          ${this.cprPhaseState === 'WAITING_READY' ? '🎙️ ไมค์เปิดรับเสียงแล้ว • รอตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง' : '🔊 กำลังอธิบายขั้นตอนจัดท่า CPR...'}
+                        </div>
+                        <div id="txtCprReadyPrompt" style="font-size:clamp(15px, 1.35vw, 19px); font-weight:800; color:#FFFFFF; line-height:1.3;">
+                          ${this.cprPhaseState === 'WAITING_READY' ? 'จัดท่าที่หุ่นหน้าห้องเสร็จแล้ว พูดว่า “พร้อมแล้ว” เพื่อเริ่มนับ 3-2-1!' : 'น้องตัวแทนออกไปเตรียมจัดท่าที่หุ่น CPR หน้าห้องได้เลยครับ'}
+                        </div>
+                        <div id="txtCprReadyHeard" style="font-size:12px; color:#94A3B8; font-weight:600;">
+                          ${this.cprPhaseState === 'WAITING_READY' ? 'กำลังฟังคำว่า “พร้อมแล้ว” / “พร้อม” / “เริ่มเลย”...' : 'ปุ่มและไมค์จะเปิดรับคำว่า “พร้อมแล้ว” ทันทีเมื่อพูดจบ (หรือพิธีกรกดปุ่มด้านขวาได้ทันที)'}
+                        </div>
+                      </div>
+                      <button onclick="GameStateManager.confirmCprReadyAndStart()" class="btn-cpr-ready-start font-technical" title="กดปุ่มนี้หรือ Spacebar เพื่อเริ่มนับถอยหลัง 3-2-1 ทันที">
+                        ▶ พร้อมแล้ว! เริ่มนับ 3-2-1
+                      </button>
+                    </div>
                   </div>
 
                   <!-- Bottom Split Controls Row -->
@@ -8997,7 +9113,7 @@
                         </button>
                       </div>
                       <div class="cpr-counter-display font-technical">
-                        <div class="cpr-count-num" id="txtCprCountNumber"><span id="txtCprCount">00</span> <span style="font-size:18px; color:#64748B;">/ 30 ครั้ง</span></div>
+                        <div class="cpr-count-num" id="txtCprCountNumber"><span id="txtCprCount">00</span> <span style="font-size:18px; color:#64748B;">/ ${this.cprTargetCount} ครั้ง</span></div>
                       </div>
                     </div>
 
@@ -9709,6 +9825,8 @@
 
           if (!this.stage3UnlockedChimePlayed) {
             this.stage3UnlockedChimePlayed = true;
+            RealtimeEngine.send('STAGE3_TAP_COMPLETED', { target: this.effectiveTapTarget });
+            this.broadcastMultiplayerStageSync();
             try { SoundEngine.playStageClear(); } catch(e) {}
             showToast('✓ ปลดล็อกข้อมูลครบ 4 ข้อแล้ว! ตัวแทนพูดแจ้งข้อมูลใส่ไมค์ได้เลย');
 
@@ -9724,46 +9842,49 @@
 
       handleMobileCprHit(senderId, payload = {}) {
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprPhaseState !== 'ACTIVE' || !this.cprCanHit || this.cprFinished) return;
-        const accuracy = typeof payload === 'string' ? payload : (payload.accuracy || 'GOOD');
+        const accuracy = typeof payload === 'string' ? payload : (payload.accuracy || 'MISS');
         const beatIndex = payload.beatIndex !== undefined ? payload.beatIndex : -1;
+        const deltaMs = payload.deltaMs !== undefined ? Number(payload.deltaMs) : 999;
 
-        if (accuracy === 'PERFECT' || accuracy === 'GOOD') {
-          // De-duplicate multiple hits on the same beat note across all mobiles
-          if (!this.mobileHitsPerBeat) this.mobileHitsPerBeat = {};
-          if (beatIndex >= 0) {
-            this.mobileHitsPerBeat[beatIndex] = (this.mobileHitsPerBeat[beatIndex] || 0) + 1;
-            if (this.mobileHitsPerBeat[beatIndex] > 3) return; // Cap at 3 increments per beat
+        // Strict server-side verification: reject inaccurate or invalid packets
+        if ((accuracy !== 'PERFECT' && accuracy !== 'GOOD') || deltaMs > 125) return;
+
+        const isPerfect = accuracy === 'PERFECT' && deltaMs <= 75;
+        const player = this.connectedPlayers[senderId];
+        if (player) {
+          player.cprHits++;
+          player.score += (isPerfect ? 3 : 1);
+        }
+
+        // Strict 1-Beat = Max 1 Chest Compression on Host (real 110 BPM pacing even with 100 phones!)
+        if (!this.mobileHitsPerBeat) this.mobileHitsPerBeat = {};
+        if (beatIndex >= 0) {
+          if (this.mobileHitsPerBeat[beatIndex] >= 1) {
+            return; // Beat already counted on chest; player still received personal MVP points above
           }
+          this.mobileHitsPerBeat[beatIndex] = 1;
+        }
 
-          // V19.0: Count CPR compression directly (+1) without network latency penalty!
-          this.cprCount = Math.min(30, this.cprCount + 1);
-          window.ECGEngine.triggerCompressionSpike();
+        const target = this.cprTargetCount || 60;
+        this.cprCount = Math.min(target, this.cprCount + 1);
+        window.ECGEngine.triggerCompressionSpike();
+        this.updateCprAccuracyBar(isPerfect ? 100 : 82, isPerfect ? 'PERFECT' : 'GOOD');
 
-          const isPerfect = accuracy === 'PERFECT';
-          this.updateCprAccuracyBar(isPerfect ? 100 : 85, accuracy);
+        const badge = document.getElementById('cprTimingJudgeBadge');
+        if (badge) {
+          badge.className = isPerfect
+            ? 'cpr-timing-judge-badge perfect font-technical'
+            : 'cpr-timing-judge-badge good font-technical';
+          const pName = player ? player.name : 'ผู้เล่น';
+          badge.innerText = `✓ ${pName} กดตรงจังหวะ! (${this.cprCount}/${target})`;
+        }
 
-          const badge = document.getElementById('cprTimingJudgeBadge');
-          const player = this.connectedPlayers[senderId];
-          if (player) {
-            player.cprHits++;
-            player.score += (isPerfect ? 3 : 1);
-          }
-          if (badge) {
-            badge.className = isPerfect
-              ? 'cpr-timing-judge-badge perfect font-technical'
-              : 'cpr-timing-judge-badge good font-technical';
-            const pName = player ? player.name : 'ผู้เล่น';
-            badge.innerText = `✓ ${pName} กดตรงจังหวะ! (${this.cprCount}/30)`;
-          }
+        const txt = document.getElementById('txtCprCount');
+        if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
 
-          const txt = document.getElementById('txtCprCount');
-          if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
-
-          if (this.cprCount >= 30) {
-            this.cprFinished = true;
-            this.transitionFrom5ATo5B();
-          }
-          this.broadcastMultiplayerStageSync();
+        if (this.cprCount >= target) {
+          this.cprFinished = true;
+          this.transitionFrom5ATo5B();
         }
       }
 
@@ -10680,7 +10801,7 @@
           btn.innerText = `โหมดจังหวะ: ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM' : 'มาตรฐาน (ยืดหยุ่น)'}`;
           btn.style.color = this.cprStrictRhythm ? '#0284C7' : '#059669';
         }
-        showToast(`สลับเป็นโหมด ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM (±95ms/165ms)' : 'มาตรฐาน (ยืดหยุ่น ±135ms/235ms)'}`);
+        showToast(`สลับเป็นโหมด ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM (±65ms/115ms)' : 'ยืดหยุ่น (±95ms/155ms)'}`);
       }
 
       updateCprAccuracyBar(pct, status) {
@@ -10697,13 +10818,91 @@
       }
 
       skipToAED() {
-        this.cprCount = 30;
+        this.cprCount = this.cprTargetCount;
         this.transitionFrom5ATo5B();
+      }
+
+      enterStage5CprReadyWait() {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return;
+        this.cprPhaseState = 'WAITING_READY';
+        this.cprCanHit = false;
+
+        const ov = document.getElementById('cprReadyOverlay');
+        if (ov) {
+          ov.style.display = 'flex';
+          ov.classList.add('is-waiting');
+        }
+        const badgeEl = document.getElementById('txtCprReadyBadge');
+        if (badgeEl) {
+          badgeEl.style.color = '#34D399';
+          badgeEl.innerText = '🎙️ ไมค์เปิดรับเสียงแล้ว • รอตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง';
+        }
+        const promptEl = document.getElementById('txtCprReadyPrompt');
+        if (promptEl) {
+          promptEl.innerText = 'จัดท่าที่หุ่นหน้าห้องเสร็จแล้ว พูดว่า “พร้อมแล้ว” เพื่อเริ่มนับ 3-2-1!';
+        }
+        const heardEl = document.getElementById('txtCprReadyHeard');
+        if (heardEl) {
+          heardEl.innerText = 'กำลังฟังคำว่า “พร้อมแล้ว” / “พร้อม” / “เริ่มเลย”...';
+        }
+        const judgeBadge = document.getElementById('cprTimingJudgeBadge');
+        if (judgeBadge) {
+          judgeBadge.className = 'cpr-timing-judge-badge warn font-technical';
+          judgeBadge.innerText = '🎙️ รอตัวแทนจัดท่าที่หุ่นแล้วพูด “พร้อมแล้ว”';
+        }
+
+        this.broadcastHostSync();
+        this.broadcastMultiplayerStageSync();
+        SoundEngine.playPulseBeep(760, 0.08);
+
+        // Open Thai Speech Recognition to listen for "พร้อมแล้ว"
+        MicSensor.ensureMicLive().catch(() => {});
+        MicSensor.startSpeechRecognition((transcript) => {
+          if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprPhaseState !== 'WAITING_READY' || window.isSystemSpeaking) return;
+          const clean = (transcript || '').trim();
+          if (!clean) return;
+          const heardBox = document.getElementById('txtCprReadyHeard');
+          if (heardBox) {
+            heardBox.innerHTML = `ได้ยิน: <strong style="color:#34D399;">“${clean}”</strong>`;
+          }
+
+          const val = clean.toLowerCase().replace(/\s+/g, '');
+          const readyKeywords = [
+            'พร้อมแล้ว', 'พร้อมครับ', 'พร้อมค่ะ', 'พร้อมคับ', 'พร้อม',
+            'เริ่มเลย', 'เริ่มครับ', 'เริ่มค่ะ', 'เริ่มได้', 'ลุยเลย', 'ลุย',
+            'เสร็จแล้ว', 'จัดท่าเสร็จ', 'โอเค', 'ok', 'ready', 'go'
+          ];
+          if (readyKeywords.some(k => val.includes(k))) {
+            this.confirmCprReadyAndStart();
+          }
+        });
+      }
+
+      confirmCprReadyAndStart() {
+        if (this.currentStage !== 5 || this.stage5Phase !== 'CPR') return;
+        if (this.cprPhaseState !== 'INTRO' && this.cprPhaseState !== 'WAITING_READY') return;
+
+        // If host clicked button while AI intro was still speaking, cancel speech cleanly
+        if (window.speechSynthesis) {
+          try { window.speechSynthesis.cancel(); } catch(e) {}
+        }
+        window.isSystemSpeaking = false;
+        if (window.AIVoiceCoach) AIVoiceCoach.isSpeaking = false;
+
+        MicSensor.stopSpeechRecognition();
+        const ov = document.getElementById('cprReadyOverlay');
+        if (ov) ov.style.display = 'none';
+
+        try { SoundEngine.playStageClear(); } catch(e) {}
+        showToast('✓ ตัวแทนพร้อมแล้ว! เริ่มนับถอยหลัง 3-2-1 ปั๊มหัวใจ 110 BPM');
+        this.runCprCountdownAndStart();
       }
 
       async runCprCountdownAndStart() {
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return;
         this.cprPhaseState = 'COUNTDOWN';
+        const readyOv = document.getElementById('cprReadyOverlay');
+        if (readyOv) readyOv.style.display = 'none';
         this.cprCanHit = false;
         MicSensor.stopSpeechRecognition();
         this.broadcastMultiplayerStageSync();
@@ -10773,7 +10972,8 @@
         RealtimeEngine.send('CPR_START_SYNC', {
           cprState: 'ACTIVE',
           bpm: 110,
-          epochStart: this.cprEpochStart
+          epochStart: this.cprEpochStart,
+          cprTarget: this.cprTargetCount || 60
         });
         this.broadcastMultiplayerStageSync();
         this.startCprRhythmEngine();
@@ -11013,29 +11213,26 @@
 
       attemptCprHit(source = 'click', isBypass = false) {
         const badge = document.getElementById('cprTimingJudgeBadge');
+        const target = this.cprTargetCount || 60;
 
-        // 1. Block hits if AI is still speaking or 3-2-1 countdown hasn't finished!
+        // 1. Block hits if AI is still speaking, waiting for ready, or 3-2-1 countdown hasn't finished!
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return false;
         if (!this.cprCanHit || !this.cprStartTime) {
           if (badge) {
             badge.className = 'cpr-timing-judge-badge warn font-technical';
-            badge.innerText = '⏳ รอเสียงนับ 3-2-1 จบก่อนครับ!';
+            badge.innerText = this.cprPhaseState === 'WAITING_READY'
+              ? '🎙️ รอตัวแทนพูดว่า “พร้อมแล้ว” ก่อนครับ!'
+              : '⏳ รอเสียงนับ 3-2-1 จบก่อนครับ!';
           }
           return false;
         }
 
         const now = performance.now();
 
-        // 2. Anti-Mash Cooldown: If player recently mashed off-beat, block spam clicks for 280ms!
+        // 2. Anti-Mash Cooldown: block spam presses after an off-beat miss!
         if (!isBypass && this.cprMissCooldownUntil && now < this.cprMissCooldownUntil) {
           return false;
         }
-
-        const elapsed = now - this.cprStartTime;
-        const CPR_BEAT_MS = 60000 / 110; // 545.4545ms
-        const nearestBeatIdx = Math.round(elapsed / CPR_BEAT_MS);
-        const exactBeatTime = nearestBeatIdx * CPR_BEAT_MS;
-        const deltaMs = Math.abs(elapsed - exactBeatTime);
 
         const pad = document.getElementById('btnCprDrumPad');
         const flashTarget = (color) => {
@@ -11053,32 +11250,54 @@
           }
         };
 
+        // 3. Anti-Mash Speed Trap: reject tapping faster than 158 BPM (< 380ms interval)!
+        const minTapInterval = this.cprStrictRhythm ? 380 : 340;
+        if (!isBypass && this.lastCprTapTime && (now - this.lastCprTapTime) < minTapInterval) {
+          this.cprMissCooldownUntil = now + 380;
+          flashTarget('#E11D48');
+          SoundEngine.playErrorBuzz();
+          this.updateCprAccuracyBar(10, 'MISS');
+          if (badge) {
+            badge.className = 'cpr-timing-judge-badge miss font-technical';
+            badge.innerText = '✕ อย่ากดรัว/มั่ว! รอจังหวะ 110 BPM';
+          }
+          return false;
+        }
+        this.lastCprTapTime = now;
+
+        const elapsed = now - this.cprStartTime;
+        const CPR_BEAT_MS = 60000 / 110; // 545.4545ms
+        const nearestBeatIdx = Math.round(elapsed / CPR_BEAT_MS);
+        const exactBeatTime = nearestBeatIdx * CPR_BEAT_MS;
+        const deltaMs = Math.abs(elapsed - exactBeatTime);
+
         if (!this.consumedBeatIndices) this.consumedBeatIndices = new Set();
 
-        // 3. Explicit Test Bypass (Shift+Click or Test Button)
+        // 4. Explicit Test Bypass (Shift+Click or Test Button)
         if (isBypass) {
           this.consumedBeatIndices.add(nearestBeatIdx);
-          this.cprCount = Math.min(30, this.cprCount + 1);
+          this.cprCount = Math.min(target, this.cprCount + 1);
           flashTarget('#10B981');
           window.ECGEngine.triggerCompressionSpike();
           this.updateCprAccuracyBar(100, 'PERFECT');
           if (badge) {
             badge.className = 'cpr-timing-judge-badge perfect font-technical';
-            badge.innerText = '✓ ตรงจังหวะ 110 BPM (+1 ครั้ง)';
+            badge.innerText = `✓ ตรงจังหวะ 110 BPM (+1 ครั้ง • ${this.cprCount}/${target})`;
           }
           const txt = document.getElementById('txtCprCount');
           if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
-          if (this.cprCount >= 30) {
+          if (this.cprCount >= target) {
             this.cprFinished = true;
             this.transitionFrom5ATo5B();
           }
           return true;
         }
 
-        // 4. Anti-Double-Tap on the same beat note
+        // 5. Anti-Double-Tap on the same beat note
         if (this.consumedBeatIndices.has(nearestBeatIdx)) {
-          this.cprMissCooldownUntil = now + (this.cprStrictRhythm ? 240 : 160);
+          this.cprMissCooldownUntil = now + 300;
           flashTarget('#F59E0B');
+          SoundEngine.playErrorBuzz();
           if (badge) {
             badge.className = 'cpr-timing-judge-badge warn font-technical';
             badge.innerText = '⚠️ กดซ้ำจังหวะเดิม! รอลูกไฟถัดไป';
@@ -11086,19 +11305,19 @@
           return false;
         }
 
-        // 5. V18.0 Dual-Threshold Timing Windows (Forgiving Standard vs Strict Mode)
-        const perfectWindow = this.cprStrictRhythm ? 95 : 135;
-        const goodWindow = this.cprStrictRhythm ? 165 : 235;
+        // 6. V26.1 Genuine Rhythm Windows (Strict default: ±65ms / ±115ms; Friendly: ±95ms / ±155ms)
+        const perfectWindow = this.cprStrictRhythm ? 65 : 95;
+        const goodWindow = this.cprStrictRhythm ? 115 : 155;
 
         if (deltaMs <= goodWindow) {
           this.consumedBeatIndices.add(nearestBeatIdx);
-          this.cprCount = Math.min(30, this.cprCount + 1);
+          this.cprCount = Math.min(target, this.cprCount + 1);
 
           flashTarget('#10B981');
           window.ECGEngine.triggerCompressionSpike();
 
           const isPerfect = deltaMs <= perfectWindow;
-          const accPct = Math.max(70, Math.round((1 - deltaMs / (goodWindow * 1.2)) * 100));
+          const accPct = Math.max(70, Math.round((1 - deltaMs / (goodWindow * 1.25)) * 100));
           this.updateCprAccuracyBar(accPct, isPerfect ? 'PERFECT' : 'GOOD');
 
           if (badge) {
@@ -11113,23 +11332,21 @@
           const txt = document.getElementById('txtCprCount');
           if (txt) txt.innerText = String(this.cprCount).padStart(2, '0');
 
-          if (this.cprCount >= 30) {
+          if (this.cprCount >= target) {
             this.cprFinished = true;
             this.transitionFrom5ATo5B();
           }
           return true;
         } else {
-          // 6. Off-Beat Miss: Forgiving 180ms cooldown (or 280ms if strict) so rhythm isn't lost
-          const missCooldown = this.cprStrictRhythm ? 280 : 180;
+          // 7. Off-Beat Miss: strict penalty cooldown so random mashing NEVER scores!
+          const missCooldown = this.cprStrictRhythm ? 360 : 260;
           this.cprMissCooldownUntil = now + missCooldown;
           flashTarget('#E11D48');
           SoundEngine.playErrorBuzz();
-          this.updateCprAccuracyBar(25, 'MISS');
+          this.updateCprAccuracyBar(15, 'MISS');
           if (badge) {
             badge.className = 'cpr-timing-judge-badge miss font-technical';
-            badge.innerText = this.cprStrictRhythm
-              ? '✕ ผิดจังหวะ! กดตอนลูกไฟเข้าวงกลม'
-              : '✕ เร็วไปนิด / ช้าไปนิด รอจังหวะบีตถัดไป';
+            badge.innerText = `✕ ผิดจังหวะ! (คลาด ${Math.round(deltaMs)}ms) รอลูกไฟเข้าวงกลม`;
           }
           return false;
         }
@@ -11150,7 +11367,7 @@
         const badge = document.getElementById('cprTimingJudgeBadge');
         if (badge) {
           badge.className = 'cpr-timing-judge-badge perfect font-technical';
-          badge.innerText = '✓ กดหน้าอกครบ 30 ครั้งเรียบร้อย!';
+          badge.innerText = `✓ กดหน้าอกครบ ${this.cprTargetCount} ครั้งเรียบร้อย!`;
         }
 
         // Guaranteed non-blocking transition to Stage 5B after 900ms (NEVER await TTS before switching DOM!)
@@ -11168,7 +11385,7 @@
           this.renderStage();
           this.broadcastMultiplayerStageSync();
 
-          speakAndWait('กดหน้าอกครบสามสิบครั้งแล้ว และเครื่อง เออีดี ชาร์จไฟสองร้อยจูลพร้อมช็อกไฟฟ้าแล้วครับ! ทุกคนในห้องห้ามแตะหน้าจอมือถือเด็ดขาดนะครับ! ส่วนน้องตัวแทนหน้าห้อง ให้พูดคำสั่งความปลอดภัยสามขั้นตอนเรียงทีละข้อดังๆ เริ่มจากคำว่า ฉันถอย ได้เลยครับ!', 's5_aed_intro').then(() => {
+          speakAndWait('กดหน้าอกครบหกสิบครั้งแล้ว และเครื่อง เออีดี ชาร์จไฟสองร้อยจูลพร้อมช็อกไฟฟ้าแล้วครับ! ทุกคนในห้องห้ามแตะหน้าจอมือถือเด็ดขาดนะครับ! ส่วนน้องตัวแทนหน้าห้อง ให้พูดคำสั่งความปลอดภัยสามขั้นตอนเรียงทีละข้อดังๆ เริ่มจากคำว่า ฉันถอย ได้เลยครับ!', 's5_aed_intro').then(() => {
             setTimeout(() => {
               this.aedListening = true;
               this.lastAedStepTime = performance.now();
@@ -11522,6 +11739,10 @@
         if (clockEl) clockEl.innerText = '08:00';
 
         this.cprCount = 0;
+        this.cprPhaseState = 'INTRO';
+        this.lastCprTapTime = 0;
+        this.mobileHitsPerBeat = {};
+        this.effectiveTapTarget = 80;
         this.cprActive = false;
         this.cprCanHit = false;
         this.cprFinished = false;
@@ -11739,7 +11960,11 @@
               this.advanceStage2Complete();
             } else if (this.currentStage === 5) {
               if (this.stage5Phase === 'CPR') {
-                this.handleCprHitManual();
+                if (this.cprPhaseState === 'WAITING_READY' || this.cprPhaseState === 'INTRO') {
+                  this.confirmCprReadyAndStart();
+                } else {
+                  this.handleCprHitManual();
+                }
               } else if (this.stage5Phase === 'AED') {
                 if (!this.aedSteps.step1) this.triggerAedStep(1);
                 else if (!this.aedSteps.step2) this.triggerAedStep(2);
@@ -12146,34 +12371,63 @@
         `;
       }
 
-      function renderStage3TapRush() {
+      function renderStage3TapRush(canTap = false, target = 80, completed = false) {
         const body = document.getElementById('mobileAppBody');
         if (!body) return;
 
-        let localTaps = 0;
+        if (state.tapBatchTimer) {
+          clearTimeout(state.tapBatchTimer);
+          state.tapBatchTimer = null;
+        }
+
+        const displayTarget = target || 80;
+        let localTaps = state.stage3LocalTaps || 0;
+
+        if (completed) {
+          body.innerHTML = `
+            <div class="mobile-card-white font-technical" style="text-align:center; padding:26px 18px;">
+              <div style="font-size:44px; margin-bottom:8px;">✅</div>
+              <div style="font-size:11px; font-weight:800; color:#059669; background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
+                ด่านที่ 3 • ปลดล็อกข้อมูลสำเร็จ 100%
+              </div>
+              <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 6px;">
+                ส่งข้อมูลขึ้นจอใหญ่ครบ 4 ข้อแล้ว!
+              </h3>
+              <div style="font-size:13px; color:#475569; line-height:1.45;">
+                คุณช่วยกดส่งข้อมูลไปทั้งหมด <strong style="color:#0284C7;">${localTaps} ครั้ง</strong><br>
+                รอตัวแทนหน้าห้องอ่านแจ้งเจ้าหน้าที่ 1669 สักครู่ครับ
+              </div>
+            </div>
+          `;
+          return;
+        }
+
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:20px 16px;">
-            <div style="font-size:11px; font-weight:800; color:#0284C7; background:#F0F9FF; border:1px solid #BAE6FD; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
-              ⚡ ด่านที่ 3 • CO-OP INTEL RUSH (1,000 TAPS)
+            <div style="font-size:11px; font-weight:800; color:${canTap ? '#0284C7' : '#D97706'}; background:${canTap ? '#F0F9FF' : '#FFFBEB'}; border:1px solid ${canTap ? '#BAE6FD' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+              ${canTap ? `⚡ ด่านที่ 3 • CO-OP INTEL RUSH (${displayTarget.toLocaleString()} TAPS)` : '🔒 ด่านที่ 3 • รอฟังคำสั่งเจ้าหน้าที่ 1669...'}
             </div>
             <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 4px;">
-              กดรัวๆ เพื่อส่งข้อมูลเหตุฉุกเฉิน!
+              ${canTap ? 'กดรัวๆ เพื่อส่งข้อมูลเหตุฉุกเฉิน!' : 'กรุณาฟังคำแนะนำบนจอใหญ่ให้จบก่อนครับ'}
             </h3>
             <div style="font-size:12px; color:#64748B;">
-              ร่วมกันกดปุ่มนี้รัวๆ เพื่อปลดล็อกพิกัดและอาการส่งขึ้นจอใหญ่
+              ${canTap ? 'ร่วมกันกดปุ่มนี้รัวๆ เพื่อปลดล็อกพิกัดและอาการส่งขึ้นจอใหญ่' : 'ปุ่มจะปลดล็อกให้กดได้อัตโนมัติทันทีเมื่อเจ้าหน้าที่สั่งจบ'}
             </div>
 
-            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush" ontouchstart="event.preventDefault();">
-              <span style="font-size:32px;">⚡</span>
-              <span style="font-size:18px; font-weight:900;">กดรัวๆ!</span>
-              <span style="font-size:11px; opacity:0.85;">TAP HERE</span>
+            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush" ontouchstart="event.preventDefault();" style="${canTap ? '' : 'background:linear-gradient(135deg, #94A3B8, #64748B); border-color:#CBD5E1; box-shadow:none; opacity:0.65; pointer-events:none; cursor:not-allowed;'}">
+              <span style="font-size:32px;">${canTap ? '⚡' : '🔒'}</span>
+              <span style="font-size:18px; font-weight:900;">${canTap ? 'กดรัวๆ!' : 'รอคำสั่ง...'}</span>
+              <span style="font-size:11px; opacity:0.85;">${canTap ? 'TAP HERE' : 'LOCKED'}</span>
             </div>
 
-            <div style="font-size:13px; font-weight:800; color:#0284C7;">
-              คุณกดไปแล้ว: <strong id="mTxtLocalTaps" class="num-readout" style="font-size:18px;">0</strong> ครั้ง
+            <div style="font-size:13px; font-weight:800; color:${canTap ? '#0284C7' : '#94A3B8'};">
+              คุณกดไปแล้ว: <strong id="mTxtLocalTaps" class="num-readout" style="font-size:18px;">${localTaps}</strong> ครั้ง
             </div>
           </div>
         `;
+
+        if (!canTap) return;
+        if (navigator.vibrate) navigator.vibrate(40);
 
         const btn = document.getElementById('mBtnTapRush');
         const txt = document.getElementById('mTxtLocalTaps');
@@ -12188,7 +12442,9 @@
         if (btn) {
           btn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
+            if (state.currentStage !== 3 || !state.stage3CanTap || state.stage3Completed) return;
             localTaps++;
+            state.stage3LocalTaps = localTaps;
             state.taps++;
             state.tapBatchCount++;
             if (txt) txt.innerText = localTaps;
@@ -12198,66 +12454,102 @@
               state.tapBatchTimer = setTimeout(() => {
                 flushTaps();
                 state.tapBatchTimer = null;
-              }, 400); // 400ms batching window for 100 players
+              }, 320);
             }
           });
         }
       }
 
-      function renderStage5ACpr(cprState = 'INTRO', epochStart = null) {
+      function renderStage5ACpr(cprState = 'INTRO', epochStart = null, cprTarget = 60) {
         const body = document.getElementById('mobileAppBody');
         if (!body) return;
 
-        if (epochStart) state.cprEpochStart = epochStart;
         state.cprMobilePhase = cprState || 'INTRO';
-
-        const isIntro = state.cprMobilePhase === 'INTRO';
+        const isWaitingReady = state.cprMobilePhase === 'WAITING_READY';
         const isCountdown = state.cprMobilePhase === 'COUNTDOWN';
         const isActive = state.cprMobilePhase === 'ACTIVE';
+
+        if (isActive && !state.cprLocalStartTime) {
+          state.cprLocalStartTime = performance.now();
+          state.mobileConsumedBeats = new Set();
+          state.mobileCprCooldownUntil = 0;
+          state.lastMobileTapMs = 0;
+        }
+        if (!isActive) {
+          state.cprLocalStartTime = 0;
+        }
+
+        const badgeTxt = isActive
+          ? `🫀 ด่านที่ 5A • ปั๊มหัวใจ 110 BPM (${cprTarget} ครั้ง)`
+          : (isCountdown
+            ? '⏳ กำลังนับถอยหลังเตรียมเริ่ม...'
+            : (isWaitingReady
+              ? '⏳ รอตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง...'
+              : '🔒 กรุณาฟังคำแนะนำสักครู่...'));
+
+        const titleTxt = isActive
+          ? 'แตะตอนวงแหวนบีบเข้าชิดขอบปุ่ม!'
+          : (isCountdown
+            ? 'เตรียมวางนิ้วรอจังหวะ...'
+            : (isWaitingReady
+              ? 'รอตัวแทนจัดท่าที่หุ่นแล้วพูด “พร้อมแล้ว”'
+              : 'ตัวแทนกำลังออกไปจัดท่าที่หุ่น CPR หน้าห้อง'));
+
+        const subTxt = isActive
+          ? 'ห้ามกดรัวมั่ว! นับเฉพาะจังหวะที่ตรง 110 BPM เท่านั้น'
+          : 'เตรียมถือมือถือไว้ให้มั่น พอตัวแทนพร้อม ระบบจะนับ 3-2-1 ทันที!';
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:18px 16px;">
             <div id="mCprPhaseBadge" style="font-size:11px; font-weight:800; color:${isActive ? '#059669' : '#D97706'}; background:${isActive ? '#ECFDF5' : '#FFFBEB'}; border:1px solid ${isActive ? '#A7F3D0' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
-              ${isActive ? '🫀 ด่านที่ 5A • จังหวะปั๊มหัวใจ 110 BPM' : (isCountdown ? '⏳ กำลังนับถอยหลังเตรียมเริ่ม...' : '⏳ กรุณาฟังคำแนะนำสักครู่...')}
+              ${badgeTxt}
             </div>
             <h3 id="mCprTitle" style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 2px;">
-              ${isActive ? 'แตะตามจังหวะชีพจร 110 ครั้ง/นาที' : (isCountdown ? 'เตรียมวางมือบนหน้าจอ...' : 'รอสัญญาณเริ่มจากจอใหญ่')}
+              ${titleTxt}
             </h3>
             <div id="mCprSub" style="font-size:11.5px; color:#64748B;">
-              ${isActive ? 'แตะให้ตรงจังหวะไฟและเสียงบีต เพื่อช่วยเพิ่มคะแนน CPR ให้กลุ่มของคุณ!' : 'ฟังคำแนะนำจาก AI และน้องตัวแทนหน้าห้อง'}
+              ${subTxt}
             </div>
 
-            <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad" ontouchstart="event.preventDefault();" style="opacity:${isActive ? '1' : '0.45'}; cursor:${isActive ? 'pointer' : 'not-allowed'}; pointer-events:${isActive ? 'auto' : 'none'};">
-              <span style="font-size:34px;">🫀</span>
-              <span id="mTxtPadPrompt" style="font-size:17px; font-weight:900;">${isActive ? 'กดจังหวะนี้!' : 'รอเริ่ม...'}</span>
-              <span style="font-size:11px; opacity:0.9;">110 BPM</span>
+            <div class="mobile-cpr-pad-stage">
+              <div id="mCprApproachRing" class="mobile-cpr-approach-ring"></div>
+              <div class="mobile-cpr-heart-pad font-technical" id="mBtnCprPad" ontouchstart="event.preventDefault();" style="opacity:${isActive ? '1' : '0.45'}; cursor:${isActive ? 'pointer' : 'not-allowed'}; pointer-events:${isActive ? 'auto' : 'none'};">
+                <span style="font-size:32px;">${isActive ? '🫀' : '🔒'}</span>
+                <span id="mTxtPadPrompt" style="font-size:16px; font-weight:900;">${isActive ? 'กดตามวงกลม!' : (isWaitingReady ? 'รอตัวแทนพร้อม...' : 'รอเริ่ม...')}</span>
+                <span style="font-size:11px; opacity:0.9;">110 BPM</span>
+              </div>
             </div>
 
-            <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:#059669; min-height:20px;">
-              ${isActive ? 'แตะปุ่มรูปหัวใจตามจังหวะได้เลย!' : 'ปุ่มจะปลดล็อกอัตโนมัติเมื่อเริ่มนับจังหวะครับ'}
+            <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:${isActive ? '#059669' : '#64748B'}; min-height:22px;">
+              ${isActive ? 'รอวงแหวนสีเขียวบีบเข้าขอบปุ่มแล้วค่อยแตะ!' : 'ปุ่มจะปลดล็อกอัตโนมัติเมื่อเริ่มนับจังหวะครับ'}
             </div>
           </div>
         `;
 
         const pad = document.getElementById('mBtnCprPad');
+        const ring = document.getElementById('mCprApproachRing');
         const fb = document.getElementById('mTxtCprFeedback');
+        const promptEl = document.getElementById('mTxtPadPrompt');
         const CPR_BEAT_MS = 60000 / 110; // 545.4545ms
 
-        // Phase-Locked rAF Heart Pulse Engine
+        // Phase-Locked Visual Approach Ring Engine (Osu-style shrinking ring synced to 110 BPM!)
         if (state.cprRafId) cancelAnimationFrame(state.cprRafId);
         const animateHeartBeat = () => {
           if (state.currentStage !== 5) return;
-          if (state.cprMobilePhase === 'ACTIVE' && state.cprEpochStart) {
-            const elapsed = Date.now() - state.cprEpochStart;
-            const phase = ((elapsed % CPR_BEAT_MS) / CPR_BEAT_MS);
-            if (pad) {
-              const scale = 1.0 + (0.12 * Math.sin(phase * Math.PI));
-              pad.style.transform = `scale(${scale.toFixed(3)})`;
-              if (phase <= 0.18 || phase >= 0.82) {
-                pad.style.boxShadow = '0 0 25px rgba(225, 29, 72, 0.6)';
-              } else {
-                pad.style.boxShadow = '0 4px 14px rgba(225, 29, 72, 0.25)';
-              }
+          if (state.cprMobilePhase === 'ACTIVE' && state.cprLocalStartTime && ring) {
+            const elapsed = performance.now() - state.cprLocalStartTime;
+            const phase = (elapsed % CPR_BEAT_MS) / CPR_BEAT_MS; // 0.0 -> 1.0
+            const scale = 1.48 - (0.48 * phase); // Shrinks from 1.48x -> 1.00x right on the beat!
+            ring.style.opacity = '1';
+            ring.style.transform = `scale(${scale.toFixed(3)})`;
+
+            const distToBeat = Math.min(phase, 1 - phase) * CPR_BEAT_MS;
+            if (distToBeat <= 115) {
+              ring.classList.add('in-window');
+              if (promptEl) promptEl.innerText = 'กดตอนนี้!';
+            } else {
+              ring.classList.remove('in-window');
+              if (promptEl) promptEl.innerText = 'รอจังหวะ...';
             }
           }
           state.cprRafId = requestAnimationFrame(animateHeartBeat);
@@ -12265,34 +12557,64 @@
         state.cprRafId = requestAnimationFrame(animateHeartBeat);
 
         if (pad) {
+          const triggerMissUI = (msg, cooldownMs = 360) => {
+            state.mobileCprCooldownUntil = performance.now() + cooldownMs;
+            pad.classList.add('miss-flash');
+            setTimeout(() => pad.classList.remove('miss-flash'), 200);
+            if (navigator.vibrate) navigator.vibrate([50, 35, 50]);
+            if (fb) {
+              fb.innerText = msg;
+              fb.style.color = '#E11D48';
+            }
+          };
+
           pad.addEventListener('pointerdown', (e) => {
             e.preventDefault();
-            if (state.cprMobilePhase !== 'ACTIVE') return;
+            if (state.cprMobilePhase !== 'ACTIVE' || !state.cprLocalStartTime) return;
 
-            const now = Date.now();
-            if (state.lastMobileCprSendTime && (now - state.lastMobileCprSendTime) < 250) {
-              return; // 250ms anti-mash cooldown
+            const now = performance.now();
+
+            // 1. Penalty cooldown active (blocks continuous mashing)
+            if (state.mobileCprCooldownUntil && now < state.mobileCprCooldownUntil) {
+              return;
             }
-            state.lastMobileCprSendTime = now;
 
-            const epoch = state.cprEpochStart || now;
-            const elapsed = now - epoch;
+            // 2. Anti-Mash Speed Trap: tapping faster than 380ms (>158 BPM) is mashing!
+            if (state.lastMobileTapMs && (now - state.lastMobileTapMs) < 380) {
+              state.lastMobileTapMs = now;
+              triggerMissUI('✕ อย่ากดรัวมั่ว! แตะตามจังหวะ 110 BPM', 400);
+              return;
+            }
+            state.lastMobileTapMs = now;
+
+            const elapsed = now - state.cprLocalStartTime;
             const nearestBeatIdx = Math.round(elapsed / CPR_BEAT_MS);
             const deltaMs = Math.abs(elapsed - (nearestBeatIdx * CPR_BEAT_MS));
 
-            // Forgiving hit windows on mobile
-            const isPerfect = deltaMs <= 135;
-            const isGood = deltaMs <= 220;
+            if (!state.mobileConsumedBeats) state.mobileConsumedBeats = new Set();
+
+            // 3. Same-Beat Double-Tap Lockout
+            if (state.mobileConsumedBeats.has(nearestBeatIdx)) {
+              triggerMissUI('⚠️ กดซ้ำจังหวะเดิม! รอวงแหวนรอบถัดไป', 300);
+              return;
+            }
+
+            // 4. Genuine Rhythm Evaluation (Perfect <= 70ms, Good <= 120ms, >120ms = MISS!)
+            const isPerfect = deltaMs <= 70;
+            const isGood = deltaMs <= 120;
 
             if (isGood) {
+              state.mobileConsumedBeats.add(nearestBeatIdx);
               state.cprHits++;
               state.score += (isPerfect ? 3 : 1);
               updateHeader();
 
-              if (navigator.vibrate) navigator.vibrate(45);
+              if (navigator.vibrate) navigator.vibrate(35);
 
               if (fb) {
-                fb.innerText = isPerfect ? '✓ PERFECT! ตรงจังหวะ 110 BPM เป๊ะ (+3)' : '✓ GOOD! ปั๊มจังหวะดีมาก (+1)';
+                fb.innerText = isPerfect
+                  ? `✓ PERFECT! ตรงจังหวะเป๊ะ (${Math.round(deltaMs)}ms) +3`
+                  : `✓ GOOD! จังหวะดี (${Math.round(deltaMs)}ms) +1`;
                 fb.style.color = isPerfect ? '#059669' : '#0284C7';
               }
 
@@ -12302,10 +12624,7 @@
                 beatIndex: nearestBeatIdx
               });
             } else {
-              if (fb) {
-                fb.innerText = '✕ เร็วไปนิด / ช้าไปนิด รอจังหวะถัดไปครับ';
-                fb.style.color = '#D97706';
-              }
+              triggerMissUI(`✕ ผิดจังหวะ! (คลาด ${Math.round(deltaMs)}ms) รอวงแหวนเข้าขอบ`, 350);
             }
           });
         }
@@ -12494,12 +12813,27 @@
       // Setup Realtime Sync Handlers on Mobile
       function applyStageSync(d) {
         if (!state.joined || !d) return;
-        const syncKey = `${d.stage}_${d.subStep || ''}_${d.subPhase || ''}`;
-        if (state.lastRenderedKey === syncKey) return; // Idempotent: don't wipe active inputs if already rendered!
+
+        let syncKey = `${d.stage}`;
+        if ([1, 4, 6, 7, 8].includes(d.stage)) {
+          syncKey = `${d.stage}_${d.subStep || ''}`;
+        } else if (d.stage === 3) {
+          syncKey = `3_${d.stage3Completed ? 'DONE' : (d.stage3CanTap ? 'OPEN' : 'LOCKED')}`;
+        } else if (d.stage === 5) {
+          syncKey = d.subPhase === 'CPR' ? `5_CPR_${d.cprState || 'INTRO'}` : `5_AED`;
+        }
+
+        if (state.lastRenderedKey === syncKey) return; // Idempotent: never wipes active inputs!
         state.lastRenderedKey = syncKey;
 
+        if (d.stage !== 3) {
+          state.stage3LocalTaps = 0;
+        }
         state.currentStage = d.stage;
         state.currentSubStep = d.subStep;
+        state.stage3CanTap = Boolean(d.stage3CanTap);
+        state.stage3Completed = Boolean(d.stage3Completed);
+        state.stage3Target = d.stage3Target || 80;
 
         if (d.stage === 0) {
           renderLobbyWaiting();
@@ -12516,10 +12850,10 @@
         } else if (d.stage === 2) {
           renderStage2Shout();
         } else if (d.stage === 3) {
-          renderStage3TapRush();
+          renderStage3TapRush(state.stage3CanTap, state.stage3Target, state.stage3Completed);
         } else if (d.stage === 5) {
           if (d.subPhase === 'CPR') {
-            renderStage5ACpr(d.cprState || 'INTRO', d.cprEpochStart || null);
+            renderStage5ACpr(d.cprState || 'INTRO', d.cprEpochStart || null, d.cprTarget || 60);
           } else {
             renderStage5BAed();
           }
@@ -12538,13 +12872,45 @@
         }
       });
 
-      // V19.0: Realtime CPR Synchronization Listeners
+      // V26.1: Instant Stage 3 Tap Unlock & Completion Listeners
+      RealtimeEngine.on('STAGE3_TAP_UNLOCK', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        applyStageSync({
+          stage: 3,
+          stage3CanTap: true,
+          stage3Completed: false,
+          stage3Target: d.target || state.stage3Target || 80
+        });
+      });
+
+      RealtimeEngine.on('STAGE3_TAP_COMPLETED', (msg) => {
+        if (!state.joined) return;
+        const d = msg.payload || {};
+        applyStageSync({
+          stage: 3,
+          stage3CanTap: true,
+          stage3Completed: true,
+          stage3Target: d.target || state.stage3Target || 80
+        });
+      });
+
+      // V26.1: Realtime CPR Synchronization Listeners (Idempotent with syncKey!)
       RealtimeEngine.on('CPR_START_SYNC', (msg) => {
         if (!state.joined) return;
         const d = msg.payload || {};
         state.cprEpochStart = d.epochStart || Date.now();
-        state.cprMobilePhase = 'ACTIVE';
-        renderStage5ACpr('ACTIVE', state.cprEpochStart);
+        state.cprLocalStartTime = performance.now();
+        state.mobileConsumedBeats = new Set();
+        state.mobileCprCooldownUntil = 0;
+        state.lastMobileTapMs = 0;
+        applyStageSync({
+          stage: 5,
+          subPhase: 'CPR',
+          cprState: 'ACTIVE',
+          cprEpochStart: state.cprEpochStart,
+          cprTarget: d.cprTarget || 60
+        });
       });
 
       RealtimeEngine.on('CPR_COUNTDOWN_STEP', (msg) => {
