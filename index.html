@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>HEARTBEAT RUSH — Clinical Emergency Response & Telemetry Simulator (V6.3 Command Console)</title>
+  <title>HEARTBEAT RUSH — MDBUU Open House 2027 (Clinical Emergency Simulator)</title>
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,6 +92,11 @@
       -webkit-font-smoothing: antialiased;
       text-shadow: none !important;
     }
+    input, textarea, select {
+      user-select: text !important;
+      -webkit-user-select: text !important;
+      -webkit-touch-callout: default !important;
+    }
 
     body {
       background-color: var(--bg-canvas);
@@ -177,12 +182,12 @@
        01. CLINICAL HEADER & HORIZONTAL STEPPER (HEIGHT: 58PX)
        ========================================================================== */
     .monitor-header {
-      height: 52px;
-      padding: 0 12px;
+      height: 56px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       background: #FFFFFF;
       border-bottom: 1.5px solid #E2E8F0;
       box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
@@ -199,8 +204,8 @@
       flex-shrink: 0;
     }
     .brand-icon-box {
-      width: 26px;
-      height: 26px;
+      width: 30px;
+      height: 30px;
       border-radius: 7px;
       background: #090D16;
       display: flex;
@@ -209,16 +214,16 @@
       flex-shrink: 0;
     }
     .brand-title {
-      font-size: 13.5px;
+      font-size: 15.5px;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #090D16;
       white-space: nowrap;
     }
     .brand-badge-mdbuu {
-      font-size: 10.5px;
+      font-size: 11.5px;
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 3px 8px;
       background: #F1F5F9;
       color: #475569;
       border-radius: 5px;
@@ -248,11 +253,11 @@
       display: none;
     }
     .nav-step-pill {
-      font-size: 11px;
+      font-size: 12.5px;
       font-weight: 600;
       color: #64748B;
-      padding: 3px 6px;
-      border-radius: 6px;
+      padding: 5px 9px;
+      border-radius: 7px;
       white-space: nowrap;
       transition: all 0.15s ease;
       background: transparent;
@@ -283,8 +288,8 @@
       color: #090D16;
       font-family: var(--font-num) !important;
       font-weight: 700;
-      font-size: 11px;
-      padding: 3px 7px;
+      font-size: 12.5px;
+      padding: 4px 10px;
       border-radius: 6px;
       display: inline-flex;
       align-items: center;
@@ -296,9 +301,9 @@
       border: 1px solid #E2E8F0;
       color: #334155;
       border-radius: 6px;
-      height: 28px;
-      padding: 0 7px;
-      font-size: 11px;
+      height: 32px;
+      padding: 0 10px;
+      font-size: 12px;
       font-weight: 600;
       display: inline-flex;
       align-items: center;
@@ -310,7 +315,7 @@
       flex-shrink: 0 !important;
     }
     .nav-btn-icon-only {
-      width: 28px;
+      width: 32px;
       padding: 0 !important;
       justify-content: center;
     }
@@ -376,13 +381,13 @@
        02. TOP TELEMETRY BENTO STRIP (PATIENT HUD + ECG + VITALS) (196PX)
        ========================================================================== */
     .telemetry-ribbon-bar {
-      width: 97vw;
+      width: 97.5vw;
       max-width: 2400px;
-      margin: 6px auto 0;
-      height: clamp(148px, 18vh, 178px);
+      margin: 8px auto 0;
+      height: clamp(162px, 18.5vh, 188px);
       display: grid;
-      grid-template-columns: clamp(340px, 27vw, 440px) 1fr clamp(200px, 16vw, 250px);
-      gap: clamp(8px, 1vw, 14px);
+      grid-template-columns: clamp(380px, 29vw, 480px) 1fr clamp(230px, 18vw, 290px);
+      gap: 12px;
       flex-shrink: 0;
       background: transparent;
       border: none;
@@ -399,9 +404,9 @@
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
       border-radius: 16px;
-      padding: 8px 10px;
+      padding: 10px 12px;
       display: flex;
-      gap: 12px;
+      gap: 14px;
       align-items: stretch;
       box-shadow: var(--shadow-card);
       flex-shrink: 0;
@@ -411,7 +416,7 @@
       overflow: hidden;
     }
     .patient-hud-photo-wrap {
-      width: clamp(100px, 13vh, 135px);
+      width: clamp(115px, 14vh, 148px);
       height: 100%;
       max-height: 100%;
       border-radius: 12px;
@@ -474,7 +479,7 @@
       gap: 1px;
     }
     .patient-hud-label {
-      font-size: 9px;
+      font-size: 10.5px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #64748B;
@@ -482,7 +487,7 @@
       line-height: 1.1;
     }
     .patient-hud-stage-name {
-      font-size: 13.5px;
+      font-size: 15.5px;
       font-weight: 800;
       color: #090D16;
       line-height: 1.2;
@@ -491,9 +496,9 @@
       text-overflow: ellipsis;
     }
     .patient-hud-state {
-      font-size: 11px;
+      font-size: 12.5px;
       font-weight: 700;
-      padding: 4px 8px;
+      padding: 5px 10px;
       border-radius: 8px;
       display: block;
       width: 100%;
@@ -509,27 +514,27 @@
     .patient-hud-micro-footer {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 5px;
+      gap: 6px;
       width: 100%;
     }
     .micro-pill {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 6px;
-      padding: 3px 6px;
+      padding: 4px 8px;
       display: flex;
       flex-direction: column;
       gap: 1px;
       min-width: 0;
     }
     .micro-lbl {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 700;
       color: #64748B;
       line-height: 1.1;
     }
     .micro-val {
-      font-size: 10.5px;
+      font-size: 12px;
       font-weight: 800;
       color: #090D16;
       white-space: nowrap;
@@ -539,31 +544,34 @@
     }
     .hud-reaction-badge {
       position: absolute;
-      top: 6px;
+      bottom: 6px;
+      left: 6px;
       right: 6px;
-      background: #E11D48;
+      background: rgba(225, 29, 72, 0.94);
       color: #FFFFFF;
       font-size: 11px;
       font-weight: 800;
       padding: 4px 8px;
-      border-radius: 6px;
+      border-radius: 7px;
+      text-align: center;
       box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
       opacity: 0;
       pointer-events: none;
-      transform: translateY(-4px) scale(0.9);
+      transform: translateY(6px) scale(0.92);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 10;
+      z-index: 12;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .hud-reaction-badge.show {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
     .hud-reaction-badge.recovery {
-      background: #059669;
+      background: rgba(5, 150, 105, 0.94);
       box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
     }
-
     .patient-hud-badge.warn .patient-hud-state {
       background: var(--vital-amber-bg);
       color: var(--vital-amber);
@@ -581,7 +589,7 @@
     }
     @keyframes hudDamagePulse {
       0% { transform: scale(1); border-color: #E2E8F0; }
-      20% { transform: scale(1.04); border-color: #E11D48; box-shadow: 0 0 0 8px rgba(225, 29, 72, 0.25); }
+      20% { transform: scale(1.03); border-color: #E11D48; box-shadow: 0 0 0 6px rgba(225, 29, 72, 0.22); }
       100% { transform: scale(1); border-color: #E11D48; }
     }
     .patient-hud-badge.damage-flash {
@@ -589,7 +597,7 @@
     }
     @keyframes hudRecoveryPulse {
       0% { transform: scale(1); border-color: #E2E8F0; }
-      20% { transform: scale(1.03); border-color: #059669; box-shadow: 0 0 0 8px rgba(5, 150, 105, 0.25); }
+      20% { transform: scale(1.02); border-color: #059669; box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.22); }
       100% { transform: scale(1); border-color: #059669; }
     }
     .patient-hud-badge.recovery-flash {
@@ -621,10 +629,10 @@
       position: absolute;
       top: 10px;
       left: 14px;
-      font-size: 11px;
+      font-size: 12.5px;
       font-weight: 700;
       letter-spacing: 0.04em;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 6px;
       background: rgba(255, 255, 255, 0.94);
       border: 1px solid #E2E8F0;
@@ -685,7 +693,7 @@
       text-align: center;
     }
     .vital-label {
-      font-size: 10.5px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.08em;
       color: #64748B;
@@ -698,7 +706,7 @@
       gap: 4px;
     }
     .vital-number {
-      font-size: calc(clamp(34px, 2.8vw, 52px) * var(--ui-scale));
+      font-size: calc(clamp(40px, 3.2vw, 58px) * var(--ui-scale));
       font-weight: 800;
       line-height: 1;
       letter-spacing: -0.04em;
@@ -714,7 +722,7 @@
       color: #0284C7;
     }
     .vital-unit-txt {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       color: #64748B;
     }
@@ -723,9 +731,9 @@
        03. PRIMARY STAGE VIEWPORT & MAIN CARD
        ========================================================================== */
     .stage-viewport {
-      width: 97vw;
+      width: 97.5vw;
       max-width: 2400px;
-      margin: 6px auto 8px;
+      margin: 8px auto 10px;
       flex: 1;
       min-height: 0;
       max-height: none;
@@ -738,13 +746,13 @@
       border: 1.5px solid #E2E8F0;
       border-radius: 22px;
       box-shadow: var(--shadow-card);
-      padding: 14px 22px;
+      padding: 16px 24px;
       height: 100%;
       min-height: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
       overflow-y: auto;
       box-sizing: border-box;
     }
@@ -754,8 +762,8 @@
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       border-radius: 10px;
-      padding: 5px 14px;
-      margin-bottom: 4px;
+      padding: 7px 16px;
+      margin-bottom: 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -789,7 +797,7 @@
     .v-bar:nth-child(5) { animation-delay: 0.6s; }
 
     .voice-pill-text-clean {
-      font-size: calc(13.5px * var(--ui-scale));
+      font-size: calc(14.5px * var(--ui-scale));
       font-weight: 600;
       color: #334155;
     }
@@ -797,8 +805,8 @@
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 12px;
+      padding: 5px 12px;
+      font-size: 13px;
       font-weight: 600;
       color: #334155;
       cursor: pointer;
@@ -833,22 +841,22 @@
       flex-shrink: 0;
     }
     .voice-bar-title {
-      font-size: 12px;
+      font-size: 13.5px;
       font-weight: 700;
       color: #0284C7;
     }
     .voice-bar-transcript {
-      font-size: 12px;
+      font-size: 13.5px;
       font-weight: 600;
       color: #334155;
     }
 
     /* Stage Titles */
     .stage-headline-clean {
-      font-size: calc(clamp(19px, 1.85vw, 30px) * var(--ui-scale));
+      font-size: calc(clamp(22px, 2.05vw, 32px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
-      line-height: 1.32;
+      line-height: 1.3;
       margin-bottom: 6px;
       letter-spacing: -0.01em;
       text-wrap: balance;
@@ -865,10 +873,10 @@
       touch-action: none !important;
     }
     .stage-sub-clean {
-      font-size: 14.5px;
+      font-size: 16px;
       color: #64748B;
       margin-bottom: 8px;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     /* ==========================================================================
@@ -878,7 +886,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       padding-bottom: 8px;
       border-bottom: 1px solid #F1F5F9;
     }
@@ -890,15 +898,15 @@
     .stage-context-num {
       background: #090D16;
       color: #FFFFFF;
-      font-size: 11px;
+      font-size: 12.5px;
       font-family: var(--font-num) !important;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
       letter-spacing: 0.04em;
     }
     .stage-context-cat {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
       color: #475569;
     }
@@ -906,9 +914,9 @@
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
       color: #64748B;
-      font-size: 11.5px;
+      font-size: 13px;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
     }
     .stage-choices-vertical-stack {
@@ -1042,10 +1050,12 @@
       background: #F8FAFC;
       border: 1.5px solid #E2E8F0;
       border-radius: 14px;
-      padding: 14px 18px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
+      flex: 1;
+      justify-content: space-between;
     }
     .meter-track-container {
       background: #EEF2F6;
@@ -1366,8 +1376,8 @@
     /* V18.0 Stage 9 3-Column Clinical Victory Bento Layout */
     .stage9-victory-bento-grid {
       display: grid;
-      grid-template-columns: clamp(240px, 20vw, 310px) 1fr clamp(250px, 21vw, 320px);
-      gap: 16px;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(360px, 1.05fr) minmax(290px, 0.9fr);
+      gap: 14px;
       flex: 1;
       min-height: 0;
       height: calc(100% - 46px);
@@ -1567,183 +1577,10 @@
       margin-top: 6px;
     }
 
-    /* ==========================================================================
+        /* ==========================================================================
        06. MODALS (LOBBY & SETTINGS)
        ========================================================================== */
-    .lobby-modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(244, 246, 249, 0.96);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 900;
-    }
-    .lobby-modal-backdrop.hidden-modal {
-      display: none !important;
-    }
-    .lobby-card-clean {
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 24px;
-      box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.08);
-      padding: 38px 44px;
-      text-align: center;
-      max-width: 560px;
-      width: 92%;
-      position: relative;
-    }
-    .lobby-status-ticker {
-      background: #F1F5F9;
-      color: #334155;
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      padding: 5px 14px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-    .lobby-status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #059669;
-    }
-    .lobby-title-clean {
-      font-size: 30px;
-      font-weight: 800;
-      color: #090D16;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-      font-family: var(--font-display);
-    }
-    .lobby-sub-clean {
-      font-size: 14.5px;
-      color: #64748B;
-      margin-bottom: 22px;
-      line-height: 1.4;
-    }
-    .lobby-team-selector-box {
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .lobby-random-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #64748B;
-      letter-spacing: 0.05em;
-      display: block;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-    }
-    .slot-machine-viewport {
-      width: 140px;
-      height: 96px;
-      margin: 0 auto 12px;
-      border: 2px solid #090D16;
-      border-radius: 14px;
-      box-shadow: 0 4px 0 #090D16;
-      background: #FFFFFF;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .slot-target-reticle {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 50%;
-      height: 1px;
-      background: #E2E8F0;
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-    .slot-reel-strip {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .slot-reel-item {
-      font-family: var(--font-num) !important;
-      font-size: 54px;
-      font-weight: 800;
-      color: #090D16;
-      line-height: 1;
-      transition: transform 0.15s ease;
-    }
-    .btn-team-random {
-      background: #FFFFFF;
-      color: #090D16;
-      border: 1.5px solid #CBD5E1;
-      box-shadow: 0 2px 0 #CBD5E1;
-      border-radius: 10px;
-      padding: 10px 24px;
-      font-weight: 700;
-      font-size: 14.5px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s ease;
-    }
-    .btn-team-random:hover {
-      border-color: #090D16;
-      box-shadow: 0 3px 0 #090D16;
-      transform: translateY(-1px);
-    }
-    .btn-team-random:active {
-      transform: translateY(1px);
-      box-shadow: 0 1px 0 #090D16;
-    }
-    #txtTeamCallout {
-      margin-top: 10px;
-      font-size: 13.5px;
-      color: #0284C7;
-      font-weight: 600;
-      min-height: 22px;
-    }
-    .btn-start-console-clean {
-      background: #090D16;
-      color: #FFFFFF;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 16px 26px;
-      border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(9, 13, 22, 0.2);
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s var(--ease-out-expo);
-    }
-    .btn-start-console-clean:hover {
-      background: #1E293B;
-      transform: translateY(-1px);
-    }
-    .btn-start-console-clean:active {
-      transform: translateY(1px);
-    }
-    .lobby-hotkey-hints {
-      font-size: 11.5px;
-      color: #94A3B8;
-      margin-top: 14px;
-      font-weight: 500;
-    }
-
-    /* Settings Modal */
+    /* Old Lobby Modal styles unified in Flagship Bento section below */
     .settings-modal-backdrop {
       position: fixed;
       inset: 0;
@@ -1824,30 +1661,48 @@
        ========================================================================== */
     .stage-body-split {
       display: grid;
-      grid-template-columns: 42% 58%;
-      gap: clamp(18px, 2vw, 32px);
+      grid-template-columns: minmax(480px, 47%) 1fr;
+      gap: 24px;
       align-items: stretch;
-      margin-top: 4px;
+      margin-top: 2px;
       flex: 1;
       min-height: 0;
       height: 100%;
     }
     .scene-photo-frame {
       width: 100%;
-      height: 100%;
-      min-height: 280px;
-      max-height: 100%;
-      border-radius: 16px;
+      height: 100% !important;
+      min-height: 260px;
+      aspect-ratio: auto !important;
+      max-height: none !important;
+      align-self: stretch !important;
+      border-radius: 18px;
       overflow: hidden;
-      border: 1.5px solid #E2E8F0;
+      border: 1.5px solid #CBD5E1;
       position: relative;
+      isolation: isolate;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      background: #090D16;
+      box-shadow: 0 10px 28px -6px rgba(15, 23, 42, 0.18);
+    }
+    video.scene-photo-img {
+      position: absolute;
+      inset: 0;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+      display: block !important;
+      pointer-events: none;
       background: #0F172A;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .scene-photo-img,
     .scene-photo-clean {
+      position: absolute;
+      inset: 0;
       width: 100% !important;
       height: 100% !important;
       max-width: 100% !important;
@@ -1860,6 +1715,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 12px;
       height: 100%;
       min-height: 0;
     }
@@ -2185,8 +2041,8 @@
     .stage2-kw-tile {
       background: #F8FAFC;
       border: 1.5px solid #CBD5E1;
-      border-radius: 12px;
-      padding: 12px 14px;
+      border-radius: 14px;
+      padding: 16px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -2198,15 +2054,15 @@
       box-shadow: 0 2px 0 #059669;
     }
     .stage2-kw-tile .kw-text {
-      font-size: calc(15px * var(--ui-scale));
-      font-weight: 700;
+      font-size: calc(17.5px * var(--ui-scale));
+      font-weight: 800;
       color: #334155;
     }
     .stage2-kw-tile.matched .kw-text {
       color: #059669;
     }
     .stage2-kw-tile .kw-status-dot {
-      font-size: 11.5px;
+      font-size: 13px;
       font-weight: 700;
       color: #94A3B8;
     }
@@ -2217,29 +2073,31 @@
     /* Stage 5A CPR Standard Glass & Controls */
     .cpr-standard-glass-card {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
-      right: 12px;
-      background: rgba(9, 13, 22, 0.82);
-      backdrop-filter: blur(10px);
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
-      padding: 10px 14px;
+      border-radius: 10px;
+      padding: 6px 12px;
       color: #FFFFFF;
       z-index: 5;
     }
     .cpr-standard-title {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: #38BDF8;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       text-transform: uppercase;
     }
     .cpr-standard-items {
       display: flex;
-      flex-direction: column;
-      gap: 3px;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 11px;
     }
     .cpr-std-item {
       font-size: 11.5px;
@@ -2276,94 +2134,253 @@
       gap: 4px;
     }
 
-    /* Lobby Flagship Bento Card */
+    /* ==========================================================================
+       LOBBY FLAGSHIP BENTO SHOWCASE (V23 CLEAN SINGLE BLOCK)
+       ========================================================================== */
+    .lobby-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(241, 245, 249, 0.92);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 900;
+    }
+    .lobby-modal-backdrop.hidden-modal {
+      display: none !important;
+    }
+
     .lobby-bento-card {
-      max-width: 1220px;
-      width: 95vw;
+      max-width: 1500px;
+      width: 96vw;
+      height: 90vh;
+      max-height: 860px;
       background: #FFFFFF;
-      border: 1.5px solid #E2E8F0;
+      border: 1.5px solid #CBD5E1;
       border-radius: 28px;
       overflow: hidden;
-      box-shadow: 0 24px 60px -15px rgba(15, 23, 42, 0.12);
+      box-shadow: 0 28px 70px -15px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(255, 255, 255, 0.9) inset;
       display: grid;
       grid-template-columns: 1.25fr 0.95fr;
       box-sizing: border-box;
     }
+
+    /* Left Column: Bold Title, Tall Hero Banner, 4x2 Protocol Grid & Live Roster */
     .lobby-col-left {
-      padding: 38px 44px;
+      padding: 26px 34px;
       background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-      border-right: 1px solid #E2E8F0;
+      border-right: 1.5px solid #E2E8F0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 20px;
+      gap: 13px;
+      min-height: 0;
+      overflow: hidden;
+    }
+    .lobby-status-ticker {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      color: #1E293B;
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+    }
+    .lobby-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #059669;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
     }
     .lobby-title-clean {
-      font-size: 38px;
-      font-weight: 800;
+      font-size: clamp(38px, 3.1vw, 48px);
+      font-weight: 900;
       color: #090D16;
       margin: 8px 0 4px 0;
       letter-spacing: -0.03em;
+      line-height: 1.05;
+      font-family: var(--font-display);
     }
     .lobby-sub-clean {
-      font-size: 17px;
+      font-size: 16.5px;
       font-weight: 600;
-      color: #475569;
-      margin: 0 0 12px 0;
+      color: #334155;
+      margin: 0 0 8px 0;
+      line-height: 1.35;
     }
     .lobby-motto-pill {
-      font-size: 12.5px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #059669;
+      color: #065F46;
       background: #ECFDF5;
-      border: 1px solid #A7F3D0;
-      padding: 4px 12px;
-      border-radius: 8px;
-      display: inline-block;
+      border: 1.5px solid #A7F3D0;
+      padding: 6px 14px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       width: fit-content;
     }
+
+    /* Full-Width Hero Illustration Banner */
+    .lobby-hero-banner {
+      position: relative;
+      width: 100%;
+      flex: 1.2;
+      min-height: 160px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1.5px solid #CBD5E1;
+      background: #0F172A;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
+      isolation: isolate;
+      transform: translateZ(0);
+    }
+    .lobby-hero-banner img,
+    .lobby-hero-banner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+    }
+    .lobby-hero-badge-left {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      background: rgba(9, 13, 22, 0.86);
+      backdrop-filter: blur(6px);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 8px;
+      z-index: 3;
+    }
+    .lobby-hero-badge-right {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(6, 78, 59, 0.92);
+      backdrop-filter: blur(6px);
+      color: #A7F3D0;
+      border: 1px solid rgba(167, 243, 208, 0.4);
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 4px 11px;
+      border-radius: 7px;
+      z-index: 3;
+    }
+
+    /* 4x2 Protocol Grid */
     .lobby-protocol-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin: 12px 0;
+      flex-shrink: 0;
     }
     .lobby-proto-item {
       background: #FFFFFF;
-      border: 1px solid #E2E8F0;
+      border: 1.5px solid #E2E8F0;
       border-radius: 10px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+      min-width: 0;
     }
     .proto-num {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 800;
       background: #090D16;
       color: #FFFFFF;
-      padding: 2px 6px;
-      border-radius: 5px;
+      padding: 3px 6px;
+      border-radius: 6px;
       font-family: var(--font-num) !important;
+      flex-shrink: 0;
     }
     .proto-name {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 700;
-      color: #334155;
+      color: #1E293B;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    /* Live Joined Players Wall */
+    .lobby-roster-box {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 0.7;
+      min-height: 82px;
+    }
+    .lobby-roster-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #090D16;
+    }
+    .lobby-roster-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .player-roster-chip {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #1E293B;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .player-roster-chip.bot-chip {
+      border-color: #BAE6FD;
+      background: #F0F9FF;
+      color: #0284C7;
+    }
+
+    /* Bottom Telemetry Bar */
     .lobby-telemetry-bar {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding-top: 14px;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 10px;
       border-top: 1px solid #E2E8F0;
-      font-size: 11.5px;
-      color: #64748B;
-      font-weight: 600;
+      font-size: 12.5px;
+      color: #475569;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .lobby-tel-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
     }
     .lobby-tel-item {
       display: flex;
@@ -2371,28 +2388,336 @@
       gap: 6px;
     }
     .tel-dot.active {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #059669;
-      box-shadow: 0 0 6px rgba(5, 150, 105, 0.6);
+      box-shadow: 0 0 6px rgba(5, 150, 105, 0.5);
+      display: inline-block;
     }
+
+    /* Right Column: Zero-Gap Balanced Command Console */
     .lobby-col-right {
-      padding: 38px 40px;
+      padding: 26px 34px;
       background: #FFFFFF;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      gap: 18px;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 14px;
+      min-height: 0;
     }
 
-  
+    /* Block 1: Large QR Join Card */
+    .lobby-qr-join-card {
+      width: 100%;
+      flex: 1;
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+      box-sizing: border-box;
+    }
+    .lobby-qr-frame {
+      background: #FFFFFF;
+      padding: 8px;
+      border-radius: 14px;
+      border: 1.5px solid #CBD5E1;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+    }
+    .lobby-qr-frame canvas {
+      width: 126px !important;
+      height: 126px !important;
+      display: block;
+    }
+    .lobby-pin-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .btn-copy-pin-mini {
+      background: #FFFFFF;
+      border: 1.5px solid #CBD5E1;
+      color: #1E293B;
+      border-radius: 8px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-copy-pin-mini:hover {
+      border-color: #0284C7;
+      color: #0284C7;
+      background: #F0F9FF;
+    }
+    .lobby-qr-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn-dev-mobile-sim,
+    .btn-bot-toggle {
+      background: #FFFFFF;
+      border: 1.5px solid #CBD5E1;
+      color: #1E293B;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 12px;
+      font-size: 13px;
+      border-radius: 10px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-dev-mobile-sim {
+      border-color: #7DD3FC;
+      color: #0284C7;
+    }
+    .btn-dev-mobile-sim:hover {
+      background: #F0F9FF;
+      border-color: #0284C7;
+    }
+    .btn-bot-toggle:hover {
+      border-color: #059669;
+      background: #F0FDF4;
+    }
+    .btn-bot-toggle.active {
+      background: #ECFDF5;
+      border-color: #059669;
+      color: #065F46;
+    }
+
+    /* Block 2: Large Split-Flap Team Selector */
+    .lobby-team-selector-box {
+      width: 100%;
+      flex: 1;
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 20px;
+      padding: 18px 22px;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 142px 1fr;
+      gap: 20px;
+      align-items: center;
+      text-align: left;
+      box-sizing: border-box;
+    }
+    .slot-machine-viewport {
+      width: 142px;
+      height: 112px;
+      margin: 0;
+      border: 3px solid #090D16;
+      border-radius: 16px;
+      box-shadow: 0 5px 0 #090D16;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 49%, #EEF2F6 51%, #FFFFFF 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .slot-machine-viewport.winner {
+      border-color: #059669;
+      box-shadow: 0 5px 0 #059669, 0 0 0 4px rgba(5, 150, 105, 0.14);
+    }
+    .slot-target-reticle {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(148, 163, 184, 0.45);
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .slot-reel-strip {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .slot-reel-item {
+      font-family: var(--font-num) !important;
+      font-size: 58px;
+      font-weight: 800;
+      color: #090D16;
+      line-height: 1;
+      transition: transform 0.15s ease;
+    }
+    .slot-reel-item.active-winner {
+      color: #059669;
+    }
+    .lobby-random-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 9px;
+      min-width: 0;
+    }
+    .lobby-random-label {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #475569;
+      letter-spacing: 0.02em;
+      margin: 0;
+    }
+    .btn-team-random {
+      background: #090D16;
+      color: #FFFFFF;
+      border: 1.5px solid #090D16;
+      box-shadow: 0 3px 10px rgba(9, 13, 22, 0.18);
+      border-radius: 11px;
+      padding: 10px 22px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .btn-team-random:hover {
+      background: #0284C7;
+      border-color: #0284C7;
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.30);
+      transform: translateY(-1px);
+    }
+    .btn-team-random:active {
+      transform: translateY(1px);
+    }
+    #txtTeamCallout {
+      margin: 0;
+      font-size: 14.5px;
+      color: #0284C7;
+      font-weight: 800;
+      min-height: 22px;
+      line-height: 1.35;
+    }
+
+    /* Block 2.5: 3-Step Quick Onboarding Strip */
+    .lobby-howto-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+    }
+    .lobby-howto-step {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 13px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+    }
+    .lobby-howto-num {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #0284C7;
+    }
+    .lobby-howto-txt {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1E293B;
+      line-height: 1.32;
+    }
+
+    /* Block 3: Full-Width Primary Launch CTA & Shortcuts */
+    .lobby-cta-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn-start-console-clean {
+      background: linear-gradient(135deg, #090D16 0%, #1E293B 100%);
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: 800;
+      height: 58px;
+      padding: 0 24px;
+      border-radius: 15px;
+      box-shadow: 0 6px 18px rgba(9, 13, 22, 0.22);
+      border: 1px solid #334155;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s var(--ease-out-expo);
+    }
+    .btn-start-console-clean:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      border-color: #10B981;
+      box-shadow: 0 8px 22px rgba(5, 150, 105, 0.3);
+      transform: translateY(-1px);
+    }
+    .lobby-hotkey-hints {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      color: #475569;
+      margin: 0;
+      font-weight: 700;
+    }
+    .hotkey-chip {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      border-radius: 7px;
+      padding: 3px 9px;
+      font-family: var(--font-num) !important;
+      font-size: 12px;
+      color: #1E293B;
+    }
+
     /* ==========================================================================
-       V10.0 ULTIMATE FLAGSHIP • CLINICAL DESIGN & HANDS-FREE FLOW STYLES
+       V23.0 RESTORED CORE CLINICAL, GAME OVER MODAL, INSPECTION & TOAST CSS
        ========================================================================== */
-    /* Clickable Nav Pills */
+    /* 1. Toast Notification Pill */
+    .toast-bubble {
+      background: #090D16;
+      color: #FFFFFF;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    .toast-bubble.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 2. Clickable Nav Pills & Host Remote Hover */
     .nav-step-pill {
       cursor: pointer !important;
       transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -2414,68 +2739,47 @@
       transform: translateY(-1px);
     }
 
-    /* 4-Step Clinical Flow Elements */
-    .inspect-target-pulse {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(15, 23, 42, 0.85);
-      border: 2px solid #38BDF8;
-      border-radius: 999px;
-      padding: 10px 20px;
-      color: #FFFFFF;
-      font-size: 13.5px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
-      animation: inspectPulse 2s infinite ease-in-out;
-      pointer-events: none;
-      z-index: 10;
-    }
-    @keyframes inspectPulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
-      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; box-shadow: 0 0 35px rgba(56, 189, 248, 0.75); }
-    }
-
+    /* 3. Step 1: Inspection Prompt Card (Stages 1, 4, 6, 7, 8 — Fixes blank white column!) */
     .inspect-prompt-card {
-      background: #FFFFFF;
-      border: 2px dashed #0284C7;
-      border-radius: 16px;
-      padding: clamp(20px, 2.4vh, 32px);
-      margin: 8px 0 0;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+      border: 2.5px dashed #0284C7;
+      border-radius: 18px;
+      padding: clamp(22px, 2.8vh, 36px) clamp(24px, 2.4vw, 36px);
+      margin: 4px 0 0;
       display: flex;
       flex-direction: column;
       flex: 1;
       justify-content: center;
-      gap: 16px;
+      gap: 18px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 6px 22px rgba(2, 132, 199, 0.08);
     }
     .inspect-prompt-card:hover {
       background: #F0F9FF;
       border-color: #0369A1;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.16);
+      box-shadow: 0 10px 28px rgba(2, 132, 199, 0.16);
+    }
+    .inspect-prompt-card:active {
+      transform: translateY(1px);
     }
     .inspect-card-badge {
       display: inline-flex;
       align-items: center;
       align-self: flex-start;
       gap: 6px;
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 999px;
       background: #E0F2FE;
+      border: 1px solid #BAE6FD;
       color: #0369A1;
-      font-size: calc(13px * var(--ui-scale));
+      font-size: calc(14px * var(--ui-scale));
       font-weight: 800;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
     .inspect-card-title {
-      font-size: calc(clamp(20px, 1.9vw, 30px) * var(--ui-scale));
+      font-size: calc(clamp(22px, 2vw, 31px) * var(--ui-scale));
       font-weight: 800;
       color: #090D16;
       line-height: 1.38;
@@ -2483,116 +2787,43 @@
     .inspect-voice-callout {
       background: #090D16;
       color: #38BDF8;
-      border-radius: 10px;
-      padding: 14px 20px;
-      font-size: calc(clamp(15px, 1.35vw, 21px) * var(--ui-scale));
+      border: 1px solid #1E293B;
+      border-radius: 12px;
+      padding: 16px 22px;
+      font-size: calc(clamp(15.5px, 1.35vw, 20px) * var(--ui-scale));
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-    .mic-wave-pulse {
-      font-size: 20px;
-      animation: micWaveAnim 1.4s infinite alternate;
-    }
-    @keyframes micWaveAnim {
-      0% { transform: scale(0.9); }
-      100% { transform: scale(1.2); }
-    }
-
-    /* Clinical Findings Overlay Card (Slide up over photo) */
-    .clinical-findings-overlay {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      right: 12px;
-      background: rgba(9, 13, 22, 0.92);
-      border: 1.5px solid rgba(56, 189, 248, 0.4);
-      border-radius: 14px;
-      padding: 14px 16px;
-      backdrop-filter: blur(10px);
-      color: #F8FAFC;
-      z-index: 10;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      animation: slideUpFindings 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes slideUpFindings {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    .findings-header {
-      font-size: 11.5px;
-      font-weight: 800;
-      color: #38BDF8;
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .findings-body {
-      font-size: 13.5px;
-      line-height: 1.45;
-      color: #F1F5F9;
-      font-weight: 500;
-    }
-
-    /* Visual Equipment / Action Cards Grid (V11 Compact Horizontal Tactile Cards) */
-    .equipment-choices-grid {
-      display: grid;
       gap: 12px;
-      margin-top: 8px;
-      flex: 1;
-      min-height: 0;
-      align-content: stretch;
+      box-shadow: 0 4px 14px rgba(9, 13, 22, 0.16);
     }
-    .equipment-choices-grid.grid-4 {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-    }
-    .equipment-choices-grid.grid-3 {
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(3, 1fr);
-    }
-    .equipment-choice-card {
-      background: #F8FAFC;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 14px;
-      padding: 12px 16px;
+
+    /* 4. Clinical Findings Banner, Wrong-Answer Hint & Equipment Icons */
+    .clinical-findings-subline {
       display: flex;
-      flex-direction: row;
       align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 2px 0 #E2E8F0;
-      min-height: 0 !important;
-      height: 100%;
-      overflow: hidden;
-      box-sizing: border-box;
+      gap: 8px;
+      font-size: 15.5px;
+      font-weight: 700;
+      color: #0369A1;
+      background: #F0F9FF;
+      border: 1.5px solid #BAE6FD;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      line-height: 1.4;
     }
-    .equipment-choice-card:hover {
-      border-color: #090D16;
-      background: #FFFFFF;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 0 #090D16;
-    }
-    .equipment-choice-card.selected {
-      border: 2px solid #0284C7 !important;
-      background: #F0F9FF !important;
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25) !important;
-      transform: translateY(-1px);
-    }
-    .equipment-choice-card.correct {
-      border-color: #059669 !important;
-      background: #ECFDF5 !important;
-      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
-    }
-    .equipment-choice-card.wrong {
-      border-color: #DC2626 !important;
-      background: #FEF2F2 !important;
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25) !important;
+    .clinical-wrong-hint-banner {
+      background: #FFF1F2;
+      border: 1px solid #FECDD3;
+      border-left: 4px solid #E11D48;
+      color: #9F1239;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 600;
+      margin-top: 6px;
     }
     .choice-num-badge {
       width: 28px;
@@ -2607,218 +2838,56 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .equipment-choice-card.selected .choice-num-badge {
-      background: #0284C7;
-    }
     .equipment-icon-wrap {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
       background: #FFFFFF;
-      border: 1px solid #E2E8F0;
+      border: 1.5px solid #E2E8F0;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
     .equipment-icon-wrap svg {
-      width: 26px;
-      height: 26px;
-    }
-    .choice-equipment-title {
-      font-size: 14.5px;
-      font-weight: 700;
-      color: #090D16;
-      line-height: 1.35;
-      flex-grow: 1;
+      width: 28px;
+      height: 28px;
     }
 
-    /* Action Purpose & Confirmation Drawer */
-    .equipment-choices-grid.drawer-active {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      grid-template-rows: 1fr !important;
-      gap: 8px;
-      margin-top: 6px;
-      margin-bottom: 4px;
-      flex: none;
-      height: 48px;
-    }
-    .equipment-choices-grid.drawer-active.grid-3 {
-      grid-template-columns: repeat(3, 1fr) !important;
-    }
-    .equipment-choices-grid.drawer-active .equipment-choice-card {
-      padding: 6px 10px;
-      gap: 8px;
-      border-radius: 10px;
-      height: 100%;
-    }
-    .equipment-choices-grid.drawer-active .choice-num-badge {
-      width: 20px;
-      height: 20px;
-      font-size: 11px;
-      border-radius: 6px;
-    }
-    .equipment-choices-grid.drawer-active .equipment-icon-wrap {
-      width: 26px;
-      height: 26px;
-      border-radius: 6px;
-    }
-    .equipment-choices-grid.drawer-active .equipment-icon-wrap svg {
-      width: 16px;
-      height: 16px;
-    }
-    .equipment-choices-grid.drawer-active .choice-equipment-title {
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .action-purpose-drawer {
-      background: #F8FAFC;
-      border: 1.5px solid #0284C7;
-      border-radius: 12px;
-      padding: 10px 16px;
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      color: #090D16;
-      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12);
-      animation: drawerSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .drawer-header {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #334155;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .drawer-header strong {
-      color: #0284C7;
-      font-weight: 800;
-    }
-    .drawer-purpose-body {
-      background: #FFFFFF;
-      border-left: 3px solid #0284C7;
-      border-radius: 0 8px 8px 0;
-      padding: 8px 12px;
-      font-size: 13.5px;
-      color: #090D16;
-      line-height: 1.4;
-    }
-    .drawer-action-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 2px;
-    }
-    .btn-confirm-voice {
-      flex: 2;
-      background: #059669;
-      color: #FFFFFF;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
-      transition: all 0.15s ease;
-    }
-    .btn-confirm-voice:hover {
-      background: #10B981;
-    }
-    .btn-cancel-voice {
-      flex: 1;
-      background: #FFFFFF;
-      color: #475569;
-      border: 1px solid #CBD5E1;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
-    }
-    .btn-cancel-voice:hover {
-      background: #F1F5F9;
-      color: #090D16;
-    }
-
-    .clinical-findings-subline {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13.5px;
-      color: #0284C7;
-      background: #F0F9FF;
-      border: 1px solid #BAE6FD;
-      border-radius: 8px;
-      padding: 7px 12px;
-      margin-top: 4px;
-      margin-bottom: 6px;
-      line-height: 1.4;
-    }
-    .clinical-findings-subline strong {
-      color: #0369A1;
-      font-weight: 700;
-    }
-    .clinical-wrong-hint-banner {
-      background: #FFF1F2;
-      border: 1px solid #FECDD3;
-      border-left: 4px solid #E11D48;
-      color: #9F1239;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-size: 13.5px;
-      font-weight: 600;
-      margin-top: 6px;
-    }
-
-    /* Stage 2 Shout Energy Sustain Bar */
+    /* 5. Stage 2 Sustained Shout Energy Bar */
     .stage2-energy-wrap {
-      margin-top: 8px;
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 5px;
     }
     .stage2-energy-track {
-      height: 12px;
+      height: 14px;
       background: #E2E8F0;
-      border-radius: 6px;
+      border-radius: 7px;
       overflow: hidden;
       position: relative;
+      border: 1px solid #CBD5E1;
     }
     .stage2-energy-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #F59E0B, #10B981);
       transition: width 0.08s linear;
-      border-radius: 5px;
+      border-radius: 6px;
     }
 
-    /* CODE BLUE // GAME OVER MODAL (SWISS MEDICAL CLINICAL ALERT) */
+    /* 6. CRITICAL FIX: CODE BLUE // GAME OVER MODAL (Fixes Giant Face Covering Stage 1!) */
     .game-over-modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(15, 23, 42, 0.70);
       backdrop-filter: blur(8px);
       z-index: 9999;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      animation: fadeIn 0.25s ease;
     }
     .game-over-card {
       background: #FFFFFF;
@@ -2828,7 +2897,7 @@
       max-width: 680px;
       width: 100%;
       padding: 28px 32px;
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
       display: grid;
       grid-template-columns: 180px 1fr;
       gap: 24px;
@@ -2845,64 +2914,216 @@
       display: block;
     }
 
-    /* Stage 9 Summary Grid & Leaderboard */
+    /* ==========================================================================
+       STAGE 9 SUMMARY & SCOREBOARD POLISH (V22 HIGH-DENSITY EXECUTIVE BENTO)
+       ========================================================================== */
     .summary-v10-grid {
       display: grid;
-      grid-template-columns: 230px 1fr 240px;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.3fr) minmax(0, 0.95fr);
       gap: 16px;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .summary-bento-col {
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 0;
+      min-width: 0;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+    }
+
+    /* Left Column: Expands Scene Image to Eliminate White Voids */
+    .summary-scene-wrap {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 165px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid #CBD5E1;
+      background: #0F172A;
+    }
+    .summary-scene-wrap img,
+    .summary-scene-wrap video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .summary-rosc-box {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .summary-vitals-trio {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .summary-vital-mini {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 10px;
+      padding: 8px 8px;
+      text-align: center;
+    }
+    .summary-motto-banner {
+      background: #ECFDF5;
+      border: 1.5px solid #A7F3D0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
       align-items: center;
-      margin-top: 0;
+      justify-content: space-between;
+      font-size: 13.5px;
+      color: #065F46;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Center Column: Large 94px Radial Gauge + Bold 8-Stage Pills */
+    .summary-perf-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px 16px;
+      flex-shrink: 0;
+    }
+    .radial-gauge-wrapper-v18 {
+      position: relative;
+      width: 94px;
+      height: 94px;
+      flex-shrink: 0;
+    }
+    .radial-gauge-svg-v18 {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    .radial-gauge-center-v18 {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      pointer-events: none;
+    }
+    .rank-letter-v18 {
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .rank-points-v18 {
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+      line-height: 1;
+    }
+
+    .stage-scores-grid-v18 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 8px;
       flex: 1;
       min-height: 0;
     }
-    .stage-scores-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .stage-score-card {
+    .stage-score-pill-v18 {
       background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 10px;
-      padding: 6px 8px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 0 14px;
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 0;
     }
-    .stage-score-card.perfect {
-      border-color: #A7F3D0;
+    .stage-score-pill-v18.perfect {
       background: #F0FDF4;
+      border-color: #A7F3D0;
     }
-    .stage-score-card.penalty {
-      border-color: #FECACA;
-      background: #FEF2F2;
+    .stage-score-pill-v18.penalty {
+      background: #FFF1F2;
+      border-color: #FECDD3;
     }
-    .stage-score-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748B;
+    .stage-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
     }
-    .stage-score-val {
-      font-size: 15px;
+    .stage-pill-num {
+      font-size: 12px;
       font-weight: 800;
-      color: #090D16;
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: #090D16;
+      color: #FFFFFF;
+      flex-shrink: 0;
     }
-    .stage-score-card.perfect .stage-score-val { color: #059669; }
-    .stage-score-card.penalty .stage-score-val { color: #DC2626; }
+    .stage-score-pill-v18.perfect .stage-pill-num {
+      background: #059669;
+    }
+    .stage-score-pill-v18.penalty .stage-pill-num {
+      background: #E11D48;
+    }
+    .stage-pill-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #090D16;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stage-pill-score {
+      font-size: 15.5px;
+      font-weight: 900;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .stage-score-pill-v18.perfect .stage-pill-score {
+      color: #059669;
+    }
+    .stage-score-pill-v18.penalty .stage-pill-score {
+      color: #E11D48;
+    }
 
-    /* Hall of Fame Leaderboard Table */
+    /* Right Column: Leaderboard + Expanded Centered QR Card + Bold CTAs */
     .leaderboard-box {
+      padding: 12px 14px;
+      gap: 6px;
+      flex-shrink: 0;
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
       border-radius: 14px;
-      padding: 8px 12px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
     }
     .leaderboard-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 800;
       color: #090D16;
       display: flex;
@@ -2912,17 +3133,17 @@
     .leaderboard-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 11.5px;
+      font-size: 13.5px;
     }
     .leaderboard-table th {
       text-align: left;
       color: #64748B;
       font-weight: 700;
-      padding: 3px 6px;
+      padding: 5px 8px;
       border-bottom: 1px solid #E2E8F0;
     }
     .leaderboard-table td {
-      padding: 3px 6px;
+      padding: 5px 8px;
       border-bottom: 1px solid #F1F5F9;
       color: #090D16;
       font-weight: 600;
@@ -2935,38 +3156,44 @@
       color: #0284C7;
     }
 
-    /* Scannable QR Code Box */
-    .qr-certificate-box {
-      background: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 14px;
-      padding: 16px;
+    .qr-box-v18 {
+      background: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 16px;
+      padding: 14px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       text-align: center;
       gap: 10px;
+      flex: 1;
+      min-height: 0;
     }
-    .qr-canvas-frame {
+    .qr-frame-v18 {
       background: #FFFFFF;
       padding: 8px;
       border-radius: 12px;
-      border: 1.5px solid #E2E8F0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      border: 1.5px solid #CBD5E1;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
     }
-    #qrCanvas {
+    .qr-frame-v18 canvas {
+      width: 128px !important;
+      height: 128px !important;
       display: block;
-      width: 140px;
-      height: 140px;
     }
     .btn-view-cert {
       width: 100%;
       background: #0284C7;
       color: #FFFFFF;
       border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 12.5px;
+      border-radius: 11px;
+      padding: 0 16px;
+      font-size: 14.5px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -3037,104 +3264,7 @@
     /* ==========================================================================
        V14.0 CO-OP KAHOOT MULTIPLAYER & AUDIENCE CONTROLLER STYLES
        ========================================================================== */
-    /* Lobby 3-Zone Additions */
-    .lobby-roster-box {
-      background: #F8FAFC;
-      border: 1px solid #E2E8F0;
-      border-radius: 14px;
-      padding: 12px 14px;
-      margin-top: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .lobby-roster-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11.5px;
-      font-weight: 800;
-      color: #090D16;
-    }
-    .lobby-roster-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      max-height: 95px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-    .player-roster-chip {
-      background: #FFFFFF;
-      border: 1px solid #CBD5E1;
-      border-radius: 999px;
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-      animation: chipPopIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-    }
-    @keyframes chipPopIn {
-      0% { transform: scale(0.7); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .player-roster-chip.bot-chip {
-      border-color: #BAE6FD;
-      background: #F0F9FF;
-      color: #0284C7;
-    }
-    .lobby-qr-join-card {
-      background: #FFFFFF;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 18px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 4px 16px rgba(15,23,42,0.04);
-    }
-    .btn-dev-mobile-sim {
-      background: #F1F5F9;
-      border: 1px solid #CBD5E1;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #0284C7;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-    .btn-dev-mobile-sim:hover {
-      background: #E2E8F0;
-      color: #0369A1;
-    }
-    .btn-bot-toggle {
-      background: #ECFDF5;
-      border: 1px solid #A7F3D0;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: #059669;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.15s;
-    }
-    .btn-bot-toggle.active {
-      background: #059669;
-      color: #FFFFFF;
-      border-color: #047857;
-    }
-
+    /* Lobby 3-Zone Additions unified into Lobby Flagship Bento Showcase */
     /* Live Vote Status Board (Choice Step 2: AUDIENCE_VOTING) */
     .vote-status-board-card {
       background: #FFFFFF;
@@ -3800,18 +3930,20 @@
   </main>
 
     <!-- Lobby Intro Modal (Flagship 3-Zone Command Showcase V14) -->
+    <!-- Lobby Intro Modal (Flagship 3-Zone Command Showcase V18) -->
+    <!-- Lobby Intro Modal (Flagship 3-Zone Command Showcase V21) -->
   <div id="modalLobby" class="lobby-modal-backdrop">
     <div class="lobby-bento-card">
-      <!-- Left Column: Mission Overview & Live Connected Co-Responders Roster -->
+      <!-- Left Column: Mission Overview, Resilient Hero Scene & Live Connected Co-Responders Roster -->
       <div class="lobby-col-left">
         <div>
           <div class="lobby-status-ticker font-technical">
             <span class="lobby-status-dot"></span>
             MDBUU OPEN HOUSE 2027 • คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
           </div>
-          <h1 class="lobby-title-clean">
-            HEARTBEAT RUSH
-          </h1>
+          <div class="lobby-title-row">
+            <h1 class="lobby-title-clean">HEARTBEAT RUSH</h1>
+          </div>
           <p class="lobby-sub-clean">
             ระบบจำลองสถานการณ์ฉุกเฉินและการปฐมพยาบาลเบื้องต้น (Co-op Multiplayer)
           </p>
@@ -3820,16 +3952,30 @@
           </div>
         </div>
 
-        <!-- 2x4 Mini Protocol Preview Grid (Stages 01-08) -->
+        <!-- Full-Width Hero Scene Banner (User Animation Clip) -->
+        <div class="lobby-hero-banner" id="lobbyHeroBannerBox">
+          <video id="lobbyHeroVideo" class="lobby-hero-video" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s0.jpg">
+            <source src="videos/scenes/scene_s0.mp4" type="video/mp4">
+            <source src="videos/scenes/scene_s00.mp4" type="video/mp4">
+          </video>
+          <div class="lobby-hero-badge-left font-technical">
+            EMS DISPATCH • ศูนย์สั่งการกู้ชีพฉุกเฉิน ม.บูรพา
+          </div>
+          <div class="lobby-hero-badge-right font-technical">
+            ● TELEMETRY &amp; CO-OP READY
+          </div>
+        </div>
+
+        <!-- 4x2 Mini Protocol Preview Grid (Stages 01-08) -->
         <div class="lobby-protocol-grid font-technical">
-          <div class="lobby-proto-item"><span class="proto-num">01</span><span class="proto-name">ประเมินความปลอดภัย</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">02</span><span class="proto-name">ตะโกนขอความช่วยเหลือ</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">03</span><span class="proto-name">แจ้งสายด่วน 1669</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">04</span><span class="proto-name">ประเมินการหายใจเฮือก</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">05</span><span class="proto-name">กดหน้าอก CPR & AED</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">06</span><span class="proto-name">ล้างแผลด้วย NSS</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">07</span><span class="proto-name">ห้ามเลือด Direct Pressure</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">08</span><span class="proto-name">ดามกระดูกและคล้องแขน</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">01</span><span class="proto-name">ประเมินปลอดภัย</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">02</span><span class="proto-name">เรียกช่วย</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">03</span><span class="proto-name">โทร 1669</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">04</span><span class="proto-name">หายใจเฮือก</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">05</span><span class="proto-name">CPR &amp; AED</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">06</span><span class="proto-name">ล้างแผล</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">07</span><span class="proto-name">ห้ามเลือด</span></div>
+          <div class="lobby-proto-item"><span class="proto-num">08</span><span class="proto-name">ดามกระดูก</span></div>
         </div>
 
         <!-- Live Joined Players Wall (Kahoot-style Roster) -->
@@ -3839,46 +3985,54 @@
             <span style="font-size:10.5px; color:#64748B;">เรียลไทม์ผ่านมือถือ</span>
           </div>
           <div id="lobbyPlayersRoster" class="lobby-roster-chips">
-            <span style="font-size:11px; color:#94A3B8; padding:4px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>
+            <span style="font-size:11px; color:#94A3B8; padding:2px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>
           </div>
         </div>
 
-        <!-- Bottom System Telemetry Bar -->
+        <!-- Bottom System Telemetry Bar (with live MQTT IDs) -->
         <div class="lobby-telemetry-bar font-technical">
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> ไมค์: พร้อม</div>
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG: 60 FPS</div>
-          <div class="lobby-tel-item" id="lobbyMqttStatusItem"><span class="tel-dot active" id="lobbyMqttDot" style="background:#059669;"></span> <span id="lobbyMqttStatusTxt">MQTT: ออนไลน์</span></div>
-          <div class="lobby-tel-item"><span class="tel-dot active"></span> ROOM PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#0284C7;">----</strong></div>
+          <div class="lobby-tel-group">
+            <div class="lobby-tel-item"><span class="tel-dot active"></span> ไมค์: พร้อม</div>
+            <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG: 60 FPS</div>
+            <div class="lobby-tel-item"><span id="lobbyMqttDot" class="tel-dot active"></span> <span id="lobbyMqttStatusTxt" style="color:#059669;">MQTT: ออนไลน์</span></div>
+            <div class="lobby-tel-item">PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#0284C7;">----</strong></div>
+          </div>
+          <button onclick="AIVoiceCoach.testAuditionVoice()" class="nav-btn font-technical" style="height:26px; padding:0 9px; font-size:11px; background:#F0F9FF; color:#0284C7; border-color:#BAE6FD;" title="ทดสอบเสียงลำโพงก่อนเริ่ม">
+            🔊 ทดสอบเสียง
+          </button>
         </div>
       </div>
 
-      <!-- Right Column: Scannable QR Join Card + Team Randomizer + Bot Simulator -->
+      <!-- Right Column: Full-Width Aligned Command Stack -->
       <div class="lobby-col-right">
-        <!-- Scannable QR Code Join Card -->
+        <!-- Block 1: Scannable QR Code Join Card -->
         <div class="lobby-qr-join-card font-technical">
-          <canvas id="lobbyQrCanvas" width="130" height="130" style="width:110px; height:110px; border-radius:8px; border:1px solid #E2E8F0;"></canvas>
-          <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
-            <div style="font-size:11px; font-weight:700; color:#64748B;">สแกนเพื่อร่วมเล่นด้วยมือถือ:</div>
-            <div style="font-size:22px; font-weight:800; color:#0284C7; letter-spacing:0.02em;">
+          <div class="lobby-qr-frame">
+            <canvas id="lobbyQrCanvas" width="130" height="130"></canvas>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; flex:1; min-width:0;">
+            <div class="lobby-pin-header-row">
+              <span style="font-size:13px; font-weight:700; color:#475569;">สแกนเพื่อร่วมเล่นด้วยมือถือ:</span>
+              <button onclick="GameStateManager.copyJoinLink()" class="btn-copy-pin-mini font-technical" title="คัดลอกลิงก์เข้าห้องสำหรับมือถือ">
+                📋 คัดลอกลิงก์
+              </button>
+            </div>
+            <div style="font-size:34px; font-weight:900; color:#0284C7; letter-spacing:0.02em; line-height:1.05;">
               PIN: #<span id="txtLobbyPin" class="num-readout">----</span>
             </div>
-            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:4px;">
+            <div class="lobby-qr-actions">
               <button onclick="GameStateManager.openMobileSimulator()" class="btn-dev-mobile-sim font-technical" title="เปิดหน้าต่างจำลองมือถือขนาด 390x780 ข้างๆ จอนี้">
                 📱 เปิดจอมือถือจำลอง
               </button>
-              <button id="btnLobbyBotToggle" onclick="GameStateManager.toggleBotSimulator()" class="btn-bot-toggle font-technical" title="จำลองผู้เล่น 25 หรือ 100 คนร่วมโหวตและช่วย CPR">
+              <button id="btnLobbyBotToggle" onclick="GameStateManager.toggleBotSimulator()" class="btn-bot-toggle font-technical" title="คลิกสลับโหมดบอท: ปิด / 25 คน / 100 คน">
                 🤖 บอท: <span id="txtBotStatus">ปิด</span>
               </button>
             </div>
           </div>
         </div>
 
+        <!-- Block 2: Horizontal Split-Flap Team Selector -->
         <div class="lobby-team-selector-box">
-          <span class="lobby-random-label font-technical">
-            สุ่มทีมตัวแทนหน้าห้อง (กลุ่ม 01–10)
-          </span>
-
-          <!-- Mechanical Split-Flap Display -->
           <div id="slotViewport" class="slot-machine-viewport">
             <div class="slot-target-reticle"></div>
             <div id="slotReelStrip" class="slot-reel-strip font-technical">
@@ -3886,20 +4040,47 @@
             </div>
           </div>
 
-          <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/></svg>
-            สุ่มตัวแทน!
-          </button>
-          <div id="txtTeamCallout" class="font-technical">กลุ่มตัวแทน: กลุ่มที่ 03</div>
+          <div class="lobby-random-controls">
+            <span class="lobby-random-label font-technical">
+              สุ่มทีมตัวแทนหน้าห้อง (กลุ่ม 01–10)
+            </span>
+            <button id="btnRandomTeam" onclick="GameStateManager.pickRandomTeam()" class="btn-team-random font-technical">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/></svg>
+              สุ่มตัวแทน!
+            </button>
+            <div id="txtTeamCallout" class="font-technical">กลุ่มตัวแทน: กลุ่มที่ 03</div>
+          </div>
         </div>
 
-        <button id="btnStartConsole" class="btn-start-console-clean font-technical">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          เริ่มภารกิจกู้ชีพ / เปิดระบบมอนิเตอร์
-        </button>
+        <!-- Block 2.5: 3-Step Quick Onboarding Strip -->
+        <div class="lobby-howto-strip font-technical">
+          <div class="lobby-howto-step">
+            <span class="lobby-howto-num">STEP 01</span>
+            <span class="lobby-howto-txt">สแกน QR เข้าห้องด้วยมือถือ</span>
+          </div>
+          <div class="lobby-howto-step">
+            <span class="lobby-howto-num">STEP 02</span>
+            <span class="lobby-howto-txt">สุ่มตัวแทนหน้าห้อง 1 กลุ่ม</span>
+          </div>
+          <div class="lobby-howto-step">
+            <span class="lobby-howto-num">STEP 03</span>
+            <span class="lobby-howto-txt">ช่วยกันโหวต &amp; ปั๊ม CPR 110 BPM</span>
+          </div>
+        </div>
 
-        <div class="lobby-hotkey-hints font-technical">
-          [F] เต็มจอ &nbsp;&bull;&nbsp; [M] ปิดเสียง &nbsp;&bull;&nbsp; [R] รีเซ็ต &nbsp;&bull;&nbsp; [Shift+Right] ข้ามด่าน
+        <!-- Block 3: Full-Width Launch Mission Button & Hotkey Chips -->
+        <div class="lobby-cta-stack">
+          <button id="btnStartConsole" class="btn-start-console-clean font-technical">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            เริ่มภารกิจกู้ชีพ / เปิดระบบมอนิเตอร์
+          </button>
+
+          <div class="lobby-hotkey-hints font-technical">
+            <span class="hotkey-chip">[F] เต็มจอ</span>
+            <span class="hotkey-chip">[M] ปิดเสียง</span>
+            <span class="hotkey-chip">[R] รีเซ็ต</span>
+            <span class="hotkey-chip">[Shift+Right] ข้ามด่าน</span>
+          </div>
         </div>
       </div>
     </div>
@@ -3946,9 +4127,12 @@
           ขณะนี้เปิดโหมด: <strong>เสียง AI สังเคราะห์ (Web Speech TTS)</strong> พร้อมใช้งานขึ้น GitHub ได้ทันทีโดยไม่ต้องรอไฟล์อัดเสียงครับ
         </span>
       </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #E2E8F0; padding-top:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; border-top:1px solid #E2E8F0; padding-top:12px;">
         <button id="btnVolumeBoost" onclick="SoundEngine.toggleVolumeBoost()" class="nav-btn font-technical">
           เสียงปกติ (100%)
+        </button>
+        <button onclick="GameStateManager.clearLeaderboardData()" class="nav-btn font-technical" style="color:#E11D48; border-color:#FECDD3; background:#FFF1F2;">
+          🗑️ ล้างตารางคะแนน TOP 3
         </button>
         <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn">
           รีเซ็ตเสียงเต็มระบบ
@@ -4510,7 +4694,7 @@
         this.isVoiceModeEnabled = !this.isVoiceModeEnabled;
         const btn = document.getElementById('btnVoiceModeToggle');
         if (btn) {
-          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> ${this.isVoiceModeEnabled ? 'AI: เปิด' : 'AI: ปิด'}`;
+          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> <span class="btn-txt">${this.isVoiceModeEnabled ? 'AI: เปิด' : 'AI: ปิด'}</span>`;
           btn.style.color = this.isVoiceModeEnabled ? '#334155' : 'var(--amber-warn)';
         }
         if (!this.isVoiceModeEnabled && this.synth) {
@@ -5545,7 +5729,8 @@
           this.speed = 2.0;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical healthy';
-            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ (Lead II) • จังหวะปกติ 76 BPM</span>';
+            const curHr = (document.getElementById('txtHeartRate')?.innerText || '').trim() || '76';
+            badge.innerHTML = `<span class="ecg-status-dot"></span><span id="ecgStatusText">คลื่นไฟฟ้าหัวใจ (Lead II) • จังหวะปกติ ${curHr} BPM</span>`;
           }
         } else if (mode === 'BRADYCARDIA') {
           this.color = '#E11D48';
@@ -6415,6 +6600,7 @@
         this.activeHintText = null; // 'PROMPT_INSPECT' | 'AUDIENCE_VOTING' | 'HERO_DECISION'
         this.selectedChoiceIndex = null;
         this.isGameOver = false;
+        this.isTreatmentVideoPlaying = false;
 
         // Dual-Screen Host Remote Channel
         this.hostChannel = null;
@@ -6444,6 +6630,7 @@
         window.ECGEngine = new ECGCanvasEngine('ecgCanvas');
         globalBgEcg = new BackgroundECGEngine('bgEcgCanvas');
         globalConfetti = new ConfettiEngine('confettiCanvas');
+
         this.bindEvents();
 
         // 2.5-Second Continuous Host Stage Sync Heartbeat (Recovers reconnecting/lagging phones)
@@ -6517,7 +6704,7 @@
 
         if (qrCanvas) {
           const joinUrl = `${window.location.origin}${window.location.pathname}?play=1&pin=${this.sessionPin}`;
-          renderQrToCanvas(qrCanvas, joinUrl, 130);
+          renderQrToCanvas(qrCanvas, joinUrl, 140);
         }
       }
 
@@ -6526,12 +6713,25 @@
         window.open(joinUrl, 'MobileCoResponder', 'width=390,height=780,resizable=yes,scrollbars=yes');
       }
 
+      copyJoinLink() {
+        const joinUrl = `${window.location.origin}${window.location.pathname}?play=1&pin=${this.sessionPin}`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(joinUrl).then(() => {
+            showToast(`📋 คัดลอกลิงก์เข้าห้อง #${this.sessionPin} เรียบร้อยแล้ว!`);
+          }).catch(() => {
+            showToast(`PIN ห้อง: #${this.sessionPin}`);
+          });
+        } else {
+          showToast(`PIN ห้อง: #${this.sessionPin}`);
+        }
+      }
+
       toggleBotSimulator() {
-        const isEnabled = BotSimulator.toggle();
+        const mode = BotSimulator.toggle(); // returns '25', '100', or 'off'
+        const isActive = mode !== 'off';
         const btn = document.getElementById('btnLobbyBotToggle');
-        const txt = document.getElementById('txtBotStatus');
-        if (btn) btn.classList.toggle('active', isEnabled);
-        if (txt) txt.innerText = isEnabled ? 'เปิด (25 คน)' : 'ปิด';
+        if (btn) btn.classList.toggle('active', isActive);
+        BotSimulator.updateButtonLabel();
       }
 
       registerPlayer(id, name, group, isBot = false) {
@@ -6818,6 +7018,12 @@
           else elHr.classList.remove('critical');
         }
         if (elSp) elSp.innerText = spo2;
+        if (window.ECGEngine && window.ECGEngine.mode === 'SINUS') {
+          const ecgBadge = document.getElementById('ecgStatusBadge');
+          if (ecgBadge) {
+            ecgBadge.innerHTML = `<span class="ecg-status-dot"></span><span id="ecgStatusText">คลื่นไฟฟ้าหัวใจ (Lead II) • จังหวะปกติ ${hr} BPM</span>`;
+          }
+        }
       }
 
       shakeScreen() {
@@ -6837,8 +7043,14 @@
         this.currentStage = newStage;
         this.activeHintText = null;
         this.isStageChoiceLocked = false;
+        this.isTreatmentVideoPlaying = false;
+        this.isGameOver = false;
+        const goModal = document.getElementById('modalGameOver');
+        if (goModal) goModal.style.display = 'none';
         speechDebouncer.clear();
         MicSensor.stopSpeechRecognition();
+
+
 
         // Bulletproof Multiplayer Stage Sync across all stages 0-9
         this.broadcastMultiplayerStageSync();
@@ -6995,6 +7207,10 @@
           this.startClinicalVoiceTracking(8);
         } else if (newStage === 9) {
           window.ECGEngine.setMode('SINUS');
+          const ecgBadge = document.querySelector('.ecg-status-badge');
+          if (ecgBadge) {
+            ecgBadge.innerHTML = '<span class="ecg-status-dot"></span><span id="ecgStatusText">คลื่นไฟฟ้าหัวใจ (Lead II) • จังหวะปกติ 84 BPM</span>';
+          }
           this.updateVitals(84, 99);
           SoundEngine.stopPulseScheduler();
           this.updatePatientHud('images/patient/patient_s9_saved.png', 'ด่านที่ 9 • MISSION SAVED (STABLE)', 'healthy');
@@ -7019,6 +7235,67 @@
       // =========================================================================
       // V10.0 CLINICAL 4-STEP INVESTIGATION & EQUIPMENT FLOW METHODS
       // =========================================================================
+      getStageVideoSourcesHtml(stageNum, useBefore = false) {
+        const padded = String(stageNum).padStart(2, '0');
+        if (useBefore) {
+          const poster = `videos/scenes/posters/poster_s${padded}_before.jpg`;
+          return `
+            <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="${poster}" style="transition: opacity 0.25s ease;">
+              <source src="videos/scenes/scene_s${padded}_before.mp4" type="video/mp4">
+              <source src="videos/scenes/scene_s${stageNum}_before.mp4" type="video/mp4">
+            </video>
+          `;
+        }
+        const poster = `videos/scenes/posters/poster_s${padded}.jpg`;
+        return `
+          <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="${poster}" style="transition: opacity 0.25s ease;">
+            <source src="videos/scenes/scene_s${stageNum}.mp4" type="video/mp4">
+            <source src="videos/scenes/scene_s${padded}.mp4" type="video/mp4">
+          </video>
+        `;
+      }
+
+      switchStageVideoToTreatment(stageNum) {
+        if (![6, 7, 8].includes(stageNum)) return;
+        this.isTreatmentVideoPlaying = true;
+
+        const padded = String(stageNum).padStart(2, '0');
+        const poster = `videos/scenes/posters/poster_s${padded}.jpg`;
+        const video = document.getElementById('stageSceneVideo');
+
+        if (video) {
+          video.style.opacity = '0.25';
+          video.style.display = 'block';
+
+          video.innerHTML = `
+            <source src="videos/scenes/scene_s${stageNum}.mp4" type="video/mp4">
+            <source src="videos/scenes/scene_s${padded}.mp4" type="video/mp4">
+          `;
+          video.poster = poster;
+          video.muted = true;
+          video.playsInline = true;
+          video.loop = true;
+          video.load();
+          video.play().catch(() => {});
+
+          setTimeout(() => {
+            if (video) video.style.opacity = '1';
+          }, 120);
+        }
+
+        // Update AR Pathology Pin to Emerald Treatment Active State
+        const treatmentLabels = {
+          6: 'กำลังทำการรักษา: ชะล้างแผลด้วยน้ำเกลือ 0.9% NSS',
+          7: 'กำลังทำการรักษา: ใช้ผ้าก๊อซกดห้ามเลือดโดยตรง (Direct Pressure)',
+          8: 'กำลังทำการรักษา: ดามแขนครอบคลุมข้อและคล้องผ้าสามเหลี่ยม 90°'
+        };
+        const pin = document.getElementById('stageArPathologyPin');
+        if (pin && treatmentLabels[stageNum]) {
+          pin.style.borderLeftColor = '#10B981';
+          pin.style.background = 'rgba(6, 78, 59, 0.92)';
+          pin.innerHTML = `<span class="patient-cam-dot" style="background:#34D399;"></span> ✓ ${treatmentLabels[stageNum]}`;
+        }
+      }
       renderClinicalStage(stageNum) {
         const card = document.getElementById('stageMainCard');
         if (!card) return;
@@ -7028,6 +7305,8 @@
         const isInspect = this.decisionSubStep === 'PROMPT_INSPECT';
         const isVoting = this.decisionSubStep === 'AUDIENCE_VOTING';
         const isHeroDecision = this.decisionSubStep === 'HERO_DECISION';
+        const isDirectPressure = this.decisionSubStep === 'DIRECT_PRESSURE';
+        const useBeforeVideo = [6, 7, 8].includes(stageNum) && !this.isTreatmentVideoPlaying && !isDirectPressure;
 
         const totalPlayers = Math.max(1, Object.keys(this.connectedPlayers).length);
         const votesCast = Object.keys(this.currentVotes).length;
@@ -7049,14 +7328,18 @@
           </div>
 
           <div class="stage-body-split">
-            <!-- Left Column: 100% Unobstructed Scene / Wound Photo with AR Scanner -->
+            <!-- Left Column: 100% Unobstructed Scene / Wound Video (Auto Before -> Treatment Switching) -->
             <div class="scene-photo-frame">
-              <img id="stageSceneImg" src="images/scenes/scene_s${stageNum}.png" alt="Clinical Scene ${stageNum}" class="scene-photo-img" />
+              ${this.getStageVideoSourcesHtml(stageNum, useBeforeVideo)}
               ${!isInspect ? `
                 <div class="ar-scanline"></div>
-                <div class="ar-pathology-pin font-technical">
-                  <span class="patient-cam-dot" style="background:#10B981;"></span>
-                  ตรวจพบ: ${data.findingsTitle}
+                <div id="stageArPathologyPin" class="ar-pathology-pin font-technical" style="${(this.isTreatmentVideoPlaying || isDirectPressure) ? 'background:rgba(6, 78, 59, 0.92); border-left-color:#10B981;' : ''}">
+                  <span class="patient-cam-dot" style="background:${(this.isTreatmentVideoPlaying || isDirectPressure) ? '#34D399' : '#38BDF8'};"></span>
+                  ${(this.isTreatmentVideoPlaying || isDirectPressure)
+                    ? (stageNum === 6 ? '✓ กำลังทำการรักษา: ชะล้างแผลด้วยน้ำเกลือ 0.9% NSS'
+                      : (stageNum === 7 ? '✓ กำลังทำการรักษา: ใช้ผ้าก๊อซกดห้ามเลือดโดยตรง (Direct Pressure)'
+                      : '✓ กำลังทำการรักษา: ดามแขนครอบคลุมข้อและคล้องผ้าสามเหลี่ยม 90°'))
+                    : `ตรวจพบ: ${data.findingsTitle}`}
                 </div>
               ` : ''}
             </div>
@@ -7098,45 +7381,59 @@
                   </div>
                 </div>
               ` : (isVoting ? `
-                <!-- Step 2: Live Vote Status Board (Choices are on Mobiles!) -->
-                <div class="vote-status-board-card">
+                <!-- Step 2: Live Vote Status Board + Readable Choice Preview (Zero Blank Space!) -->
+                <div class="vote-status-board-card" style="padding:16px 20px; gap:12px;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div class="vote-board-badge font-technical">
+                    <div class="vote-board-badge font-technical" style="font-size:13px; padding:5px 14px;">
                       <span class="live-pulse-dot"></span>
                       เปิดรับโหวตจากมือถือทุกคนในห้อง (CO-OP KAHOOT)
                     </div>
-                    <button onclick="GameStateManager.finishAudienceVoting()" class="btn-close-vote-clean font-technical">
+                    <button onclick="GameStateManager.finishAudienceVoting()" class="btn-close-vote-clean font-technical" style="font-size:13px; padding:7px 14px;">
                       ⏱️ ปิดโหวตทันที
                     </button>
                   </div>
 
-                  <div class="vote-timer-row">
-                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec">${this.voteCountdownSeconds}</div>
-                    <div class="vote-timer-progress-wrap">
-                      <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
+                  <!-- Big Timer + Progress + Live Vote Counter -->
+                  <div style="display:flex; align-items:center; gap:16px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:10px 16px;">
+                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec" style="font-size:48px; min-width:64px; color:#0284C7;">${this.voteCountdownSeconds}</div>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; font-size:14.5px; font-weight:800; color:#1E293B;" class="font-technical">
+                        <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669; font-size:17px;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
+                        <span id="txtVotePct" class="num-readout" style="color:#0284C7; font-size:16px;">${votePct}%</span>
+                      </div>
+                      <div class="vote-timer-progress-wrap" style="height:14px;">
+                        <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="vote-count-stats font-technical">
-                    <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
-                    <span id="txtVotePct" class="num-readout">${votePct}%</span>
+                  <!-- 2x2 Readable Choice Preview Cards (So the whole room can read the options clearly!) -->
+                  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; flex:1; min-height:0;">
+                    ${data.choices.map(c => `
+                      <div style="background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; min-height:0;">
+                        <div style="width:32px; height:32px; border-radius:8px; background:#090D16; color:#FFFFFF; font-size:15px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;" class="num-readout">
+                          ${c.num}
+                        </div>
+                        <div style="font-size:14.5px; font-weight:700; color:#090D16; line-height:1.3;">
+                          ${c.title}
+                        </div>
+                      </div>
+                    `).join('')}
                   </div>
 
                   <!-- Live Groups Participation Grid (Groups 01-10) -->
-                  <div class="vote-groups-participation-grid font-technical" id="voteGroupsRoster">
+                  <div class="vote-groups-participation-grid font-technical" id="voteGroupsRoster" style="gap:6px;">
                     ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(grpNum => {
                       const grpStr = String(grpNum).padStart(2, '0');
                       const grpVotes = Object.values(this.currentVotes).filter(v => v.group === grpStr).length;
                       return `
-                        <div class="vote-group-status-pill ${grpVotes > 0 ? 'voted' : ''}">
+                        <div class="vote-group-status-pill ${grpVotes > 0 ? 'voted' : ''}" style="padding:7px 10px; font-size:13.5px;">
                           <span>กลุ่ม ${grpStr}</span>
                           <span class="vote-group-dot"></span>
                         </div>
                       `;
                     }).join('')}
                   </div>
-
-
                 </div>
               ` : `
                 <!-- Step 3: Top-Voted Choice Revealed (Hero Decision) -->
@@ -7179,10 +7476,24 @@
             </div>
           </div>
         `;
+
+        // Auto-play video reliably
+        const vids = card.querySelectorAll('video');
+        vids.forEach(v => {
+          v.muted = true;
+          v.playsInline = true;
+          v.play().catch(() => {});
+        });
       }
 
       async advanceToInspectionFinding() {
         if (![1, 4, 6, 7, 8].includes(this.currentStage)) return;
+        const stageAtStart = this.currentStage;
+        if (this.voteTimerId) {
+          clearInterval(this.voteTimerId);
+          this.voteTimerId = null;
+        }
+        this.voteCountdownSeconds = 12;
         this.decisionSubStep = 'AUDIENCE_VOTING';
         this.selectedChoiceIndex = null;
         this.currentVotes = {};
@@ -7191,20 +7502,23 @@
         this.broadcastMultiplayerStageSync();
 
         SoundEngine.playPulseBeep(880, 0.08);
-        const cData = CLINICAL_STAGES[this.currentStage];
+        const cData = CLINICAL_STAGES[stageAtStart];
         if (cData) {
-          await speakAndWait(cData.findingsSpoken, `s${this.currentStage}_findings`);
+          await speakAndWait(cData.findingsSpoken, `s${stageAtStart}_findings`);
         }
+
+        // Guard: If host already closed voting or jumped stage while AI was speaking, abort cleanly
+        if (this.currentStage !== stageAtStart || this.decisionSubStep !== 'AUDIENCE_VOTING') return;
 
         // Start 12-second audience voting countdown
         this.startVotingCountdown(12);
 
         // If bot simulator is active, cast automated realistic votes
         if (BotSimulator.enabled && cData) {
-          BotSimulator.onAudienceVoting(this.currentStage, cData.correctChoice);
+          BotSimulator.onAudienceVoting(stageAtStart, cData.correctChoice);
         }
 
-        this.startClinicalVoiceTracking(this.currentStage);
+        this.startClinicalVoiceTracking(stageAtStart);
       }
 
       startVotingCountdown(seconds = 12) {
@@ -7361,14 +7675,24 @@
           this.activeHintText = null;
           if (btn) btn.classList.add('correct');
           SoundEngine.playStageClear();
-          
+
           if (this.currentStage === 1) this.updatePatientHud('images/patient/patient_s1_dazed.png', 'ด่านที่ 1 • SECURED & SAFE', 'warn');
           else if (this.currentStage === 4) this.updatePatientHud('images/patient/patient_s4_agonal.png', 'ด่านที่ 4 • ARREST CONFIRMED', 'critical');
           else if (this.currentStage === 6) this.updatePatientHud('images/patient/patient_s6_rosc.png', 'ด่านที่ 6 • WOUND CLEANED', 'healthy');
           else if (this.currentStage === 7) this.updatePatientHud('images/patient/patient_s7_hemostasis.png', 'ด่านที่ 7 • HEMOSTASIS CONTROLLED', 'healthy');
           else if (this.currentStage === 8) this.updatePatientHud('images/patient/patient_s8_splint.png', 'ด่านที่ 8 • SPLINTED & SLING', 'healthy');
 
-          await speakAndWait(choiceItem.correctSpoken, `s${this.currentStage}_correct`);
+          // V24.0: Immediately switch Stages 6, 7, 8 from "_before" clip to Treatment animation clip!
+          if ([6, 7, 8].includes(this.currentStage)) {
+            this.switchStageVideoToTreatment(this.currentStage);
+          }
+
+          // Guarantee viewers see the treatment animation for at least 3.5s on Stages 6 & 8 even if AI Voice is muted
+          const minWatchMs = [6, 8].includes(this.currentStage) ? 3500 : 1200;
+          await Promise.all([
+            speakAndWait(choiceItem.correctSpoken, `s${this.currentStage}_correct`),
+            new Promise(r => setTimeout(r, minWatchMs))
+          ]);
 
           // Award multiplayer MVP points to players who voted for the winning answer
           const cNum = choiceItem.num;
@@ -7589,6 +7913,7 @@
         }
 
         this.isStageChoiceLocked = false;
+        this.isTreatmentVideoPlaying = false;
         this.decisionSubStep = 'HERO_DECISION';
         const cData = CLINICAL_STAGES[this.currentStage];
         if (cData) {
@@ -7605,6 +7930,7 @@
         this.isGameOver = false;
         this.activeHintText = null;
         this.isStageChoiceLocked = false;
+        this.isTreatmentVideoPlaying = false;
 
         const modal = document.getElementById('modalGameOver');
         if (modal) modal.style.display = 'none';
@@ -7699,9 +8025,9 @@
             this.selectEquipmentCard(msg.choice);
           }
         } else if (msg.type === 'REMOTE_CONFIRM') {
-          this.confirmSelectedChoice();
+          this.confirmHeroDecision();
         } else if (msg.type === 'REMOTE_CANCEL') {
-          this.cancelSelectedChoice();
+          this.reopenAudienceVoting();
         } else if (msg.type === 'REMOTE_TOGGLE_BOTS') {
           this.toggleBotSimulator();
         } else if (msg.type === 'REMOTE_FINISH_VOTE') {
@@ -7825,26 +8151,47 @@
       // =========================================================================
       saveLeaderboardEntry() {
         try {
-          const list = JSON.parse(localStorage.getItem('mdbuu_heartbeat_leaderboard') || '[]');
-          const timeUsed = 480 - (this.sessionSeconds || 0);
+          let list = JSON.parse(localStorage.getItem('mdbuu_heartbeat_leaderboard') || '[]');
+          const timeUsed = Math.max(15, 480 - (this.sessionSeconds || 0));
           const mins = Math.floor(timeUsed / 60);
           const secs = timeUsed % 60;
           const timeStr = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
           const rankLetter = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
+          const teamLabel = `กลุ่มที่ ${String(this.selectedTeam).padStart(2, '0')}`;
+
           const entry = {
-            team: `กลุ่มที่ ${this.selectedTeam}`,
+            team: teamLabel,
             score: this.score,
             rank: rankLetter,
             timeStr: timeStr,
             timestamp: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
             stageScores: { ...this.stageScores }
           };
-          list.push(entry);
+
+          // Keep the best record per team if tested multiple times
+          const existingIdx = list.findIndex(item => item.team === teamLabel);
+          if (existingIdx !== -1) {
+            if (entry.score > list[existingIdx].score || (entry.score === list[existingIdx].score && entry.timeStr < list[existingIdx].timeStr)) {
+              list[existingIdx] = entry;
+            }
+          } else {
+            list.push(entry);
+          }
+
           list.sort((a, b) => b.score - a.score || a.timeStr.localeCompare(b.timeStr));
           localStorage.setItem('mdbuu_heartbeat_leaderboard', JSON.stringify(list.slice(0, 10)));
         } catch(e) {
           console.warn('Leaderboard save failed:', e);
         }
+      }
+
+      clearLeaderboardData() {
+        if (!confirm('ยืนยันล้างสถิติตารางคะแนน TOP 3 ทั้งหมดเพื่อเตรียมเริ่มงานจริงใช่หรือไม่?')) return;
+        try {
+          localStorage.removeItem('mdbuu_heartbeat_leaderboard');
+          showToast('🗑️ ล้างตารางคะแนน TOP 3 เรียบร้อยแล้ว พร้อมเริ่มงานจริง!');
+          if (this.currentStage === 9) this.renderStage();
+        } catch(e) {}
       }
 
       openCertModal() {
@@ -8191,7 +8538,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s1.png" alt="Scene 1: Vehicle Crash" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s1.jpg">
+                  <source src="videos/scenes/scene_s1.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s01.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Question + Vertical Stack Choices -->
@@ -8275,7 +8625,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s2.png" alt="Scene 2: Check Responsiveness" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s2.jpg">
+                  <source src="videos/scenes/scene_s2.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s02.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: 3-Card Bento Stack (Dark Script, 3 Equal Tiles, Studio VU Console) -->
@@ -8322,11 +8675,11 @@
 
                 <!-- Card 3: Studio Acoustic VU Meter Console -->
                 <div class="meter-cluster-clean">
-                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:700; color:#64748B;" class="font-technical">
+                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; font-weight:800; color:#1E293B;" class="font-technical">
                     <span>ระดับความดังเสียงไมโครโฟน (LIVE ACOUSTIC METER)</span>
                     <div style="display:flex; align-items:center; gap:8px;">
-                      <span id="txtLiveStatusHint" style="font-size:11.5px; color:#64748B;">รอเสียงตะโกน...</span>
-                      <span id="txtLiveDecibel" style="color:#0284C7; font-weight:800; font-size:calc(18px * var(--ui-scale));">0 dB</span>
+                      <span id="txtLiveStatusHint" style="font-size:13px; color:#64748B;">รอเสียงตะโกน...</span>
+                      <span id="txtLiveDecibel" style="color:#0284C7; font-weight:900; font-size:calc(24px * var(--ui-scale));">0 dB</span>
                     </div>
                   </div>
                   <div class="meter-track-container" style="height:32px; border-radius:10px; background:#EEF2F6; position:relative; overflow:hidden; border:1.5px solid #CBD5E1;">
@@ -8339,9 +8692,9 @@
 
                   <!-- V10: Sustained Shout Energy Fill Bar -->
                   <div class="stage2-energy-wrap font-technical">
-                    <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#64748B;">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:800; color:#1E293B;">
                       <span>หลอดสะสมพลังเสียงตะโกน (ต้องดังต่อเนื่อง >= 0.7 วินาที):</span>
-                      <span id="txtStage2EnergyPct" style="color:#059669; font-weight:800;">0%</span>
+                      <span id="txtStage2EnergyPct" style="color:#059669; font-weight:800; font-size:14px;">0%</span>
                     </div>
                     <div class="stage2-energy-track">
                       <div id="stage2EnergyBarFill" class="stage2-energy-fill"></div>
@@ -8359,7 +8712,7 @@
                       [ พิธีกรกดให้ผ่านทันที (Shift+Right) ]
                     </button>
                   </div>
-                  <div id="txtStage2LiveTranscript" style="font-size:12px; color:#64748B; font-weight:600; min-height:18px;" class="font-technical">
+                  <div id="txtStage2LiveTranscript" style="font-size:14.5px; color:#475569; font-weight:700; min-height:22px;" class="font-technical">
                     รอฟังสัญญาณเสียง...
                   </div>
                 </div>
@@ -8395,7 +8748,10 @@
             <div class="stage-body-split" style="gap:18px;">
               <!-- Left Column: Scene Photo -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s3.png" alt="Scene 3: 1669 Dispatch" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s3.jpg">
+                  <source src="videos/scenes/scene_s3.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s03.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Compact Zero-Overflow Dispatch Console -->
@@ -8511,7 +8867,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s4.png" alt="Scene 4: Agonal Breathing" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s4.jpg">
+                  <source src="videos/scenes/scene_s4.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s04.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Question + 3 Auto-Stretching Choices -->
@@ -8587,7 +8946,10 @@
               <div class="stage-body-split">
                 <!-- Left Column: Photorealistic Live-Action Scene + CPR Clinical Standard Glass Card -->
                 <div class="scene-photo-frame">
-                  <img id="stageSceneImg" src="images/scenes/scene_s5.png" alt="Scene 5: CPR Compressions" class="scene-photo-img" />
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s5a.jpg">
+                    <source src="videos/scenes/scene_s5a.mp4" type="video/mp4">
+                    <source src="videos/scenes/scene_s05a.mp4" type="video/mp4">
+                  </video>
                   <div class="cpr-standard-glass-card font-technical">
                     <div class="cpr-standard-title">AHA / ERC CPR CLINICAL STANDARD</div>
                     <div class="cpr-standard-items">
@@ -8687,7 +9049,10 @@
               <div class="stage-body-split">
                 <!-- Left Column: Photorealistic Live-Action Scene -->
                 <div class="scene-photo-frame">
-                  <img id="stageSceneImg" src="images/scenes/scene_s5.png" alt="Scene 5: AED Placement" class="scene-photo-img" />
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s5b.jpg">
+                    <source src="videos/scenes/scene_s5b.mp4" type="video/mp4">
+                    <source src="videos/scenes/scene_s05b.mp4" type="video/mp4">
+                  </video>
                 </div>
 
                 <!-- Right Column: 3 Progressive Spotlight Steps -->
@@ -8771,7 +9136,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s6.png" alt="Scene 6: Wound Cleaning" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s6.jpg">
+                  <source src="videos/scenes/scene_s6.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s06.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Question + 4 Vertical Choices -->
@@ -8855,7 +9223,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s7.png" alt="Scene 7: Bleeding Control" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s7.jpg">
+                  <source src="videos/scenes/scene_s7.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s07.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Question + 3 Vertical Choices -->
@@ -8930,7 +9301,10 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <img id="stageSceneImg" src="images/scenes/scene_s8.png" alt="Scene 8: Splinting & Sling" class="scene-photo-img" />
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s8.jpg">
+                  <source src="videos/scenes/scene_s8.mp4" type="video/mp4">
+                  <source src="videos/scenes/scene_s08.mp4" type="video/mp4">
+                </video>
               </div>
 
               <!-- Right Column: Question + 3 Vertical Choices -->
@@ -8990,17 +9364,33 @@
         else if (this.currentStage === 9) {
           const rankLetter = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
           const rankColor = rankLetter === 'S' ? '#D97706' : (rankLetter === 'A+' ? '#0284C7' : '#059669');
-          const strokePct = Math.round((this.score / 100) * 440);
-          const dashOffset = 440 - strokePct;
+          const circumference = 264; // 2 * Math.PI * 42
+          const strokePct = Math.round((this.score / 100) * circumference);
+          const dashOffset = circumference - strokePct;
 
-          const leaderboard = JSON.parse(localStorage.getItem('mdbuu_heartbeat_leaderboard') || '[]');
+          const timeUsed = Math.max(15, 480 - (this.sessionSeconds || 0));
+          const usedMins = String(Math.floor(timeUsed / 60)).padStart(2, '0');
+          const usedSecs = String(timeUsed % 60).padStart(2, '0');
+          const timeUsedFormatted = `${usedMins}:${usedSecs} นาที`;
+
+          const rawLeaderboard = JSON.parse(localStorage.getItem('mdbuu_heartbeat_leaderboard') || '[]');
+          // Deduplicate legacy entries cleanly by team name
+          const dedupMap = new Map();
+          rawLeaderboard.forEach(item => {
+            if (!item || !item.team) return;
+            const prev = dedupMap.get(item.team);
+            if (!prev || item.score > prev.score || (item.score === prev.score && String(item.timeStr) < String(prev.timeStr))) {
+              dedupMap.set(item.team, item);
+            }
+          });
+          const leaderboard = Array.from(dedupMap.values()).sort((a, b) => b.score - a.score || String(a.timeStr).localeCompare(String(b.timeStr)));
           const top3 = leaderboard.slice(0, 3);
 
-          // Calculate MVP Support Squad based on multiplayer scores
+          // Calculate MVP Support Squad based on real multiplayer participation (must score > 0)
           const groupScores = {};
           for (let g = 1; g <= 10; g++) groupScores[String(g).padStart(2, '0')] = 0;
           let topPlayer = null;
-          let maxPScore = -1;
+          let maxPScore = 0;
 
           Object.values(this.connectedPlayers).forEach(p => {
             const grp = p.group || '01';
@@ -9013,14 +9403,15 @@
             }
           });
 
-          let topGroup = this.selectedTeam;
-          let maxGScore = -1;
-          Object.keys(groupScores).forEach(grp => {
+          let topGroup = String(this.selectedTeam).padStart(2, '0');
+          let maxGScore = 0; // Require > 0 so group '10' never wins by JS key-order default!
+          for (let g = 1; g <= 10; g++) {
+            const grp = String(g).padStart(2, '0');
             if (groupScores[grp] > maxGScore) {
               maxGScore = groupScores[grp];
               topGroup = grp;
             }
-          });
+          }
 
           this.mvpGroup = topGroup;
           this.mvpPlayerId = topPlayer ? topPlayer.id : null;
@@ -9035,150 +9426,190 @@
             leaderboard: top3
           });
 
+          const stageItems = [
+            { num: '01', name: 'ประเมินความปลอดภัย', val: this.stageScores[1], max: 15 },
+            { num: '02', name: 'ตะโกนขอความช่วยเหลือ', val: this.stageScores[2], max: 10 },
+            { num: '03', name: 'แจ้งสายด่วน 1669', val: this.stageScores[3], max: 15 },
+            { num: '04', name: 'ตรวจการหายใจเฮือก', val: this.stageScores[4], max: 15 },
+            { num: '05', name: 'กดหน้าอก CPR & AED', val: this.stageScores[5], max: 15 },
+            { num: '06', name: 'ล้างแผลด้วย NSS', val: this.stageScores[6], max: 10 },
+            { num: '07', name: 'ห้ามเลือดกดแผลโดยตรง', val: this.stageScores[7], max: 10 },
+            { num: '08', name: 'ดามกระดูกและคล้องแขน', val: this.stageScores[8], max: 10 }
+          ];
+
           card.innerHTML = `
-            <div class="unified-status-bar" style="margin-bottom: 8px;">
+            <div class="unified-status-bar" style="margin-bottom: 4px;">
               <div class="ai-voice-pill-clean">
                 <div class="voice-bars-clean" id="aiWaveBars"><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div><div class="v-bar"></div></div>
-                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">AI กำลังกล่าวแสดงความยินดี...</span>
+                <span id="aiVoiceStatusTxt" class="voice-pill-text-clean font-technical">ภารกิจกู้ชีพเสร็จสิ้นสมบูรณ์ • บันทึกผลการประเมินเรียบร้อย</span>
                 <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ ฟังซ้ำ ]</button>
               </div>
-              <div class="voice-answer-bar">
-                <span class="mic-live-dot" style="background:#059669;"></span>
+              <div class="voice-answer-bar" style="border-color:#A7F3D0; background:#ECFDF5;">
+                <span class="mic-live-dot" style="background:#059669; animation:none;"></span>
                 <span class="voice-bar-title font-technical" style="color:#059669;">MISSION COMPLETED:</span>
-                <span class="voice-bar-transcript font-technical">ภารกิจเสร็จสิ้นสมบูรณ์แบบ &bull; รวม ${this.score} คะแนน</span>
+                <span class="voice-bar-transcript font-technical" style="color:#065F46;">คะแนนรวม ${this.score} / 100 คะแนน (GRADE ${rankLetter})</span>
               </div>
             </div>
 
-            <!-- V18.0 3-Column Clinical Victory Bento Layout (100% Fit, Zero Overlap) -->
-            <div class="stage9-victory-bento-grid">
-              <!-- Column 1 (230px): Hero Squad Rank Card -->
-              <div class="victory-bento-col font-technical" style="align-items:center; text-align:center;">
-                <div style="font-size:11px; font-weight:800; color:#059669; letter-spacing:0.08em; text-transform:uppercase;">
-                  CLINICAL PERFORMANCE
-                </div>
-
-                <div class="radial-gauge-wrapper" style="width:116px; height:116px; margin:4px auto;">
-                  <svg class="radial-gauge-svg" viewBox="0 0 140 140" style="width:100%; height:100%;">
-                    <circle class="radial-gauge-bg" cx="70" cy="70" r="54" style="stroke-width:9; stroke:#EEF2F6;"></circle>
-                    <circle id="radialScoreCircle" class="radial-gauge-progress" cx="70" cy="70" r="54" style="stroke-width:9; stroke:${rankColor}; stroke-dasharray:340; stroke-dashoffset:340;"></circle>
-                  </svg>
-                  <div class="radial-gauge-center">
-                    <div class="rank-letter-display num-readout" style="color:${rankColor}; font-size:calc(44px * var(--ui-scale));">${rankLetter}</div>
-                    <div class="rank-points-counter num-readout" style="font-size:12px;"><span id="txtScoreCount">0</span> / 100</div>
+            <div class="summary-v10-grid">
+              <!-- COLUMN 1: Clinical Outcome & Patient Telemetry Card -->
+              <div class="summary-bento-col">
+                <div class="summary-scene-wrap">
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s9.jpg" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    <source src="videos/scenes/scene_s9.mp4" type="video/mp4">
+                    <source src="videos/scenes/scene_s09.mp4" type="video/mp4">
+                  </video>
+                  <div style="position:absolute; top:10px; left:10px; background:rgba(9,13,22,0.82); backdrop-filter:blur(6px); color:#10B981; font-size:11px; font-weight:800; padding:4px 10px; border-radius:7px; border:1px solid rgba(16,185,129,0.4);" class="font-technical">
+                    ● ROSC SUCCESS • ส่งต่อ รพ.มหาวิทยาลัยบูรพา สำเร็จ
+                  </div>
+                  <div style="position:absolute; top:10px; right:10px; background:rgba(9,13,22,0.75); color:#FFFFFF; font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px;" class="font-technical">
+                    SCENE 09
                   </div>
                 </div>
 
-                <div style="background:#090D16; color:#FFFFFF; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; width:100%; box-sizing:border-box;">
-                  กลุ่มตัวแทน: กลุ่มที่ ${this.selectedTeam}
+                <div class="summary-rosc-box">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; font-weight:800; color:#059669;" class="font-technical">
+                      ● ROSC รอดชีวิต 100% • สัญญาณชีพคงที่
+                    </span>
+                    <span style="background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px;" class="font-technical">
+                      SURVIVAL CONFIRMED
+                    </span>
+                  </div>
+
+                  <div class="summary-vitals-trio font-technical">
+                    <div class="summary-vital-mini">
+                      <div style="font-size:11px; color:#64748B; font-weight:800;">HEART RATE</div>
+                      <div style="font-size:18px; font-weight:900; color:#0284C7;" class="num-readout">84 <span style="font-size:11px;">BPM</span></div>
+                    </div>
+                    <div class="summary-vital-mini">
+                      <div style="font-size:11px; color:#64748B; font-weight:800;">SPO2 OXYGEN</div>
+                      <div style="font-size:18px; font-weight:900; color:#059669;" class="num-readout">99 <span style="font-size:11px;">%</span></div>
+                    </div>
+                    <div class="summary-vital-mini">
+                      <div style="font-size:11px; color:#64748B; font-weight:800;">TIME USED</div>
+                      <div style="font-size:16px; font-weight:900; color:#090D16;" class="num-readout">${timeUsedFormatted}</div>
+                    </div>
+                  </div>
                 </div>
 
-                <div style="background:#FEF3C7; border:1px solid #FDE68A; color:#92400E; font-size:11px; font-weight:700; padding:4px 8px; border-radius:8px; width:100%; box-sizing:border-box;">
-                  🏆 MVP SQUAD: กลุ่มที่ ${this.mvpGroup}
+                <div class="summary-motto-banner font-technical">
+                  <span>“ช่วยให้เป็น เห็นแล้วกล้าทำ”</span>
+                  <span>MDBUU OPEN HOUSE 2027</span>
                 </div>
 
-                <div class="mini-rosc-strip" style="width:100%; padding:6px 8px; box-sizing:border-box; margin:0;">
-                  <div style="font-size:11px; font-weight:800; color:#059669;">ROSC • รอดชีวิต 100%</div>
-                  <div style="font-size:10.5px; color:#64748B;">HR 84 • SpO2 99%</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#475569; padding-top:6px; border-top:1px solid #F1F5F9; font-weight:700;" class="font-technical">
+                  <span>📍 Resuscitation Room รพ.มหาวิทยาลัยบูรพา</span>
+                  <span style="color:#059669; font-weight:800;">ส่งมอบแพทย์เรียบร้อย ✓</span>
                 </div>
               </div>
 
-              <!-- Column 2 (1fr): Clinical Breakdown & Daily Hall of Fame -->
-              <div class="victory-bento-col" style="justify-content:flex-start; gap:8px;">
-                <div style="font-size:12px; font-weight:800; color:#090D16;" class="font-technical">
-                  📊 สรุปคะแนนรายด่าน (PER-STAGE BREAKDOWN):
-                </div>
+              <!-- COLUMN 2: Radial Score Gauge + 8-Stage Tactical Breakdown -->
+              <div class="summary-bento-col">
+                <div class="summary-perf-header">
+                  <div class="radial-gauge-wrapper-v18">
+                    <svg class="radial-gauge-svg-v18" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" stroke-width="8"></circle>
+                      <circle id="radialScoreCircle" cx="50" cy="50" r="42" fill="none" stroke="${rankColor}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${circumference}" style="stroke-dashoffset: ${circumference}; transition: stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1);"></circle>
+                    </svg>
+                    <div class="radial-gauge-center-v18">
+                      <div class="rank-letter-v18 num-readout" style="color:${rankColor};">${rankLetter}</div>
+                      <div class="rank-points-v18 num-readout"><span id="txtScoreCount">0</span>/100</div>
+                    </div>
+                  </div>
 
-                <div class="stage-scores-grid font-technical" style="gap:6px; margin:0;">
-                  <div class="stage-score-card ${this.stageScores[1] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">01 ปลอดภัย</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[1]} / 15</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[2] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">02 เรียกช่วย</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[2]} / 10</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[3] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">03 โทร 1669</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[3]} / 15</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[4] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">04 หายใจเฮือก</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[4]} / 15</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[5] === 15 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">05 CPR/AED</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[5]} / 15</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[6] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">06 ล้างแผล</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[6]} / 10</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[7] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">07 ห้ามเลือด</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[7]} / 10</span>
-                  </div>
-                  <div class="stage-score-card ${this.stageScores[8] === 10 ? 'perfect' : 'penalty'}" style="padding:6px 8px;">
-                    <span class="stage-score-num" style="font-size:10px;">08 ดามแขน</span>
-                    <span class="stage-score-val" style="font-size:calc(14px * var(--ui-scale));">${this.stageScores[8]} / 10</span>
+                  <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:0;">
+                    <div style="font-size:10.5px; font-weight:800; color:#059669; letter-spacing:0.06em;" class="font-technical">
+                      CLINICAL PERFORMANCE EVALUATION
+                    </div>
+                    <div style="background:#090D16; color:#FFFFFF; font-size:13.5px; font-weight:800; padding:5px 12px; border-radius:8px; width:fit-content;" class="font-technical">
+                      กลุ่มตัวแทน: กลุ่มที่ ${String(this.selectedTeam).padStart(2, '0')}
+                    </div>
+                    <div style="background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:7px; width:fit-content;" class="font-technical">
+                      🏆 MVP SUPPORT SQUAD: กลุ่มที่ ${this.mvpGroup}
+                    </div>
                   </div>
                 </div>
 
-                <!-- Daily Hall of Fame Top 3 Table -->
-                <div class="leaderboard-box font-technical" style="margin:0; padding:8px 10px; flex:1; min-height:0; overflow:hidden;">
-                  <div class="leaderboard-title" style="font-size:11px; margin-bottom:4px;">
-                    🏆 ตารางคะแนนสูงสุดประจำวัน (HALL OF FAME TOP 3)
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; font-weight:800; color:#090D16;" class="font-technical">
+                  <span>📊 สรุปคะแนนรายด่าน (PER-STAGE BREAKDOWN)</span>
+                  <span style="color:#64748B; font-weight:600;">8 ด่านกู้ชีพ</span>
+                </div>
+
+                <div class="stage-scores-grid-v18 font-technical">
+                  ${stageItems.map(st => {
+                    const isPerfect = st.val >= st.max;
+                    return `
+                      <div class="stage-score-pill-v18 ${isPerfect ? 'perfect' : 'penalty'}">
+                        <div class="stage-pill-left">
+                          <span class="stage-pill-num num-readout">${st.num}</span>
+                          <span class="stage-pill-name">${st.name}</span>
+                        </div>
+                        <div class="stage-pill-score num-readout">
+                          ${st.val}/${st.max} ${isPerfect ? '✓' : '!'}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+
+              <!-- COLUMN 3: Hall of Fame Top 3 + QR Certificate + Action CTAs -->
+              <div class="summary-bento-col">
+                <div class="leaderboard-box font-technical" style="padding:10px 12px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <span class="leaderboard-title">🏆 ตารางคะแนนสูงสุด (TOP 3)</span>
+                    <span style="font-size:10px; color:#64748B;">ประจำวัน</span>
                   </div>
-                  <table class="leaderboard-table" style="font-size:calc(13px * var(--ui-scale));">
+                  <table class="leaderboard-table">
                     <thead>
                       <tr>
-                        <th style="padding:3px 6px;">อันดับ</th>
-                        <th style="padding:3px 6px;">กลุ่ม</th>
-                        <th style="padding:3px 6px;">คะแนน</th>
-                        <th style="padding:3px 6px;">เกรด</th>
-                        <th style="padding:3px 6px;">เวลา</th>
+                        <th>อันดับ</th>
+                        <th>กลุ่ม</th>
+                        <th>คะแนน</th>
+                        <th>เวลา</th>
                       </tr>
                     </thead>
                     <tbody>
                       ${top3.length > 0 ? top3.map((entry, idx) => {
                         const medal = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : '🥉');
+                        const isCur = entry.team === `กลุ่มที่ ${String(this.selectedTeam).padStart(2, '0')}`;
                         return `
-                          <tr class="${entry.team === `กลุ่มที่ ${this.selectedTeam}` ? 'current-team' : ''}">
-                            <td style="padding:3px 6px;">${medal} #${idx + 1}</td>
-                            <td style="padding:3px 6px;">${entry.team}</td>
-                            <td style="padding:3px 6px; font-weight:800;">${entry.score}</td>
-                            <td style="padding:3px 6px;">${entry.rank}</td>
-                            <td style="padding:3px 6px;">${entry.timeStr}</td>
+                          <tr class="${isCur ? 'current-team' : ''}">
+                            <td>${medal} #${idx + 1}</td>
+                            <td>${entry.team}</td>
+                            <td class="num-readout">${entry.score}</td>
+                            <td class="num-readout">${entry.timeStr}</td>
                           </tr>
                         `;
                       }).join('') : `
                         <tr>
-                          <td colspan="5" style="text-align:center; color:#94A3B8; padding:8px;">กำลังบันทึกคะแนนกลุ่มแรกของวัน...</td>
+                          <td colspan="4" style="text-align:center; color:#94A3B8; padding:8px 0;">กำลังบันทึกคะแนนกลุ่มแรกของวัน...</td>
                         </tr>
                       `}
                     </tbody>
                   </table>
                 </div>
-              </div>
 
-              <!-- Column 3 (245px): Digital Diploma & Action Buttons -->
-              <div class="victory-bento-col font-technical" style="align-items:center; text-align:center;">
-                <div style="font-size:11.5px; font-weight:800; color:#090D16;">
-                  📱 สแกนรับเกียรติบัตรรายบุคคล
-                </div>
-                <div style="font-size:10.5px; color:#64748B;">
-                  สแกนด้วยกล้องมือถือเพื่อรับภาพเกียรติบัตรของคุณ
+                <!-- QR Certificate Card (Centered & Balanced) -->
+                <div class="qr-box-v18 font-technical">
+                  <div class="qr-frame-v18">
+                    <canvas id="qrCanvas"></canvas>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:3px; align-items:center;">
+                    <div style="font-size:15px; font-weight:800; color:#090D16;">📲 สแกนรับเกียรติบัตรรายบุคคล</div>
+                    <div style="font-size:12.5px; color:#475569; line-height:1.35;">
+                      สแกนด้วยกล้องมือถือเพื่อดาวน์โหลดเกียรติบัตรระบุชื่อของคุณทันที
+                    </div>
+                  </div>
                 </div>
 
-                <div class="qr-canvas-frame" style="width:146px; height:146px; padding:3px; margin:2px auto;">
-                  <canvas id="qrCanvas" style="width:140px; height:140px;"></canvas>
-                </div>
-
-                <div style="display:flex; flex-direction:column; gap:6px; width:100%; margin-top:4px;">
-                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert" style="width:100%; height:32px; font-size:11.5px; justify-content:center; padding:0 8px; margin:0;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                    📜 เปิดดูเกียรติบัตรกลุ่ม
+                <!-- Bottom Action Buttons -->
+                <div style="display:flex; flex-direction:column; gap:8px; flex-shrink:0;">
+                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert font-technical" style="height:44px; border-radius:11px; font-size:14.5px;">
+                    📜 เปิดดูและดาวน์โหลดเกียรติบัตรกลุ่ม
                   </button>
-                  <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset" style="width:100%; height:32px; font-size:11.5px; justify-content:center; padding:0 8px; margin:0; background:#090D16; color:#FFFFFF; border:none;" title="เริ่มรอบใหม่ทันที [R]">
+                  <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset font-technical" style="width:100%; height:44px; border-radius:11px; font-size:14.5px;" title="เริ่มรอบใหม่ทันที [R]">
                     🔄 เริ่มรอบถัดไป (Reset - R)
                   </button>
                 </div>
@@ -9202,13 +9633,26 @@
 
             const qrCanvas = document.getElementById('qrCanvas');
             if (qrCanvas) {
-              const certUrl = window.location.origin + window.location.pathname + `?cert=1&team=${encodeURIComponent(this.selectedTeam)}&score=${this.score}&rank=${rankLetter}`;
-              renderQrToCanvas(qrCanvas, certUrl, 140);
+              const certUrl = window.location.origin + window.location.pathname + `?cert=1&team=${encodeURIComponent(String(this.selectedTeam).padStart(2, '0'))}&score=${this.score}&rank=${rankLetter}`;
+              renderQrToCanvas(qrCanvas, certUrl, 128);
             }
           }, 150);
+          const vids = card.querySelectorAll('video');
+          vids.forEach(v => {
+            v.muted = true;
+            v.playsInline = true;
+            v.play().catch(() => {});
+          });
           return;
         }
 
+        // Ensure dynamically injected <video> tags autoplay reliably on Safari across Stages 2, 3, 5A, 5B
+        const stageVids = card.querySelectorAll('video');
+        stageVids.forEach(v => {
+          v.muted = true;
+          v.playsInline = true;
+          v.play().catch(() => {});
+        });
       }
 
       // Fix #2: Stage 1 Voice Answer Bar with Debounce
@@ -9364,6 +9808,7 @@
 
       startStage7BDirectPressure() {
         this.decisionSubStep = 'DIRECT_PRESSURE';
+        this.isTreatmentVideoPlaying = true;
         this.hostHoldingPressure = false;
         if (!this.activePressureHolders) this.activePressureHolders = new Set();
         this.activePressureHolders.clear();
@@ -10711,6 +11156,7 @@
         // Guaranteed non-blocking transition to Stage 5B after 900ms (NEVER await TTS before switching DOM!)
         setTimeout(() => {
           this.stage5Phase = 'AED';
+
           this.aedCurrentStep = 1;
           this.aedSteps = { step1: false, step2: false, step3: false };
           this.updatePatientHud('images/patient/patient_s5_aed.png', 'STAGE 5B // AED DEFIBRILLATION', 'critical');
@@ -10844,6 +11290,8 @@
         this.aedListening = false;
         MicSensor.stopSpeechRecognition();
 
+
+
         SoundEngine.playWarningTone(750, 0.7);
 
         // V19.0: Send Realtime Surge Sync to all connected mobile smartphones!
@@ -10881,6 +11329,13 @@
       // V19.0 CINEMATIC PROCEDURAL LIGHTNING & SHOCKWAVE DEFIBRILLATION ENGINE
       // =========================================================================
       runCinematicAedShock() {
+        const aedVid = document.getElementById('stageSceneVideo');
+        if (aedVid) {
+          try {
+            aedVid.currentTime = 10.5;
+            aedVid.play().catch(() => {});
+          } catch(e) {}
+        }
         const overlay = document.getElementById('aedShockCinemaOverlay');
         const canvas = document.getElementById('aedShockCanvas');
         const banner = document.getElementById('aedShockBanner');
@@ -11030,27 +11485,81 @@
       }
 
       quickResetGame() {
-        // Broadcast session closed to lock previous phones
+        // 1. Stop all active timers, audio, speech, and mic recognition cleanly
+        if (window.speechSynthesis) {
+          try { window.speechSynthesis.cancel(); } catch(e) {}
+        }
+        window.isSystemSpeaking = false;
+        if (window.AIVoiceCoach) AIVoiceCoach.isSpeaking = false;
+        MicSensor.stopSpeechRecognition();
+        speechDebouncer.clear();
+        SoundEngine.stopPulseScheduler();
+        BotSimulator.clearTimers();
+
+        if (this.voteTimerId) { clearInterval(this.voteTimerId); this.voteTimerId = null; }
+        if (this.stage7PressureInterval) { clearInterval(this.stage7PressureInterval); this.stage7PressureInterval = null; }
+        if (this.cprHighwayAnimId) { cancelAnimationFrame(this.cprHighwayAnimId); this.cprHighwayAnimId = null; }
+
+        // 2. Broadcast session closed to lock previous phones
         if (RealtimeEngine) {
           RealtimeEngine.send('SESSION_CLOSED', { pin: this.sessionPin });
         }
 
+        // 3. Hide any open modals (Game Over / Certificate)
+        const goModal = document.getElementById('modalGameOver');
+        if (goModal) goModal.style.display = 'none';
+        const certModal = document.getElementById('modalCertificate');
+        if (certModal) certModal.style.display = 'none';
+
+        // 4. Full state reset so previous group's mistakes never bleed into the next round!
         this.currentStage = 0;
         this.score = 100;
+        this.stageScores = { 1: 15, 2: 10, 3: 15, 4: 15, 5: 15, 6: 10, 7: 10, 8: 10 };
+        this.stageMistakes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
+        this.deathCount = 0;
         this.sessionSeconds = 480;
+        const clockEl = document.getElementById('txtSessionClock');
+        if (clockEl) clockEl.innerText = '08:00';
+
         this.cprCount = 0;
         this.cprActive = false;
+        this.cprCanHit = false;
+        this.cprFinished = false;
+        this.cprTransitioning = false;
+        this.stage5Phase = 'CPR';
+        this.decisionSubStep = 'PROMPT_INSPECT';
+        this.activeHintText = null;
+        this.isStageChoiceLocked = false;
+        this.isGameOver = false;
+        this.isTreatmentVideoPlaying = false;
+        this.voteCountdownSeconds = 12;
+
         this.checklist = { location: false, incident: false, patient: false, aed: false };
         this.aedSteps = { step1: false, step2: false, step3: false };
+        this.aedCurrentStep = 1;
+        this.aedListening = false;
         this.stage3TapCount = 0;
+        this.stage3Locked = false;
+        this.stage3CanTap = false;
+        this.stage3UnlockedChimePlayed = false;
+        this.stage2Completed = false;
+        this.shoutHoldMs = 0;
         this.currentVotes = {};
         this.connectedPlayers = {};
+        this.hostHoldingPressure = false;
+        if (this.activePressureHolders) this.activePressureHolders.clear();
+
+        // 5. Reset header step pills back to Stage 0 (Lobby)
+        for (let i = 0; i <= 9; i++) {
+          const pill = document.getElementById(`stepPill${i}`);
+          if (pill) pill.className = i === 0 ? 'nav-step-pill active' : 'nav-step-pill';
+        }
+
         window.ECGEngine.setMode('SINUS');
         this.updateVitals(76, 98);
-        SoundEngine.stopPulseScheduler();
         this.updatePatientHud('images/patient/patient_s1_dazed.png', 'READY // STANDBY', 'warn');
 
-        // Generate brand new 4-digit PIN for next round
+        // 6. Generate brand new 4-digit PIN for next round
         this.sessionPin = String(Math.floor(1000 + Math.random() * 9000));
         RealtimeEngine.init(this.sessionPin, true);
 
@@ -11069,9 +11578,9 @@
         this.renderLobbyQrCode();
         this.refreshLobbyRoster();
 
-        // If bot simulator was enabled, re-populate bots for next round
+        // Preserve previous bot mode (25 or 100) if active
         if (BotSimulator.enabled) {
-          BotSimulator.enable();
+          BotSimulator.enable(BotSimulator.mode === '100' ? 100 : 25);
         }
 
         this.pickRandomTeam();
@@ -11297,6 +11806,13 @@
       };
 
       localStorage.setItem('mdbuu_player_id', state.playerId);
+
+      // Unlock full vertical scrolling for real smartphones (iOS/Android)
+      document.body.classList.remove('lobby-mode');
+      document.body.style.overflow = 'auto';
+      document.body.style.overflowX = 'hidden';
+      document.body.style.height = 'auto';
+      document.body.style.minHeight = '100vh';
 
       // Render Base Mobile Shell
       document.body.innerHTML = `
@@ -11537,6 +12053,24 @@
             </div>
           </div>
         `;
+
+        // Live mobile countdown indicator (12s -> 0s)
+        if (state.voteTimer) clearInterval(state.voteTimer);
+        let mobileSec = 12;
+        state.voteTimer = setInterval(() => {
+          mobileSec--;
+          const tEl = document.getElementById('mTxtVoteTimer');
+          if (!tEl || state.currentSubStep !== 'AUDIENCE_VOTING') {
+            clearInterval(state.voteTimer);
+            state.voteTimer = null;
+            return;
+          }
+          tEl.innerText = `${Math.max(0, mobileSec)}s`;
+          if (mobileSec <= 0) {
+            clearInterval(state.voteTimer);
+            state.voteTimer = null;
+          }
+        }, 1000);
 
         // Handle Voting Clicks
         const list = document.getElementById('mChoicesList');
@@ -11842,19 +12376,30 @@
         const btn = document.getElementById('mBtnHoldPressure');
         const txt = document.getElementById('mTxtHoldStatus');
         if (btn) {
+          btn.style.touchAction = 'none';
+          btn.style.webkitTouchCallout = 'none';
+          btn.addEventListener('contextmenu', (e) => e.preventDefault());
+
+          const setHold = (isHolding) => {
+            btn.style.background = isHolding ? '#ECFDF5' : '#FFF1F2';
+            btn.style.borderColor = isHolding ? '#A7F3D0' : '#FECDD3';
+            if (txt) {
+              txt.innerText = isHolding ? 'กำลังกดแผล...' : 'กดค้างไว้!';
+              txt.style.color = isHolding ? '#059669' : '#E11D48';
+            }
+            RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: isHolding });
+          };
+
           btn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
-            btn.style.background = '#ECFDF5';
-            btn.style.borderColor = '#A7F3D0';
-            if (txt) { txt.innerText = 'กำลังกดแผล...'; txt.style.color = '#059669'; }
-            RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: true });
+            if (navigator.vibrate) navigator.vibrate(25);
+            setHold(true);
           });
-          btn.addEventListener('pointerup', (e) => {
-            e.preventDefault();
-            btn.style.background = '#FFF1F2';
-            btn.style.borderColor = '#FECDD3';
-            if (txt) { txt.innerText = 'กดค้างไว้!'; txt.style.color = '#E11D48'; }
-            RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: false });
+          ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => {
+            btn.addEventListener(ev, (e) => {
+              e.preventDefault();
+              setHold(false);
+            });
           });
         }
       }
@@ -12055,6 +12600,11 @@
       const params = new URLSearchParams(window.location.search);
       if (params.get('cert') === '1') {
         const team = params.get('team') || '01';
+        document.body.classList.remove('lobby-mode');
+        document.body.style.overflow = 'auto';
+        document.body.style.overflowX = 'hidden';
+        document.body.style.height = 'auto';
+        document.body.style.minHeight = '100vh';
         const score = params.get('score') || '100';
         const rank = params.get('rank') || 'S';
         document.body.innerHTML = `
@@ -12148,5 +12698,6 @@
       AIVoiceCoach.initVoice();
     });
   </script>
+
 </body>
 </html>
