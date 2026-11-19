@@ -240,23 +240,23 @@
     .nav-step-pills {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 3px;
+      justify-content: safe center;
+      gap: 2px;
       overflow-x: auto;
       scrollbar-width: none;
       -ms-overflow-style: none;
       flex: 1;
       min-width: 0;
-      padding: 0 4px;
+      padding: 0 2px;
     }
     .nav-step-pills::-webkit-scrollbar {
       display: none;
     }
     .nav-step-pill {
-      font-size: 12.5px;
+      font-size: clamp(10.5px, 0.78vw, 12.5px);
       font-weight: 600;
       color: #64748B;
-      padding: 5px 9px;
+      padding: 4px clamp(5px, 0.5vw, 8px);
       border-radius: 7px;
       white-space: nowrap;
       transition: all 0.15s ease;
@@ -337,16 +337,21 @@
       border-color: #7DD3FC;
     }
 
-    @media (max-width: 1440px) {
+    @media (max-width: 1600px) {
       .monitor-header {
+        height: 50px;
         gap: 6px;
-        padding: 0 8px;
+        padding: 0 10px;
       }
       .brand-badge-mdbuu {
         display: none;
       }
       .brand-title {
-        font-size: 13px;
+        font-size: 13.5px;
+      }
+      .session-clock-pill {
+        font-size: 11.5px;
+        padding: 3px 7px;
       }
       .session-clock-pill .clock-lbl {
         display: none;
@@ -355,25 +360,29 @@
         display: none;
       }
       .nav-btn {
-        padding: 0 5px !important;
+        height: 29px;
+        padding: 0 7px !important;
+        font-size: 11.5px;
         gap: 3px !important;
       }
+      .nav-btn-icon-only {
+        width: 29px;
+        padding: 0 !important;
+      }
       .nav-step-pill {
-        padding: 2px 4px !important;
-        font-size: 10.5px !important;
+        padding: 4px 6px !important;
+        font-size: 11px !important;
       }
     }
 
-    @media (max-width: 1250px) {
-      #btnVoiceModeToggle .btn-txt {
+    @media (max-width: 1340px) {
+      #btnVoiceModeToggle .btn-txt,
+      .host-remote-btn .btn-txt {
         display: none;
       }
-      .host-remote-btn .btn-txt {
-        font-size: 10.5px;
-      }
       .nav-step-pill {
-        padding: 2px 3px !important;
-        font-size: 10px !important;
+        padding: 3px 4.5px !important;
+        font-size: 10.5px !important;
       }
     }
 
@@ -383,11 +392,11 @@
     .telemetry-ribbon-bar {
       width: 97.5vw;
       max-width: 2400px;
-      margin: 8px auto 0;
-      height: clamp(162px, 18.5vh, 188px);
+      margin: 6px auto 0;
+      height: clamp(132px, 16vh, 180px);
       display: grid;
-      grid-template-columns: clamp(380px, 29vw, 480px) 1fr clamp(230px, 18vw, 290px);
-      gap: 12px;
+      grid-template-columns: clamp(350px, 28vw, 460px) minmax(0, 1fr) clamp(210px, 17vw, 280px);
+      gap: 10px;
       flex-shrink: 0;
       background: transparent;
       border: none;
@@ -744,16 +753,16 @@
     .stage-card-clean {
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
-      border-radius: 22px;
+      border-radius: 20px;
       box-shadow: var(--shadow-card);
-      padding: 16px 24px;
+      padding: 12px 18px;
       height: 100%;
       min-height: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 10px;
-      overflow-y: auto;
+      gap: 8px;
+      overflow: hidden;
       box-sizing: border-box;
     }
 
@@ -1661,13 +1670,13 @@
        ========================================================================== */
     .stage-body-split {
       display: grid;
-      grid-template-columns: minmax(480px, 47%) 1fr;
-      gap: 24px;
+      grid-template-columns: minmax(380px, 45%) minmax(0, 1fr);
+      gap: 18px;
       align-items: stretch;
-      margin-top: 2px;
+      margin-top: 0;
       flex: 1;
       min-height: 0;
-      height: 100%;
+      overflow: hidden;
     }
     .scene-photo-frame {
       width: 100%;
@@ -1715,9 +1724,13 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
       height: 100%;
       min-height: 0;
+      min-width: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 2px;
     }
     .stage-choices-vertical-stack {
       display: flex;
@@ -2915,39 +2928,41 @@
     }
 
     /* ==========================================================================
-       STAGE 9 SUMMARY & SCOREBOARD POLISH (V22 HIGH-DENSITY EXECUTIVE BENTO)
+       STAGE 9 SUMMARY & SCOREBOARD POLISH (V27 ZERO-OVERLAP EXECUTIVE BENTO)
        ========================================================================== */
     .summary-v10-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.3fr) minmax(0, 0.95fr);
-      gap: 16px;
+      grid-template-columns: minmax(0, 1.02fr) minmax(0, 1.32fr) minmax(0, 0.96fr);
+      gap: 12px;
       align-items: stretch;
       flex: 1;
       min-height: 0;
       height: 100%;
+      overflow: hidden;
     }
 
     .summary-bento-col {
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
-      border-radius: 18px;
-      padding: 16px 18px;
+      border-radius: 16px;
+      padding: 12px 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 12px;
+      gap: 8px;
       min-height: 0;
       min-width: 0;
+      overflow: hidden;
       box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
     }
 
-    /* Left Column: Expands Scene Image to Eliminate White Voids */
+    /* Left Column: Expands Scene Image Cleanly */
     .summary-scene-wrap {
       position: relative;
       width: 100%;
-      flex: 1;
-      min-height: 165px;
-      border-radius: 14px;
+      flex: 1 1 130px;
+      min-height: 110px;
+      border-radius: 12px;
       overflow: hidden;
       border: 1.5px solid #CBD5E1;
       background: #0F172A;
@@ -2964,54 +2979,57 @@
     .summary-rosc-box {
       background: #F8FAFC;
       border: 1.5px solid #E2E8F0;
-      border-radius: 14px;
-      padding: 12px 14px;
+      border-radius: 12px;
+      padding: 9px 11px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
       flex-shrink: 0;
     }
     .summary-vitals-trio {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
     }
     .summary-vital-mini {
       background: #FFFFFF;
       border: 1px solid #CBD5E1;
-      border-radius: 10px;
-      padding: 8px 8px;
+      border-radius: 9px;
+      padding: 6px 4px;
       text-align: center;
+      min-width: 0;
     }
     .summary-motto-banner {
       background: #ECFDF5;
       border: 1.5px solid #A7F3D0;
-      border-radius: 12px;
-      padding: 10px 14px;
+      border-radius: 10px;
+      padding: 7px 11px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 13.5px;
+      gap: 6px;
+      font-size: 12.5px;
       color: #065F46;
       font-weight: 800;
       flex-shrink: 0;
+      white-space: nowrap;
     }
 
-    /* Center Column: Large 94px Radial Gauge + Bold 8-Stage Pills */
+    /* Center Column: Radial Gauge + Zero-Cutoff 8-Stage Pills */
     .summary-perf-header {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       background: #F8FAFC;
       border: 1.5px solid #E2E8F0;
-      border-radius: 16px;
-      padding: 12px 16px;
+      border-radius: 14px;
+      padding: 9px 12px;
       flex-shrink: 0;
     }
     .radial-gauge-wrapper-v18 {
       position: relative;
-      width: 94px;
-      height: 94px;
+      width: 78px;
+      height: 78px;
       flex-shrink: 0;
     }
     .radial-gauge-svg-v18 {
@@ -3026,40 +3044,44 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 1px;
       pointer-events: none;
     }
     .rank-letter-v18 {
-      font-size: 34px;
+      font-size: 28px;
       font-weight: 900;
       line-height: 1;
       letter-spacing: -0.02em;
     }
     .rank-points-v18 {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
       color: #334155;
       line-height: 1;
     }
 
+    /* CRITICAL FIX: repeat(2, minmax(0, 1fr)) prevents right-column score pills from clipping! */
     .stage-scores-grid-v18 {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+      gap: 6px;
       flex: 1;
       min-height: 0;
+      min-width: 0;
     }
     .stage-score-pill-v18 {
       background: #F8FAFC;
       border: 1.5px solid #E2E8F0;
-      border-radius: 12px;
-      padding: 0 14px;
+      border-radius: 10px;
+      padding: 0 9px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       min-height: 0;
+      min-width: 0;
+      overflow: hidden;
     }
     .stage-score-pill-v18.perfect {
       background: #F0FDF4;
@@ -3072,14 +3094,16 @@
     .stage-pill-left {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 6px;
+      flex: 1;
       min-width: 0;
+      overflow: hidden;
     }
     .stage-pill-num {
-      font-size: 12px;
+      font-size: 10.5px;
       font-weight: 800;
-      padding: 3px 7px;
-      border-radius: 6px;
+      padding: 2px 5px;
+      border-radius: 5px;
       background: #090D16;
       color: #FFFFFF;
       flex-shrink: 0;
@@ -3091,15 +3115,16 @@
       background: #E11D48;
     }
     .stage-pill-name {
-      font-size: 14.5px;
+      font-size: clamp(11.5px, 0.85vw, 13.5px);
       font-weight: 700;
       color: #090D16;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-width: 0;
     }
     .stage-pill-score {
-      font-size: 15.5px;
+      font-size: clamp(12px, 0.9vw, 14px);
       font-weight: 900;
       white-space: nowrap;
       flex-shrink: 0;
@@ -3111,42 +3136,43 @@
       color: #E11D48;
     }
 
-    /* Right Column: Leaderboard + Expanded Centered QR Card + Bold CTAs */
+    /* Right Column: Leaderboard + Horizontal Zero-Overlap QR Card + Compact CTAs */
     .leaderboard-box {
-      padding: 12px 14px;
-      gap: 6px;
+      padding: 8px 10px;
+      gap: 4px;
       flex-shrink: 0;
       background: #FFFFFF;
       border: 1px solid #E2E8F0;
-      border-radius: 14px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
     }
     .leaderboard-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       color: #090D16;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .leaderboard-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13.5px;
+      font-size: 12px;
     }
     .leaderboard-table th {
       text-align: left;
       color: #64748B;
       font-weight: 700;
-      padding: 5px 8px;
+      padding: 3px 6px;
       border-bottom: 1px solid #E2E8F0;
     }
     .leaderboard-table td {
-      padding: 5px 8px;
+      padding: 3.5px 6px;
       border-bottom: 1px solid #F1F5F9;
       color: #090D16;
       font-weight: 600;
+      white-space: nowrap;
     }
     .leaderboard-table tr.current-team {
       background: #EFF6FF;
@@ -3156,34 +3182,36 @@
       color: #0284C7;
     }
 
+    /* CRITICAL FIX: Horizontal QR Card eliminates ALL upward/downward overlap over TOP 3 & Buttons! */
     .qr-box-v18 {
       background: #F8FAFC;
       border: 1.5px solid #CBD5E1;
-      border-radius: 16px;
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 10px 12px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      gap: 10px;
-      flex: 1;
+      justify-content: flex-start;
+      text-align: left;
+      gap: 12px;
+      flex: 1 1 auto;
       min-height: 0;
+      overflow: hidden;
     }
     .qr-frame-v18 {
       background: #FFFFFF;
-      padding: 8px;
-      border-radius: 12px;
+      padding: 5px;
+      border-radius: 10px;
       border: 1.5px solid #CBD5E1;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.06);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
     }
     .qr-frame-v18 canvas {
-      width: 128px !important;
-      height: 128px !important;
+      width: clamp(76px, 10vh, 104px) !important;
+      height: clamp(76px, 10vh, 104px) !important;
       display: block;
     }
     .btn-view-cert {
@@ -3191,9 +3219,9 @@
       background: #0284C7;
       color: #FFFFFF;
       border: none;
-      border-radius: 11px;
-      padding: 0 16px;
-      font-size: 14.5px;
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 13.5px;
       font-weight: 800;
       cursor: pointer;
       display: flex;
@@ -3269,15 +3297,57 @@
     .vote-status-board-card {
       background: #FFFFFF;
       border: 1.5px solid #E2E8F0;
-      border-radius: 18px;
-      padding: 20px 24px;
+      border-radius: 16px;
+      padding: 12px 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 4px 20px rgba(15,23,42,0.04);
-      flex: 1;
+      gap: 9px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.04);
+      flex: 1 1 auto;
       min-height: 0;
-      justify-content: space-between;
+      overflow-y: auto;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+    .vote-status-board-card > * {
+      flex-shrink: 0;
+    }
+    .vote-choices-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      flex-shrink: 0;
+    }
+    .vote-choice-preview-item {
+      background: #F8FAFC;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 10px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .vote-choice-preview-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      background: #090D16;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .vote-choice-preview-text {
+      font-size: clamp(12.5px, 0.95vw, 14.5px);
+      font-weight: 700;
+      color: #090D16;
+      line-height: 1.28;
+      min-width: 0;
+      word-break: break-word;
     }
     .vote-board-badge {
       display: inline-flex;
@@ -3849,6 +3919,84 @@
       100% { background: #881337; }
     }
 
+    /* ==========================================================================
+       V27.0 COMPACT LAPTOP VIEWPORT PROTECTION (HEIGHT <= 860px / DOCK VISIBLE)
+       ========================================================================== */
+    @media (max-height: 860px) {
+      .telemetry-ribbon-bar {
+        height: clamp(124px, 15.5vh, 148px);
+        margin-top: 5px;
+      }
+      .patient-hud-badge {
+        padding: 7px 10px;
+        gap: 10px;
+      }
+      .patient-hud-photo-wrap {
+        width: clamp(94px, 12.5vh, 122px);
+      }
+      .patient-hud-stage-name {
+        font-size: 14px;
+      }
+      .patient-hud-state {
+        font-size: 11.5px;
+        padding: 4px 8px;
+      }
+      .micro-pill {
+        padding: 3px 6px;
+      }
+      .micro-val {
+        font-size: 11px;
+      }
+      .vital-number {
+        font-size: calc(clamp(34px, 2.8vw, 48px) * var(--ui-scale));
+      }
+      .stage-viewport {
+        margin: 6px auto 8px;
+      }
+      .unified-status-bar {
+        padding: 5px 12px;
+      }
+      .stage-headline-clean {
+        font-size: calc(clamp(18px, 1.75vw, 25px) * var(--ui-scale));
+        margin-bottom: 4px;
+      }
+      .clinical-findings-subline {
+        font-size: 13.5px;
+        padding: 7px 12px;
+        margin: 2px 0;
+      }
+      .stage-context-bar {
+        margin-bottom: 4px;
+        padding-bottom: 5px;
+      }
+      .cpr-ready-overlay {
+        padding: 8px 14px;
+        gap: 10px;
+      }
+      .btn-cpr-ready-start {
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+      .cpr-timing-judge-badge {
+        width: 100% !important;
+        height: 34px !important;
+        font-size: 12px !important;
+      }
+      .aed-card-v7 {
+        padding: 8px 14px;
+        min-height: 48px;
+      }
+      .aed-phrase-large {
+        font-size: calc(clamp(18px, 1.7vw, 26px) * var(--ui-scale));
+      }
+      .stage2-kw-tile {
+        padding: 10px 12px;
+      }
+      .meter-cluster-clean {
+        padding: 10px 14px;
+        gap: 6px;
+      }
+    }
   </style>
 </head>
 <body class="lobby-mode">
@@ -6255,8 +6403,12 @@
 
         this.recognition.onend = () => {
           if (this.isSttRunning && !window.isSystemSpeaking && (window.GameStateManager && [1, 2, 3, 4, 5, 6, 7, 8].includes(window.GameStateManager.currentStage))) {
-            if (window.GameStateManager.currentStage === 5 && window.GameStateManager.stage5Phase === 'CPR') {
-              return; // STT is OFF during CPR
+            if (
+              window.GameStateManager.currentStage === 5 &&
+              window.GameStateManager.stage5Phase === 'CPR' &&
+              window.GameStateManager.cprPhaseState !== 'WAITING_READY'
+            ) {
+              return; // STT is OFF during active CPR & Countdown, but MUST stay alive during WAITING_READY!
             }
             try { this.recognition.start(); } catch(e) {}
           }
@@ -7473,53 +7625,49 @@
                   </div>
                 </div>
               ` : (isVoting ? `
-                <!-- Step 2: Live Vote Status Board + Readable Choice Preview (Zero Blank Space!) -->
-                <div class="vote-status-board-card" style="padding:16px 20px; gap:12px;">
-                  <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div class="vote-board-badge font-technical" style="font-size:13px; padding:5px 14px;">
+                <!-- Step 2: Zero-Overlap Live Vote Status Board + Readable Choice Preview -->
+                <div class="vote-status-board-card">
+                  <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <div class="vote-board-badge font-technical" style="font-size:12px; padding:4px 12px;">
                       <span class="live-pulse-dot"></span>
                       เปิดรับโหวตจากมือถือทุกคนในห้อง (CO-OP KAHOOT)
                     </div>
-                    <button onclick="GameStateManager.finishAudienceVoting()" class="btn-close-vote-clean font-technical" style="font-size:13px; padding:7px 14px;">
+                    <button onclick="GameStateManager.finishAudienceVoting()" class="btn-close-vote-clean font-technical" style="font-size:12px; padding:5px 12px; flex-shrink:0;">
                       ⏱️ ปิดโหวตทันที
                     </button>
                   </div>
 
-                  <!-- Big Timer + Progress + Live Vote Counter -->
-                  <div style="display:flex; align-items:center; gap:16px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:10px 16px;">
-                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec" style="font-size:48px; min-width:64px; color:#0284C7;">${this.voteCountdownSeconds}</div>
-                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
-                      <div style="display:flex; justify-content:space-between; align-items:center; font-size:14.5px; font-weight:800; color:#1E293B;" class="font-technical">
-                        <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669; font-size:17px;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
-                        <span id="txtVotePct" class="num-readout" style="color:#0284C7; font-size:16px;">${votePct}%</span>
+                  <!-- Compact Timer + Progress + Live Vote Counter -->
+                  <div style="display:flex; align-items:center; gap:14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:7px 14px;">
+                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec" style="font-size:36px; min-width:52px; color:#0284C7;">${this.voteCountdownSeconds}</div>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:5px; min-width:0;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; font-size:13.5px; font-weight:800; color:#1E293B;" class="font-technical">
+                        <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669; font-size:15.5px;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
+                        <span id="txtVotePct" class="num-readout" style="color:#0284C7; font-size:15px;">${votePct}%</span>
                       </div>
-                      <div class="vote-timer-progress-wrap" style="height:14px;">
+                      <div class="vote-timer-progress-wrap" style="height:11px;">
                         <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- 2x2 Readable Choice Preview Cards (So the whole room can read the options clearly!) -->
-                  <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; flex:1; min-height:0;">
+                  <!-- 2x2 Readable Choice Preview Cards (Guaranteed Zero Overlap) -->
+                  <div class="vote-choices-preview-grid">
                     ${data.choices.map(c => `
-                      <div style="background:#F8FAFC; border:1.5px solid #E2E8F0; border-radius:12px; padding:10px 12px; display:flex; align-items:center; gap:10px; min-height:0;">
-                        <div style="width:32px; height:32px; border-radius:8px; background:#090D16; color:#FFFFFF; font-size:15px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;" class="num-readout">
-                          ${c.num}
-                        </div>
-                        <div style="font-size:14.5px; font-weight:700; color:#090D16; line-height:1.3;">
-                          ${c.title}
-                        </div>
+                      <div class="vote-choice-preview-item">
+                        <div class="vote-choice-preview-num num-readout">${c.num}</div>
+                        <div class="vote-choice-preview-text">${c.title}</div>
                       </div>
                     `).join('')}
                   </div>
 
                   <!-- Live Groups Participation Grid (Groups 01-10) -->
-                  <div class="vote-groups-participation-grid font-technical" id="voteGroupsRoster" style="gap:6px;">
+                  <div class="vote-groups-participation-grid font-technical" id="voteGroupsRoster" style="gap:5px; margin-top:auto;">
                     ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(grpNum => {
                       const grpStr = String(grpNum).padStart(2, '0');
                       const grpVotes = Object.values(this.currentVotes).filter(v => v.group === grpStr).length;
                       return `
-                        <div class="vote-group-status-pill ${grpVotes > 0 ? 'voted' : ''}" style="padding:7px 10px; font-size:13.5px;">
+                        <div class="vote-group-status-pill ${grpVotes > 0 ? 'voted' : ''}" style="padding:5px 8px; font-size:12px;">
                           <span>กลุ่ม ${grpStr}</span>
                           <span class="vote-group-dot"></span>
                         </div>
@@ -8876,46 +9024,46 @@
                   </div>
                 </div>
 
-                <!-- 4-Card Facts Strip (V19.0: 2x2 Grid with 17px Bold Readouts) -->
-                <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:4px; flex:1;" id="stage3FactsStrip">
-                  <div class="fact-card-clean" id="factCard1" style="padding:10px 14px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
-                    <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#090D16;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
+                <!-- 4-Card Facts Strip (Compact Balanced 2x2 Grid) -->
+                <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; margin-bottom:2px; flex:0 1 auto;" id="stage3FactsStrip">
+                  <div class="fact-card-clean" id="factCard1" style="padding:8px 12px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
+                    <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f1Unlocked ? 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอกด 25%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard2" style="padding:10px 14px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
-                    <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#090D16;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
+                  <div class="fact-card-clean" id="factCard2" style="padding:8px 12px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
+                    <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f2Unlocked ? 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง' : '🔒 รอกด 50%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard3" style="padding:10px 14px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">3. อาการผู้ป่วย</div>
-                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#E11D48;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
+                  <div class="fact-card-clean" id="factCard3" style="padding:8px 12px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">3. อาการผู้ป่วย</div>
+                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#E11D48;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f3Unlocked ? 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard4" style="padding:10px 14px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
-                    <div class="fact-label-clean font-technical" style="font-size:calc(12.5px * var(--ui-scale)); font-weight:800; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
-                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:calc(clamp(18px, 1.65vw, 25px) * var(--ui-scale)); font-weight:800; line-height:1.3; color:#059669;' : 'font-size:calc(14px * var(--ui-scale)); color:#94A3B8;'}">
+                  <div class="fact-card-clean" id="factCard4" style="padding:8px 12px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                    <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
+                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#059669;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f4Unlocked ? 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED' : '🔒 รอกด 100%'}
                     </div>
                   </div>
                 </div>
 
-                <h2 class="stage-headline-clean" style="font-size:18.5px; font-weight:800; margin:4px 0 2px 0; line-height:1.35;">
+                <h2 class="stage-headline-clean" style="font-size:clamp(14.5px, 1.2vw, 17px); font-weight:800; margin:2px 0; line-height:1.3;">
                   เจ้าหน้าที่ 1669: “สายด่วน 1669 รับสายครับ! แจ้งข้อมูลสำคัญทั้ง 4 ข้อให้เจ้าหน้าที่ทราบได้เลยครับ”
                 </h2>
 
-                <!-- Compact Voice Transcript & Manual Input Panel (Zero-Spoiler) -->
-                <div class="voice-transcript-panel" style="padding:8px 12px; margin:0;">
+                <!-- Compact Voice Transcript & Manual Input Panel -->
+                <div class="voice-transcript-panel" style="padding:7px 12px; margin:0; flex-shrink:0;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="font-technical" style="font-size:11.5px; font-weight:700; color:#0284C7;">
+                    <span class="font-technical" style="font-size:11px; font-weight:700; color:#0284C7;">
                       🎙️ พูดแจ้งข้อมูลใส่ไมค์:
                     </span>
                   </div>
-                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:22px; margin-top:4px; font-size:calc(14.5px * var(--ui-scale));">
+                  <div id="txtLiveTranscript" class="live-transcript-box" style="min-height:20px; margin-top:2px; font-size:13.5px;">
                     ${this.stage3CanTap ? 'ไมค์เปิดรับเสียงแล้ว... แจ้งข้อมูลสำคัญ 4 ข้อได้เลย' : 'รอเจ้าหน้าที่ 1669 พูดจบสักครู่...'}
                   </div>
                   <div class="manual-input-box" style="margin-top:4px;">
@@ -8924,23 +9072,23 @@
                   </div>
                 </div>
 
-                <!-- 4 Checklist Pills (Zero Spoilers until answered!) -->
-                <div class="checklist-pills-row font-technical" style="gap:8px; margin-top:2px;">
-                  <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean ${this.checklist.location ? 'checked' : ''}" style="padding:8px 10px;">
-                    <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.location ? '✓ 1. พิกัด: หน้า รพ.ม.บูรพา' : '1. พิกัดจุดเกิดเหตุ'}</div>
+                <!-- 4 Checklist Pills (Zero Cutoff) -->
+                <div class="checklist-pills-row font-technical" style="display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; margin-top:auto; flex-shrink:0;">
+                  <div id="chkPillLoc" onclick="GameStateManager.toggleChecklistItem('location')" class="chk-pill-clean ${this.checklist.location ? 'checked' : ''}" style="padding:7px 8px; gap:6px; min-width:0;">
+                    <div class="chk-pill-box" style="width:18px; height:18px; font-size:11px;">✓</div>
+                    <div class="chk-pill-text" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.checklist.location ? '✓ พิกัด: รพ.ม.บูรพา' : '1. พิกัดจุดเกิดเหตุ'}</div>
                   </div>
-                  <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean ${this.checklist.incident ? 'checked' : ''}" style="padding:8px 10px;">
-                    <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.incident ? '✓ 2. เหตุการณ์: รถเก๋งชนรั้ว' : '2. ลักษณะเหตุการณ์'}</div>
+                  <div id="chkPillInc" onclick="GameStateManager.toggleChecklistItem('incident')" class="chk-pill-clean ${this.checklist.incident ? 'checked' : ''}" style="padding:7px 8px; gap:6px; min-width:0;">
+                    <div class="chk-pill-box" style="width:18px; height:18px; font-size:11px;">✓</div>
+                    <div class="chk-pill-text" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.checklist.incident ? '✓ รถเก๋งชนรั้ว' : '2. ลักษณะเหตุการณ์'}</div>
                   </div>
-                  <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean ${this.checklist.patient ? 'checked' : ''}" style="padding:8px 10px;">
-                    <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.patient ? '✓ 3. อาการ: หมดสติ ไม่หายใจ' : '3. อาการผู้ป่วย'}</div>
+                  <div id="chkPillPat" onclick="GameStateManager.toggleChecklistItem('patient')" class="chk-pill-clean ${this.checklist.patient ? 'checked' : ''}" style="padding:7px 8px; gap:6px; min-width:0;">
+                    <div class="chk-pill-box" style="width:18px; height:18px; font-size:11px;">✓</div>
+                    <div class="chk-pill-text" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.checklist.patient ? '✓ หมดสติ ไม่หายใจ' : '3. อาการผู้ป่วย'}</div>
                   </div>
-                  <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean ${this.checklist.aed ? 'checked' : ''}" style="padding:8px 10px;">
-                    <div class="chk-pill-box">✓</div>
-                    <div class="chk-pill-text" style="font-size:calc(13.5px * var(--ui-scale));">${this.checklist.aed ? '✓ 4. ต้องการ: รถกู้ชีพ + AED' : '4. สิ่งที่ต้องการ'}</div>
+                  <div id="chkPillAed" onclick="GameStateManager.toggleChecklistItem('aed')" class="chk-pill-clean ${this.checklist.aed ? 'checked' : ''}" style="padding:7px 8px; gap:6px; min-width:0;">
+                    <div class="chk-pill-box" style="width:18px; height:18px; font-size:11px;">✓</div>
+                    <div class="chk-pill-text" style="font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${this.checklist.aed ? '✓ รถกู้ชีพ + AED' : '4. สิ่งที่ต้องการ'}</div>
                   </div>
                 </div>
               </div>
@@ -9614,9 +9762,9 @@
                   <span>MDBUU OPEN HOUSE 2027</span>
                 </div>
 
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#475569; padding-top:6px; border-top:1px solid #F1F5F9; font-weight:700;" class="font-technical">
-                  <span>📍 Resuscitation Room รพ.มหาวิทยาลัยบูรพา</span>
-                  <span style="color:#059669; font-weight:800;">ส่งมอบแพทย์เรียบร้อย ✓</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; font-size:11.5px; color:#475569; padding-top:5px; border-top:1px solid #F1F5F9; font-weight:700; white-space:nowrap; flex-shrink:0;" class="font-technical">
+                  <span style="overflow:hidden; text-overflow:ellipsis;">📍 ห้องฉุกเฉิน รพ.ม.บูรพา</span>
+                  <span style="color:#059669; font-weight:800; flex-shrink:0;">ส่งมอบแพทย์เรียบร้อย ✓</span>
                 </div>
               </div>
 
@@ -9707,25 +9855,25 @@
                   </table>
                 </div>
 
-                <!-- QR Certificate Card (Centered & Balanced) -->
+                <!-- QR Certificate Card (Horizontal Zero-Overlap Layout) -->
                 <div class="qr-box-v18 font-technical">
                   <div class="qr-frame-v18">
                     <canvas id="qrCanvas"></canvas>
                   </div>
-                  <div style="display:flex; flex-direction:column; gap:3px; align-items:center;">
-                    <div style="font-size:15px; font-weight:800; color:#090D16;">📲 สแกนรับเกียรติบัตรรายบุคคล</div>
-                    <div style="font-size:12.5px; color:#475569; line-height:1.35;">
+                  <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start; min-width:0; flex:1;">
+                    <div style="font-size:13.5px; font-weight:800; color:#090D16; line-height:1.25;">📲 สแกนรับเกียรติบัตรรายบุคคล</div>
+                    <div style="font-size:11.5px; color:#475569; line-height:1.35;">
                       สแกนด้วยกล้องมือถือเพื่อดาวน์โหลดเกียรติบัตรระบุชื่อของคุณทันที
                     </div>
                   </div>
                 </div>
 
                 <!-- Bottom Action Buttons -->
-                <div style="display:flex; flex-direction:column; gap:8px; flex-shrink:0;">
-                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert font-technical" style="height:44px; border-radius:11px; font-size:14.5px;">
+                <div style="display:flex; flex-direction:column; gap:6px; flex-shrink:0;">
+                  <button onclick="GameStateManager.openCertModal()" class="btn-view-cert font-technical" style="height:38px; border-radius:10px; font-size:13.5px;">
                     📜 เปิดดูและดาวน์โหลดเกียรติบัตรกลุ่ม
                   </button>
-                  <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset font-technical" style="width:100%; height:44px; border-radius:11px; font-size:14.5px;" title="เริ่มรอบใหม่ทันที [R]">
+                  <button onclick="GameStateManager.quickResetGame()" class="btn-quick-reset font-technical" style="width:100%; height:38px; padding:0 14px; border-radius:10px; font-size:13.5px;" title="เริ่มรอบใหม่ทันที [R]">
                     🔄 เริ่มรอบถัดไป (Reset - R)
                   </button>
                 </div>
