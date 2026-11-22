@@ -4837,8 +4837,7 @@
 
         <!-- Full-Width Hero Scene Banner (User Animation Clip) -->
         <div class="lobby-hero-banner" id="lobbyHeroBannerBox">
-          <video id="lobbyHeroVideo" class="lobby-hero-video" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s0.jpg">
-            <source src="videos/scenes/scene_s0.mp4" type="video/mp4">
+          <video id="lobbyHeroVideo" class="lobby-hero-video" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s00.jpg">
             <source src="videos/scenes/scene_s00.mp4" type="video/mp4">
           </video>
           <div class="lobby-hero-badge-left font-technical">
@@ -8440,6 +8439,9 @@
           }
           SoundEngine.playStageClear();
 
+          // V28: the patient's thank-you outro, held a moment, then the group-photo loop
+          setTimeout(() => { if (this.currentStage === 9) this.playSceneClip('outro', { hold: 3000, thenLoop: 's09' }); }, 60);
+
           speakAndWait('จบภารกิจแล้วครับ! ปรบมือให้ตัวแทนหน้าห้อง แล้วก็ทุกคนที่ช่วยกันวันนี้หน่อย เกียรติบัตรที่มีชื่อของแต่ละคนส่งเข้ามือถือแล้ว เซฟเก็บไว้ได้เลย ช่วยให้เป็น เห็นแล้วกล้าทำ ขอบคุณที่มาเยี่ยมคณะแพทย์ ม.บูรพาครับ', 's9_final_congrats');
         }
       }
@@ -8455,17 +8457,51 @@
           return `
             <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="${poster}" style="transition: opacity 0.25s ease;">
               <source src="videos/scenes/scene_s${padded}_before.mp4" type="video/mp4">
-              <source src="videos/scenes/scene_s${stageNum}_before.mp4" type="video/mp4">
             </video>
           `;
         }
         const poster = `videos/scenes/posters/poster_s${padded}.jpg`;
         return `
           <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="${poster}" style="transition: opacity 0.25s ease;">
-            <source src="videos/scenes/scene_s${stageNum}.mp4" type="video/mp4">
             <source src="videos/scenes/scene_s${padded}.mp4" type="video/mp4">
           </video>
         `;
+      }
+
+      // V28: play a one-shot story clip (correct / fatal / success / shock / intro / outro) in the scene frame.
+      // Resolves when it ends (+hold ms), errors, or after a safety cap. thenLoop = clip to loop afterwards.
+      playSceneClip(name, { hold = 0, thenLoop = null, cap = 9000 } = {}) {
+        return new Promise(resolve => {
+          const v = document.getElementById('stageSceneVideo');
+          if (!v) return resolve(false);
+          let done = false, capTimer = null;
+          const finish = (ok) => {
+            if (done) return;
+            done = true;
+            clearTimeout(capTimer);
+            v.removeEventListener('ended', onEnd);
+            v.removeEventListener('error', onErr, true);
+            if (thenLoop && document.body.contains(v)) {
+              v.poster = `videos/scenes/posters/poster_${thenLoop}.jpg`;
+              v.innerHTML = `<source src="videos/scenes/scene_${thenLoop}.mp4" type="video/mp4">`;
+              v.loop = true;
+              v.load();
+              v.play().catch(() => {});
+            }
+            resolve(ok);
+          };
+          const onEnd = () => setTimeout(() => finish(true), hold);
+          const onErr = () => finish(false);
+          v.addEventListener('ended', onEnd);
+          v.addEventListener('error', onErr, true); // <source> errors do not bubble
+          v.loop = false;
+          v.poster = `videos/scenes/posters/poster_${name}.jpg`;
+          v.innerHTML = `<source src="videos/scenes/scene_${name}.mp4" type="video/mp4">`;
+          v.style.opacity = '1';
+          v.load();
+          v.play().catch(() => {});
+          capTimer = setTimeout(() => finish(false), cap);
+        });
       }
 
       switchStageVideoToTreatment(stageNum) {
@@ -8481,7 +8517,6 @@
           video.style.display = 'block';
 
           video.innerHTML = `
-            <source src="videos/scenes/scene_s${stageNum}.mp4" type="video/mp4">
             <source src="videos/scenes/scene_s${padded}.mp4" type="video/mp4">
           `;
           video.poster = poster;
@@ -8911,9 +8946,12 @@
 
           // Guarantee viewers see the treatment animation for at least 3.5s on Stages 6 & 8 even if AI Voice is muted
           const minWatchMs = [6, 8].includes(this.currentStage) ? 3500 : 1200;
+          // V28: stages 1 & 4 get their own "correct" one-shot clip
+          const correctClip = { 1: 's01_correct', 4: 's04_correct' }[this.currentStage];
           await Promise.all([
             speakAndWait(choiceItem.correctSpoken, `s${this.currentStage}_correct`),
-            new Promise(r => setTimeout(r, minWatchMs))
+            new Promise(r => setTimeout(r, minWatchMs)),
+            correctClip ? this.playSceneClip(correctClip, { hold: 300 }) : null
           ]);
 
           // Award multiplayer MVP points to players who voted for the winning answer
@@ -8934,6 +8972,12 @@
           else if (this.currentStage === 8) this.setStage(9);
         } else if (choiceItem.type === 'fatal') {
           if (btn) btn.classList.add('wrong');
+          // V28: show what goes wrong (3 s one-shot) before the game-over card
+          const fatalClip = { 1: 's01_fatal', 4: 's04_fatal', 7: 's07_fatal' }[this.currentStage];
+          if (fatalClip) {
+            SoundEngine.playErrorBuzz();
+            await this.playSceneClip(fatalClip, { hold: 500, cap: 5000 });
+          }
           this.triggerGameOver(choiceItem.fatalReason, this.currentStage);
         } else {
           // Non-fatal penalty (-5 pts)
@@ -9768,8 +9812,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s1.jpg">
-                  <source src="videos/scenes/scene_s1.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s01.jpg">
                   <source src="videos/scenes/scene_s01.mp4" type="video/mp4">
                 </video>
               </div>
@@ -9855,8 +9898,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s2.jpg">
-                  <source src="videos/scenes/scene_s2.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s02.jpg">
                   <source src="videos/scenes/scene_s02.mp4" type="video/mp4">
                 </video>
               </div>
@@ -9978,8 +10020,7 @@
             <div class="stage-body-split" style="gap:18px;">
               <!-- Left Column: Scene Photo -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s3.jpg">
-                  <source src="videos/scenes/scene_s3.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s03.jpg">
                   <source src="videos/scenes/scene_s03.mp4" type="video/mp4">
                 </video>
               </div>
@@ -10097,8 +10138,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s4.jpg">
-                  <source src="videos/scenes/scene_s4.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s04.jpg">
                   <source src="videos/scenes/scene_s04.mp4" type="video/mp4">
                 </video>
               </div>
@@ -10176,8 +10216,7 @@
               <div class="stage-body-split">
                 <!-- Left Column: Photorealistic Live-Action Scene + CPR Clinical Standard Glass Card -->
                 <div class="scene-photo-frame">
-                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s5a.jpg">
-                    <source src="videos/scenes/scene_s5a.mp4" type="video/mp4">
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s05a.jpg">
                     <source src="videos/scenes/scene_s05a.mp4" type="video/mp4">
                   </video>
                   <div class="cpr-standard-glass-card font-technical">
@@ -10295,8 +10334,7 @@
               <div class="stage-body-split">
                 <!-- Left Column: Photorealistic Live-Action Scene -->
                 <div class="scene-photo-frame">
-                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s5b.jpg">
-                    <source src="videos/scenes/scene_s5b.mp4" type="video/mp4">
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s05b.jpg">
                     <source src="videos/scenes/scene_s05b.mp4" type="video/mp4">
                   </video>
                 </div>
@@ -10382,8 +10420,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s6.jpg">
-                  <source src="videos/scenes/scene_s6.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s06.jpg">
                   <source src="videos/scenes/scene_s06.mp4" type="video/mp4">
                 </video>
               </div>
@@ -10469,8 +10506,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s7.jpg">
-                  <source src="videos/scenes/scene_s7.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s07.jpg">
                   <source src="videos/scenes/scene_s07.mp4" type="video/mp4">
                 </video>
               </div>
@@ -10547,8 +10583,7 @@
             <div class="stage-body-split">
               <!-- Left Column: Photorealistic Live-Action Scene -->
               <div class="scene-photo-frame">
-                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s8.jpg">
-                  <source src="videos/scenes/scene_s8.mp4" type="video/mp4">
+                <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s08.jpg">
                   <source src="videos/scenes/scene_s08.mp4" type="video/mp4">
                 </video>
               </div>
@@ -10701,8 +10736,7 @@
               <!-- COLUMN 1: Clinical Outcome & Patient Telemetry Card -->
               <div class="summary-bento-col">
                 <div class="summary-scene-wrap">
-                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s9.jpg" style="width:100%; height:100%; object-fit:cover; display:block;">
-                    <source src="videos/scenes/scene_s9.mp4" type="video/mp4">
+                  <video id="stageSceneVideo" class="scene-photo-img" autoplay loop muted playsinline poster="videos/scenes/posters/poster_s09.jpg" style="width:100%; height:100%; object-fit:cover; display:block;">
                     <source src="videos/scenes/scene_s09.mp4" type="video/mp4">
                   </video>
                   <div style="position:absolute; top:10px; left:10px; background:rgba(9,13,22,0.82); backdrop-filter:blur(6px); color:#10B981; font-size:11px; font-weight:800; padding:4px 10px; border-radius:7px; border:1px solid rgba(16,185,129,0.4);" class="font-technical">
@@ -11461,7 +11495,10 @@
           txtHint.style.color = '#10B981';
         }
 
-        await speakAndWait('ดังมากครับ! มีคนได้ยินแล้ว กำลังวิ่งไปหยิบเครื่องเออีดีให้เรา ต่อไป โทรหนึ่งหกหกเก้ากันครับ', 's2_success');
+        await Promise.all([
+          speakAndWait('ดังมากครับ! มีคนได้ยินแล้ว กำลังวิ่งไปหยิบเครื่องเออีดีให้เรา ต่อไป โทรหนึ่งหกหกเก้ากันครับ', 's2_success'),
+          this.playSceneClip('s02_success', { hold: 300 })
+        ]);
         this.setStage(3);
       }
 
@@ -11587,7 +11624,10 @@
           const box = document.getElementById('txtLiveTranscript');
           if (box) box.innerHTML = '<span style="color:#10B981; font-weight:700;">✓ ได้รับข้อมูลครบทั้ง 4 ข้อเรียบร้อยแล้วครับ! กรุณาฟังเจ้าหน้าที่ 1669 ตอบกลับ...</span>';
 
-          await speakAndWait('เจ้าหน้าที่ได้ข้อมูลครบแล้วครับ รถพยาบาลออกมาแล้ว ระหว่างรอ เรายังต้องดูแลคนเจ็บต่อ', 's3_success');
+          await Promise.all([
+            speakAndWait('เจ้าหน้าที่ได้ข้อมูลครบแล้วครับ รถพยาบาลออกมาแล้ว ระหว่างรอ เรายังต้องดูแลคนเจ็บต่อ', 's3_success'),
+            this.playSceneClip('s03_success', { hold: 300 })
+          ]);
           this.setStage(4);
         }
       }
@@ -12655,6 +12695,9 @@
         // V19.0: Send Realtime Surge Sync to all connected mobile smartphones!
         RealtimeEngine.send('AED_SHOCK_SURGE', { joules: 200 });
 
+        // V28: shock -> ROSC clip; its jolt (0.8 s) lines up with the discharge below (0.7 s)
+        this.playSceneClip('s05c_shock', { cap: 8000 });
+
         setTimeout(() => {
           SoundEngine.playAEDShock();
           window.ECGEngine.setMode('DEFIB_DISCHARGE');
@@ -13080,6 +13123,8 @@
         document.getElementById('btnStartConsole').addEventListener('click', () => {
           try { SoundEngine.initAndResume(); } catch(e) {}
           this.setStage(1);
+          // V28: open the story with the intro clip, then settle into the stage-1 loop
+          setTimeout(() => { if (this.currentStage === 1) this.playSceneClip('intro', { thenLoop: 's01' }); }, 60);
           MicSensor.ensureMicLive().catch(e => console.warn('Background mic request:', e));
         });
 
