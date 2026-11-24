@@ -7985,7 +7985,7 @@
         this.stageMistakes = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
         this.deathCount = 0;
         this.cprCount = 0;
-        this.cprTargetCount = 60;
+        this.cprTargetCount = 30; // V29: 30 compressions (one cycle) keeps the 8-minute round
         this.lastCprTapTime = 0;
         this.cprActive = false;
         this.cprCanHit = false;
@@ -8008,7 +8008,7 @@
         this.stage3Locked = false;
         this.shoutChargeProgress = 0;
         this.isStageChoiceLocked = false;
-        this.cprStrictRhythm = true; // V26.1 Strict Anti-Mash 110 BPM Mode Default
+        this.cprStrictRhythm = false; // V29: friendly ±155ms by default (strict ±115ms let casual tappers miss ~1 in 5)
         this.cprHighwayAnimId = null;
         this.aedCurrentStep = 1;
 
@@ -8309,7 +8309,7 @@
           subPhase: this.stage5Phase,
           cprState: this.cprPhaseState || 'INTRO',
           cprEpochStart: this.cprEpochStart || 0,
-          cprTarget: this.cprTargetCount || 60,
+          cprTarget: this.cprTargetCount || 30,
           stage3CanTap: Boolean(this.stage3CanTap),
           stage3Target: this.effectiveTapTarget || 80,
           stage3Completed: Boolean(this.stage3TapCount >= (this.effectiveTapTarget || 80)),
@@ -8667,7 +8667,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
-          await speakAndWait('หัวใจหยุดเต้นแล้วครับ ตัวแทนออกไปที่หุ่นเลย คุกเข่าข้างตัว วางส้นมือกลางหน้าอก แขนเหยียดตรง เพื่อนๆ เตรียมมือถือ เราจะกดตามจังหวะไปด้วยกันหกสิบครั้ง พร้อมเมื่อไหร่ พูดว่า พร้อมแล้ว ครับ', 's5_cpr_intro');
+          await speakAndWait('หัวใจหยุดเต้นแล้วครับ ตัวแทนออกไปที่หุ่นเลย คุกเข่าข้างตัว วางส้นมือกลางหน้าอก แขนเหยียดตรง เพื่อนๆ เตรียมมือถือ เราจะกดตามจังหวะไปด้วยกันสามสิบครั้ง พร้อมเมื่อไหร่ พูดว่า พร้อมแล้ว ครับ', 's5_cpr_intro');
           if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprPhaseState !== 'INTRO') return;
           this.enterStage5CprReadyWait();
         } else if (newStage === 6) {
@@ -11324,9 +11324,9 @@
         const deltaMs = payload.deltaMs !== undefined ? Number(payload.deltaMs) : 999;
 
         // Strict server-side verification: reject inaccurate or invalid packets
-        if ((accuracy !== 'PERFECT' && accuracy !== 'GOOD') || deltaMs > 125) return;
+        if ((accuracy !== 'PERFECT' && accuracy !== 'GOOD') || deltaMs > 160) return;
 
-        const isPerfect = accuracy === 'PERFECT' && deltaMs <= 75;
+        const isPerfect = accuracy === 'PERFECT' && deltaMs <= 95;
         const player = this.connectedPlayers[senderId];
         if (player) {
           player.cprHits++;
@@ -11335,14 +11335,15 @@
 
         // Strict 1-Beat = Max 1 Chest Compression on Host (real 110 BPM pacing even with 100 phones!)
         if (!this.mobileHitsPerBeat) this.mobileHitsPerBeat = {};
+        if (!this.consumedBeatIndices) this.consumedBeatIndices = new Set();
         if (beatIndex >= 0) {
-          if (this.mobileHitsPerBeat[beatIndex] >= 1) {
+          if (this.mobileHitsPerBeat[beatIndex] >= 1 || this.consumedBeatIndices.has(beatIndex)) {
             return; // Beat already counted on chest; player still received personal MVP points above
           }
           this.mobileHitsPerBeat[beatIndex] = 1;
         }
 
-        const target = this.cprTargetCount || 60;
+        const target = this.cprTargetCount || 30;
         this.cprCount = Math.min(target, this.cprCount + 1);
         window.ECGEngine.triggerCompressionSpike();
         this.updateCprAccuracyBar(isPerfect ? 100 : 82, isPerfect ? 'PERFECT' : 'GOOD');
@@ -12458,7 +12459,7 @@
           cprState: 'ACTIVE',
           bpm: 110,
           epochStart: this.cprEpochStart,
-          cprTarget: this.cprTargetCount || 60
+          cprTarget: this.cprTargetCount || 30
         });
         this.broadcastMultiplayerStageSync();
         this.startCprRhythmEngine();
@@ -12705,7 +12706,7 @@
 
       attemptCprHit(source = 'click', isBypass = false) {
         const badge = document.getElementById('cprTimingJudgeBadge');
-        const target = this.cprTargetCount || 60;
+        const target = this.cprTargetCount || 30;
 
         // 1. Block hits if AI is still speaking, waiting for ready, or 3-2-1 countdown hasn't finished!
         if (this.currentStage !== 5 || this.stage5Phase !== 'CPR' || this.cprFinished || this.cprTransitioning) return false;
@@ -12785,7 +12786,8 @@
           return true;
         }
 
-        // 5. Anti-Double-Tap on the same beat note
+        // 5. Anti-Double-Tap on the same beat note (V29: a beat a phone already counted counts once)
+        if (this.mobileHitsPerBeat && this.mobileHitsPerBeat[nearestBeatIdx] >= 1) this.consumedBeatIndices.add(nearestBeatIdx);
         if (this.consumedBeatIndices.has(nearestBeatIdx)) {
           this.cprMissCooldownUntil = now + 300;
           flashTarget('#F59E0B');
@@ -12877,7 +12879,7 @@
           this.renderStage();
           this.broadcastMultiplayerStageSync();
 
-          speakAndWait('ครบหกสิบครั้งแล้วครับ เครื่องเออีดีมาถึงแล้ว และเครื่องบอกให้ช็อก ทุกคนห้ามแตะจอมือถือนะครับ ตัวแทนพูดคำเตือนให้ดังทีละคำ เริ่มจาก ฉันถอย', 's5_aed_intro').then(() => {
+          speakAndWait('ครบสามสิบครั้งแล้วครับ เครื่องเออีดีมาถึงแล้ว และเครื่องบอกให้ช็อก ทุกคนห้ามแตะจอมือถือนะครับ ตัวแทนพูดคำเตือนให้ดังทีละคำ เริ่มจาก ฉันถอย', 's5_aed_intro').then(() => {
             setTimeout(() => {
               this.aedListening = true;
               this.lastAedStepTime = performance.now();
@@ -14123,9 +14125,9 @@
               return;
             }
 
-            // 4. Genuine Rhythm Evaluation (Perfect <= 70ms, Good <= 120ms, >120ms = MISS!)
-            const isPerfect = deltaMs <= 70;
-            const isGood = deltaMs <= 120;
+            // 4. Rhythm evaluation (V29 friendly: Perfect <= 95ms, Good <= 155ms)
+            const isPerfect = deltaMs <= 95;  // V29: same friendly window as the host
+            const isGood = deltaMs <= 155;
 
             if (isGood) {
               state.mobileConsumedBeats.add(nearestBeatIdx);
@@ -14442,7 +14444,7 @@
           subPhase: 'CPR',
           cprState: 'ACTIVE',
           cprEpochStart: state.cprEpochStart,
-          cprTarget: d.cprTarget || 60
+          cprTarget: d.cprTarget || 30
         });
       });
 
