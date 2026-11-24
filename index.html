@@ -7,7 +7,7 @@
   <!-- Google Fonts: Prompt, IBM Plex Sans Thai, JetBrains Mono, Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Prompt:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700;800&family=Prompt:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <!-- MQTT over Secure WebSockets (EMQX Public Broker wss://broker.emqx.io:8084/mqtt) -->
   <!-- mqtt.js 5.16.1 vendored locally (sha256 75873d04…a05a4e) so the event never depends on a CDN or an unannounced major upgrade -->
   <script src="js/vendor/mqtt-5.16.1.min.js"></script>
@@ -21,7 +21,7 @@
     :root {
       /* Typography */
       --font-thai: 'IBM Plex Sans Thai', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-display: 'Plus Jakarta Sans', 'Prompt', -apple-system, sans-serif;
+      --font-display: 'IBM Plex Sans Thai', 'Prompt', -apple-system, sans-serif;
       --font-num: 'JetBrains Mono', monospace;
 
       /* Backgrounds & Surfaces */
@@ -41,18 +41,18 @@
       /* Typography Ink */
       --text-ink: #090D16;           /* Deep carbon black for primary text */
       --text-slate: #334155;         /* Secondary body text */
-      --text-muted: #64748B;         /* Technical labels & captions */
+      --text-muted: #4F5660;         /* Technical labels & captions */
 
       /* Clinical Semantic Accents (Crisp, Flat, Zero Neon Glow) */
-      --vital-crimson: #E11D48;      /* Critical HR / Bradycardia / Arrest */
+      --vital-crimson: #C8241A;      /* Critical HR / Bradycardia / Arrest */
       --vital-crimson-bg: #FFF1F2;
       --vital-crimson-border: #FECDD3;
 
-      --vital-emerald: #059669;      /* Normal Sinus / Correct / Pass */
+      --vital-emerald: #11734F;      /* Normal Sinus / Correct / Pass */
       --vital-emerald-bg: #ECFDF5;
       --vital-emerald-border: #A7F3D0;
 
-      --vital-cobalt: #0284C7;       /* SpO2 Oxygen / Active Mic / Info */
+      --vital-cobalt: #1F5FA8;       /* SpO2 Oxygen / Active Mic / Info */
       --vital-cobalt-bg: #F0F9FF;
       --vital-cobalt-border: #BAE6FD;
 
@@ -72,12 +72,12 @@
       --border-tile-hover: #090D16;
       --text-main: #090D16;
       --text-sub: #334155;
-      --ecg-green: #059669;
-      --spo2-cyan: #0284C7;
+      --ecg-green: #11734F;
+      --spo2-cyan: #1F5FA8;
       --amber-warn: #D97706;
-      --crimson-crit: #E11D48;
-      --cyan-accent: #0284C7;
-      --blue-accent: #0284C7;
+      --crimson-crit: #C8241A;
+      --cyan-accent: #1F5FA8;
+      --blue-accent: #1F5FA8;
 
       /* Motion Curves */
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -153,7 +153,7 @@
     }
     #vignetteOverlay.active-critical {
       opacity: 0.18;
-      background: radial-gradient(circle, transparent 65%, #E11D48 100%);
+      background: radial-gradient(circle, transparent 65%, #C8241A 100%);
     }
     @keyframes aedFullScreenFlash {
       0%   { opacity: 0; background: #FFFFFF; }
@@ -258,7 +258,7 @@
     .nav-step-pill {
       font-size: clamp(10.5px, 0.78vw, 12.5px);
       font-weight: 600;
-      color: #64748B;
+      color: #4F5660;
       padding: 4px clamp(5px, 0.5vw, 8px);
       border-radius: 7px;
       white-space: nowrap;
@@ -269,7 +269,7 @@
       flex-shrink: 0;
     }
     .nav-step-pill.completed {
-      color: #059669;
+      color: #11734F;
       background: #ECFDF5;
       font-weight: 600;
     }
@@ -331,7 +331,7 @@
       transform: translateY(1px);
     }
     .audio-reset-btn {
-      color: #0284C7;
+      color: #1F5FA8;
       border-color: #BAE6FD;
       background: #F0F9FF;
     }
@@ -493,7 +493,7 @@
       font-size: 10.5px;
       font-weight: 800;
       letter-spacing: 0.08em;
-      color: #64748B;
+      color: #4F5660;
       text-transform: uppercase;
       line-height: 1.1;
     }
@@ -541,7 +541,7 @@
     .micro-lbl {
       font-size: 10px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
       line-height: 1.1;
     }
     .micro-val {
@@ -600,16 +600,16 @@
     }
     @keyframes hudDamagePulse {
       0% { transform: scale(1); border-color: #E2E8F0; }
-      20% { transform: scale(1.03); border-color: #E11D48; box-shadow: 0 0 0 6px rgba(225, 29, 72, 0.22); }
-      100% { transform: scale(1); border-color: #E11D48; }
+      20% { transform: scale(1.03); border-color: #C8241A; box-shadow: 0 0 0 6px rgba(225, 29, 72, 0.22); }
+      100% { transform: scale(1); border-color: #C8241A; }
     }
     .patient-hud-badge.damage-flash {
       animation: hudDamagePulse 0.5s ease both;
     }
     @keyframes hudRecoveryPulse {
       0% { transform: scale(1); border-color: #E2E8F0; }
-      20% { transform: scale(1.02); border-color: #059669; box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.22); }
-      100% { transform: scale(1); border-color: #059669; }
+      20% { transform: scale(1.02); border-color: #11734F; box-shadow: 0 0 0 6px rgba(5, 150, 105, 0.22); }
+      100% { transform: scale(1); border-color: #11734F; }
     }
     .patient-hud-badge.recovery-flash {
       animation: hudRecoveryPulse 0.5s ease both;
@@ -659,18 +659,18 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #059669;
+      background: #11734F;
       display: inline-block;
       flex-shrink: 0;
     }
     .ecg-status-badge.critical .ecg-status-dot {
-      background: #E11D48;
+      background: #C8241A;
     }
     .ecg-status-badge.warn .ecg-status-dot {
       background: #D97706;
     }
     .ecg-status-badge.info .ecg-status-dot {
-      background: #0284C7;
+      background: #1F5FA8;
     }
 
     /* Column 3: Precision Digital Vitals */
@@ -707,7 +707,7 @@
       font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.08em;
-      color: #64748B;
+      color: #4F5660;
       margin-bottom: 2px;
       text-transform: uppercase;
     }
@@ -724,18 +724,18 @@
       font-family: var(--font-num) !important;
     }
     .vital-hr {
-      color: #059669;
+      color: #11734F;
     }
     .vital-hr.critical {
-      color: #E11D48;
+      color: #C8241A;
     }
     .vital-spo2 {
-      color: #0284C7;
+      color: #1F5FA8;
     }
     .vital-unit-txt {
       font-size: 14px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
     }
 
     /* ==========================================================================
@@ -798,7 +798,7 @@
     .v-bar {
       width: 3px;
       height: 6px;
-      background: #0284C7;
+      background: #1F5FA8;
       border-radius: 2px;
       animation: soundBar 1.2s infinite ease-in-out;
     }
@@ -847,14 +847,14 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #0284C7;
+      background: #1F5FA8;
       animation: pulseDot 1.5s infinite ease-in-out;
       flex-shrink: 0;
     }
     .voice-bar-title {
       font-size: 13.5px;
       font-weight: 700;
-      color: #0284C7;
+      color: #1F5FA8;
     }
     .voice-bar-transcript {
       font-size: 13.5px;
@@ -885,7 +885,7 @@
     }
     .stage-sub-clean {
       font-size: 16px;
-      color: #64748B;
+      color: #4F5660;
       margin-bottom: 8px;
       line-height: 1.45;
     }
@@ -924,7 +924,7 @@
     .stage-context-stakes {
       background: #F8FAFC;
       border: 1px solid #E2E8F0;
-      color: #64748B;
+      color: #4F5660;
       font-size: 13px;
       font-weight: 600;
       padding: 4px 10px;
@@ -997,7 +997,7 @@
       border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
-      color: #64748B;
+      color: #4F5660;
       white-space: nowrap;
       flex-shrink: 0;
       transition: all 0.15s ease;
@@ -1053,7 +1053,7 @@
     }
     .kw-chip-clean.matched {
       background: #ECFDF5;
-      color: #059669;
+      color: #11734F;
       border-color: #A7F3D0;
       font-weight: 700;
     }
@@ -1078,7 +1078,7 @@
     }
     .meter-bar-fill {
       height: 100%;
-      background: #0284C7;
+      background: #1F5FA8;
       width: 0%;
       transition: width 0.08s linear;
     }
@@ -1107,7 +1107,7 @@
     .fact-label-clean {
       font-size: 11px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 2px;
@@ -1168,8 +1168,8 @@
     }
     .chk-pill-clean.checked {
       background: #ECFDF5;
-      border-color: #059669;
-      box-shadow: 0 2px 0 #059669;
+      border-color: #11734F;
+      box-shadow: 0 2px 0 #11734F;
     }
     .chk-pill-box {
       width: 22px;
@@ -1186,8 +1186,8 @@
       flex-shrink: 0;
     }
     .chk-pill-clean.checked .chk-pill-box {
-      background: #059669;
-      border-color: #059669;
+      background: #11734F;
+      border-color: #11734F;
       color: #FFFFFF;
     }
     .chk-pill-text {
@@ -1196,7 +1196,7 @@
       color: #334155;
     }
     .chk-pill-clean.checked .chk-pill-text {
-      color: #059669;
+      color: #11734F;
     }
 
     /* Stage 5 CPR & AED */
@@ -1251,7 +1251,7 @@
       justify-content: space-between;
       font-size: 11px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
     }
     .clap-meter-track {
       background: #EEF2F6;
@@ -1263,7 +1263,7 @@
     }
     .clap-meter-fill {
       height: 100%;
-      background: #0284C7;
+      background: #1F5FA8;
       width: 0%;
     }
     .clap-meter-threshold-line {
@@ -1322,13 +1322,13 @@
     }
     .aed-safety-card.active-cleared {
       background: #ECFDF5;
-      border-color: #059669;
-      box-shadow: 0 3px 0 #059669;
+      border-color: #11734F;
+      box-shadow: 0 3px 0 #11734F;
     }
     .aed-card-step-badge {
       font-size: 11px;
       font-weight: 800;
-      color: #64748B;
+      color: #4F5660;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 4px;
@@ -1341,7 +1341,7 @@
     }
     .aed-card-instruction {
       font-size: 13px;
-      color: #64748B;
+      color: #4F5660;
       font-weight: 500;
     }
 
@@ -1478,7 +1478,7 @@
     .rank-points-counter {
       font-size: 13px;
       font-weight: 800;
-      color: #64748B;
+      color: #4F5660;
     }
     .hero-title-pill {
       background: #090D16;
@@ -1492,7 +1492,7 @@
     .team-badge-display {
       font-size: 12px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
       margin-top: 4px;
     }
     .scoreboard-right-stats {
@@ -1512,7 +1512,7 @@
     .rosc-badge-txt {
       font-size: 12px;
       font-weight: 700;
-      color: #059669;
+      color: #11734F;
     }
     .tactical-stat-bars {
       display: grid;
@@ -1536,13 +1536,13 @@
     }
     .tactical-detail {
       font-size: 11.5px;
-      color: #64748B;
+      color: #4F5660;
       display: block;
     }
     .tactical-grade-badge {
       font-size: 10.5px;
       font-weight: 800;
-      color: #059669;
+      color: #11734F;
       background: #ECFDF5;
       padding: 3px 8px;
       border-radius: 6px;
@@ -1561,7 +1561,7 @@
       color: #334155;
     }
     .event-slogan-txt {
-      color: #64748B;
+      color: #4F5660;
       font-weight: 500;
       margin-left: 6px;
     }
@@ -1761,18 +1761,18 @@
       transition: all 0.15s ease;
     }
     .stage-choices-vertical-stack .game-choice-tile:hover {
-      border-color: #0284C7;
+      border-color: #1F5FA8;
       background: #F0F9FF;
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(2, 132, 199, 0.1);
     }
     .stage-choices-vertical-stack .game-choice-tile.correct {
-      border-color: #059669 !important;
+      border-color: #11734F !important;
       background: #ECFDF5 !important;
       box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.25) !important;
     }
     .stage-choices-vertical-stack .game-choice-tile.wrong {
-      border-color: #E11D48 !important;
+      border-color: #C8241A !important;
       background: #FFF1F2 !important;
       box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.25) !important;
     }
@@ -1897,7 +1897,7 @@
     }
     .cpr-timing-judge-badge.perfect {
       background: #ECFDF5;
-      color: #059669;
+      color: #11734F;
       border: 1.5px solid #10B981;
     }
     .cpr-timing-judge-badge.good {
@@ -1907,7 +1907,7 @@
     }
     .cpr-timing-judge-badge.miss {
       background: #FFF1F2;
-      color: #E11D48;
+      color: #C8241A;
       border: 1.5px solid #F43F5E;
     }
     .cpr-timing-judge-badge.warn {
@@ -1917,7 +1917,7 @@
     }
     .cpr-timing-judge-badge.standby {
       background: #F8FAFC;
-      color: #64748B;
+      color: #4F5660;
       border: 1.5px solid #CBD5E1;
     }
 
@@ -1968,8 +1968,8 @@
     .aed-card-v7.is-done {
       opacity: 1;
       background: #ECFDF5;
-      border: 2.5px solid #059669;
-      box-shadow: 0 4px 0 #059669;
+      border: 2.5px solid #11734F;
+      box-shadow: 0 4px 0 #11734F;
       transform: scale(1.0);
     }
     .aed-step-left {
@@ -1990,7 +1990,7 @@
       color: #FFFFFF;
     }
     .aed-card-v7.is-done .aed-step-num-badge {
-      background: #059669;
+      background: #11734F;
       color: #FFFFFF;
     }
     .aed-phrase-large {
@@ -2013,7 +2013,7 @@
     }
     .aed-card-v7.is-pending .aed-status-callout {
       background: #E2E8F0;
-      color: #64748B;
+      color: #4F5660;
     }
     .aed-card-v7.is-active .aed-status-callout {
       background: #FEF3C7;
@@ -2065,8 +2065,8 @@
     }
     .stage2-kw-tile.matched {
       background: #ECFDF5;
-      border-color: #059669;
-      box-shadow: 0 2px 0 #059669;
+      border-color: #11734F;
+      box-shadow: 0 2px 0 #11734F;
     }
     .stage2-kw-tile .kw-text {
       font-size: calc(17.5px * var(--ui-scale));
@@ -2074,7 +2074,7 @@
       color: #334155;
     }
     .stage2-kw-tile.matched .kw-text {
-      color: #059669;
+      color: #11734F;
     }
     .stage2-kw-tile .kw-status-dot {
       font-size: 13px;
@@ -2082,7 +2082,7 @@
       color: #94A3B8;
     }
     .stage2-kw-tile.matched .kw-status-dot {
-      color: #059669;
+      color: #11734F;
     }
 
     /* Stage 5A CPR Standard Glass & Controls */
@@ -2212,7 +2212,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #059669;
+      background: #11734F;
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
     }
     .lobby-title-clean {
@@ -2375,7 +2375,7 @@
     .player-roster-chip.bot-chip {
       border-color: #BAE6FD;
       background: #F0F9FF;
-      color: #0284C7;
+      color: #1F5FA8;
     }
 
     /* Bottom Telemetry Bar */
@@ -2406,7 +2406,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #059669;
+      background: #11734F;
       box-shadow: 0 0 6px rgba(5, 150, 105, 0.5);
       display: inline-block;
     }
@@ -2471,8 +2471,8 @@
       transition: all 0.15s ease;
     }
     .btn-copy-pin-mini:hover {
-      border-color: #0284C7;
-      color: #0284C7;
+      border-color: #1F5FA8;
+      color: #1F5FA8;
       background: #F0F9FF;
     }
     .lobby-qr-actions {
@@ -2501,19 +2501,19 @@
     }
     .btn-dev-mobile-sim {
       border-color: #7DD3FC;
-      color: #0284C7;
+      color: #1F5FA8;
     }
     .btn-dev-mobile-sim:hover {
       background: #F0F9FF;
-      border-color: #0284C7;
+      border-color: #1F5FA8;
     }
     .btn-bot-toggle:hover {
-      border-color: #059669;
+      border-color: #11734F;
       background: #F0FDF4;
     }
     .btn-bot-toggle.active {
       background: #ECFDF5;
-      border-color: #059669;
+      border-color: #11734F;
       color: #065F46;
     }
 
@@ -2549,8 +2549,8 @@
       flex-shrink: 0;
     }
     .slot-machine-viewport.winner {
-      border-color: #059669;
-      box-shadow: 0 5px 0 #059669, 0 0 0 4px rgba(5, 150, 105, 0.14);
+      border-color: #11734F;
+      box-shadow: 0 5px 0 #11734F, 0 0 0 4px rgba(5, 150, 105, 0.14);
     }
     .slot-target-reticle {
       position: absolute;
@@ -2580,7 +2580,7 @@
       transition: transform 0.15s ease;
     }
     .slot-reel-item.active-winner {
-      color: #059669;
+      color: #11734F;
     }
     .lobby-random-controls {
       display: flex;
@@ -2612,8 +2612,8 @@
       transition: all 0.15s ease;
     }
     .btn-team-random:hover {
-      background: #0284C7;
-      border-color: #0284C7;
+      background: #1F5FA8;
+      border-color: #1F5FA8;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.30);
       transform: translateY(-1px);
     }
@@ -2623,7 +2623,7 @@
     #txtTeamCallout {
       margin: 0;
       font-size: 14.5px;
-      color: #0284C7;
+      color: #1F5FA8;
       font-weight: 800;
       min-height: 22px;
       line-height: 1.35;
@@ -2649,7 +2649,7 @@
     .lobby-howto-num {
       font-size: 11.5px;
       font-weight: 800;
-      color: #0284C7;
+      color: #1F5FA8;
     }
     .lobby-howto-txt {
       font-size: 13px;
@@ -2684,7 +2684,7 @@
       transition: all 0.2s var(--ease-out-expo);
     }
     .btn-start-console-clean:hover {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      background: linear-gradient(135deg, #11734F 0%, #047857 100%);
       border-color: #10B981;
       box-shadow: 0 8px 22px rgba(5, 150, 105, 0.3);
       transform: translateY(-1px);
@@ -2747,7 +2747,7 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .host-remote-btn:hover {
-      background: #0284C7 !important;
+      background: #1F5FA8 !important;
       color: #FFFFFF !important;
       border-color: #38BDF8 !important;
       box-shadow: 0 0 14px rgba(2, 132, 199, 0.45);
@@ -2757,7 +2757,7 @@
     /* 3. Step 1: Inspection Prompt Card (Stages 1, 4, 6, 7, 8 — Fixes blank white column!) */
     .inspect-prompt-card {
       background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-      border: 2.5px dashed #0284C7;
+      border: 2.5px dashed #1F5FA8;
       border-radius: 18px;
       padding: clamp(22px, 2.8vh, 36px) clamp(24px, 2.4vw, 36px);
       margin: 4px 0 0;
@@ -2832,7 +2832,7 @@
     .clinical-wrong-hint-banner {
       background: #FFF1F2;
       border: 1px solid #FECDD3;
-      border-left: 4px solid #E11D48;
+      border-left: 4px solid #C8241A;
       color: #9F1239;
       padding: 10px 14px;
       border-radius: 10px;
@@ -2907,7 +2907,7 @@
     .game-over-card {
       background: #FFFFFF;
       border: 1.5px solid #FECDD3;
-      border-top: 6px solid #E11D48;
+      border-top: 6px solid #C8241A;
       border-radius: 24px;
       max-width: 680px;
       width: 100%;
@@ -3111,10 +3111,10 @@
       flex-shrink: 0;
     }
     .stage-score-pill-v18.perfect .stage-pill-num {
-      background: #059669;
+      background: #11734F;
     }
     .stage-score-pill-v18.penalty .stage-pill-num {
-      background: #E11D48;
+      background: #C8241A;
     }
     .stage-pill-name {
       font-size: clamp(11.5px, 0.85vw, 13.5px);
@@ -3132,10 +3132,10 @@
       flex-shrink: 0;
     }
     .stage-score-pill-v18.perfect .stage-pill-score {
-      color: #059669;
+      color: #11734F;
     }
     .stage-score-pill-v18.penalty .stage-pill-score {
-      color: #E11D48;
+      color: #C8241A;
     }
 
     /* Right Column: Leaderboard + Horizontal Zero-Overlap QR Card + Compact CTAs */
@@ -3164,7 +3164,7 @@
     }
     .leaderboard-table th {
       text-align: left;
-      color: #64748B;
+      color: #4F5660;
       font-weight: 700;
       padding: 3px 6px;
       border-bottom: 1px solid #E2E8F0;
@@ -3181,7 +3181,7 @@
       font-weight: 800;
     }
     .leaderboard-table tr.current-team td {
-      color: #0284C7;
+      color: #1F5FA8;
     }
 
     /* CRITICAL FIX: Horizontal QR Card eliminates ALL upward/downward overlap over TOP 3 & Buttons! */
@@ -3218,7 +3218,7 @@
     }
     .btn-view-cert {
       width: 100%;
-      background: #0284C7;
+      background: #1F5FA8;
       color: #FFFFFF;
       border: none;
       border-radius: 10px;
@@ -3266,7 +3266,7 @@
     .cert-recipient-name {
       font-size: 32px;
       font-weight: 800;
-      color: #059669;
+      color: #11734F;
       letter-spacing: -0.02em;
       margin: 2px 0;
     }
@@ -3357,7 +3357,7 @@
       gap: 8px;
       font-size: 12.5px;
       font-weight: 800;
-      color: #0284C7;
+      color: #1F5FA8;
       background: #F0F9FF;
       border: 1px solid #BAE6FD;
       padding: 4px 12px;
@@ -3367,7 +3367,7 @@
       width: 8px;
       height: 8px;
       border-radius: 999px;
-      background: #0284C7;
+      background: #1F5FA8;
       box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7);
       animation: dotPulse 1.4s infinite;
     }
@@ -3416,7 +3416,7 @@
     }
     .vote-timer-bar {
       height: 100%;
-      background: linear-gradient(90deg, #059669 0%, #38BDF8 100%);
+      background: linear-gradient(90deg, #11734F 0%, #38BDF8 100%);
       border-radius: 999px;
       width: 100%;
       transition: width 0.15s linear;
@@ -3444,13 +3444,13 @@
       justify-content: space-between;
       font-size: calc(13px * var(--ui-scale));
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
       transition: all 0.2s;
     }
     .vote-group-status-pill.voted {
       background: #ECFDF5;
       border-color: #A7F3D0;
-      color: #059669;
+      color: #11734F;
     }
     .vote-group-dot {
       width: 8px;
@@ -3466,7 +3466,7 @@
     /* Hero Decision Card (Step 3: HERO_DECISION) */
     .hero-decision-card-v14 {
       background: #FFFFFF;
-      border: 2px solid #059669;
+      border: 2px solid #11734F;
       border-radius: 18px;
       padding: 20px 24px;
       display: flex;
@@ -3518,7 +3518,7 @@
       gap: 12px;
     }
     .btn-hero-confirm {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      background: linear-gradient(135deg, #11734F 0%, #047857 100%);
       color: #FFFFFF;
       border: 1px solid #065F46;
       border-radius: 12px;
@@ -3571,7 +3571,7 @@
     .stage3-locked-text {
       font-size: 12px;
       font-weight: 700;
-      color: #64748B;
+      color: #4F5660;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -3594,7 +3594,7 @@
     .aed-violation-toast {
       background: #FFF1F2;
       border: 1.5px solid #FECDD3;
-      border-left: 5px solid #E11D48;
+      border-left: 5px solid #C8241A;
       border-radius: 10px;
       padding: 8px 14px;
       margin-bottom: 8px;
@@ -3641,7 +3641,7 @@
     }
     .pressure-gauge-fill {
       height: 100%;
-      background: linear-gradient(90deg, #E11D48 0%, #059669 100%);
+      background: linear-gradient(90deg, #C8241A 0%, #11734F 100%);
       border-radius: 999px;
       width: 0%;
       transition: width 0.1s linear;
@@ -3703,7 +3703,7 @@
     .mobile-top-bar .pin-badge {
       font-size: 11px;
       font-weight: 700;
-      color: #0284C7;
+      color: #1F5FA8;
       background: #F0F9FF;
       border: 1px solid #BAE6FD;
       padding: 3px 8px;
@@ -3712,7 +3712,7 @@
     .mobile-top-bar .score-badge {
       font-size: 11px;
       font-weight: 800;
-      color: #059669;
+      color: #11734F;
       background: #ECFDF5;
       border: 1px solid #A7F3D0;
       padding: 3px 8px;
@@ -3752,7 +3752,7 @@
       transition: all 0.15s;
     }
     .mobile-group-pill-btn.selected {
-      background: #059669;
+      background: #11734F;
       color: #FFFFFF;
       border-color: #047857;
       box-shadow: 0 2px 8px rgba(5,150,105,0.25);
@@ -3776,7 +3776,7 @@
       background: #F8FAFC;
     }
     .mobile-choice-tap-btn.selected-choice {
-      border-color: #059669;
+      border-color: #11734F;
       background: #ECFDF5;
       box-shadow: 0 4px 14px rgba(5,150,105,0.15);
     }
@@ -3784,7 +3784,7 @@
       width: 160px;
       height: 160px;
       border-radius: 999px;
-      background: radial-gradient(circle, #38BDF8 0%, #0284C7 100%);
+      background: radial-gradient(circle, #38BDF8 0%, #1F5FA8 100%);
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
@@ -3799,7 +3799,7 @@
     }
     .mobile-tap-rush-circle:active {
       transform: scale(0.92);
-      background: radial-gradient(circle, #0284C7 0%, #0369A1 100%);
+      background: radial-gradient(circle, #1F5FA8 0%, #0369A1 100%);
     }
     /* V26.1 Stage 5A Host Ready-Check Overlay over CPR Highway */
     .cpr-ready-overlay {
@@ -3823,7 +3823,7 @@
       box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18), 0 8px 24px rgba(5, 150, 105, 0.32);
     }
     .btn-cpr-ready-start {
-      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      background: linear-gradient(135deg, #10B981 0%, #11734F 100%);
       color: #FFFFFF;
       border: 1.5px solid #34D399;
       border-radius: 11px;
@@ -3874,7 +3874,7 @@
       width: 156px;
       height: 156px;
       border-radius: 999px;
-      background: radial-gradient(circle, #10B981 0%, #059669 100%);
+      background: radial-gradient(circle, #10B981 0%, #11734F 100%);
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
@@ -3905,7 +3905,7 @@
     .mobile-aed-danger-screen {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: #E11D48;
+      background: #C8241A;
       color: #FFFFFF;
       display: flex;
       flex-direction: column;
@@ -3917,7 +3917,7 @@
       animation: aedWarningFlash 0.5s infinite alternate;
     }
     @keyframes aedWarningFlash {
-      0% { background: #E11D48; }
+      0% { background: #C8241A; }
       100% { background: #881337; }
     }
 
@@ -4009,7 +4009,7 @@
       --o-paper: #F5F3EF;
       --o-ink: #121417;
       --o-muted: #5E646C;
-      --o-faint: #8B9097;
+      --o-faint: #5E636B;
       --o-rule: #DCD8D0;
       --o-red: #C8241A;
       --o-green: #11734F;
@@ -4165,10 +4165,10 @@
       background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--o-rule) !important;
       border-radius: 0 !important; box-shadow: none !important; padding: 14px 0 !important;
     }
-    body.v28-open .fact-card-clean:is([style*="#0284C7"], [style*="rgb(2, 132, 199)"]) { border-left: 5px solid var(--o-green) !important; padding-left: 16px !important; }
+    body.v28-open .fact-card-clean:is([style*="#1F5FA8"], [style*="rgb(31, 95, 168)"]) { border-left: 5px solid var(--o-green) !important; padding-left: 16px !important; }
     body.v28-open .fact-label-clean { font-size: 16px !important; color: var(--o-muted) !important; }
     body.v28-open .fact-val-clean { font-size: 22px !important; }
-    body.v28-open .fact-card-clean:is([style*="#0284C7"], [style*="rgb(2, 132, 199)"]) .fact-val-clean { font-size: 27px !important; color: var(--o-ink) !important; }
+    body.v28-open .fact-card-clean:is([style*="#1F5FA8"], [style*="rgb(31, 95, 168)"]) .fact-val-clean { font-size: 27px !important; color: var(--o-ink) !important; }
     body.v28-open .voice-transcript-panel { background: transparent !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; }
     body.v28-open .live-transcript-box, body.v28-open .live-transcript-box * { font-size: 20px !important; }
     body.v28-open .input-dispatch-text { border-radius: 3px !important; box-shadow: none !important; }
@@ -4652,9 +4652,251 @@
     }
     @keyframes v28rec { 50% { opacity: 0; } }
     body.v28-open .hud-reaction-badge { z-index: 5 !important; }
+
+    /* =====================================================================
+       V29 — Impeccable pass (24 Nov 2026). Scope: body.v28-open.v29, key [V] toggles it.
+       Same paper/ink world as design A, tuned for a projector read from the back row:
+       two room-facing type tiers (>=56 / >=30px), darker greys, one red, one green,
+       host-only chrome pushed off the projected view, the CPR count and the
+       8 remembered steps as the two hero moments.
+       ===================================================================== */
+    body.v28-open.v29 {
+      --v-ink: #121417; --v-muted: #474C54; --v-faint: #5E636B; --v-rule: #D6D1C7;
+      --v-red: #C8241A; --v-green: #11734F; --v-blue: #1F5FA8; --v-amber: #94560A;
+      --v-paper: #F5F3EF; --v-paper-2: #ECE8E1;
+    }
+    body.v28-open.v29 ::selection { background: var(--v-ink); color: var(--v-paper); }
+
+    /* ---- header: readable rail, no English chrome ---- */
+    body.v28-open.v29 .nav-step-pill { font-size: 22px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .nav-step-pill b { color: var(--v-faint) !important; font-size: 22px !important; }
+    body.v28-open.v29 .nav-step-pill.active, body.v28-open.v29 .nav-step-pill.active b { color: var(--v-ink) !important; font-size: 26px !important; }
+    body.v28-open.v29 .nav-step-pill .sp-always { color: var(--v-faint) !important; }
+    body.v28-open.v29 .nav-step-pill.active .sp-always { color: var(--v-ink) !important; }
+    body.v28-open.v29 .clock-lbl { display: none !important; }
+    body.v28-open.v29 .session-clock-pill { font-size: 24px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .brand-badge-mdbuu { color: var(--v-faint) !important; }
+
+    /* ---- patient strip: one status line, bigger camera, readable fields ---- */
+    body.v28-open.v29 .patient-hud-top-group { display: none !important; }
+    body.v28-open.v29 .patient-hud-state { font-size: 30px !important; line-height: 1.2 !important; font-weight: 700 !important; }
+    body.v28-open.v29 .patient-hud-badge.warn .patient-hud-state { color: var(--v-amber) !important; }
+    body.v28-open.v29 .patient-hud-badge.critical .patient-hud-state { color: var(--v-red) !important; }
+    body.v28-open.v29 .patient-hud-badge.healthy .patient-hud-state { color: var(--v-green) !important; }
+    body.v28-open.v29 .micro-lbl { font-size: 18px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .micro-val { font-size: 24px !important; color: var(--v-ink) !important; line-height: 1.25 !important; white-space: normal !important; }
+    body.v28-open.v29 .patient-hud-micro-footer { gap: 28px !important; }
+    body.v28-open.v29 .v28-cam-meta { font-size: 14px !important; }
+    body.v28-open.v29 .patient-cam-live-badge { font-size: 15px !important; }
+    body.v28-open.v29 .ecg-status-badge { font-size: 24px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .vital-label { font-size: 24px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .vital-unit-txt { font-size: 18px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 #txtSpO2 { color: var(--v-blue) !important; }
+    body.v28-open.v29 .vital-hr { color: var(--v-green) !important; }
+    body.v28-open.v29 .vital-hr.critical { color: var(--v-red) !important; }
+
+    /* ---- the stage repeats itself only once: the rail. ---- */
+    body.v28-open.v29 .stage-context-bar { display: none !important; }
+    body.v28-open.v29 .inspect-card-badge { display: none !important; }
+
+    /* ---- status chips riding on the video: readable, solid ---- */
+    body.v28-open.v29 .v28-onvideo { font-size: 20px !important; }
+    body.v28-open.v29 .v28-onvideo .voice-pill-text-clean,
+    body.v28-open.v29 .v28-onvideo .voice-bar-transcript,
+    body.v28-open.v29 .v28-onvideo .voice-bar-title,
+    body.v28-open.v29 .v28-onvideo .btn-replay-clean { font-size: 20px !important; }
+    body.v28-open.v29 .v28-onvideo .ai-voice-pill-clean,
+    body.v28-open.v29 .v28-onvideo .voice-answer-bar { background: rgba(18,20,23,.86) !important; padding: 8px 14px !important; border-radius: 4px !important; }
+    body.v28-open.v29 .ar-pathology-pin { font-size: 22px !important; padding: 10px 16px !important; background: rgba(18,20,23,.88) !important; border: 0 !important; border-radius: 4px !important; }
+    body.v28-open.v29 .ar-scanline { display: none !important; }
+
+    /* ---- room-facing type: two tiers ---- */
+    body.v28-open.v29 .v28-left .stage-headline-clean { font-size: 44px !important; line-height: 1.25 !important; }
+    body.v28-open.v29 .v28-left .clinical-findings-subline,
+    body.v28-open.v29 .v28-left .stage-sub-clean { font-size: 30px !important; line-height: 1.4 !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .inspect-card-title { font-size: 60px !important; line-height: 1.2 !important; }
+    body.v28-open.v29 .inspect-voice-callout { font-size: 30px !important; color: var(--v-muted) !important; line-height: 1.4 !important; }
+    body.v28-open.v29 .inspect-voice-callout svg { width: 30px !important; height: 30px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .inspect-prompt-card { justify-content: center !important; }
+    body.v28-open.v29 .clinical-wrong-hint-banner { font-size: 28px !important; line-height: 1.4 !important; background: transparent !important; border: 0 !important; border-top: 3px solid var(--v-red) !important; border-radius: 0 !important; padding: 14px 0 0 !important; color: var(--v-ink) !important; }
+
+    /* ---- voting: labelled countdown, no host buttons in view ---- */
+    body.v28-open.v29 #txtVoteTimerSec { font-size: 72px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 #txtVoteTimerSec::after { content: ' วิ'; font-size: 28px; color: var(--v-muted); font-family: var(--font-thai); }
+    body.v28-open.v29 .btn-close-vote-clean { display: none !important; }
+    body.v28-open.v29 .vote-board-badge { font-size: 24px !important; }
+
+    /* ---- hero decision: every option with its share; the winner is marked ---- */
+    body.v28-open.v29 .hero-decision-badge { font-size: 28px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .choice-equipment-title.large { font-size: 52px !important; line-height: 1.15 !important; }
+    body.v28-open.v29 .winning-choice-display-box { border: 0 !important; background: transparent !important; padding: 8px 0 !important; }
+    body.v28-open.v29 .winning-choice-display-box .equipment-icon-wrap { display: none !important; }
+    body.v28-open.v29 .btn-hero-confirm, body.v28-open.v29 .btn-hero-revote { font-size: 26px !important; border-radius: 4px !important; min-height: 84px !important; }
+    body.v28-open.v29 .btn-hero-revote { background: transparent !important; border: 2px solid var(--v-ink) !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .v29-alt-list { display: flex; flex-direction: column; border-top: 1px solid var(--v-rule); margin-top: 6px; }
+    body.v28-open.v29 .v29-alt { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--v-rule); cursor: pointer; position: relative; }
+    body.v28-open.v29 .v29-alt::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: var(--p, 0%); background: rgba(18,20,23,.06); z-index: 0; }
+    body.v28-open.v29 .v29-alt > * { position: relative; z-index: 1; }
+    body.v28-open.v29 .v29-alt-num { font: 700 28px/1 var(--font-num); color: var(--v-faint); }
+    body.v28-open.v29 .v29-alt-txt { font-size: 26px; color: var(--v-muted); line-height: 1.3; }
+    body.v28-open.v29 .v29-alt-pct { font: 700 28px/1 var(--font-num); color: var(--v-muted); }
+    body.v28-open.v29 .v29-alt.is-top::before { background: rgba(200,36,26,.12); }
+    body.v28-open.v29 .v29-alt.is-top .v29-alt-num, body.v28-open.v29 .v29-alt.is-top .v29-alt-pct { color: var(--v-red); }
+    body.v28-open.v29 .v29-alt.is-top .v29-alt-txt { color: var(--v-ink); font-weight: 700; }
+    body.v28-open.v29 .v29-alt.correct .v29-alt-txt { color: var(--v-green); }
+    body.v28-open.v29 .v29-alt.wrong .v29-alt-txt { color: var(--v-red); text-decoration: line-through; }
+    body.v28-open.v29 .v29-alt:focus-visible { outline: 3px solid var(--v-ink); outline-offset: 2px; }
+
+    /* ---- stage 2: rules not boxes; the room sees the phrase, the meter and the 3 checks ---- */
+    body.v28-open.v29 .shout-target-card-dark { border-radius: 4px !important; box-shadow: none !important; }
+    body.v28-open.v29 .shout-phrase-hero { font-size: 50px !important; line-height: 1.25 !important; }
+    body.v28-open.v29 .shout-target-badge { font-size: 20px !important; }
+    body.v28-open.v29 .stage2-kw-grid { gap: 0 !important; border-top: 1px solid var(--v-rule); }
+    body.v28-open.v29 .stage2-kw-tile { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--v-rule) !important; border-radius: 0 !important; box-shadow: none !important; padding: 14px 6px !important; }
+    body.v28-open.v29 .kw-text { font-size: 30px !important; }
+    body.v28-open.v29 .kw-status-dot { font-size: 22px !important; }
+    body.v28-open.v29 .meter-cluster-clean { background: transparent !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; padding: 8px 0 0 !important; }
+    body.v28-open.v29 .meter-cluster-clean > div:first-child { font-size: 26px !important; }
+    body.v28-open.v29 #txtLiveDecibel { font-size: 44px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 #txtLiveStatusHint { font-size: 22px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .meter-track-container { height: 44px !important; border-radius: 2px !important; background: var(--v-paper-2) !important; border: 0 !important; }
+    body.v28-open.v29 #liveDbBarFill { background: var(--v-ink) !important; }
+    body.v28-open.v29 #dynamicTargetLine { background: var(--v-red) !important; width: 4px !important; }
+    body.v28-open.v29 #dynamicTargetLabel { font-size: 18px !important; color: var(--v-red) !important; font-weight: 700 !important; }
+    body.v28-open.v29 .stage2-energy-wrap > div:first-child { font-size: 22px !important; }
+    body.v28-open.v29 .stage2-energy-track { height: 18px !important; border-radius: 2px !important; background: var(--v-paper-2) !important; border: 0 !important; }
+    body.v28-open.v29 .stage2-energy-fill { background: var(--v-green) !important; border-radius: 0 !important; }
+    body.v28-open.v29 .meter-cluster-clean > div:has(#sliderStage2Threshold) { display: none !important; }
+    body.v28-open.v29 #txtStage2LiveTranscript { font-size: 24px !important; color: var(--v-muted) !important; }
+
+    /* ---- stage 3: the four facts are the checklist (click a fact = host fallback); no typing on the projector ---- */
+    body.v28-open.v29 .fact-card-clean { cursor: pointer; }
+    body.v28-open.v29 .fact-label-clean { font-size: 30px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .fact-val-clean { font-size: 30px !important; }
+    body.v28-open.v29 #inputManualDispatch, body.v28-open.v29 #inputManualDispatch + button,
+    body.v28-open.v29 div:has(> #inputManualDispatch) { display: none !important; }
+    body.v28-open.v29 div:has(> .chk-pill-box), body.v28-open.v29 div:has(> label > .chk-pill-box) { display: none !important; }
+    body.v28-open.v29 .stage3-tap-meter-container { height: 28px !important; background: var(--v-paper-2) !important; border: 0 !important; border-radius: 2px !important; }
+    body.v28-open.v29 .stage3-tap-meter-fill { background: var(--v-red) !important; border-radius: 0 !important; }
+    body.v28-open.v29 .voice-transcript-panel { font-size: 26px !important; }
+
+    /* ---- stage 5 CPR: the count is the hero ---- */
+    body.v28-open.v29 .cpr-standard-glass-card { background: rgba(18,20,23,.9) !important; backdrop-filter: none !important; border: 0 !important; border-radius: 4px !important; padding: 14px 20px !important; }
+    body.v28-open.v29 .cpr-standard-title { display: none !important; }
+    body.v28-open.v29 .cpr-standard-items { gap: 28px !important; }
+    body.v28-open.v29 .cpr-std-item { font-size: 26px !important; color: rgba(255,255,255,.8) !important; }
+    body.v28-open.v29 .cpr-std-item strong { color: #fff !important; font-size: 30px !important; }
+    body.v28-open.v29 .cpr-bottom-split-row { display: grid !important; grid-template-columns: auto 1fr !important; align-items: center !important; gap: 36px !important; }
+    body.v28-open.v29 .cpr-drum-counter-box { display: flex !important; align-items: center !important; gap: 36px !important; }
+    body.v28-open.v29 .cpr-drum-pad-wrapper { width: 150px !important; height: 150px !important; }
+    body.v28-open.v29 #btnCprDrumPad { width: 140px !important; height: 140px !important; background: var(--v-green) !important; border: 0 !important; box-shadow: none !important; }
+    body.v28-open.v29 #txtDrumLabel { font-size: 24px !important; }
+    body.v28-open.v29 #btnCprDrumPad span:last-child { font-size: 16px !important; }
+    body.v28-open.v29 .cpr-count-num { font-size: 0 !important; line-height: .9 !important; white-space: nowrap; }
+    body.v28-open.v29 #txtCprCount { font-size: 220px !important; font-weight: 800 !important; letter-spacing: -0.03em; color: var(--v-ink) !important; }
+    body.v28-open.v29 .cpr-count-num > span:last-child { font-size: 40px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 #cprTimingJudgeBadge { width: auto !important; height: auto !important; min-height: 64px; padding: 10px 18px !important; font-size: 28px !important; white-space: normal !important; line-height: 1.3 !important; background: var(--v-paper-2) !important; border: 0 !important; border-radius: 4px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .clap-meter-row > div:first-child { font-size: 22px !important; }
+    body.v28-open.v29 .clap-meter-track { height: 18px !important; border: 0 !important; border-radius: 2px !important; background: var(--v-paper-2) !important; }
+    body.v28-open.v29 #clapMeterBarFill { background: var(--v-green) !important; }
+    body.v28-open.v29 .cpr-judge-console-box > div:last-child:has(#btnCprModeToggle) { display: none !important; }
+    body.v28-open.v29 .cpr-ready-overlay #txtCprReadyPrompt { font-size: 34px !important; }
+    body.v28-open.v29 .cpr-ready-overlay #txtCprReadyBadge, body.v28-open.v29 .cpr-ready-overlay #txtCprReadyHeard { font-size: 20px !important; }
+    body.v28-open.v29 .btn-cpr-ready-start { font-size: 24px !important; padding: 18px 24px !important; border-radius: 4px !important; }
+
+    /* ---- stage 9: the 8 steps are the takeaway; the score rides along ---- */
+    body.v28-open.v29 .stage-scores-grid-v18 { gap: 0 !important; }
+    body.v28-open.v29 .stage-score-pill-v18 { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--v-rule) !important; border-radius: 0 !important; padding: 9px 0 !important; box-shadow: none !important; }
+    body.v28-open.v29 .stage-pill-num { background: transparent !important; color: var(--v-red) !important; font-size: 26px !important; padding: 0 !important; min-width: 44px; }
+    body.v28-open.v29 .stage-pill-name { font-size: 30px !important; color: var(--v-ink) !important; font-weight: 700 !important; }
+    body.v28-open.v29 .stage-pill-score { font-size: 20px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .stage-score-pill-v18.penalty .stage-pill-score { color: var(--v-red) !important; }
+    body.v28-open.v29 .v29-steps-title { font-size: 34px; font-weight: 800; color: var(--v-ink); margin: 4px 0 2px; }
+    body.v28-open.v29 .v29-steps-title small { display: block; font-size: 20px; font-weight: 600; color: var(--v-muted); }
+    body.v28-open.v29 .rank-letter-v18 { color: var(--v-ink) !important; }
+    body.v28-open.v29 .summary-motto-banner { font-size: 26px !important; }
+    body.v28-open.v29 .summary-motto-banner span:first-child { font-size: 30px !important; color: var(--v-ink) !important; }
+    body.v28-open.v29 .summary-vital-mini > div:first-child { font-size: 18px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .leaderboard-title { font-size: 24px !important; }
+    body.v28-open.v29 .leaderboard-table { font-size: 22px !important; }
+    body.v28-open.v29 .qr-box-v18 { font-size: 22px !important; }
+
+    /* ---- game over: a paper sheet with one red rule, not a blurred pink dialog ---- */
+    body.v28-open.v29 .game-over-modal-backdrop { backdrop-filter: none !important; background: rgba(18,20,23,.72) !important; }
+    body.v28-open.v29 .game-over-card { background: var(--v-paper) !important; border-radius: 4px !important; border: 0 !important; border-top: 8px solid var(--v-red) !important; box-shadow: 0 24px 60px rgba(0,0,0,.35) !important; max-width: 1180px !important; width: 82vw !important; padding: 44px 48px !important; gap: 40px !important; }
+    body.v28-open.v29 .game-over-card::before { display: none !important; }
+    body.v28-open.v29 .game-over-img { width: 300px !important; height: 300px !important; border-radius: 2px !important; object-fit: cover; }
+    body.v28-open.v29 .game-over-card > div > div:first-child { background: transparent !important; border: 0 !important; padding: 0 !important; color: var(--v-red) !important; font-size: 24px !important; }
+    body.v28-open.v29 .game-over-card h2 { font-size: 52px !important; color: var(--v-ink) !important; line-height: 1.15 !important; }
+    body.v28-open.v29 #txtGameOverCause { font-size: 28px !important; color: var(--v-muted) !important; line-height: 1.45 !important; }
+    body.v28-open.v29 #txtGameOverRight { font-size: 32px; font-weight: 700; color: var(--v-green); line-height: 1.35; border-top: 1px solid var(--v-rule); padding-top: 14px; }
+    body.v28-open.v29 #txtGameOverRight:empty { display: none; }
+    body.v28-open.v29 #txtGameOverPenalty { font-size: 20px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .game-over-card button { background: var(--v-ink) !important; border-radius: 4px !important; font-size: 26px !important; padding: 18px 28px !important; }
+
+    /* ---- lobby: darker small print ---- */
+    body.v28-open.v29 #lobbyPlayersRoster > span { color: var(--v-muted) !important; }
+    body.v28-open.v29 .hotkey-chip { color: var(--v-muted) !important; }
+    body.v28-open.v29 .proto-name { overflow: visible !important; text-overflow: clip !important; }
+
+    /* ---- host strip: what the game waits for + the keys, in the empty band under the stage ---- */
+    .v29-only { display: none !important; }
+    body.v28-open.v29 .v29-only { display: flex !important; }
+    body.v28-open.v29 .v29-steps-title.v29-only { display: block !important; }
+    body.v28-open.v29 .v29-hide { display: none !important; }
+    body.v28-open.v29 .fact-card-clean:is([style*="#1F5FA8"], [style*="rgb(31, 95, 168)"]) { border-left: 0 !important; padding-left: 0 !important; }
+    body.v28-open.v29 .fact-card-clean:is([style*="#1F5FA8"], [style*="rgb(31, 95, 168)"]) .fact-val-clean { color: var(--v-green) !important; }
+    /* v29 round 2 fixes after looking at every stage */
+    body.v28-open.v29:not(.lobby-mode) #stageMainCard { padding-bottom: 62px !important; box-sizing: border-box !important; }
+    body.v28-open.v29 .v28-cam-meta { font-size: 12px !important; white-space: nowrap; left: 12px !important; right: 12px !important; }
+    body.v28-open.v29 .micro-val { font-size: 22px !important; }
+    body.v28-open.v29 .game-over-card { display: grid !important; grid-template-columns: 300px 1fr !important; align-items: start !important; }
+    body.v28-open.v29 .stage2-kw-tile { flex-direction: column !important; align-items: flex-start !important; gap: 4px !important; padding: 10px 14px 10px 0 !important; }
+    body.v28-open.v29 .kw-text { font-size: 28px !important; line-height: 1.25 !important; }
+    body.v28-open.v29 .kw-status-dot { font-size: 20px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .shout-phrase-hero { font-size: 46px !important; }
+    body.v28-open.v29 #txtLiveStatusHint { display: none !important; }
+    body.v28-open.v29 #txtLiveDecibel { white-space: nowrap !important; }
+    body.v28-open.v29 .meter-cluster-clean { gap: 12px !important; }
+    body.v28-open.v29 .fact-val-clean { color: var(--v-faint) !important; }
+    body.v28-open.v29 .voice-transcript-panel > div:first-child:not(:last-child) { display: none !important; }
+    /* CPR: ready card owns its height; count row above the timing feedback */
+    body.v28-open.v29 div:has(> #cprHighwayCanvas) { min-height: 150px; }
+    body.v28-open.v29 .cpr-ready-overlay { position: relative !important; inset: auto !important; padding: 18px 20px !important; }
+    body.v28-open.v29 div:has(> #cprHighwayCanvas):has(.cpr-ready-overlay[style*="flex"]) #cprHighwayCanvas { display: none !important; }
+    body.v28-open.v29 .cpr-ready-overlay #txtCprReadyBadge, body.v28-open.v29 .cpr-ready-overlay #txtCprReadyHeard { display: none !important; }
+    body.v28-open.v29 .cpr-bottom-split-row { grid-template-columns: 1fr !important; gap: 14px !important; }
+    body.v28-open.v29 .cpr-judge-console-box { width: 100% !important; }
+    body.v28-open.v29 #cprTimingJudgeBadge { width: 100% !important; justify-content: flex-start !important; }
+    /* summary: steps fit, no overflow */
+    body.v28-open.v29 .v28-room-stats { display: none !important; }
+    body.v28-open.v29 .stage-score-pill-v18 { padding: 5px 0 !important; }
+    body.v28-open.v29 .stage-pill-name { font-size: 26px !important; }
+    body.v28-open.v29 .stage-pill-num { font-size: 22px !important; }
+    body.v28-open.v29 .v29-steps-title { font-size: 30px; }
+    body.v28-open.v29 .v29-steps-title small { font-size: 18px; }
+    body.v28-open.v29 .summary-motto-banner { flex-direction: column !important; align-items: flex-start !important; gap: 2px !important; }
+    body.v28-open.v29 .summary-motto-banner span:last-child { font-size: 16px !important; color: var(--v-faint) !important; }
+    body.v28-open.v29 .summary-v10-grid .unified-status-bar, body.v28-open.v29 #stageMainCard > .unified-status-bar { font-size: 20px !important; }
+    #v29HostStrip[data-stage="9"] { display: none !important; }
+    body.v28-open.v29 .ecg-status-badge, body.v28-open.v29 #ecgStatusText { letter-spacing: 0 !important; }
+    body.v28-open.v29 .winning-choice-display-box .choice-equipment-title + div { font-size: 24px !important; color: var(--v-muted) !important; }
+    #v29HostStrip { display: none; }
+    body.v28-open.v29:not(.lobby-mode) #v29HostStrip {
+      display: flex; position: fixed; left: 42px; right: 42px; bottom: 18px; z-index: 40; align-items: baseline; gap: 22px;
+      font: 600 20px/1.2 var(--font-thai); color: var(--v-faint); border-top: 1px solid var(--v-rule); padding-top: 10px; pointer-events: none;
+    }
+    #v29HostStrip .hs-wait { color: var(--v-ink); font-weight: 700; }
+    #v29HostStrip .hs-wait::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--v-red); margin-right: 10px; vertical-align: 2px; }
+    #v29HostStrip .hs-keys { margin-left: auto; white-space: nowrap; }
+    #v29HostStrip kbd { font: 700 17px/1 var(--font-num); color: var(--v-ink); border: 1px solid var(--v-rule); border-radius: 3px; padding: 3px 6px; margin: 0 4px 0 12px; }
+    @media (prefers-reduced-motion: no-preference) {
+      body.v28-open.v29 .mic-live-dot { animation-duration: 2.4s !important; }
+    }
   </style>
 </head>
-<body class="lobby-mode v28-open">
+<body class="lobby-mode v28-open v29">
+  <div id="v29HostStrip" aria-hidden="true"><span class="hs-wait" id="v29HsWait"></span><span class="hs-keys"><kbd>Space</kbd>ตรวจ/ยืนยัน<kbd>1–4</kbd>เลือก<kbd>Shift →</kbd>ข้าม<kbd>B</kbd>ย้อน<kbd>N</kbd>ไม่ใช้มือถือ</span></div>
   <div id="v28StageCard" aria-hidden="true"><div class="sc-num"></div><div class="sc-title"></div>
     <svg viewBox="0 0 520 60"><path d="M0 30 H190 L210 30 L222 8 L238 54 L252 18 L262 30 H330 L345 24 L358 30 H520"/></svg></div>
   <div id="v28HitFlash" aria-hidden="true"></div>
@@ -4713,10 +4955,10 @@
 
     <div class="nav-right-controls">
       <div class="session-clock-pill font-technical">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4F5660" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span class="clock-lbl">SESSION</span> <span id="txtSessionClock" class="num-readout">08:00</span>
       </div>
-      <button id="btnHostRemote" onclick="GameStateManager.openHostRemote()" class="nav-btn font-technical host-remote-btn" style="background:#0F172A; color:#38BDF8; border-color:#0284C7; font-weight:700;" title="เปิดหน้าต่างจอกรรมการควบคุมระยะไกล (Dual-Screen)">
+      <button id="btnHostRemote" onclick="GameStateManager.openHostRemote()" class="nav-btn font-technical host-remote-btn" style="background:#0F172A; color:#38BDF8; border-color:#1F5FA8; font-weight:700;" title="เปิดหน้าต่างจอกรรมการควบคุมระยะไกล (Dual-Screen)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         <span class="btn-txt">จอกรรมการ</span>
       </button>
@@ -4770,7 +5012,7 @@
             <span id="patientHudConscious" class="micro-val">มึนงง / สับสน</span>
           </div>
           <div class="micro-pill">
-            <span class="micro-lbl">การหายใจ/ชีพจร</span>
+            <span class="micro-lbl">หายใจ • ชีพจร</span>
             <span id="patientHudCirculation" class="micro-val">ทางเดินหายใจเปิด</span>
           </div>
         </div>
@@ -4863,8 +5105,8 @@
         <!-- Live Joined Players Wall (Kahoot-style Roster) -->
         <div class="lobby-roster-box font-technical">
           <div class="lobby-roster-header">
-            <span>เข้าห้องแล้ว <strong id="txtLobbyPlayerCount" style="color:#059669;">0</strong> / 100 คน</span>
-            <span style="font-size:10.5px; color:#64748B;">เรียลไทม์ผ่านมือถือ</span>
+            <span>เข้าห้องแล้ว <strong id="txtLobbyPlayerCount" style="color:#11734F;">0</strong> / 100 คน</span>
+            <span style="font-size:10.5px; color:#4F5660;">เรียลไทม์ผ่านมือถือ</span>
           </div>
           <div id="lobbyPlayersRoster" class="lobby-roster-chips">
             <span style="font-size:11px; color:#94A3B8; padding:2px 0;">สแกน QR Code ฝั่งขวาเพื่อเข้าร่วมห้อง...</span>
@@ -4876,10 +5118,10 @@
           <div class="lobby-tel-group">
             <div class="lobby-tel-item"><span class="tel-dot active"></span> ไมค์: พร้อม</div>
             <div class="lobby-tel-item"><span class="tel-dot active"></span> ECG: 60 FPS</div>
-            <div class="lobby-tel-item"><span id="lobbyMqttDot" class="tel-dot active"></span> <span id="lobbyMqttStatusTxt" style="color:#059669;">MQTT: ออนไลน์</span></div>
-            <div class="lobby-tel-item">PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#0284C7;">----</strong></div>
+            <div class="lobby-tel-item"><span id="lobbyMqttDot" class="tel-dot active"></span> <span id="lobbyMqttStatusTxt" style="color:#11734F;">MQTT: ออนไลน์</span></div>
+            <div class="lobby-tel-item">PIN: <strong id="txtLobbyTelPin" class="num-readout" style="color:#1F5FA8;">----</strong></div>
           </div>
-          <button onclick="AIVoiceCoach.testAuditionVoice()" class="nav-btn font-technical" style="height:26px; padding:0 9px; font-size:11px; background:#F0F9FF; color:#0284C7; border-color:#BAE6FD;" title="ทดสอบเสียงลำโพงก่อนเริ่ม">
+          <button onclick="AIVoiceCoach.testAuditionVoice()" class="nav-btn font-technical" style="height:26px; padding:0 9px; font-size:11px; background:#F0F9FF; color:#1F5FA8; border-color:#BAE6FD;" title="ทดสอบเสียงลำโพงก่อนเริ่ม">
             🔊 ทดสอบเสียง
           </button>
         </div>
@@ -4900,7 +5142,7 @@
                 📋 คัดลอกลิงก์
               </button>
             </div>
-            <div style="font-size:34px; font-weight:900; color:#0284C7; letter-spacing:0.02em; line-height:1.05;">
+            <div style="font-size:34px; font-weight:900; color:#1F5FA8; letter-spacing:0.02em; line-height:1.05;">
               PIN: #<span id="txtLobbyPin" class="num-readout">----</span>
             </div>
             <div class="lobby-qr-actions">
@@ -4978,7 +5220,7 @@
         <button onclick="GameStateManager.closeSettingsModal()" class="nav-btn" style="height:28px; width:28px; padding:0; display:flex; align-items:center; justify-content:center;">✕</button>
       </div>
       <div style="display:flex; flex-direction:column; gap:6px;">
-        <label style="font-size:12px; color:#64748B; font-weight:600;" class="font-technical">เลือกเสียง AI ภาษาไทยที่ชอบ:</label>
+        <label style="font-size:12px; color:#4F5660; font-weight:600;" class="font-technical">เลือกเสียง AI ภาษาไทยที่ชอบ:</label>
         <select id="selectThaiVoice" class="settings-select font-technical" onchange="AIVoiceCoach.selectVoice(this.value)">
           <option value="">กำลังโหลดเสียงในเครื่อง...</option>
         </select>
@@ -4988,7 +5230,7 @@
       </div>
       <!-- Display Scale Mode (V20.0) -->
       <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px; padding-top:10px; border-top:1px solid #E2E8F0;">
-        <label style="font-size:12px; color:#64748B; font-weight:600;" class="font-technical">ขนาดหน้าจอการแสดงผล (Display Scale):</label>
+        <label style="font-size:12px; color:#4F5660; font-weight:600;" class="font-technical">ขนาดหน้าจอการแสดงผล (Display Scale):</label>
         <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:6px;">
           <button id="btnScaleAuto" onclick="GameStateManager.setDisplayScaleMode('auto')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">อัตโนมัติ</button>
           <button id="btnScaleLaptop" onclick="GameStateManager.setDisplayScaleMode('laptop')" class="nav-btn font-technical" style="padding:6px 4px; font-size:11px;">โน้ตบุ๊ก 100%</button>
@@ -4999,16 +5241,16 @@
 
       <!-- Voice Source Toggle (AI TTS vs Recorded MP3) -->
       <div style="display:flex; flex-direction:column; gap:6px; margin-top:6px; padding-top:10px; border-top:1px solid #E2E8F0;">
-        <label style="font-size:12px; color:#64748B; font-weight:600;" class="font-technical">แหล่งที่มาของเสียงพูดแนะนำ:</label>
+        <label style="font-size:12px; color:#4F5660; font-weight:600;" class="font-technical">แหล่งที่มาของเสียงพูดแนะนำ:</label>
         <div style="display:flex; gap:8px;">
-          <button id="btnVoiceSrcAI" onclick="AIVoiceCoach.setVoiceSourceMode('AI')" class="nav-btn font-technical" style="flex:1; border-color:#059669; color:#059669; background:#ECFDF5; font-weight:700;">
+          <button id="btnVoiceSrcAI" onclick="AIVoiceCoach.setVoiceSourceMode('AI')" class="nav-btn font-technical" style="flex:1; border-color:#11734F; color:#11734F; background:#ECFDF5; font-weight:700;">
             เสียง AI สังเคราะห์
           </button>
-          <button id="btnVoiceSrcRecorded" onclick="AIVoiceCoach.setVoiceSourceMode('RECORDED')" class="nav-btn font-technical" style="flex:1; border-color:#CBD5E1; color:#64748B; background:#FFFFFF;">
+          <button id="btnVoiceSrcRecorded" onclick="AIVoiceCoach.setVoiceSourceMode('RECORDED')" class="nav-btn font-technical" style="flex:1; border-color:#CBD5E1; color:#4F5660; background:#FFFFFF;">
             ไฟล์เสียงคนพากย์จริง
           </button>
         </div>
-        <span id="txtVoiceSourceDesc" style="font-size:11px; color:#64748B; line-height:1.4;">
+        <span id="txtVoiceSourceDesc" style="font-size:11px; color:#4F5660; line-height:1.4;">
           ขณะนี้เปิดโหมด: <strong>เสียง AI สังเคราะห์ (Web Speech TTS)</strong> พร้อมใช้งานขึ้น GitHub ได้ทันทีโดยไม่ต้องรอไฟล์อัดเสียงครับ
         </span>
       </div>
@@ -5016,7 +5258,7 @@
         <button id="btnVolumeBoost" onclick="SoundEngine.toggleVolumeBoost()" class="nav-btn font-technical">
           เสียงปกติ (100%)
         </button>
-        <button onclick="GameStateManager.clearLeaderboardData()" class="nav-btn font-technical" style="color:#E11D48; border-color:#FECDD3; background:#FFF1F2;">
+        <button onclick="GameStateManager.clearLeaderboardData()" class="nav-btn font-technical" style="color:#C8241A; border-color:#FECDD3; background:#FFF1F2;">
           🗑️ ล้างตารางคะแนน TOP 3
         </button>
         <button onclick="SoundEngine.resetAudioSystem()" class="nav-btn font-technical audio-reset-btn">
@@ -5032,15 +5274,16 @@
     <div class="game-over-card">
       <img id="gameOverImg" src="images/patient/patient_s1_wrong.png" alt="Patient Critical" class="game-over-img" />
       <div style="display:flex; flex-direction:column; gap:12px;">
-        <div style="display:inline-flex; align-items:center; gap:6px; background:#FFF1F2; color:#E11D48; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; width:fit-content;">
+        <div style="display:inline-flex; align-items:center; gap:6px; background:#FFF1F2; color:#C8241A; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; font-size:12px; font-weight:700; width:fit-content;">
           ภาวะวิกฤตเฉียบพลัน • หักคะแนนด่านนี้ 10 คะแนน
         </div>
         <h2 style="font-size:24px; font-weight:800; color:#090D16; margin:0;">การตัดสินใจนี้เป็นอันตรายถึงชีวิต!</h2>
         <p id="txtGameOverCause" style="font-size:15px; line-height:1.5; color:#334155; margin:0;">
           เกิดไฟลุกไหม้จากห้องเครื่องและมีรถเฉี่ยวชนซ้ำ เนื่องจากยังไม่ได้กั้นพื้นที่และดับเครื่องยนต์ก่อนเข้าช่วย
         </p>
-        <div id="txtGameOverPenalty" style="font-size:13px; color:#64748B; font-weight:600;"></div>
-        <button onclick="GameStateManager.retryCurrentStage()" style="background:#E11D48; color:#FFFFFF; border:none; border-radius:12px; padding:13px 20px; font-size:15px; font-weight:700; cursor:pointer; width:fit-content; margin-top:4px;">
+        <div id="txtGameOverRight"></div>
+        <div id="txtGameOverPenalty" style="font-size:13px; color:#4F5660; font-weight:600;"></div>
+        <button onclick="GameStateManager.retryCurrentStage()" style="background:#C8241A; color:#FFFFFF; border:none; border-radius:12px; padding:13px 20px; font-size:15px; font-weight:700; cursor:pointer; width:fit-content; margin-top:4px;">
           ย้อนกลับไปแก้ไขด่านนี้
         </button>
       </div>
@@ -5076,7 +5319,7 @@
         <h2 style="font-size: 20px; font-weight: 800; color: #0F172A; margin: 6px 0 2px;">
           ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน
         </h2>
-        <div style="font-size: 12.5px; color: #64748B;">ขอมอบไว้เพื่อแสดงว่าทีมผู้ปฏิบัติการกู้ชีพ</div>
+        <div style="font-size: 12.5px; color: #4F5660;">ขอมอบไว้เพื่อแสดงว่าทีมผู้ปฏิบัติการกู้ชีพ</div>
 
         <!-- Recipient Centerpiece Banner -->
         <div id="txtCertTeamName" style="font-size: 34px; font-weight: 900; color: #065F46; background: linear-gradient(90deg, transparent, #ECFDF5, transparent); padding: 6px 32px; border-top: 1px solid #A7F3D0; border-bottom: 1px solid #A7F3D0; margin: 8px 0; width: 100%; box-sizing: border-box;">
@@ -5094,16 +5337,16 @@
         <!-- 3-Pillar Prestige Score & Rank Box -->
         <div style="background: #FFFFFF; border: 1.5px solid #E2E8F0; border-left: 4px solid #D4AF37; border-radius: 14px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(15,23,42,0.04); display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; box-sizing: border-box; text-align: center;">
           <div>
-            <div style="font-size: 11px; color: #64748B; font-weight: 700;">คะแนนปฏิบัติการ</div>
+            <div style="font-size: 11px; color: #4F5660; font-weight: 700;">คะแนนปฏิบัติการ</div>
             <div id="txtCertScoreVal" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 17px; color: #090D16;">100 / 100</div>
           </div>
           <div>
-            <div style="font-size: 11px; color: #64748B; font-weight: 700;">ระดับเกียรติคุณ</div>
-            <div id="txtCertGradeVal" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 17px; color: #059669;">GRADE S</div>
+            <div style="font-size: 11px; color: #4F5660; font-weight: 700;">ระดับเกียรติคุณ</div>
+            <div id="txtCertGradeVal" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 17px; color: #11734F;">GRADE S</div>
           </div>
           <div>
-            <div style="font-size: 11px; color: #64748B; font-weight: 700;">สถานะผู้ป่วย</div>
-            <div style="font-weight: 800; font-size: 14.5px; color: #0284C7;">รอดชีวิต 100%</div>
+            <div style="font-size: 11px; color: #4F5660; font-weight: 700;">สถานะผู้ป่วย</div>
+            <div style="font-weight: 800; font-size: 14.5px; color: #1F5FA8;">รอดชีวิต 100%</div>
           </div>
         </div>
 
@@ -5111,7 +5354,7 @@
         <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; margin-top: 14px; padding-top: 12px; border-top: 1px dashed #CBD5E1; text-align: left; box-sizing: border-box;">
           <div>
             <div style="font-size: 11.5px; font-weight: 700; color: #0F172A;">ฐานกิจกรรม HEARTBEAT RUSH</div>
-            <div style="font-size: 11px; color: #64748B; font-style: italic;">“ช่วยให้เป็น เห็นแล้วกล้าทำ”</div>
+            <div style="font-size: 11px; color: #4F5660; font-style: italic;">“ช่วยให้เป็น เห็นแล้วกล้าทำ”</div>
           </div>
           <div style="border: 1px solid #D4AF37; background: #FEFCE8; color: #92400E; font-size: 9.5px; font-weight: 800; padding: 4px 8px; border-radius: 6px; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace;">
             VERIFIED // MDBUU-2027
@@ -5706,6 +5949,53 @@
     };
     window.V28Motion = V28Motion;
 
+    // V29: one quiet line under the stage telling the host what the game is waiting for
+    const V29Host = {
+      start(gm) {
+        if (this._t) return;
+        this._t = setInterval(() => this.tick(gm), 300);
+        document.addEventListener('click', (e) => {
+          const card = e.target.closest && e.target.closest('#factCard1, #factCard2, #factCard3, #factCard4');
+          if (!card || !document.body.classList.contains('v29')) return;
+          const map = { factCard1: 'chkPillLoc', factCard2: 'chkPillInc', factCard3: 'chkPillPat', factCard4: 'chkPillAed' };
+          const pill = document.getElementById(map[card.id]);
+          if (pill) pill.click();
+        });
+      },
+      text(gm) {
+        const s = gm.currentStage, sub = gm.decisionSubStep, np = gm.noPhoneMode;
+        if (gm.isGameOver) return 'พูด “ลองใหม่” หรือคลิกปุ่ม เพื่อเล่นด่านนี้อีกครั้ง';
+        if ([1, 4, 6, 7, 8].includes(s)) {
+          if (sub === 'PROMPT_INSPECT') return 'รอตัวแทนพูด “ตรวจดู” หรือกด Space';
+          if (sub === 'AUDIENCE_VOTING') return np ? 'ทั้งห้องชูนิ้ว 1–4 แล้วพิธีกรกดเลข' : 'ทั้งห้องกำลังโหวตในมือถือ';
+          if (sub === 'HERO_DECISION' || sub === 'CONFIRM_CHOICE') return 'รอตัวแทนพูด “ยืนยัน” หรือกด Space';
+          if (sub === 'DIRECT_PRESSURE') return 'กด Space ค้างไว้ = กดห้ามเลือด';
+          return '';
+        }
+        if (s === 2) return 'ทั้งห้องตะโกน 3 ประโยคบนจอให้ดัง';
+        if (s === 3) return np ? 'ทั้งห้องปรบมือรัวๆ พิธีกรกด Space แล้วตัวแทนแจ้ง 1669 ครบ 4 ข้อ' : 'ทั้งห้องกดรัวในมือถือ แล้วตัวแทนแจ้ง 1669 ครบ 4 ข้อ';
+        if (s === 5) {
+          if (gm.stage5Phase !== 'CPR') return 'รอตัวแทนพูด “ฉันถอย คุณถอย ทุกคนถอย”';
+          const st = gm.cprPhaseState;
+          if (st === 'WAITING_READY') return 'รอตัวแทนพูด “พร้อมแล้ว” หรือกด Space';
+          if (st === 'COUNTDOWN') return 'นับ 3-2-1';
+          if (st === 'ACTIVE') return 'กดตามจังหวะ (Space)';
+          return 'ตัวแทนไปที่หุ่น CPR หน้าห้อง';
+        }
+        if (s === 9) return 'ถ่ายรูปหมู่ แล้วกด R เริ่มรอบใหม่';
+        return '';
+      },
+      tick(gm) {
+        const el = document.getElementById('v29HsWait'); if (!el) return;
+        const t = this.text(gm);
+        const strip = document.getElementById('v29HostStrip');
+        if (strip && strip.dataset.stage !== String(gm.currentStage)) strip.dataset.stage = String(gm.currentStage);
+        if (el.textContent !== t) el.textContent = t;
+        el.style.visibility = t ? 'visible' : 'hidden';
+      }
+    };
+    window.V29Host = V29Host;
+
     // V28: build a real left column (scene video + story) after every stage render
     const V28Layout = {
       apply() {
@@ -6064,18 +6354,18 @@
         const txt = document.getElementById('lobbyMqttStatusTxt');
         if (!txt) return;
         if (this.mqttStatus === 'connected') {
-          if (dot) dot.style.background = '#059669';
+          if (dot) dot.style.background = '#11734F';
           const n = this.liveMqttClients().length;
           txt.innerText = `MQTT: ออนไลน์ (${n} เส้นทาง)`;
-          txt.style.color = '#059669';
+          txt.style.color = '#11734F';
         } else if (this.mqttStatus === 'connecting') {
           if (dot) dot.style.background = '#D97706';
           txt.innerText = 'MQTT: กำลังเชื่อมต่อ...';
           txt.style.color = '#D97706';
         } else {
-          if (dot) dot.style.background = '#E11D48';
+          if (dot) dot.style.background = '#C8241A';
           txt.innerText = 'MQTT: ออฟไลน์ (Broadcast)';
-          txt.style.color = '#E11D48';
+          txt.style.color = '#C8241A';
         }
       }
 
@@ -6385,10 +6675,10 @@
           if (txt) {
             if (this.mode === '100') {
               txt.innerText = '100 คน';
-              txt.style.color = '#0284C7';
+              txt.style.color = '#1F5FA8';
             } else if (this.mode === '25') {
               txt.innerText = '25 คน';
-              txt.style.color = '#059669';
+              txt.style.color = '#11734F';
             } else {
               txt.innerText = 'ปิด';
               txt.style.color = '';
@@ -6531,7 +6821,7 @@
       ctx.font = 'bold 36px "Prompt", sans-serif';
       ctx.fillText('ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน', 600, 520);
 
-      ctx.fillStyle = '#64748B';
+      ctx.fillStyle = '#4F5660';
       ctx.font = '500 22px "Prompt", sans-serif';
       ctx.fillText('ขอมอบประกาศนียบัตรฉบับนี้ไว้เพื่อแสดงว่า', 600, 580);
 
@@ -6568,11 +6858,11 @@
       ctx.font = 'bold 20px "JetBrains Mono", monospace';
       ctx.fillText('INDIVIDUAL PERFORMANCE RECORD', 600, 930);
 
-      ctx.fillStyle = '#059669';
+      ctx.fillStyle = '#11734F';
       ctx.font = 'bold 22px "Prompt", sans-serif';
       ctx.fillText(`คะแนนรวม: ${score} / 100 คะแนน • GRADE ${rank}`, 600, 975);
 
-      ctx.fillStyle = '#64748B';
+      ctx.fillStyle = '#4F5660';
       ctx.font = '500 17px "Prompt", sans-serif';
       ctx.fillText(stats, 600, 1025);
 
@@ -6803,7 +7093,7 @@
         this.mode = 'SINUS';
         this.phase = 0;
         this.speed = 2.0;
-        this.color = '#059669';
+        this.color = '#11734F';
         this.points = [];
         this.width = 0;
         this.height = 0;
@@ -6839,7 +7129,7 @@
         this.mode = mode;
         const badge = document.getElementById('ecgStatusBadge');
         if (mode === 'SINUS') {
-          this.color = '#059669';
+          this.color = '#11734F';
           this.speed = 2.0;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical healthy';
@@ -6854,11 +7144,11 @@
             badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • ชีพจรเร็ว (ตกใจ บาดเจ็บ)</span>';
           }
         } else if (mode === 'BRADYCARDIA') {
-          this.color = '#E11D48';
+          this.color = '#C8241A';
           this.speed = 1.7;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • วิกฤต: หัวใจเต้นช้า 38 BPM</span>';
+            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • วิกฤต: หัวใจเต้นช้ามาก ใกล้หยุดเต้น</span>';
           }
         } else if (mode === 'AGONAL') {
           this.color = '#D97706';
@@ -6868,34 +7158,34 @@
             badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • วิกฤต: หายใจเฮือก 22 BPM</span>';
           }
         } else if (mode === 'VFIB_COARSE') {
-          this.color = '#E11D48';
+          this.color = '#C8241A';
           this.speed = 2.6;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • วิกฤต: หัวใจห้องล่างเต้นพลิ้ว (V-Fib)</span>';
+            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • หัวใจเต้นพลิ้ว (VF) • ไม่มีชีพจร • ช็อกได้</span>';
           }
         } else if (mode === 'CPR_COMPRESSION') {
-          this.color = '#E11D48';
+          this.color = '#C8241A';
           this.speed = 2.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
-            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • วิกฤต: หัวใจหยุดเต้น (กำลังทำ CPR)</span>';
+            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • หัวใจเต้นพลิ้ว (VF) • ไม่มีชีพจร • กำลังกดหน้าอก</span>';
           }
         } else if (mode === 'DEFIB_DISCHARGE') {
-          this.color = '#0284C7';
+          this.color = '#1F5FA8';
           if (badge) {
             badge.className = 'ecg-status-badge font-technical info';
             badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • ปล่อยพลังงานช็อก AED เรียบร้อย</span>';
           }
         } else if (mode === 'ROSC') {
-          this.color = '#059669';
+          this.color = '#11734F';
           this.speed = 2.2;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical healthy';
-            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • หัวใจกลับมาเต้นแล้ว 88 BPM</span>';
+            badge.innerHTML = '<span class="ecg-status-dot"></span><span>คลื่นไฟฟ้าหัวใจ • หัวใจกลับมาเต้นแล้ว</span>';
           }
         } else if (mode === 'FLATLINE' || mode === 'ASYSTOLE') {
-          this.color = '#DC2626';
+          this.color = '#C8241A';
           this.speed = 1.0;
           if (badge) {
             badge.className = 'ecg-status-badge font-technical critical';
@@ -7466,7 +7756,7 @@
             type: 'fatal',
             fatalReason: 'เกิดไฟลุกไหม้จากห้องเครื่องและมีรถเฉี่ยวชนซ้ำ เนื่องจากยังไม่ได้กั้นพื้นที่และดับเครื่องยนต์ก่อนเข้าช่วย',
             voiceHint: 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ ต้องประเมินความปลอดภัยก่อนเสมอ!',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/><line x1="12" y1="2" x2="12" y2="6"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/><line x1="12" y1="2" x2="12" y2="6"/></svg>`
           },
           {
             num: 2,
@@ -7474,7 +7764,7 @@
             purpose: 'ใช้กั้นรถเลนข้างๆ เปิดไฟฉุกเฉิน และดับเครื่องยนต์ก่อนเข้าช่วย',
             type: 'correct',
             correctSpoken: 'ถูกครับ! วางกรวย เปิดไฟฉุกเฉิน ดับเครื่องรถ ความปลอดภัยของเราต้องมาก่อน เพราะถ้าเราเจ็บเองอีกคน ก็ไม่มีใครช่วยเขาได้แล้ว',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 2 8 16H2L10 2z"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="8" y1="10" x2="16" y2="10"/><circle cx="18" cy="7" r="2"/><path d="M20 7h2"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#11734F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 2 8 16H2L10 2z"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="8" y1="10" x2="16" y2="10"/><circle cx="18" cy="7" r="2"/><path d="M20 7h2"/></svg>`
           },
           {
             num: 3,
@@ -7483,7 +7773,7 @@
             type: 'fatal',
             fatalReason: 'เกิดไฟลุกไหม้จากห้องเครื่องและมีรถเฉี่ยวชนซ้ำ เนื่องจากยังไม่ได้กั้นพื้นที่และดับเครื่องยนต์ก่อนเข้าช่วย',
             voiceHint: 'ห้ามมุดเข้าไปในรถที่มีควันพุ่งเด็ดขาด เพราะเครื่องยนต์อาจเกิดไฟลุกไหม้ได้ ต้องตัดความเสี่ยงดับเครื่องยนต์และกั้นพื้นที่ก่อน!',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="10" x2="12" y2="16"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="10" x2="12" y2="16"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`
           },
           {
             num: 4,
@@ -7519,7 +7809,7 @@
             type: 'fatal',
             fatalReason: 'ผู้ป่วยอยู่ในภาวะหัวใจหยุดเต้น (หายใจเฮือก) การไม่กดหน้าอก CPR ทันทีทำให้สมองขาดออกซิเจนเกิน 4 นาที',
             voiceHint: 'หายใจเฮือกไม่ใช่การหายใจปกติ แต่เป็นสัญญาณของภาวะหัวใจหยุดเต้น ต้องเริ่มกดหน้าอกทันที!',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-3.5a4.5 4.5 0 0 1 9 0V21"/><circle cx="18" cy="18" r="3"/><polyline points="18 16 18 18 19 19"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21v-3.5a4.5 4.5 0 0 1 9 0V21"/><circle cx="18" cy="18" r="3"/><polyline points="18 16 18 18 19 19"/></svg>`
           },
           {
             num: 2,
@@ -7527,7 +7817,7 @@
             purpose: 'ใช้ปั๊มหัวใจทดแทนหัวใจที่หยุดเต้นทันที เพื่อส่งเลือดไปเลี้ยงสมอง',
             type: 'correct',
             correctSpoken: 'ใช่เลยครับ! หายใจเฮือกแบบนี้ไม่ใช่หายใจปกติ มันคือสัญญาณว่าหัวใจหยุดเต้น ต้องเริ่มกดหน้าอกเดี๋ยวนี้',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 9v4"/><path d="M10 11h4"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#11734F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 9v4"/><path d="M10 11h4"/></svg>`
           },
           {
             num: 3,
@@ -7536,7 +7826,7 @@
             type: 'fatal',
             fatalReason: 'ผู้ป่วยอยู่ในภาวะหัวใจหยุดเต้น (หายใจเฮือก) การไม่กดหน้าอก CPR ทันทีทำให้สมองขาดออกซิเจนเกิน 4 นาที',
             voiceHint: 'ห้ามเสียเวลากับยาดมเด็ดขาด ผู้ป่วยหัวใจหยุดเต้นต้องได้รับการกดหน้าอก CPR ปั๊มหัวใจทันที!',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="8" height="16" rx="2"/><circle cx="12" cy="9" r="2"/><path d="M10 16h4"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="8" height="16" rx="2"/><circle cx="12" cy="9" r="2"/><path d="M10 16h4"/></svg>`
           }
         ]
       },
@@ -7571,7 +7861,7 @@
             purpose: 'ใช้น้ำเกลือปราศจากเชื้อชะล้างเศษดินและสิ่งสกปรกโดยไม่ทำลายเนื้อเยื่อ',
             type: 'correct',
             correctSpoken: 'ถูกครับ น้ำเกลือล้างแผล ไม่แสบ ไม่ทำร้ายเนื้อเยื่อ ถ้าอยู่ข้างนอกแล้วไม่มีน้ำเกลือ น้ำประปาสะอาดก็ใช้ล้างได้ครับ',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v4h-4z"/><rect x="6" y="6" width="12" height="16" rx="3"/><path d="M12 10a2.5 2.5 0 0 1 2.5 2.5c0 1.5-2.5 4.5-2.5 4.5s-2.5-3-2.5-4.5A2.5 2.5 0 0 1 12 10z"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1F5FA8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4v4h-4z"/><rect x="6" y="6" width="12" height="16" rx="3"/><path d="M12 10a2.5 2.5 0 0 1 2.5 2.5c0 1.5-2.5 4.5-2.5 4.5s-2.5-3-2.5-4.5A2.5 2.5 0 0 1 12 10z"/></svg>`
           },
           {
             num: 3,
@@ -7591,7 +7881,7 @@
             penaltyDeduction: 5,
             hintText: 'ห้ามนำแป้งหรือยาผงมาโรยแผลสดเด็ดขาด เพราะจะจับตัวเป็นก้อนแข็ง ขัดขวางการหายของแผลและเสี่ยงติดเชื้อรุนแรง',
             voiceHint: 'แป้งหรือยาผงโรยแผลสด จะจับตัวเป็นก้อน แผลหายช้า แล้วยังติดเชื้อง่ายด้วยครับ ลองอีกที',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="10" height="15" rx="3"/><circle cx="12" cy="3" r="1"/><path d="M10 11h4"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="10" height="15" rx="3"/><circle cx="12" cy="3" r="1"/><path d="M10 11h4"/></svg>`
           }
         ]
       },
@@ -7626,7 +7916,7 @@
             purpose: 'ใช้กดลงบนแผลโดยตรง ต่อเนื่อง 5–10 นาทีแล้วพันผ้ากระชับ',
             type: 'correct',
             correctSpoken: 'ถูกครับ เอาผ้าก๊อซกดลงบนแผลตรงๆ แล้วกดค้างไว้ ทั้งห้องช่วยกัน กดนิ้วค้างบนปุ่มในมือถือพร้อมกันสามวินาทีเลยครับ',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16"/><path d="M4 14h16"/><path d="M10 4v16"/><path d="M14 4v16"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#11734F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16"/><path d="M4 14h16"/><path d="M10 4v16"/><path d="M14 4v16"/></svg>`
           },
           {
             num: 3,
@@ -7635,7 +7925,7 @@
             type: 'fatal',
             fatalReason: 'ผู้ป่วยสูญเสียเลือดปริมาณมากอย่างต่อเนื่องจนความดันโลหิตตกและเกิดภาวะช็อกจากการเสียเลือด',
             voiceHint: 'ห้ามปล่อยให้เลือดไหลออกเด็ดขาด และห้ามใช้สำลีเพราะเส้นใยจะติดในแผล ต้องกดห้ามเลือดทันที!',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><line x1="5" y1="5" x2="19" y2="19"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><line x1="5" y1="5" x2="19" y2="19"/></svg>`
           }
         ]
       },
@@ -7662,7 +7952,7 @@
             penaltyDeduction: 5,
             hintText: 'ห้ามดัดหรือดึงกระดูกที่หักให้ตรงเด็ดขาด เพราะปลายกระดูกคมจะบาดเส้นเลือดและเส้นประสาทฉีกขาด ให้ดามในท่าที่เป็นอยู่',
             voiceHint: 'อย่าดึงให้ตรงนะครับ ปลายกระดูกที่หักคม อาจไปบาดเส้นเลือดกับเส้นประสาท ลองใหม่',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><line x1="2" y1="12" x2="22" y2="12"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><line x1="2" y1="12" x2="22" y2="12"/></svg>`
           },
           {
             num: 2,
@@ -7670,7 +7960,7 @@
             purpose: 'ใช้ดามในท่าที่เป็นอยู่ครอบคลุมข้อศอก-ข้อมือ และคล้องคอ 90 องศา',
             type: 'correct',
             correctSpoken: 'ถูกต้องครับ ไม่ดัด ไม่ดึง ดามไว้ในท่าที่เป็นอยู่ ให้คลุมทั้งข้อศอกและข้อมือ แล้วใช้ผ้าสามเหลี่ยมคล้องคอ ให้แขนพับประมาณเก้าสิบองศา',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#11734F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`
           },
           {
             num: 3,
@@ -7680,7 +7970,7 @@
             penaltyDeduction: 5,
             hintText: 'ห้ามบีบนวดคลึงบริเวณกระดูกที่หักเด็ดขาด เพราะจะทำให้กระดูกเคลื่อนที่ บาดเจ็บซ้ำซ้อน และเสี่ยงกระดูกทะลุผิวหนัง',
             voiceHint: 'อย่านวดตรงที่สงสัยว่าหักครับ กระดูกจะเคลื่อน แล้วเจ็บหนักกว่าเดิม ลองใหม่',
-            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>`
+            iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>`
           }
         ]
       }
@@ -7754,6 +8044,8 @@
         document.body.classList.add('lobby-mode');
         try { if (localStorage.getItem('mdbuu_no_phone') === '1') setTimeout(() => this.toggleNoPhoneMode(true), 0); } catch(e) {}
         try { if (localStorage.getItem('mdbuu_theme') === 'icu' || /[?&]theme=icu/.test(location.search)) document.body.classList.add('theme-icu'); } catch(e) {}
+        try { if (localStorage.getItem('mdbuu_v29') === 'off' || /[?&]v29=off/.test(location.search)) document.body.classList.remove('v29'); } catch(e) {}
+        V29Host.start(this);
         this.initDisplayScaleSystem();
         this.startSessionTimer();
         window.ECGEngine = new ECGCanvasEngine('ecgCanvas');
@@ -7892,7 +8184,7 @@
             <div style="font-size:40px;font-weight:800;line-height:1.2;margin:8px 0 12px;">รีโมตควบคุมเกม</div>
             <div style="font-size:19px;line-height:1.5;color:#5E646C;">สแกนด้วยมือถือพี่สตาฟ แล้วกดข้าม/ย้อนด่าน เลือกข้อ หรือยืนยันคำตอบได้จากทุกที่ในห้อง<br>
             <b style="color:#121417;">อย่าเปิดหน้านี้ตอนฉายให้น้องเห็น</b> • รหัสนี้เปลี่ยนทุกครั้งที่กด R เริ่มรอบใหม่</div>
-            <div style="font-size:15px;color:#8B9097;margin-top:14px;">ปิดเองใน 25 วินาที หรือคลิกที่ใดก็ได้</div>
+            <div style="font-size:15px;color:#5E636B;margin-top:14px;">ปิดเองใน 25 วินาที หรือคลิกที่ใดก็ได้</div>
           </div></div>`;
         m.onclick = () => m.remove();
         document.body.appendChild(m);
@@ -7908,8 +8200,8 @@
         const people = Object.values(this.connectedPlayers || {}).filter(p => !p.isBot).length;
         return `<div class="v28-room-stats font-technical">
           <div><b>${firstTry}/5</b><span>ข้อที่ตอบถูกตั้งแต่ครั้งแรก</span></div>
-          <div><b>${cprPct}</b><span>กดหน้าอกตรงจังหวะ</span></div>
-          <div><b>${this.noPhoneMode ? 'ทั้งห้อง' : people}</b><span>${this.noPhoneMode ? 'ช่วยกันชูนิ้วโหวต' : 'คนช่วยผ่านมือถือ'}</span></div>
+          ${tot > 0 ? `<div><b>${cprPct}</b><span>กดหน้าอกตรงจังหวะ</span></div>` : ''}
+          ${(this.noPhoneMode || people > 0) ? `<div><b>${this.noPhoneMode ? 'ทั้งห้อง' : people}</b><span>${this.noPhoneMode ? 'ช่วยกันชูนิ้วโหวต' : 'คนช่วยผ่านมือถือ'}</span></div>` : ''}
         </div>`;
       }
 
@@ -7973,8 +8265,8 @@
             <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:4px; margin-bottom:8px; width:100%;">
               ${Object.entries(groupCounts).map(([grp, cnt]) => `
                 <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:3px 6px; font-size:10.5px; display:flex; justify-content:space-between; align-items:center;">
-                  <span style="color:#64748B; font-weight:700;">กล. ${grp}</span>
-                  <span style="color:#0284C7; font-weight:800;">${cnt} คน</span>
+                  <span style="color:#4F5660; font-weight:700;">กล. ${grp}</span>
+                  <span style="color:#1F5FA8; font-weight:800;">${cnt} คน</span>
                 </div>
               `).join('')}
             </div>
@@ -7984,7 +8276,7 @@
           const recentPlayers = players.slice(-12).reverse();
           const chipsHtml = recentPlayers.map(p => `
             <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
-              <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
+              <span style="color:${p.isBot ? '#1F5FA8' : '#11734F'};">●</span> กลุ่ม ${p.group} • ${p.name}
             </div>
           `).join('');
 
@@ -7992,7 +8284,7 @@
         } else {
           roster.innerHTML = players.map(p => `
             <div class="player-roster-chip ${p.isBot ? 'bot-chip' : ''}">
-              <span style="color:${p.isBot ? '#0284C7' : '#059669'};">●</span> กลุ่ม ${p.group} • ${p.name}
+              <span style="color:${p.isBot ? '#1F5FA8' : '#11734F'};">●</span> กลุ่ม ${p.group} • ${p.name}
             </div>
           `).join('');
         }
@@ -8161,15 +8453,15 @@
         };
 
         const stageTriage = {
-          1: { con: 'มึนงง / สับสน', circ: 'ชีพจรเร็ว 112 BPM' },
-          2: { con: 'หมดสติ ไม่รู้สึกตัว', circ: 'ชีพจรเต้นช้ามาก' },
-          3: { con: 'หมดสติ ไม่ตอบสนอง', circ: 'ชีพจรแผ่วเบา' },
-          4: { con: 'หมดสติ หายใจเฮือก', circ: 'หัวใจหยุดเต้น' },
-          5: { con: 'หมดสติ', circ: 'กำลังทำ CPR' },
-          6: { con: 'เริ่มรู้สึกตัวดีขึ้น', circ: 'ฟื้นชีพ (88 BPM)' },
-          7: { con: 'รู้สึกตัวดี', circ: 'มีเลือดซึมที่แผล' },
+          1: { con: 'มึนงง สับสน', circ: 'หายใจเร็ว • ชีพจรเร็ว' },
+          2: { con: 'หมดสติ ไม่ตอบสนอง', circ: 'หายใจช้า • ชีพจรช้ามาก' },
+          3: { con: 'หมดสติ ไม่ตอบสนอง', circ: 'หายใจแผ่ว • ชีพจรแผ่วมาก' },
+          4: { con: 'หมดสติ', circ: 'หายใจเฮือก (ไม่ใช่หายใจ) • ไม่มีชีพจร' },
+          5: { con: 'หมดสติ', circ: 'ไม่หายใจ • ไม่มีชีพจร' },
+          6: { con: 'เริ่มรู้สึกตัว', circ: 'หายใจเอง • ชีพจรกลับมา' },
+          7: { con: 'รู้สึกตัวดี', circ: 'หายใจปกติ • เลือดออกที่แผล' },
           8: { con: 'รู้สึกตัวดี', circ: 'สัญญาณชีพคงที่' },
-          9: { con: 'รู้สึกตัวดี', circ: 'ชีพจรปกติ 84 BPM' }
+          9: { con: 'รู้สึกตัวดี', circ: 'หายใจปกติ • ชีพจรปกติ' }
         };
 
         if (stageTitleEl) {
@@ -8214,11 +8506,11 @@
         const elHr = document.getElementById('txtHeartRate');
         const elSp = document.getElementById('txtSpO2');
         if (elHr) {
-          elHr.innerText = hr;
-          if (hr === 0 || hr < 45) elHr.classList.add('critical');
+          elHr.innerText = (hr == null) ? '—' : hr; // V29: pulseless -> dash, never a number
+          if (hr == null || hr === 0 || hr < 45) elHr.classList.add('critical');
           else elHr.classList.remove('critical');
         }
-        if (elSp) elSp.innerText = spo2;
+        if (elSp) elSp.innerText = (spo2 == null) ? '—' : spo2; // V29: no pulse -> no SpO2 reading
         if (window.ECGEngine && window.ECGEngine.mode === 'SINUS') {
           const ecgBadge = document.getElementById('ecgStatusBadge');
           if (ecgBadge) {
@@ -8341,9 +8633,9 @@
           }
           this.startStage3LiveSTT();
         } else if (newStage === 4) {
-          window.ECGEngine.setMode('AGONAL');
-          this.updateVitals(22, 48);
-          SoundEngine.startPulseScheduler(440, 2720);
+          window.ECGEngine.setMode('VFIB_COARSE'); // V29: agonal breathing = cardiac arrest (VF, shockable)
+          this.updateVitals(null, null);
+          SoundEngine.stopPulseScheduler();
           this.updatePatientHud('images/patient/patient_s4_agonal.png', 'ด่านที่ 4 • หายใจเฮือก', 'critical');
           this.decisionSubStep = 'PROMPT_INSPECT';
           this.selectedChoiceIndex = null;
@@ -8368,7 +8660,7 @@
           this.cprTransitioning = false;
           this.lastPlayedBeatIndex = -1;
           window.ECGEngine.setMode('CPR_COMPRESSION');
-          this.updateVitals(0, 40);
+          this.updateVitals(null, null);
           SoundEngine.stopPulseScheduler();
           this.updatePatientHud('images/patient/patient_s5_cpr.png', 'ด่านที่ 5 • กำลังกดหน้าอก', 'critical');
           this.renderStage();
@@ -8643,11 +8935,11 @@
 
                   <!-- Compact Timer + Progress + Live Vote Counter -->
                   <div style="display:flex; align-items:center; gap:14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; padding:7px 14px;">
-                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec" style="font-size:36px; min-width:52px; color:#0284C7;">${this.voteCountdownSeconds}</div>
+                    <div class="vote-timer-clock num-readout font-technical" id="txtVoteTimerSec" style="font-size:36px; min-width:52px; color:#1F5FA8;">${this.voteCountdownSeconds}</div>
                     <div style="flex:1; display:flex; flex-direction:column; gap:5px; min-width:0;">
                       <div style="display:flex; justify-content:space-between; align-items:center; font-size:13.5px; font-weight:800; color:#1E293B;" class="font-technical">
-                        <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#059669; font-size:15.5px;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
-                        <span id="txtVotePct" class="num-readout" style="color:#0284C7; font-size:15px;">${votePct}%</span>
+                        <span>ส่งผลโหวตแล้ว: <strong id="txtVoteCount" style="color:#11734F; font-size:15.5px;">${votesCast}</strong> / <strong id="txtTotalVoters">${totalPlayers}</strong> คน</span>
+                        <span id="txtVotePct" class="num-readout" style="color:#1F5FA8; font-size:15px;">${votePct}%</span>
                       </div>
                       <div class="vote-timer-progress-wrap" style="height:11px;">
                         <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
@@ -8690,7 +8982,7 @@
                     <div class="equipment-icon-wrap large">${this.topVotedChoice ? this.topVotedChoice.iconSvg : ''}</div>
                     <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
                       <div class="choice-equipment-title large">${this.topVotedChoice ? this.topVotedChoice.title : ''}</div>
-                      <div style="font-size:calc(15px * var(--ui-scale)); color:#64748B; font-weight:600; line-height:1.4;">${this.topVotedChoice ? this.topVotedChoice.purpose : ''}</div>
+                      <div style="font-size:calc(15px * var(--ui-scale)); color:#4F5660; font-weight:600; line-height:1.4;">${this.topVotedChoice ? this.topVotedChoice.purpose : ''}</div>
                     </div>
                   </div>
 
@@ -8705,11 +8997,22 @@
                     </button>
                   </div>
 
-                  <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; padding-top:8px; border-top:1px dashed #E2E8F0; font-size:11.5px; color:#64748B;">
+                  ${(() => {
+                    // V29: show every option with the room's share; the top vote is marked. Click = host override.
+                    const all = Object.values(this.currentVotes || {});
+                    const tot = all.length;
+                    return `<div class="v29-alt-list v29-only">${data.choices.map(c => {
+                      const n = all.filter(v => v.choice === c.num).length;
+                      const p = tot ? Math.round((n / tot) * 100) : 0;
+                      const top = this.topVotedChoice && this.topVotedChoice.num === c.num;
+                      return `<button id="choiceBtn_${c.num}" type="button" class="v29-alt ${top ? 'is-top' : ''}" style="--p:${p}%" onclick="GameStateManager.executeDecisionOutcome(${c.num})"><span class="v29-alt-num">${c.num}</span><span class="v29-alt-txt">${c.title}</span><span class="v29-alt-pct">${tot ? p + '%' : ''}</span></button>`;
+                    }).join('')}</div>`;
+                  })()}
+                  <div class="v29-hide" style="display:flex; align-items:center; justify-content:space-between; gap:6px; padding-top:8px; border-top:1px dashed #E2E8F0; font-size:11.5px; color:#4F5660;">
                     <span>หรือเลือกข้ออื่นเอง:</span>
                     <div style="display:flex; gap:6px; flex-wrap:wrap;">
                       ${data.choices.map(c => `
-                        <button id="choiceBtn_${c.num}" onclick="GameStateManager.executeDecisionOutcome(${c.num})" class="nav-btn font-technical" style="height:26px; padding:0 10px; font-size:11.5px; font-weight:700;">
+                        <button data-choice="${c.num}" onclick="GameStateManager.executeDecisionOutcome(${c.num})" class="nav-btn font-technical" style="height:26px; padding:0 10px; font-size:11.5px; font-weight:700;">
                           ข้อ ${c.num}
                         </button>
                       `).join('')}
@@ -9026,7 +9329,7 @@
 
           const box = document.getElementById('txtLiveVoiceChoice');
           if (box) {
-            box.innerHTML = `กำลังฟัง: <span style="color:#0284C7; font-weight:800;">"${cleanRaw}"</span> <span style="font-size:11px; color:#64748B;">(พูดให้จบประโยค...)</span>`;
+            box.innerHTML = `กำลังฟัง: <span style="color:#1F5FA8; font-weight:800;">"${cleanRaw}"</span> <span style="font-size:11px; color:#4F5660;">(พูดให้จบประโยค...)</span>`;
           }
 
           // Wait for player to finish speaking (750ms silence for Step 1, 950ms silence for Step 3)
@@ -9049,7 +9352,7 @@
               ];
               if (inspectPhrases.some(w => valNoSpace.includes(w))) {
                 if (box) {
-                  box.innerHTML = `ได้ยิน: <span style="color:#059669; font-weight:800;">"${finalTranscript}"</span> <span style="color:#059669;">(✓ เริ่มตรวจสอบ!)</span>`;
+                  box.innerHTML = `ได้ยิน: <span style="color:#11734F; font-weight:800;">"${finalTranscript}"</span> <span style="color:#11734F;">(✓ เริ่มตรวจสอบ!)</span>`;
                 }
                 this.advanceToInspectionFinding();
               }
@@ -9082,7 +9385,7 @@
               const spokenChoiceNum = matchVoiceToChoice(finalTranscript, stageNum);
               if (spokenChoiceNum) {
                 if (box) {
-                  box.innerHTML = `“<span style="color:#059669; font-weight:800;">${finalTranscript}</span>” <span style="color:#059669;">(✓ เลือกข้อที่ ${spokenChoiceNum}!)</span>`;
+                  box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${finalTranscript}</span>” <span style="color:#11734F;">(✓ เลือกข้อที่ ${spokenChoiceNum}!)</span>`;
                 }
                 this.executeDecisionOutcome(spokenChoiceNum);
                 return;
@@ -9096,7 +9399,7 @@
               ];
               if (confirmWords.some(w => valNoSpace.includes(w))) {
                 if (box) {
-                  box.innerHTML = `“<span style="color:#059669; font-weight:800;">${finalTranscript}</span>” <span style="color:#059669;">(✓ ยืนยันคำตอบ!)</span>`;
+                  box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${finalTranscript}</span>” <span style="color:#11734F;">(✓ ยืนยันคำตอบ!)</span>`;
                 }
                 this.confirmHeroDecision();
                 return;
@@ -9121,7 +9424,7 @@
           this.cprMetronomeTimer = null;
         }
         window.ECGEngine.setMode('FLATLINE');
-        this.updateVitals(0, 0);
+        this.updateVitals(null, null);
         SoundEngine.playFlatlineTone(1600);
         this.shakeScreen();
 
@@ -9137,6 +9440,13 @@
 
         const causeEl = document.getElementById('txtGameOverCause');
         if (causeEl) causeEl.innerText = fatalReason;
+        // V29: end the bad branch on the right move, so the room leaves with the correct step
+        const rightEl = document.getElementById('txtGameOverRight');
+        if (rightEl) {
+          const cd = CLINICAL_STAGES[stageNum];
+          const ok = cd && cd.choices ? cd.choices.find(c => c.num === cd.correctChoice) : null;
+          rightEl.textContent = ok ? `ที่ถูกต้อง: ${ok.title}` : '';
+        }
 
         const penaltyEl = document.getElementById('txtGameOverPenalty');
         if (penaltyEl) penaltyEl.innerHTML = `หักคะแนนด่านที่ ${stageNum}: <strong>-10 คะแนน</strong> &bull; คะแนนปัจจุบัน: <strong>${this.score} / 100</strong>`;
@@ -9168,9 +9478,9 @@
           SoundEngine.startPulseScheduler(540, 535);
           this.updatePatientHud('images/patient/patient_s1_dazed.png', 'ด่านที่ 1 • มึนงง ตกใจ', 'warn');
         } else if (this.currentStage === 4) {
-          window.ECGEngine.setMode('AGONAL');
-          this.updateVitals(22, 48);
-          SoundEngine.startPulseScheduler(440, 2720);
+          window.ECGEngine.setMode('VFIB_COARSE'); // V29: agonal breathing = cardiac arrest (VF, shockable)
+          this.updateVitals(null, null);
+          SoundEngine.stopPulseScheduler();
           this.updatePatientHud('images/patient/patient_s4_agonal.png', 'ด่านที่ 4 • หายใจเฮือก', 'critical');
         } else if (this.currentStage === 7) {
           window.ECGEngine.setMode('SINUS');
@@ -9336,21 +9646,21 @@
   <meta charset="UTF-8">
   <title>จอกรรมการควบคุมระยะไกล // Heartbeat Rush</title>
   <style>
-    body { margin:0; padding:16px; background:#0B0F19; color:#059669; font-weight:800; font-family:'Prompt', -apple-system, sans-serif; box-sizing:border-box; }
+    body { margin:0; padding:16px; background:#0B0F19; color:#11734F; font-weight:800; font-family:'Prompt', -apple-system, sans-serif; box-sizing:border-box; }
     h2 { margin:0 0 4px; font-size:17px; color:#38BDF8; font-family:monospace; }
     .status-bar { background:#1E293B; border-radius:10px; padding:12px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; }
     .badge { background:#0F172A; border:1px solid #334155; padding:4px 10px; border-radius:6px; font-size:12px; font-weight:700; font-family:monospace; }
-    .key-box { background:rgba(2, 132, 199, 0.15); border:1.5px solid #0284C7; border-radius:10px; padding:12px; margin-bottom:14px; font-size:13.5px; }
+    .key-box { background:rgba(2, 132, 199, 0.15); border:1.5px solid #1F5FA8; border-radius:10px; padding:12px; margin-bottom:14px; font-size:13.5px; }
     .grid-btns { display:grid; grid-template-columns:repeat(2, 1fr); gap:10px; margin-bottom:14px; }
-    button { background:#1E293B; color:#059669; font-weight:800; border:1.5px solid #334155; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
-    button:hover { background:#334155; border-color:#64748B; }
-    .btn-green { background:#059669; border-color:#10B981; }
+    button { background:#1E293B; color:#11734F; font-weight:800; border:1.5px solid #334155; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+    button:hover { background:#334155; border-color:#4F5660; }
+    .btn-green { background:#11734F; border-color:#10B981; }
     .btn-green:hover { background:#10B981; }
-    .btn-blue { background:#0284C7; border-color:#38BDF8; }
+    .btn-blue { background:#1F5FA8; border-color:#38BDF8; }
     .btn-blue:hover { background:#0369A1; }
     .btn-warn { background:#D97706; border-color:#F59E0B; }
     .btn-warn:hover { background:#B45309; }
-    .btn-danger { background:#DC2626; border-color:#EF4444; }
+    .btn-danger { background:#C8241A; border-color:#EF4444; }
     .btn-danger:hover { background:#B91C1C; }
     .full-width { grid-column:span 2; }
     .nav-row { display:flex; gap:8px; margin-top:10px; }
@@ -9602,7 +9912,7 @@
         ctx.font = 'bold 42px "Prompt", sans-serif';
         ctx.fillText('ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน', 600, 520);
 
-        ctx.fillStyle = '#64748B';
+        ctx.fillStyle = '#4F5660';
         ctx.font = '500 24px "Prompt", sans-serif';
         ctx.fillText('ขอมอบไว้เพื่อแสดงว่าทีมผู้ปฏิบัติการกู้ชีพ', 600, 575);
 
@@ -9672,7 +9982,7 @@
         const rank = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
 
         // Col 1: คะแนนปฏิบัติการ
-        ctx.fillStyle = '#64748B';
+        ctx.fillStyle = '#4F5660';
         ctx.font = 'bold 20px "Prompt", sans-serif';
         ctx.fillText('คะแนนปฏิบัติการ', cardX + cardW / 6, cardY + 55);
         ctx.fillStyle = '#090D16';
@@ -9680,18 +9990,18 @@
         ctx.fillText(`${this.score} / 100`, cardX + cardW / 6, cardY + 112);
 
         // Col 2: ระดับเกียรติคุณ
-        ctx.fillStyle = '#64748B';
+        ctx.fillStyle = '#4F5660';
         ctx.font = 'bold 20px "Prompt", sans-serif';
         ctx.fillText('ระดับเกียรติคุณ', cardX + cardW / 2, cardY + 55);
-        ctx.fillStyle = '#059669';
+        ctx.fillStyle = '#11734F';
         ctx.font = 'bold 36px "JetBrains Mono", monospace';
         ctx.fillText(`GRADE ${rank}`, cardX + cardW / 2, cardY + 112);
 
         // Col 3: สถานะผู้ป่วย
-        ctx.fillStyle = '#64748B';
+        ctx.fillStyle = '#4F5660';
         ctx.font = 'bold 20px "Prompt", sans-serif';
         ctx.fillText('สถานะผู้ป่วย', cardX + (cardW / 6) * 5, cardY + 55);
-        ctx.fillStyle = '#0284C7';
+        ctx.fillStyle = '#1F5FA8';
         ctx.font = 'bold 30px "Prompt", sans-serif';
         ctx.fillText('รอดชีวิต 100%', cardX + (cardW / 6) * 5, cardY + 110);
 
@@ -9755,7 +10065,7 @@
             }
           }
           ctx.textAlign = 'center';
-          ctx.fillStyle = '#64748B';
+          ctx.fillStyle = '#4F5660';
           ctx.font = 'bold 14px "JetBrains Mono", monospace';
           ctx.fillText('SCAN VERIFY', qrX + qrSize / 2, qrY + qrSize + 24);
         } catch(e) {
@@ -9919,7 +10229,7 @@
                     ผู้ป่วยนอนราบในจุดปลอดภัยแล้ว ตบไหล่เรียกไม่ตอบสนอง!
                   </h2>
                   <p class="stage-sub-clean" style="margin-bottom:6px;">
-                    ตะโกนขอความช่วยเหลือใส่ไมค์ให้ <strong style="color:#059669;">ถูกต้องคำพูด</strong> และ <strong style="color:var(--vital-amber);">เสียงดังทะลุเกณฑ์เป้าหมาย:</strong>
+                    ตะโกนขอความช่วยเหลือใส่ไมค์ให้ <strong style="color:#11734F;">ถูกต้องคำพูด</strong> และ <strong style="color:var(--vital-amber);">เสียงดังทะลุเกณฑ์เป้าหมาย:</strong>
                   </p>
                 </div>
 
@@ -9950,12 +10260,12 @@
                   <div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; font-weight:800; color:#1E293B;" class="font-technical">
                     <span>ความดังเสียงในห้อง</span>
                     <div style="display:flex; align-items:center; gap:8px;">
-                      <span id="txtLiveStatusHint" style="font-size:13px; color:#64748B;">รอเสียงตะโกน...</span>
-                      <span id="txtLiveDecibel" style="color:#0284C7; font-weight:900; font-size:calc(24px * var(--ui-scale));">0 dB</span>
+                      <span id="txtLiveStatusHint" style="font-size:13px; color:#4F5660;">รอเสียงตะโกน...</span>
+                      <span id="txtLiveDecibel" style="color:#1F5FA8; font-weight:900; font-size:calc(24px * var(--ui-scale));">0 dB</span>
                     </div>
                   </div>
                   <div class="meter-track-container" style="height:32px; border-radius:10px; background:#EEF2F6; position:relative; overflow:hidden; border:1.5px solid #CBD5E1;">
-                    <div id="liveDbBarFill" class="meter-bar-fill" style="background:#0284C7; height:100%; width:0%; transition:width 0.06s linear;"></div>
+                    <div id="liveDbBarFill" class="meter-bar-fill" style="background:#1F5FA8; height:100%; width:0%; transition:width 0.06s linear;"></div>
                     <div id="dynamicTargetLine" class="meter-target-line" style="position:absolute; top:0; bottom:0; width:3px; background:#090D16; z-index:5; left:${Math.min(100, Math.max(0, ((this.stage2ThresholdDb - 40)/(100 - 40))*100))}%;"></div>
                     <div id="dynamicTargetLabel" style="position:absolute; top:4px; left:calc(${Math.min(100, Math.max(0, ((this.stage2ThresholdDb - 40)/(100 - 40))*100))}% + 6px); font-size:10px; font-weight:800; color:#090D16; font-family:var(--font-technical); z-index:6;">
                       เป้า ${this.stage2ThresholdDb} dB
@@ -9966,7 +10276,7 @@
                   <div class="stage2-energy-wrap font-technical">
                     <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:800; color:#1E293B;">
                       <span>หลอดสะสมพลังเสียงตะโกน (ต้องดังต่อเนื่อง >= 0.7 วินาที):</span>
-                      <span id="txtStage2EnergyPct" style="color:#059669; font-weight:800; font-size:14px;">0%</span>
+                      <span id="txtStage2EnergyPct" style="color:#11734F; font-weight:800; font-size:14px;">0%</span>
                     </div>
                     <div class="stage2-energy-track">
                       <div id="stage2EnergyBarFill" class="stage2-energy-fill"></div>
@@ -9975,7 +10285,7 @@
 
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
                     <div style="display:flex; align-items:center; gap:8px;">
-                      <span class="font-technical" style="font-size:11.5px; color:#64748B;">
+                      <span class="font-technical" style="font-size:11.5px; color:#4F5660;">
                         เกณฑ์เป้าหมาย: <strong id="lblThresholdVal" style="color:#090D16;">${this.stage2ThresholdDb} dB</strong>
                       </span>
                       <input type="range" id="sliderStage2Threshold" min="65" max="90" value="${this.stage2ThresholdDb}" class="threshold-slider-clean" oninput="GameStateManager.setStage2Threshold(this.value)">
@@ -10038,38 +10348,38 @@
                 <!-- Co-op Tap Rush Status Bar (No Spoilers / Cheats) -->
                 <div class="stage3-locked-wrap font-technical" style="padding:8px 12px; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center;">
                   <span class="stage3-locked-text" style="font-size:12px; font-weight:700;">
-                    ⚡ พลังกดรัวมือถือ: <strong id="txtStage3TapCount" style="color:#0284C7; font-size:13.5px;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> ครั้ง (<span id="txtStage3Pct" class="num-readout">${tapPct}%</span>)
+                    ⚡ พลังกดรัวมือถือ: <strong id="txtStage3TapCount" style="color:#1F5FA8; font-size:13.5px;">${this.stage3TapCount}</strong> / <strong id="txtStage3Target">${this.effectiveTapTarget}</strong> ครั้ง (<span id="txtStage3Pct" class="num-readout">${tapPct}%</span>)
                   </span>
                   <div style="display:flex; align-items:center; gap:8px;">
                     <div class="stage3-tap-meter-container" style="width:130px; height:9px; background:#E2E8F0; border-radius:6px; overflow:hidden;">
-                      <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%; height:100%; background:linear-gradient(90deg, #0284C7, #10B981); transition:width 0.15s ease;"></div>
+                      <div class="stage3-tap-meter-fill" id="stage3TapMeterFill" style="width:${tapPct}%; height:100%; background:linear-gradient(90deg, #1F5FA8, #10B981); transition:width 0.15s ease;"></div>
                     </div>
                   </div>
                 </div>
 
                 <!-- 4-Card Facts Strip (Compact Balanced 2x2 Grid) -->
                 <div class="facts-strip-clean" style="display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:7px; margin-bottom:2px; flex:0 1 auto;" id="stage3FactsStrip">
-                  <div class="fact-card-clean" id="factCard1" style="padding:8px 12px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                  <div class="fact-card-clean" id="factCard1" style="padding:8px 12px; ${f1Unlocked ? 'background:#F0F9FF; border-color:#1F5FA8; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
                     <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">1. พิกัดจุดเกิดเหตุ</div>
                     <div class="fact-val-clean" style="${f1Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f1Unlocked ? 'ถนนสุขุมวิท หน้า รพ.ม.บูรพา' : '🔒 รอกด 25%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard2" style="padding:8px 12px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                  <div class="fact-card-clean" id="factCard2" style="padding:8px 12px; ${f2Unlocked ? 'background:#F0F9FF; border-color:#1F5FA8; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
                     <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">2. ลักษณะเหตุการณ์</div>
                     <div class="fact-val-clean" style="${f2Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#090D16;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f2Unlocked ? 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง' : '🔒 รอกด 50%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard3" style="padding:8px 12px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                  <div class="fact-card-clean" id="factCard3" style="padding:8px 12px; ${f3Unlocked ? 'background:#F0F9FF; border-color:#1F5FA8; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
                     <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">3. อาการผู้ป่วย</div>
-                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#E11D48;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-val-clean" style="${f3Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#C8241A;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f3Unlocked ? 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ' : '🔒 รอกด 75%'}
                     </div>
                   </div>
-                  <div class="fact-card-clean" id="factCard4" style="padding:8px 12px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#0284C7; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
+                  <div class="fact-card-clean" id="factCard4" style="padding:8px 12px; ${f4Unlocked ? 'background:#F0F9FF; border-color:#1F5FA8; box-shadow:0 2px 8px rgba(2,132,199,0.12);' : ''}">
                     <div class="fact-label-clean font-technical" style="font-size:11.5px; font-weight:800; margin-bottom:2px;">4. สิ่งที่ต้องการ</div>
-                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#059669;' : 'font-size:13px; color:#94A3B8;'}">
+                    <div class="fact-val-clean" style="${f4Unlocked ? 'font-size:clamp(14.5px, 1.3vw, 19px); font-weight:800; line-height:1.25; color:#11734F;' : 'font-size:13px; color:#94A3B8;'}">
                       ${f4Unlocked ? 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED' : '🔒 รอกด 100%'}
                     </div>
                   </div>
@@ -10082,7 +10392,7 @@
                 <!-- Compact Voice Transcript & Manual Input Panel -->
                 <div class="voice-transcript-panel" style="padding:7px 12px; margin:0; flex-shrink:0;">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span class="font-technical" style="font-size:11px; font-weight:700; color:#0284C7;">
+                    <span class="font-technical" style="font-size:11px; font-weight:700; color:#1F5FA8;">
                       🎙️ พูดแจ้งข้อมูลใส่ไมค์:
                     </span>
                   </div>
@@ -10245,7 +10555,7 @@
                       หัวใจหยุดเต้นแล้ว กดหน้าอกพร้อมกันทั้งห้อง ${this.cprTargetCount} ครั้ง
                     </h2>
                     <p class="stage-sub-clean" style="margin:0; font-size:13px;">
-                      ให้น้องตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง เสร็จแล้วพูด <strong style="color:#059669;">“พร้อมแล้ว”</strong> เพื่อเริ่มนับ 3-2-1 และให้เพื่อนในห้องช่วยกดให้ตรงจังหวะบีต!
+                      ให้น้องตัวแทนจัดท่าที่หุ่น CPR หน้าห้อง เสร็จแล้วพูด <strong style="color:#11734F;">“พร้อมแล้ว”</strong> เพื่อเริ่มนับ 3-2-1 และให้เพื่อนในห้องช่วยกดให้ตรงจังหวะบีต!
                     </p>
                   </div>
 
@@ -10275,37 +10585,37 @@
                     <!-- Left: Drum Pad + Counter -->
                     <div class="cpr-drum-counter-box">
                       <div class="cpr-drum-pad-wrapper" style="position:relative; width:88px; height:88px; display:flex; align-items:center; justify-content:center;">
-                        <div id="cprApproachRing" class="cpr-approach-ring" style="border:3px solid #0284C7;"></div>
-                        <button id="btnCprDrumPad" onclick="GameStateManager.handleCprHitManual(event)" class="cpr-drum-pad-btn font-technical" style="width:78px; height:78px; border-radius:50%; border:3px solid #22C55E; background:linear-gradient(135deg, #10B981, #059669); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:${this.cprCanHit ? '1' : '0.45'}; cursor:${this.cprCanHit ? 'pointer' : 'not-allowed'}; box-shadow:0 4px 14px rgba(16, 185, 129, 0.35);">
+                        <div id="cprApproachRing" class="cpr-approach-ring" style="border:3px solid #1F5FA8;"></div>
+                        <button id="btnCprDrumPad" onclick="GameStateManager.handleCprHitManual(event)" class="cpr-drum-pad-btn font-technical" style="width:78px; height:78px; border-radius:50%; border:3px solid #22C55E; background:linear-gradient(135deg, #10B981, #11734F); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:${this.cprCanHit ? '1' : '0.45'}; cursor:${this.cprCanHit ? 'pointer' : 'not-allowed'}; box-shadow:0 4px 14px rgba(16, 185, 129, 0.35);">
                           <span id="txtDrumLabel" style="font-size:12px; font-weight:800; line-height:1.1;">${this.cprCanHit ? 'ตบตอนนี้!' : 'ฟังคำแนะนำ...'}</span>
                           <span style="font-size:9.5px; opacity:0.85; font-weight:600;">[SPACE]</span>
                         </button>
                       </div>
                       <div class="cpr-counter-display font-technical">
-                        <div class="cpr-count-num" id="txtCprCountNumber"><span id="txtCprCount">00</span> <span style="font-size:18px; color:#64748B;">/ ${this.cprTargetCount} ครั้ง</span></div>
+                        <div class="cpr-count-num" id="txtCprCountNumber"><span id="txtCprCount">00</span> <span style="font-size:18px; color:#4F5660;">/ ${this.cprTargetCount} ครั้ง</span></div>
                       </div>
                     </div>
 
                     <!-- Right: Feedback Badge + Clap Meter + Presets -->
                     <div class="cpr-judge-console-box">
-                      <div id="cprTimingJudgeBadge" class="cpr-timing-judge-badge standby font-technical" style="width:320px; height:38px; display:flex; align-items:center; justify-content:center; background:#F1F5F9; border:1px solid #E2E8F0; border-radius:8px; font-size:12.5px; font-weight:800; color:#64748B; margin-bottom:6px;">
+                      <div id="cprTimingJudgeBadge" class="cpr-timing-judge-badge standby font-technical" style="width:320px; height:38px; display:flex; align-items:center; justify-content:center; background:#F1F5F9; border:1px solid #E2E8F0; border-radius:8px; font-size:12.5px; font-weight:800; color:#4F5660; margin-bottom:6px;">
                         รอเริ่มนับจังหวะ...
                       </div>
                       <!-- Rhythm Accuracy Bar -->
                       <div class="clap-meter-row">
-                        <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#64748B;" class="font-technical">
+                        <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#4F5660;" class="font-technical">
                           <span>ความตรงจังหวะ</span>
-                          <span id="txtClapSpikeVal" style="color:#059669; font-weight:800;">พร้อมนับจังหวะ</span>
+                          <span id="txtClapSpikeVal" style="color:#11734F; font-weight:800;">พร้อมนับจังหวะ</span>
                         </div>
                         <div class="clap-meter-track" style="margin-top:3px; background:#EEF2F6; height:8px; border-radius:4px; overflow:hidden; position:relative; border:1px solid #CBD5E1;">
                           <div id="clapMeterBarFill" class="clap-meter-fill" style="background:linear-gradient(90deg, #0EA5E9, #10B981); height:100%; width:0%; transition:width 0.12s ease;"></div>
                         </div>
                       </div>
                       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
-                        <button onclick="GameStateManager.attemptCprHit('test', true)" class="nav-btn font-technical" style="height:26px; font-size:11px; background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; padding:0 10px; font-weight:700;">
+                        <button onclick="GameStateManager.attemptCprHit('test', true)" class="nav-btn font-technical" style="height:26px; font-size:11px; background:#ECFDF5; color:#11734F; border:1px solid #A7F3D0; padding:0 10px; font-weight:700;">
                           ⚡ เทสต์กดตรงจังหวะ (+1)
                         </button>
-                        <button id="btnCprModeToggle" onclick="GameStateManager.toggleCprStrictMode()" class="nav-btn font-technical" style="height:26px; font-size:10.5px; background:#FFFFFF; color:#0284C7; border:1px solid #BAE6FD; padding:0 10px; cursor:pointer;">
+                        <button id="btnCprModeToggle" onclick="GameStateManager.toggleCprStrictMode()" class="nav-btn font-technical" style="height:26px; font-size:10.5px; background:#FFFFFF; color:#1F5FA8; border:1px solid #BAE6FD; padding:0 10px; cursor:pointer;">
                           โหมดจังหวะ: ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM' : 'มาตรฐาน (ยืดหยุ่น)'}
                         </button>
                       </div>
@@ -10356,7 +10666,7 @@
                       พูดคำที่ 1 ได้เลย
                     </span>
                     <div class="meter-track-container" style="height:6px; margin-top:6px;">
-                      <div id="aedChargeBarFill" class="meter-bar-fill" style="background:#059669; width:100%;"></div>
+                      <div id="aedChargeBarFill" class="meter-bar-fill" style="background:#11734F; width:100%;"></div>
                     </div>
                   </div>
 
@@ -10366,7 +10676,7 @@
                         <div class="aed-step-num-badge">ขั้นที่ 1</div>
                         <div>
                           <div class="aed-phrase-large">“ฉันถอย!”</div>
-                          <div style="font-size:12px; color:#64748B;">ผู้กดปุ่มถอยห่างจากคนไข้</div>
+                          <div style="font-size:12px; color:#4F5660;">ผู้กดปุ่มถอยห่างจากคนไข้</div>
                         </div>
                       </div>
                       <div id="aedBadge1" class="aed-status-callout">🎙️ พูดคำนี้ดังๆ ตอนนี้! (หรือคลิกที่นี่)</div>
@@ -10377,7 +10687,7 @@
                         <div class="aed-step-num-badge">ขั้นที่ 2</div>
                         <div>
                           <div class="aed-phrase-large">“คุณถอย!”</div>
-                          <div style="font-size:12px; color:#64748B;">เพื่อนข้างๆ ถอยห่าง</div>
+                          <div style="font-size:12px; color:#4F5660;">เพื่อนข้างๆ ถอยห่าง</div>
                         </div>
                       </div>
                       <div id="aedBadge2" class="aed-status-callout">🔒 รอพูดขั้นตอนก่อนหน้า</div>
@@ -10388,7 +10698,7 @@
                         <div class="aed-step-num-badge">ขั้นที่ 3</div>
                         <div>
                           <div class="aed-phrase-large">“ทุกคนถอย!”</div>
-                          <div style="font-size:12px; color:#64748B;">ทุกคนห้ามแตะตัวคนไข้</div>
+                          <div style="font-size:12px; color:#4F5660;">ทุกคนห้ามแตะตัวคนไข้</div>
                         </div>
                       </div>
                       <div id="aedBadge3" class="aed-status-callout">🔒 รอพูดขั้นตอนก่อนหน้า</div>
@@ -10437,7 +10747,7 @@
                       ตอบถูก +0 • ตอบผิด -5 คะแนน
                     </div>
                   </div>
-                  <h2 class="stage-headline-clean" style="color:#059669;">
+                  <h2 class="stage-headline-clean" style="color:#11734F;">
                     หัวใจกลับมาเต้นแล้ว สัญญาณชีพเริ่มเสถียร! แต่พบแผลเปิดขนาดใหญ่และมีเศษสิ่งสกปรกติดที่ท่อนแขน:
                   </h2>
                   <p class="stage-sub-clean">
@@ -10600,7 +10910,7 @@
                       ตอบถูก +0 • ตอบผิด -5 คะแนน
                     </div>
                   </div>
-                  <h2 class="stage-headline-clean" style="color:#0284C7;">
+                  <h2 class="stage-headline-clean" style="color:#1F5FA8;">
                     ห้ามเลือดเรียบร้อยแล้ว ตรวจพบท่อนแขนท่อนล่างบวมและโก่งผิดรูป สงสัยกระดูกหัก:
                   </h2>
                   <p class="stage-sub-clean">
@@ -10644,7 +10954,7 @@
         // Stage 9: Summary & Scoreboard
         else if (this.currentStage === 9) {
           const rankLetter = this.score >= 95 ? 'S' : (this.score >= 90 ? 'A+' : 'A');
-          const rankColor = rankLetter === 'S' ? '#D97706' : (rankLetter === 'A+' ? '#0284C7' : '#059669');
+          const rankColor = rankLetter === 'S' ? '#D97706' : (rankLetter === 'A+' ? '#1F5FA8' : '#11734F');
           const circumference = 264; // 2 * Math.PI * 42
           const strokePct = Math.round((this.score / 100) * circumference);
           const dashOffset = circumference - strokePct;
@@ -10711,7 +11021,7 @@
             { num: '01', name: 'ประเมินความปลอดภัย', val: this.stageScores[1], max: 15 },
             { num: '02', name: 'ตะโกนขอความช่วยเหลือ', val: this.stageScores[2], max: 10 },
             { num: '03', name: 'แจ้งสายด่วน 1669', val: this.stageScores[3], max: 15 },
-            { num: '04', name: 'ตรวจการหายใจเฮือก', val: this.stageScores[4], max: 15 },
+            { num: '04', name: 'ดูการหายใจ', val: this.stageScores[4], max: 15 },
             { num: '05', name: 'กดหน้าอก CPR & AED', val: this.stageScores[5], max: 15 },
             { num: '06', name: 'ล้างแผลด้วยน้ำเกลือ', val: this.stageScores[6], max: 10 },
             { num: '07', name: 'ห้ามเลือดกดแผลโดยตรง', val: this.stageScores[7], max: 10 },
@@ -10726,8 +11036,8 @@
                 <button onclick="AIVoiceCoach.replay()" class="btn-replay-clean font-technical">[ ฟังซ้ำ ]</button>
               </div>
               <div class="voice-answer-bar" style="border-color:#A7F3D0; background:#ECFDF5;">
-                <span class="mic-live-dot" style="background:#059669; animation:none;"></span>
-                <span class="voice-bar-title font-technical" style="color:#059669;">จบภารกิจ:</span>
+                <span class="mic-live-dot" style="background:#11734F; animation:none;"></span>
+                <span class="voice-bar-title font-technical" style="color:#11734F;">จบภารกิจ:</span>
                 <span class="voice-bar-transcript font-technical" style="color:#065F46;">คะแนนรวม ${this.score} / 100 คะแนน (เกรด ${rankLetter})</span>
               </div>
             </div>
@@ -10749,25 +11059,25 @@
 
                 <div class="summary-rosc-box">
                   <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; font-weight:800; color:#059669;" class="font-technical">
+                    <span style="font-size:12px; font-weight:800; color:#11734F;" class="font-technical">
                       ● สัญญาณชีพคงที่
                     </span>
-                    <span style="background:#ECFDF5; color:#059669; border:1px solid #A7F3D0; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px;" class="font-technical">
+                    <span style="background:#ECFDF5; color:#11734F; border:1px solid #A7F3D0; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px;" class="font-technical">
                       ปลอดภัย
                     </span>
                   </div>
 
                   <div class="summary-vitals-trio font-technical">
                     <div class="summary-vital-mini">
-                      <div style="font-size:11px; color:#64748B; font-weight:800;">ชีพจร</div>
-                      <div style="font-size:18px; font-weight:900; color:#0284C7;" class="num-readout">84 <span style="font-size:11px;">BPM</span></div>
+                      <div style="font-size:11px; color:#4F5660; font-weight:800;">ชีพจร</div>
+                      <div style="font-size:18px; font-weight:900; color:#1F5FA8;" class="num-readout">84 <span style="font-size:11px;">BPM</span></div>
                     </div>
                     <div class="summary-vital-mini">
-                      <div style="font-size:11px; color:#64748B; font-weight:800;">ออกซิเจน</div>
-                      <div style="font-size:18px; font-weight:900; color:#059669;" class="num-readout">99 <span style="font-size:11px;">%</span></div>
+                      <div style="font-size:11px; color:#4F5660; font-weight:800;">ออกซิเจน</div>
+                      <div style="font-size:18px; font-weight:900; color:#11734F;" class="num-readout">99 <span style="font-size:11px;">%</span></div>
                     </div>
                     <div class="summary-vital-mini">
-                      <div style="font-size:11px; color:#64748B; font-weight:800;">เวลาที่ใช้</div>
+                      <div style="font-size:11px; color:#4F5660; font-weight:800;">เวลาที่ใช้</div>
                       <div style="font-size:16px; font-weight:900; color:#090D16;" class="num-readout">${timeUsedFormatted}</div>
                     </div>
                   </div>
@@ -10780,7 +11090,7 @@
 
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; font-size:11.5px; color:#475569; padding-top:5px; border-top:1px solid #F1F5F9; font-weight:700; white-space:nowrap; flex-shrink:0;" class="font-technical">
                   <span style="overflow:hidden; text-overflow:ellipsis;">📍 ห้องฉุกเฉิน รพ.ม.บูรพา</span>
-                  <span style="color:#059669; font-weight:800; flex-shrink:0;">ส่งมอบแพทย์เรียบร้อย ✓</span>
+                  <span style="color:#11734F; font-weight:800; flex-shrink:0;">ส่งมอบแพทย์เรียบร้อย ✓</span>
                 </div>
               </div>
 
@@ -10799,7 +11109,7 @@
                   </div>
 
                   <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:0;">
-                    <div style="font-size:10.5px; font-weight:800; color:#059669; letter-spacing:0.06em;" class="font-technical">
+                    <div style="font-size:10.5px; font-weight:800; color:#11734F; letter-spacing:0.06em;" class="font-technical">
                       ผลงานของทีม
                     </div>
                     <div style="background:#090D16; color:#FFFFFF; font-size:13.5px; font-weight:800; padding:5px 12px; border-radius:8px; width:fit-content;" class="font-technical">
@@ -10813,9 +11123,10 @@
 
                 ${this.v28RoomStatsHtml()}
 
-                <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; font-weight:800; color:#090D16;" class="font-technical">
+                <div class="v29-steps-title v29-only">8 ขั้นตอนที่ช่วยพี่ต้นไว้<small>จำลำดับนี้ไว้ ใช้ได้จริง</small></div>
+                <div class="v29-hide" style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; font-weight:800; color:#090D16;" class="font-technical">
                   <span>คะแนนแต่ละด่าน</span>
-                  <span style="color:#64748B; font-weight:600;">8 ด่านกู้ชีพ</span>
+                  <span style="color:#4F5660; font-weight:600;">8 ด่านกู้ชีพ</span>
                 </div>
 
                 <div class="stage-scores-grid-v18 font-technical">
@@ -10841,7 +11152,7 @@
                 <div class="leaderboard-box font-technical" style="padding:10px 12px;">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                     <span class="leaderboard-title">คะแนนสูงสุดวันนี้</span>
-                    <span style="font-size:10px; color:#64748B;">ประจำวัน</span>
+                    <span style="font-size:10px; color:#4F5660;">ประจำวัน</span>
                   </div>
                   <table class="leaderboard-table">
                     <thead>
@@ -10964,7 +11275,7 @@
           if (!fc) return;
           if (unlocked) {
             fc.style.background = '#F0F9FF';
-            fc.style.borderColor = '#0284C7';
+            fc.style.borderColor = '#1F5FA8';
             fc.style.boxShadow = '0 2px 8px rgba(2, 132, 199, 0.12)';
             const valEl = fc.querySelector('.fact-val-clean');
             if (valEl) {
@@ -10984,10 +11295,10 @@
           updateFactCardUI('factCard2', true, 'รถเก๋งชนรั้วข้างทาง มีควันพุ่ง', '#090D16');
         }
         if (tapPct >= 75) {
-          updateFactCardUI('factCard3', true, 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ', '#E11D48');
+          updateFactCardUI('factCard3', true, 'ผู้ป่วย 1 ราย หมดสติ ไม่หายใจ', '#C8241A');
         }
         if (tapPct >= 100) {
-          updateFactCardUI('factCard4', true, 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED', '#059669');
+          updateFactCardUI('factCard4', true, 'ขอรถกู้ชีพฉุกเฉิน + เครื่อง AED', '#11734F');
 
           if (!this.stage3UnlockedChimePlayed) {
             this.stage3UnlockedChimePlayed = true;
@@ -11088,7 +11399,7 @@
         const btn = document.getElementById('btnHostPressureHold');
         if (btn) {
           btn.style.transform = isHolding ? 'scale(0.96)' : 'scale(1)';
-          btn.style.background = isHolding ? '#059669' : '#E11D48';
+          btn.style.background = isHolding ? '#11734F' : '#C8241A';
           btn.innerText = isHolding ? '🩸 กำลังกดห้ามเลือดค้างไว้... (อย่าเพิ่งปล่อย!)' : '🩸 กดปุ่มนี้ค้างไว้เพื่อห้ามเลือด (หรือกด Spacebar ค้าง)';
         }
       }
@@ -11124,7 +11435,7 @@
             col.innerHTML = `
               <div class="pressure-hold-overlay font-technical" style="gap:14px;">
                 <div class="pressure-hold-title">
-                  <span class="live-pulse-dot" style="background:#E11D48;"></span>
+                  <span class="live-pulse-dot" style="background:#C8241A;"></span>
                   🩸 กดแผลค้างไว้เพื่อห้ามเลือด!
                 </div>
                 <div style="font-size:13.5px; color:#475569; line-height:1.45;">
@@ -11133,8 +11444,8 @@
                 <div class="pressure-gauge-track" style="height:22px;">
                   <div class="pressure-gauge-fill" id="pressureGaugeFill" style="width:0%;"></div>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#64748B;">
-                  <span>แรงกดห้ามเลือดสะสม: <strong id="txtPressurePct" style="color:#E11D48; font-size:16px;">0%</strong></span>
+                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#4F5660;">
+                  <span>แรงกดห้ามเลือดสะสม: <strong id="txtPressurePct" style="color:#C8241A; font-size:16px;">0%</strong></span>
                   <span id="txtPressureHoldersCount">รอการกดค้าง...</span>
                 </div>
                 <div style="display:flex; gap:10px; margin-top:4px;">
@@ -11143,7 +11454,7 @@
                     onpointerup="GameStateManager.setHostPressureHolding(false)"
                     onpointerleave="GameStateManager.setHostPressureHolding(false)"
                     class="btn-hero-confirm font-technical"
-                    style="flex:1; background:#E11D48; border-color:#BE123C; font-size:15px; padding:14px 20px; user-select:none;">
+                    style="flex:1; background:#C8241A; border-color:#BE123C; font-size:15px; padding:14px 20px; user-select:none;">
                     🩸 กดปุ่มนี้ค้างไว้เพื่อห้ามเลือด (หรือกด Spacebar ค้าง)
                   </button>
                   <button onclick="GameStateManager.completeStage7BDirectPressure()" class="nav-btn font-technical host-only-skip" style="height:auto; padding:0 14px; font-size:12px;">
@@ -11183,13 +11494,13 @@
           if (fill) fill.style.width = `${pct}%`;
           if (txt) {
             txt.innerText = `${pct}%`;
-            txt.style.color = isHolding ? '#059669' : '#E11D48';
+            txt.style.color = isHolding ? '#11734F' : '#C8241A';
           }
           if (statusTxt) {
             statusTxt.innerText = isHolding
               ? `✓ กำลังกดห้ามเลือดอย่างต่อเนื่อง... (${(this.stage7PressureHeldMs / 1000).toFixed(1)} / 3.5 วินาที)`
               : '⚠️ กรุณากดปุ่มค้างไว้ ห้ามปล่อยมือ!';
-            statusTxt.style.color = isHolding ? '#059669' : '#D97706';
+            statusTxt.style.color = isHolding ? '#11734F' : '#D97706';
           }
 
           if (this.stage7PressureHeldMs >= totalMs) {
@@ -11216,7 +11527,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 1 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -11357,7 +11668,7 @@
           this.latestStage2Transcript = transcript;
 
           const box = document.getElementById('txtStage2LiveTranscript');
-          if (box) box.innerHTML = `ได้ยินเสียง: <strong style="color:#059669; font-weight:800;">"${transcript}"</strong>`;
+          if (box) box.innerHTML = `ได้ยินเสียง: <strong style="color:#11734F; font-weight:800;">"${transcript}"</strong>`;
 
           // Category 1: Help
           if (val.includes('ช่วย') || val.includes('ช่วยด้วย') || val.includes('ช่วยเหลือ') || val.includes('ขอความช่วยเหลือ') || val.includes('ช่วยหน่อย')) {
@@ -11424,8 +11735,8 @@
               if (barLive) barLive.style.background = '#10B981';
               if (txtDb) txtDb.style.color = '#10B981';
             } else {
-              if (barLive) barLive.style.background = '#0284C7';
-              if (txtDb) txtDb.style.color = '#0284C7';
+              if (barLive) barLive.style.background = '#1F5FA8';
+              if (txtDb) txtDb.style.color = '#1F5FA8';
             }
 
             this.evalStage2Success();
@@ -11517,13 +11828,13 @@
         if (this.currentStage !== 3 || this.stage3Locked) return;
         const box = document.getElementById('txtLiveTranscript');
         if (box) {
-          box.innerHTML = '<span style="color:#059669; font-weight:700;">🎙️ ไมค์เปิดรับเสียงแล้ว! พูดแจ้งข้อมูลทั้ง 4 ข้อได้เลยครับ...</span>';
+          box.innerHTML = '<span style="color:#11734F; font-weight:700;">🎙️ ไมค์เปิดรับเสียงแล้ว! พูดแจ้งข้อมูลทั้ง 4 ข้อได้เลยครับ...</span>';
         }
         MicSensor.ensureMicLive().catch(() => {});
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 3 || window.isSystemSpeaking || this.stage3Locked) return;
           if (box) {
-            box.innerHTML = `ได้ยิน: <strong style="color:#0284C7;">“${transcript}”</strong> <span style="font-size:11px; color:#64748B;">(พูดต่อให้ครบ 4 ข้อ...)</span>`;
+            box.innerHTML = `ได้ยิน: <strong style="color:#1F5FA8;">“${transcript}”</strong> <span style="font-size:11px; color:#4F5660;">(พูดต่อให้ครบ 4 ข้อ...)</span>`;
           }
           // Tick checklist items in real time as keywords are spoken
           this.parseDispatchKeywords(transcript);
@@ -11638,7 +11949,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 4 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -11662,7 +11973,7 @@
           if (btn) btn.classList.add('correct');
           SoundEngine.playStageClear();
           window.ECGEngine.setMode('VFIB_COARSE');
-          this.updateVitals(0, 35);
+          this.updateVitals(null, null);
           this.updatePatientHud('images/patient/patient_s4_agonal.png', 'ด่านที่ 4 • หัวใจหยุดเต้น', 'critical');
 
           const hintBox = document.getElementById('stage4HintBox');
@@ -11727,7 +12038,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 6 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -11798,7 +12109,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 7 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -11869,7 +12180,7 @@
         MicSensor.startSpeechRecognition((transcript, isFinal) => {
           if (this.currentStage !== 8 || this.isStageChoiceLocked || window.isSystemSpeaking) return;
           const box = document.getElementById('txtLiveVoiceChoice');
-          if (box) box.innerHTML = `“<span style="color:#059669; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
+          if (box) box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${transcript}</span>” <span style="font-size:11px; color:#F59E0B;">(กำลังฟังเสียงพูด...)</span>`;
 
           speechDebouncer.feed(transcript, isFinal, (finalText) => {
             if (this.isStageChoiceLocked) return;
@@ -11971,7 +12282,7 @@
         const btn = document.getElementById('btnCprModeToggle');
         if (btn) {
           btn.innerText = `โหมดจังหวะ: ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM' : 'มาตรฐาน (ยืดหยุ่น)'}`;
-          btn.style.color = this.cprStrictRhythm ? '#0284C7' : '#059669';
+          btn.style.color = this.cprStrictRhythm ? '#1F5FA8' : '#11734F';
         }
         showToast(`สลับเป็นโหมด ${this.cprStrictRhythm ? 'เข้มงวด 110 BPM (±65ms/115ms)' : 'ยืดหยุ่น (±95ms/155ms)'}`);
       }
@@ -11983,11 +12294,11 @@
         const txt = document.getElementById('txtClapSpikeVal');
         if (bar) {
           bar.style.width = `${pct}%`;
-          bar.style.background = status === 'MISS' ? '#E11D48' : 'linear-gradient(90deg, #0EA5E9, #10B981)';
+          bar.style.background = status === 'MISS' ? '#C8241A' : 'linear-gradient(90deg, #0EA5E9, #10B981)';
         }
         if (txt) {
           txt.innerText = status === 'MISS' ? 'ผิดจังหวะ!' : `${pct}% (${status})`;
-          txt.style.color = status === 'MISS' ? '#E11D48' : '#059669';
+          txt.style.color = status === 'MISS' ? '#C8241A' : '#11734F';
         }
       }
 
@@ -12329,7 +12640,7 @@
             const isFlashing = now < this.targetFlashUntil;
             const ringColor = isFlashing
               ? this.targetFlashColor
-              : (isAnyNoteInTarget ? (LT ? '#C8241A' : '#059669') : (LT ? '#121417' : '#0284C7'));
+              : (isAnyNoteInTarget ? (LT ? '#C8241A' : '#11734F') : (LT ? '#121417' : '#1F5FA8'));
 
             ctx.save();
             ctx.shadowColor = ringColor;
@@ -12358,7 +12669,7 @@
 
             // Label Text "จุดตบ"
             ctx.shadowBlur = 0;
-            ctx.fillStyle = LT ? ringColor : ((isFlashing || isAnyNoteInTarget) ? '#059669' : '#0284C7');
+            ctx.fillStyle = LT ? ringColor : ((isFlashing || isAnyNoteInTarget) ? '#11734F' : '#1F5FA8');
             ctx.font = LT ? 'bold 15px "IBM Plex Sans Thai", sans-serif' : 'bold 11px "IBM Plex Sans Thai", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
@@ -12435,7 +12746,7 @@
         const minTapInterval = this.cprStrictRhythm ? 380 : 340;
         if (!isBypass && this.lastCprTapTime && (now - this.lastCprTapTime) < minTapInterval) {
           this.cprMissCooldownUntil = now + 380;
-          flashTarget('#E11D48');
+          flashTarget('#C8241A');
           SoundEngine.playErrorBuzz();
           this.updateCprAccuracyBar(10, 'MISS');
           if (badge) {
@@ -12522,7 +12833,7 @@
           // 7. Off-Beat Miss: strict penalty cooldown so random mashing NEVER scores!
           const missCooldown = this.cprStrictRhythm ? 360 : 260;
           this.cprMissCooldownUntil = now + missCooldown;
-          flashTarget('#E11D48');
+          flashTarget('#C8241A');
           SoundEngine.playErrorBuzz();
           this.updateCprAccuracyBar(15, 'MISS');
           if (badge) {
@@ -12559,7 +12870,7 @@
           this.aedSteps = { step1: false, step2: false, step3: false };
           this.updatePatientHud('images/patient/patient_s5_aed.png', 'ด่านที่ 5 • ใช้เครื่อง AED', 'critical');
           window.ECGEngine.setMode('VFIB_COARSE');
-          this.updateVitals(0, 35);
+          this.updateVitals(null, null);
           SoundEngine.playAEDCharging();
           this.aedListening = false;
           this.lastAedStepTime = 0;
@@ -12577,7 +12888,7 @@
               if (banner) banner.classList.add('ready');
 
               const fbText = document.getElementById('txtAedInstructionFeedback');
-              if (fbText) fbText.innerHTML = '<span style="color:#059669; font-weight:700;">เครื่อง เออีดี พร้อมแล้ว! สั่งคำสั่งที่ 1: "ฉันถอย!"</span>';
+              if (fbText) fbText.innerHTML = '<span style="color:#11734F; font-weight:700;">เครื่อง เออีดี พร้อมแล้ว! สั่งคำสั่งที่ 1: "ฉันถอย!"</span>';
 
               this.updateAedCardsUI();
               this.startAedVoiceTracking();
@@ -12675,11 +12986,11 @@
 
         const fb = document.getElementById('txtAedInstructionFeedback');
         if (stepNum === 1) {
-          if (fb) fb.innerHTML = '<span style="color:#059669; font-weight:700;">ยอดเยี่ยม! พูดคำสั่งที่ 2: "คุณถอย!"</span>';
+          if (fb) fb.innerHTML = '<span style="color:#11734F; font-weight:700;">ยอดเยี่ยม! พูดคำสั่งที่ 2: "คุณถอย!"</span>';
         } else if (stepNum === 2) {
-          if (fb) fb.innerHTML = '<span style="color:#059669; font-weight:700;">เก่งมาก! พูดคำสั่งที่ 3: "ทุกคนถอย!"</span>';
+          if (fb) fb.innerHTML = '<span style="color:#11734F; font-weight:700;">เก่งมาก! พูดคำสั่งที่ 3: "ทุกคนถอย!"</span>';
         } else if (stepNum === 3) {
-          if (fb) fb.innerHTML = '<span style="color:#059669; font-weight:700;">ปลดล็อกความปลอดภัยครบ 3 ขั้นตอน! พร้อมปล่อยไฟฟ้าช็อก</span>';
+          if (fb) fb.innerHTML = '<span style="color:#11734F; font-weight:700;">ปลดล็อกความปลอดภัยครบ 3 ขั้นตอน! พร้อมปล่อยไฟฟ้าช็อก</span>';
           this.deliverShock();
         }
       }
@@ -12715,7 +13026,7 @@
           setTimeout(() => {
             // V28: after the shock the line stays flat for a moment, then the heart returns beat by beat
             window.ECGEngine.setMode('FLATLINE');
-            this.updateVitals(0, 40);
+            this.updateVitals(null, null);
             const ramp = [[34, 58, 0.9], [52, 74, 1.3], [68, 88, 1.7], [82, 97, 2.0]];
             ramp.forEach(([hr, sp, spd], i) => setTimeout(() => {
               if (this.currentStage !== 5) return;
@@ -13084,13 +13395,13 @@
                            (modeKey === "tv" && this.displayScaleMode === "tv") ||
                            (modeKey === "hall" && this.displayScaleMode === "hall");
           if (isActive) {
-            b.style.borderColor = "#0284C7";
-            b.style.color = "#0284C7";
+            b.style.borderColor = "#1F5FA8";
+            b.style.color = "#1F5FA8";
             b.style.background = "#F0F9FF";
             b.style.fontWeight = "700";
           } else {
             b.style.borderColor = "#E2E8F0";
-            b.style.color = "#64748B";
+            b.style.color = "#4F5660";
             b.style.background = "#FFFFFF";
             b.style.fontWeight = "600";
           }
@@ -13133,6 +13444,10 @@
 
           if (e.key === 'f' || e.key === 'F') {
             this.toggleFullscreen();
+          } else if (e.key === 'v' || e.key === 'V') {
+            const on = document.body.classList.toggle('v29'); // V29: instant switch back to the V28 look
+            try { localStorage.setItem('mdbuu_v29', on ? 'on' : 'off'); } catch(e) {}
+            if (this.currentStage > 0) this.renderStage();
           } else if (e.key === 't' || e.key === 'T') {
             const on = document.body.classList.toggle('theme-icu'); // V28 proposal B
             try { localStorage.setItem('mdbuu_theme', on ? 'icu' : 'light'); } catch(e) {}
@@ -13253,7 +13568,7 @@
         <div class="mobile-app-shell">
           <header class="mobile-top-bar font-technical">
             <div class="user-badge" id="mTopUserBadge">
-              <span style="color:#059669;">●</span>
+              <span style="color:#11734F;">●</span>
               <span id="mTxtUserName">ทีมผู้ช่วยแพทย์</span>
             </div>
             <div style="display:flex; gap:6px; align-items:center;">
@@ -13283,19 +13598,19 @@
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="margin-top:10px;">
-            <div style="font-size:10px; color:#059669; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;">
+            <div style="font-size:10px; color:#11734F; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;">
               MDBUU OPEN HOUSE 2027
             </div>
             <h2 style="font-size:20px; font-weight:800; color:#090D16; margin:0;">
               ลงทะเบียนร่วมกู้ชีพ
             </h2>
-            <div style="font-size:12.5px; color:#64748B; line-height:1.4;">
+            <div style="font-size:12.5px; color:#4F5660; line-height:1.4;">
               ร่วมตอบคำถาม โหวตอุปกรณ์ ปั๊มหัวใจ CPR และรับเกียรติบัตรระบุชื่อของคุณทันทีเมื่อจบภารกิจ!
             </div>
 
             <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
               <label style="font-size:12px; font-weight:700; color:#334155;">รหัสห้อง (Room PIN):</label>
-              <input type="number" id="mInputPin" value="${state.pin}" class="font-technical" placeholder="4 หลัก เช่น 1234" style="height:42px; border:1.5px solid #CBD5E1; border-radius:10px; padding:0 12px; font-size:18px; font-weight:800; color:#0284C7; letter-spacing:0.06em;">
+              <input type="number" id="mInputPin" value="${state.pin}" class="font-technical" placeholder="4 หลัก เช่น 1234" style="height:42px; border:1.5px solid #CBD5E1; border-radius:10px; padding:0 12px; font-size:18px; font-weight:800; color:#1F5FA8; letter-spacing:0.06em;">
             </div>
 
             <div style="display:flex; flex-direction:column; gap:4px;">
@@ -13395,7 +13710,7 @@
             }
             const badge = document.getElementById('mTxtConnStatus');
             if (badge) {
-              badge.innerHTML = `<span style="color:#059669;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>`;
+              badge.innerHTML = `<span style="color:#11734F;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>`;
             }
           });
 
@@ -13416,13 +13731,13 @@
             <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 4px;">
               ห้องปฏิบัติการกู้ชีพฉุกเฉิน
             </h3>
-            <div style="font-size:14px; font-weight:700; color:#059669; margin-bottom:8px;">
+            <div style="font-size:14px; font-weight:700; color:#11734F; margin-bottom:8px;">
               คุณอยู่ใน: กลุ่มที่ ${state.group} • ${state.name}
             </div>
             <div id="mTxtConnStatus" style="font-size:12px; font-weight:700; margin-bottom:10px;">
-              ${state.joinAcked ? `<span style="color:#059669;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>` : `<span style="color:#D97706;">🟡 กำลังเชื่อมต่อห้อง #${state.pin}...</span>`}
+              ${state.joinAcked ? `<span style="color:#11734F;">🟢 เชื่อมต่อห้อง #${state.pin} สำเร็จ</span>` : `<span style="color:#D97706;">🟡 กำลังเชื่อมต่อห้อง #${state.pin}...</span>`}
             </div>
-            <div style="font-size:12px; color:#64748B; line-height:1.45;">
+            <div style="font-size:12px; color:#4F5660; line-height:1.45;">
               รอตัวแทนและพี่วิทยากรเริ่มภารกิจหน้าห้อง...<br>
               เมื่อเริ่มด่าน หน้าจอนี้จะเปลี่ยนเป็น <strong>ระบบโหวต / ปั๊มหัวใจ CPR / ช่วยห้ามเลือด</strong> โดยอัตโนมัติครับ!
             </div>
@@ -13440,7 +13755,7 @@
             <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 6px;">
               ด่านที่ ${stageNum} • กำลังสำรวจอาการ
             </h3>
-            <div style="font-size:13px; color:#64748B; line-height:1.4;">
+            <div style="font-size:13px; color:#4F5660; line-height:1.4;">
               รอตัวแทนหน้าห้องพูดตอบรับเพื่อเริ่มตรวจสอบ... เมื่อเริ่มแล้วปุ่มโหวตอุปกรณ์จะปรากฏบนจอนี้ทันที
             </div>
           </div>
@@ -13457,16 +13772,16 @@
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="padding:16px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:11px; font-weight:800; color:#0284C7; background:#F0F9FF; border:1px solid #BAE6FD; padding:3px 10px; border-radius:999px;">
+              <span style="font-size:11px; font-weight:800; color:#1F5FA8; background:#F0F9FF; border:1px solid #BAE6FD; padding:3px 10px; border-radius:999px;">
                 ⚡ เปิดโหวตด่านที่ ${stageNum} (CO-OP VOTE)
               </span>
-              <span id="mTxtVoteTimer" style="font-size:14px; font-weight:900; color:#E11D48;" class="num-readout">12s</span>
+              <span id="mTxtVoteTimer" style="font-size:14px; font-weight:900; color:#C8241A;" class="num-readout">12s</span>
             </div>
 
             <h3 style="font-size:15px; font-weight:800; color:#090D16; margin:8px 0 2px; line-height:1.35;">
               ${instruction || 'เลือกอุปกรณ์หรือวิธีการรักษาที่ถูกต้อง:'}
             </h3>
-            <div style="font-size:11.5px; color:#64748B; margin-bottom:10px;">
+            <div style="font-size:11.5px; color:#4F5660; margin-bottom:10px;">
               แตะตัวเลือกที่ถูกต้องให้เร็วที่สุดเพื่อรับคะแนนโบนัสความเร็ว!
             </div>
 
@@ -13476,7 +13791,7 @@
                   <div class="choice-num-badge num-readout" style="width:28px; height:28px; font-size:13px;">${c.num}</div>
                   <div style="display:flex; flex-direction:column; gap:2px; flex:1; min-width:0;">
                     <div style="font-size:14px; font-weight:800; color:#090D16; line-height:1.25;">${c.title}</div>
-                    <div style="font-size:11.5px; color:#64748B; line-height:1.3;">${c.purpose}</div>
+                    <div style="font-size:11.5px; color:#4F5660; line-height:1.3;">${c.purpose}</div>
                   </div>
                 </button>
               `).join('')}
@@ -13567,10 +13882,10 @@
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:24px 16px;">
-            <div style="font-size:11px; font-weight:800; color:#E11D48; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:10px;">
+            <div style="font-size:11px; font-weight:800; color:#C8241A; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:10px;">
               📢 ด่านที่ 2 • ตะโกนขอความช่วยเหลือ (SHOUT 76+ dB)
             </div>
-            <div style="font-size:12.5px; color:#64748B; margin-bottom:14px;">
+            <div style="font-size:12.5px; color:#4F5660; margin-bottom:14px;">
               ช่วยตัวแทนหน้าห้องตะโกนประโยคนี้พร้อมกันให้ดังสนั่นห้อง!
             </div>
             <div style="background:#0F172A; color:#F8FAFC; border-radius:14px; padding:18px 14px; font-size:16px; font-weight:800; line-height:1.5; border:2px solid #38BDF8;">
@@ -13596,14 +13911,14 @@
           body.innerHTML = `
             <div class="mobile-card-white font-technical" style="text-align:center; padding:26px 18px;">
               <div style="font-size:44px; margin-bottom:8px;">✅</div>
-              <div style="font-size:11px; font-weight:800; color:#059669; background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
+              <div style="font-size:11px; font-weight:800; color:#11734F; background:#ECFDF5; border:1px solid #A7F3D0; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
                 ด่านที่ 3 • ปลดล็อกข้อมูลสำเร็จ 100%
               </div>
               <h3 style="font-size:17px; font-weight:800; color:#090D16; margin:0 0 6px;">
                 ส่งข้อมูลขึ้นจอใหญ่ครบ 4 ข้อแล้ว!
               </h3>
               <div style="font-size:13px; color:#475569; line-height:1.45;">
-                คุณช่วยกดส่งข้อมูลไปทั้งหมด <strong style="color:#0284C7;">${localTaps} ครั้ง</strong><br>
+                คุณช่วยกดส่งข้อมูลไปทั้งหมด <strong style="color:#1F5FA8;">${localTaps} ครั้ง</strong><br>
                 รอตัวแทนหน้าห้องอ่านแจ้งเจ้าหน้าที่ 1669 สักครู่ครับ
               </div>
             </div>
@@ -13613,23 +13928,23 @@
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:20px 16px;">
-            <div style="font-size:11px; font-weight:800; color:${canTap ? '#0284C7' : '#D97706'}; background:${canTap ? '#F0F9FF' : '#FFFBEB'}; border:1px solid ${canTap ? '#BAE6FD' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+            <div style="font-size:11px; font-weight:800; color:${canTap ? '#1F5FA8' : '#D97706'}; background:${canTap ? '#F0F9FF' : '#FFFBEB'}; border:1px solid ${canTap ? '#BAE6FD' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
               ${canTap ? `⚡ ด่านที่ 3 • CO-OP INTEL RUSH (${displayTarget.toLocaleString()} TAPS)` : '🔒 ด่านที่ 3 • รอฟังคำสั่งเจ้าหน้าที่ 1669...'}
             </div>
             <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 4px;">
               ${canTap ? 'กดรัวๆ เพื่อส่งข้อมูลเหตุฉุกเฉิน!' : 'กรุณาฟังคำแนะนำบนจอใหญ่ให้จบก่อนครับ'}
             </h3>
-            <div style="font-size:12px; color:#64748B;">
+            <div style="font-size:12px; color:#4F5660;">
               ${canTap ? 'ร่วมกันกดปุ่มนี้รัวๆ เพื่อปลดล็อกพิกัดและอาการส่งขึ้นจอใหญ่' : 'ปุ่มจะปลดล็อกให้กดได้อัตโนมัติทันทีเมื่อเจ้าหน้าที่สั่งจบ'}
             </div>
 
-            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush" ontouchstart="event.preventDefault();" style="${canTap ? '' : 'background:linear-gradient(135deg, #94A3B8, #64748B); border-color:#CBD5E1; box-shadow:none; opacity:0.65; pointer-events:none; cursor:not-allowed;'}">
+            <div class="mobile-tap-rush-circle font-technical" id="mBtnTapRush" ontouchstart="event.preventDefault();" style="${canTap ? '' : 'background:linear-gradient(135deg, #94A3B8, #4F5660); border-color:#CBD5E1; box-shadow:none; opacity:0.65; pointer-events:none; cursor:not-allowed;'}">
               <span style="font-size:32px;">${canTap ? '⚡' : '🔒'}</span>
               <span style="font-size:18px; font-weight:900;">${canTap ? 'กดรัวๆ!' : 'รอคำสั่ง...'}</span>
               <span style="font-size:11px; opacity:0.85;">${canTap ? 'TAP HERE' : 'LOCKED'}</span>
             </div>
 
-            <div style="font-size:13px; font-weight:800; color:${canTap ? '#0284C7' : '#94A3B8'};">
+            <div style="font-size:13px; font-weight:800; color:${canTap ? '#1F5FA8' : '#94A3B8'};">
               คุณกดไปแล้ว: <strong id="mTxtLocalTaps" class="num-readout" style="font-size:18px;">${localTaps}</strong> ครั้ง
             </div>
           </div>
@@ -13710,13 +14025,13 @@
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:18px 16px;">
-            <div id="mCprPhaseBadge" style="font-size:11px; font-weight:800; color:${isActive ? '#059669' : '#D97706'}; background:${isActive ? '#ECFDF5' : '#FFFBEB'}; border:1px solid ${isActive ? '#A7F3D0' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
+            <div id="mCprPhaseBadge" style="font-size:11px; font-weight:800; color:${isActive ? '#11734F' : '#D97706'}; background:${isActive ? '#ECFDF5' : '#FFFBEB'}; border:1px solid ${isActive ? '#A7F3D0' : '#FDE68A'}; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:6px;">
               ${badgeTxt}
             </div>
             <h3 id="mCprTitle" style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 2px;">
               ${titleTxt}
             </h3>
-            <div id="mCprSub" style="font-size:11.5px; color:#64748B;">
+            <div id="mCprSub" style="font-size:11.5px; color:#4F5660;">
               ${subTxt}
             </div>
 
@@ -13729,7 +14044,7 @@
               </div>
             </div>
 
-            <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:${isActive ? '#059669' : '#64748B'}; min-height:22px;">
+            <div id="mTxtCprFeedback" style="font-size:13px; font-weight:800; color:${isActive ? '#11734F' : '#4F5660'}; min-height:22px;">
               ${isActive ? 'รอวงแหวนสีเขียวบีบเข้าขอบปุ่มแล้วค่อยแตะ!' : 'ปุ่มจะปลดล็อกอัตโนมัติเมื่อเริ่มนับจังหวะครับ'}
             </div>
           </div>
@@ -13773,7 +14088,7 @@
             if (navigator.vibrate) navigator.vibrate([50, 35, 50]);
             if (fb) {
               fb.innerText = msg;
-              fb.style.color = '#E11D48';
+              fb.style.color = '#C8241A';
             }
           };
 
@@ -13824,7 +14139,7 @@
                 fb.innerText = isPerfect
                   ? `✓ PERFECT! ตรงจังหวะเป๊ะ (${Math.round(deltaMs)}ms) +3`
                   : `✓ GOOD! จังหวะดี (${Math.round(deltaMs)}ms) +1`;
-                fb.style.color = isPerfect ? '#059669' : '#0284C7';
+                fb.style.color = isPerfect ? '#11734F' : '#1F5FA8';
               }
 
               RealtimeEngine.send('CPR_BEAT_HIT', {
@@ -13884,19 +14199,19 @@
 
         body.innerHTML = `
           <div class="mobile-card-white font-technical" style="text-align:center; padding:22px 16px;">
-            <div style="font-size:11px; font-weight:800; color:#E11D48; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
+            <div style="font-size:11px; font-weight:800; color:#C8241A; background:#FFF1F2; border:1px solid #FECDD3; padding:4px 12px; border-radius:999px; display:inline-block; margin-bottom:8px;">
               🩸 กดค้างไว้เพื่อห้ามเลือด
             </div>
             <h3 style="font-size:16px; font-weight:800; color:#090D16; margin:0 0 4px;">
               กดนิ้วค้างไว้บนปุ่มนี้พร้อมกัน 3.5 วินาที
             </h3>
-            <div style="font-size:12px; color:#64748B; margin-bottom:14px;">
+            <div style="font-size:12px; color:#4F5660; margin-bottom:14px;">
               อย่าเพิ่งปล่อยมือจนกว่าเลือดจะหยุดไหล!
             </div>
 
             <div style="width:160px; height:160px; border-radius:999px; background:#FFF1F2; border:6px solid #FECDD3; margin:0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer;" id="mBtnHoldPressure">
               <span style="font-size:32px;">🩸</span>
-              <span style="font-size:16px; font-weight:900; color:#E11D48;" id="mTxtHoldStatus">กดค้างไว้!</span>
+              <span style="font-size:16px; font-weight:900; color:#C8241A;" id="mTxtHoldStatus">กดค้างไว้!</span>
             </div>
           </div>
         `;
@@ -13913,7 +14228,7 @@
             btn.style.borderColor = isHolding ? '#A7F3D0' : '#FECDD3';
             if (txt) {
               txt.innerText = isHolding ? 'กำลังกดแผล...' : 'กดค้างไว้!';
-              txt.style.color = isHolding ? '#059669' : '#E11D48';
+              txt.style.color = isHolding ? '#11734F' : '#C8241A';
             }
             RealtimeEngine.send('PRESSURE_HOLD_UPDATE', { holding: isHolding });
           };
@@ -13949,12 +14264,12 @@
             <h2 style="font-size:18px; font-weight:800; color:#064E3B; margin:4px 0 2px;">
               คณะแพทยศาสตร์ มหาวิทยาลัยบูรพา
             </h2>
-            <div style="font-size:11px; color:#64748B; margin-bottom:12px;">
+            <div style="font-size:11px; color:#4F5660; margin-bottom:12px;">
               ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน
             </div>
 
             <div style="background:#ECFDF5; border:1.5px solid #A7F3D0; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
-              <div style="font-size:12px; color:#64748B;">ขอมอบประกาศนียบัตรให้แก่:</div>
+              <div style="font-size:12px; color:#4F5660;">ขอมอบประกาศนียบัตรให้แก่:</div>
               <div style="font-size:22px; font-weight:900; color:#065F46; margin:4px 0;">
                 คุณ${state.name} • กลุ่มที่ ${state.group}
               </div>
@@ -13967,16 +14282,16 @@
 
             <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:10px 8px; margin-bottom:12px;">
               <div>
-                <div style="font-size:10px; color:#64748B;">คะแนนรวม</div>
+                <div style="font-size:10px; color:#4F5660;">คะแนนรวม</div>
                 <div style="font-size:16px; font-weight:900; color:#090D16;" class="num-readout">${score} / 100</div>
               </div>
               <div>
-                <div style="font-size:10px; color:#64748B;">เกรด</div>
-                <div style="font-size:16px; font-weight:900; color:#059669;" class="num-readout">GRADE ${rank}</div>
+                <div style="font-size:10px; color:#4F5660;">เกรด</div>
+                <div style="font-size:16px; font-weight:900; color:#11734F;" class="num-readout">GRADE ${rank}</div>
               </div>
               <div>
-                <div style="font-size:10px; color:#64748B;">สถานะ</div>
-                <div style="font-size:14px; font-weight:800; color:#0284C7;">รอดชีวิต</div>
+                <div style="font-size:10px; color:#4F5660;">สถานะ</div>
+                <div style="font-size:14px; font-weight:800; color:#1F5FA8;">รอดชีวิต</div>
               </div>
             </div>
 
@@ -14009,10 +14324,10 @@
             <h3 style="font-size:18px; font-weight:800; color:#090D16; margin:0 0 6px;">
               สิ้นสุดภารกิจรอบนี้แล้ว
             </h3>
-            <div style="font-size:13px; color:#64748B; line-height:1.4; margin-bottom:16px;">
+            <div style="font-size:13px; color:#4F5660; line-height:1.4; margin-bottom:16px;">
               ขอบคุณที่ร่วมปฏิบัติการช่วยฟื้นคืนชีพกับคณะแพทยศาสตร์ มหาวิทยาลัยบูรพา!
             </div>
-            <a href="${window.location.pathname}?play=1" style="display:inline-block; padding:10px 20px; background:#059669; color:#FFFFFF; border-radius:10px; text-decoration:none; font-weight:800; font-size:13.5px;">
+            <a href="${window.location.pathname}?play=1" style="display:inline-block; padding:10px 20px; background:#11734F; color:#FFFFFF; border-radius:10px; text-decoration:none; font-weight:800; font-size:13.5px;">
               🔄 เข้าร่วมรอบถัดไป
             </a>
           </div>
@@ -14158,7 +14473,7 @@
 
         const shockDiv = document.createElement('div');
         shockDiv.id = 'mAedShockFlashOverlay';
-        shockDiv.style.cssText = 'position:fixed; inset:0; z-index:99999; background:radial-gradient(circle, #FFFFFF 25%, #0284C7 80%, #090D16 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; box-sizing:border-box; transition:opacity 0.6s ease;';
+        shockDiv.style.cssText = 'position:fixed; inset:0; z-index:99999; background:radial-gradient(circle, #FFFFFF 25%, #1F5FA8 80%, #090D16 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; box-sizing:border-box; transition:opacity 0.6s ease;';
         shockDiv.innerHTML = `
           <div style="font-size:64px; margin-bottom:12px; filter:drop-shadow(0 0 20px #38BDF8);">⚡</div>
           <div style="font-size:26px; font-weight:900; color:#FFFFFF; text-shadow:0 0 25px #38BDF8; margin-bottom:8px;">
@@ -14217,7 +14532,7 @@
                 <h2 style="font-size: 18px; font-weight: 800; color: #0F172A; margin: 6px 0 2px;">
                   ประกาศนียบัตรผู้ผ่านการฝึกปฏิบัติการช่วยชีวิตฉุกเฉิน
                 </h2>
-                <div style="font-size: 12px; color: #64748B;">ขอมอบไว้เพื่อแสดงว่าทีมผู้ปฏิบัติการกู้ชีพ</div>
+                <div style="font-size: 12px; color: #4F5660;">ขอมอบไว้เพื่อแสดงว่าทีมผู้ปฏิบัติการกู้ชีพ</div>
 
                 <div class="cert-recipient-name" style="font-size: 30px; font-weight: 900; color: #065F46; background: linear-gradient(90deg, transparent, #ECFDF5, transparent); padding: 4px 24px; border-top: 1px solid #A7F3D0; border-bottom: 1px solid #A7F3D0; margin: 8px 0; width: 100%; box-sizing: border-box;">
                   กลุ่มที่ ${team}
@@ -14232,16 +14547,16 @@
 
                 <div style="background: #FFFFFF; border: 1.5px solid #E2E8F0; border-left: 4px solid #D4AF37; border-radius: 12px; padding: 10px 14px; width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; box-sizing: border-box;">
                   <div>
-                    <div style="font-size: 10.5px; color: #64748B; font-weight: 700;">คะแนน</div>
+                    <div style="font-size: 10.5px; color: #4F5660; font-weight: 700;">คะแนน</div>
                     <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 16px; color: #090D16;">${score} / 100</div>
                   </div>
                   <div>
-                    <div style="font-size: 10.5px; color: #64748B; font-weight: 700;">ระดับ</div>
-                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 16px; color: #059669;">GRADE ${rank}</div>
+                    <div style="font-size: 10.5px; color: #4F5660; font-weight: 700;">ระดับ</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 16px; color: #11734F;">GRADE ${rank}</div>
                   </div>
                   <div>
-                    <div style="font-size: 10.5px; color: #64748B; font-weight: 700;">สถานะ</div>
-                    <div style="font-weight: 800; font-size: 13.5px; color: #0284C7;">รอดชีวิต</div>
+                    <div style="font-size: 10.5px; color: #4F5660; font-weight: 700;">สถานะ</div>
+                    <div style="font-weight: 800; font-size: 13.5px; color: #1F5FA8;">รอดชีวิต</div>
                   </div>
                 </div>
 
@@ -14249,7 +14564,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   บันทึกรูปประกาศนียบัตร (PNG)
                 </button>
-                <a href="${window.location.pathname}" style="color: #64748B; font-size: 12.5px; margin-top: 10px; text-decoration: none; font-weight: 600;">↩️ กลับสู่หน้าหลักของเกม</a>
+                <a href="${window.location.pathname}" style="color: #4F5660; font-size: 12.5px; margin-top: 10px; text-decoration: none; font-weight: 600;">↩️ กลับสู่หน้าหลักของเกม</a>
               </div>
             </div>
           </div>
@@ -14276,7 +14591,7 @@
         <style>
           .rm { max-width: 520px; margin: 0 auto; padding: 18px 16px 40px; }
           .rm-top { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #DCD8D0; padding-bottom:12px; }
-          .rm-top b { font-size: 20px; } .rm-conn { font-size: 13px; color:#8B9097; }
+          .rm-top b { font-size: 20px; } .rm-conn { font-size: 13px; color:#5E636B; }
           .rm-stage { margin: 16px 0 6px; font-size: 15px; color:#C8241A; font-weight:800; letter-spacing:.06em; }
           .rm-name { font-size: 34px; font-weight: 800; line-height:1.15; } .rm-sub { font-size: 18px; color:#5E646C; margin-top:4px; }
           .rm-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
@@ -14286,7 +14601,7 @@
           .rm .pri { background:#121417; color:#fff; border-color:#121417; grid-column: 1 / -1; font-size: 22px; padding: 22px 8px; }
           .rm .num { font-size: 30px; padding: 16px 0; }
           .rm .warn { color:#C8241A; }
-          .rm h4 { margin: 22px 0 0; font-size: 14px; color:#8B9097; font-weight:700; letter-spacing:.06em; }
+          .rm h4 { margin: 22px 0 0; font-size: 14px; color:#5E636B; font-weight:700; letter-spacing:.06em; }
           .rm-log { margin-top: 18px; font-size: 14px; color:#5E646C; min-height: 20px; }
         </style>
         <div class="rm">
