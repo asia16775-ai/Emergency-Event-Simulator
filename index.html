@@ -4733,6 +4733,21 @@
     body.v28-open.v29 .winning-choice-display-box .equipment-icon-wrap { display: none !important; }
     body.v28-open.v29 .btn-hero-confirm, body.v28-open.v29 .btn-hero-revote { font-size: 26px !important; border-radius: 4px !important; min-height: 84px !important; }
     body.v28-open.v29 .btn-hero-revote { background: transparent !important; border: 2px solid var(--v-ink) !important; color: var(--v-ink) !important; }
+    .v30-say { display: inline-block; white-space: nowrap; font-weight: 800; color: inherit; }
+    .v30-own-answer { margin-top: 8px; font-size: calc(13px * var(--ui-scale)); color: #4F5660; }
+    body.v28-open .inspect-voice-callout .v30-say { color: var(--o-red) !important; margin-right: 10px; }
+    body.v28-open.v29 .inspect-voice-callout .v30-say { color: var(--v-ink) !important; }
+    body.v28-open.v29 .v30-own-answer { font-size: 24px; color: var(--v-muted); margin-top: 10px; }
+    body.v28-open.v29 .v30-own-answer .v30-say { color: var(--v-ink); }
+    /* V30: stage 7 room meter — the head count is the thing the room needs to read */
+    body.v28-open.v29 .pressure-hold-overlay { gap: 22px !important; padding: 28px 30px !important; border-radius: 4px !important; box-shadow: none !important; }
+    body.v28-open.v29 .pressure-hold-title { font-size: 40px !important; line-height: 1.25 !important; }
+    body.v28-open.v29 .pressure-hold-overlay > div:nth-child(2) { font-size: 26px !important; line-height: 1.45 !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .pressure-gauge-track { height: 34px !important; border-radius: 4px !important; }
+    body.v28-open.v29 .pressure-hold-overlay > div:nth-child(4) { flex-direction: column !important; gap: 8px !important; font-size: 24px !important; }
+    body.v28-open.v29 #txtPressurePct { font-size: 40px !important; }
+    body.v28-open.v29 #txtPressureHoldersCount { font-size: 40px !important; line-height: 1.25 !important; }
+    body.v28-open.v29 #btnHostPressureHold { font-size: 22px !important; border-radius: 4px !important; }
     body.v28-open.v29 .v29-alt-list { display: flex; flex-direction: column; border-top: 1px solid var(--v-rule); margin-top: 6px; }
     body.v28-open.v29 .v29-alt { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--v-rule); cursor: pointer; position: relative; }
     body.v28-open.v29 .v29-alt::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: var(--p, 0%); background: rgba(18,20,23,.06); z-index: 0; }
@@ -4881,6 +4896,8 @@
     #v29HostStrip[data-stage="9"] { display: none !important; }
     body.v28-open.v29 .ecg-status-badge, body.v28-open.v29 #ecgStatusText { letter-spacing: 0 !important; }
     body.v28-open.v29 .winning-choice-display-box .choice-equipment-title + div { font-size: 24px !important; color: var(--v-muted) !important; }
+    body.v28-open.v29 .stage-sub-clean:has(+ .v29-aed-steps) { display: none !important; }
+    body.v28-open.v29 .v29-aed-steps { color: var(--v-ink) !important; }
     #v29HostStrip { display: none; }
     body.v28-open.v29:not(.lobby-mode) #v29HostStrip {
       display: flex; position: fixed; left: 42px; right: 42px; bottom: 18px; z-index: 40; align-items: baseline; gap: 22px;
@@ -5856,6 +5873,10 @@
       }
 
       replay() {
+        // V30: if a recorded line is still playing, rewind it instead of starting a second copy
+        const a = window.VoiceChannel && VoiceChannel.audio;
+        if (a && !a.paused && !a.ended) { try { a.currentTime = 0; } catch(e) {} return; }
+        if (this.isSpeaking) return;
         if (this.currentScript) speakAndWait(this.currentScript, this.currentKey || null);
       }
 
@@ -5929,12 +5950,12 @@
       rules: {
         s1_correct: 'ปลอดภัยก่อนเสมอ — กั้นพื้นที่ ดับเครื่อง แล้วค่อยเข้าไปช่วย',
         s2_success: 'ตะโกนให้ครบ — ช่วยด้วย • มีคนหมดสติ • โทร 1669 เอา AED มา',
-        s3_success: 'โทร 1669 บอก 4 อย่าง — ที่ไหน • เกิดอะไร • อาการ • ต้องการอะไร',
-        s4_correct: 'หายใจเฮือก = หัวใจหยุดเต้น — เริ่มกดหน้าอกทันที',
-        s5_aed_intro: 'กดลึก 5–6 ซม. • 100–120 ครั้ง/นาที • ก่อนช็อก ทุกคนถอย',
+        s3_success: 'โทร 1669 บอก 4 อย่าง — ที่ไหน • เกิดอะไร • อาการ • ต้องการอะไร • อย่าวางสายก่อน',
+        s4_correct: 'ดูการหายใจไม่เกิน 10 วินาที — หายใจเฮือก = หัวใจหยุดเต้น เริ่มกดหน้าอกทันที',
+        s5_aed_intro: 'กดลึก 5–6 ซม. • 100–120 ครั้ง/นาที • ก่อนช็อก ทุกคนถอย • ช็อกแล้วกดต่อทันที',
         s6_correct: 'ล้างแผลด้วยน้ำเกลือหรือน้ำสะอาด — ไม่ราดแอลกอฮอล์', '19': 'ล้างแผลด้วยน้ำเกลือหรือน้ำสะอาด — ไม่ราดแอลกอฮอล์',
-        s7_correct: 'เลือดไหล — เอาผ้าสะอาดกดตรงแผล แล้วกดค้างไว้', '22': 'เลือดไหล — เอาผ้าสะอาดกดตรงแผล แล้วกดค้างไว้',
-        s8_correct: 'สงสัยกระดูกหัก — ไม่ดัด ไม่ดึง ดามในท่าที่เป็นอยู่', '25': 'สงสัยกระดูกหัก — ไม่ดัด ไม่ดึง ดามในท่าที่เป็นอยู่'
+        s7_correct: 'เลือดไหล — ผ้าสะอาดกดตรงแผลค้างไว้อย่างน้อย 10 นาที • ผ้าชุ่มให้วางเพิ่ม ห้ามดึงออก', '22': 'เลือดไหล — ผ้าสะอาดกดตรงแผลค้างไว้อย่างน้อย 10 นาที • ผ้าชุ่มให้วางเพิ่ม ห้ามดึงออก',
+        s8_correct: 'สงสัยกระดูกหัก — ไม่ดัด ไม่ดึง ดามในท่าที่เป็นอยู่ ให้คลุมข้อเหนือและใต้จุดหัก', '25': 'สงสัยกระดูกหัก — ไม่ดัด ไม่ดึง ดามในท่าที่เป็นอยู่ ให้คลุมข้อเหนือและใต้จุดหัก'
       },
       takeaway(key) {
         const text = this.rules[key];
@@ -5966,9 +5987,9 @@
         const s = gm.currentStage, sub = gm.decisionSubStep, np = gm.noPhoneMode;
         if (gm.isGameOver) return 'พูด “ลองใหม่” หรือคลิกปุ่ม เพื่อเล่นด่านนี้อีกครั้ง';
         if ([1, 4, 6, 7, 8].includes(s)) {
-          if (sub === 'PROMPT_INSPECT') return 'รอตัวแทนพูด “ตรวจดู” หรือกด Space';
+          if (sub === 'PROMPT_INSPECT') return 'รอตัวแทนพูดประโยคบนจอ (เช่น “ขอดู…ก่อน”) หรือกด Space';
           if (sub === 'AUDIENCE_VOTING') return np ? 'ทั้งห้องชูนิ้ว 1–4 แล้วพิธีกรกดเลข' : 'ทั้งห้องกำลังโหวตในมือถือ';
-          if (sub === 'HERO_DECISION' || sub === 'CONFIRM_CHOICE') return 'รอตัวแทนพูด “ยืนยัน” หรือกด Space';
+          if (sub === 'HERO_DECISION' || sub === 'CONFIRM_CHOICE') return 'รอตัวแทนพูด “เอาตามเพื่อน” / “ขอข้อ …” / “ขอโหวตใหม่” หรือกด Space';
           if (sub === 'DIRECT_PRESSURE') return 'กด Space ค้างไว้ = กดห้ามเลือด';
           return '';
         }
@@ -6153,13 +6174,42 @@
       '110': 'audio/110.mp3', 'lobby_roll_10': 'audio/110.mp3'
     };
 
-    function playCustomAudioClip(filePath) {
+    // V30: one voice at a time. A new line (or a stage jump) cuts the line before it,
+    // so skipping ahead never stacks two takes on top of each other.
+    // The cut line's promise is left pending on purpose: its follow-up (open the mic,
+    // go to the next step) belongs to a flow the host already moved past.
+    const VoiceChannel = {
+      seq: 0,
+      audio: null,
+      stop() {
+        this.seq++;
+        const a = this.audio;
+        this.audio = null;
+        if (a) {
+          try {
+            const v0 = a.volume;
+            let i = 0;
+            const t = setInterval(() => {
+              i++;
+              try { a.volume = Math.max(0, v0 * (1 - i / 5)); } catch(e) {}
+              if (i >= 5) { clearInterval(t); try { a.pause(); a.src = ''; } catch(e) {} }
+            }, 30);
+          } catch(e) { try { a.pause(); } catch(_) {} }
+        }
+        if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e) {} }
+      }
+    };
+    window.VoiceChannel = VoiceChannel;
+
+    function playCustomAudioClip(filePath, mySeq = VoiceChannel.seq) {
       return new Promise((resolve, reject) => {
+        if (mySeq !== VoiceChannel.seq) return; // a newer line already took over
         const audio = new Audio(filePath);
         audio.preload = 'auto';
 
         let hasResolved = false;
         const cleanup = () => {
+          if (mySeq !== VoiceChannel.seq) { hasResolved = true; return; } // cut by a newer line
           if (!hasResolved) {
             hasResolved = true;
             setTimeout(() => {
@@ -6170,6 +6220,8 @@
         };
 
         audio.onplay = () => {
+          if (mySeq !== VoiceChannel.seq) { try { audio.pause(); } catch(e) {} return; }
+          VoiceChannel.audio = audio;
           window.isSystemSpeaking = true;
           AIVoiceCoach.isSpeaking = true;
           MicSensor.stopSpeechRecognition();
@@ -6177,7 +6229,7 @@
         };
 
         audio.onended = cleanup;
-        audio.onerror = () => reject(new Error('File not found: ' + filePath));
+        audio.onerror = () => { if (mySeq === VoiceChannel.seq) reject(new Error('File not found: ' + filePath)); };
 
         // Safety fallback timer (V28: sized to the clip so long takes are never cut short)
         let safetyMs = 22000;
@@ -6186,18 +6238,21 @@
         };
         const armSafety = () => setTimeout(() => {
           if (!hasResolved && !audio.paused) {
+            if (mySeq !== VoiceChannel.seq) return;
             if (audio.currentTime + 0.5 < (audio.duration || 0)) { armSafety(); return; } // still playing normally
             cleanup();
           }
         }, safetyMs);
         armSafety();
 
-        audio.play().catch(reject);
+        audio.play().catch((e) => { if (mySeq === VoiceChannel.seq) reject(e); });
       });
     }
 
     function speakAndWait(text, audioKey = null) {
       return new Promise(async (resolve) => {
+        VoiceChannel.stop();
+        const mySeq = VoiceChannel.seq;
         AIVoiceCoach.currentScript = text;
         AIVoiceCoach.currentKey = audioKey;
         try { V28Motion.takeaway(audioKey); } catch(e) {}
@@ -6206,7 +6261,7 @@
           window.isSystemSpeaking = false;
           AIVoiceCoach.isSpeaking = false;
           AIVoiceCoach.updateUi(false, 'โหมดพิธีกรพากย์ (ไมค์พร้อม)');
-          setTimeout(resolve, 800);
+          setTimeout(() => { if (mySeq === VoiceChannel.seq) resolve(); }, 800);
           return;
         }
 
@@ -6220,7 +6275,7 @@
           if (/^lobby_roll_\d+$/.test(audioKey)) candidates.push('lobby_roll_generic');
           for (const k of candidates) {
             try {
-              await playCustomAudioClip(`audio/voice/${k}.mp3`);
+              await playCustomAudioClip(`audio/voice/${k}.mp3`, mySeq);
               resolve();
               return;
             } catch(e) { /* not recorded yet -> next candidate, legacy numbered file, then AI voice */ }
@@ -6230,7 +6285,7 @@
         // 1. Try Custom Recorded Audio Clip IF Mode is RECORDED
         if (AIVoiceCoach.voiceSourceMode === 'RECORDED' && audioKey && AUDIO_VOICE_MAP[audioKey]) {
           try {
-            await playCustomAudioClip(AUDIO_VOICE_MAP[audioKey]);
+            await playCustomAudioClip(AUDIO_VOICE_MAP[audioKey], mySeq);
             resolve();
             return;
           } catch(e) {
@@ -6241,13 +6296,14 @@
         // Also check if generic lobby roll is available for team numbers
         if (AIVoiceCoach.voiceSourceMode === 'RECORDED' && audioKey && audioKey.startsWith('lobby_roll_') && AUDIO_VOICE_MAP['lobby_roll_generic']) {
           try {
-            await playCustomAudioClip(AUDIO_VOICE_MAP['lobby_roll_generic']);
+            await playCustomAudioClip(AUDIO_VOICE_MAP['lobby_roll_generic'], mySeq);
             resolve();
             return;
           } catch(e) {}
         }
 
         // 2. Web Speech Synthesis Fallback (Male Pitch & Natural Tempo)
+        if (mySeq !== VoiceChannel.seq) return; // cut while looking for a recording
         if (!('speechSynthesis' in window)) {
           resolve();
           return;
@@ -6271,6 +6327,7 @@
         const finish = () => {
           if (settled) return;
           settled = true;
+          if (mySeq !== VoiceChannel.seq) return; // cut by a newer line
           setTimeout(() => {
             AIVoiceCoach.releaseGate();
             resolve();
@@ -7739,7 +7796,8 @@
         title: 'การประเมินความปลอดภัยจุดเกิดเหตุ',
         initialStory: 'รถเก๋งชนรั้วข้างถนน มีคนเจ็บอยู่ในรถ และมีควันออกจากฝากระโปรง',
         inspectQuestion: 'ก่อนเข้าไปช่วย จะดูรอบ ๆ ที่เกิดเหตุก่อนไหม?',
-        inspectVoicePrompt: 'พูดว่า "ตรวจดู" หรือ "เช็กเลย"',
+        inspectVoicePrompt: 'พูดว่า "ขอดูรอบๆ ก่อนว่าปลอดภัยไหม"',
+        inspectPhrases: ['ขอดูรอบๆ ก่อนว่าปลอดภัยไหม', 'เช็กที่เกิดเหตุก่อน'], // V30: sample lines shown on screen for the representative
         inspectSpoken: 'ระหว่างทาง เราเจอรถเก๋งชนรั้วข้างถนน มีคนเจ็บฟุบอยู่ในรถ ก่อนวิ่งเข้าไป เราจะดูรอบๆ ก่อนไหมครับ',
         findingsTitle: 'ผลการสำรวจจุดเกิดเหตุ',
         findingsDesc: '⚠️ พบอันตรายวิกฤต: กลุ่มควันสีขาวพุ่งหนาแน่นจากฝากระโปรง เครื่องยนต์ยังไม่ดับ และมีรถวิ่งผ่านเลนข้างๆ ด้วยความเร็วสูง',
@@ -7755,7 +7813,7 @@
             purpose: 'ใช้ดึงตัวคนเจ็บออกจากรถทันทีโดยไม่ตัดความเสี่ยงอันตรายรอบข้าง',
             type: 'fatal',
             fatalReason: 'เกิดไฟลุกไหม้จากห้องเครื่องและมีรถเฉี่ยวชนซ้ำ เนื่องจากยังไม่ได้กั้นพื้นที่และดับเครื่องยนต์ก่อนเข้าช่วย',
-            voiceHint: 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ ต้องประเมินความปลอดภัยก่อนเสมอ!',
+            voiceHint: 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือไฟลุกไหม้ได้ ต้องประเมินความปลอดภัยก่อนเสมอ!',
             iconSvg: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8241A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/><line x1="12" y1="2" x2="12" y2="6"/></svg>`
           },
           {
@@ -7792,7 +7850,8 @@
         title: 'ดูการหายใจ',
         initialStory: 'แจ้ง 1669 แล้ว คนเจ็บนอนนิ่งอยู่ในจุดที่ปลอดภัย',
         inspectQuestion: 'ก้มลงดูการหายใจของคนเจ็บไหม?',
-        inspectVoicePrompt: 'พูดว่า "ตรวจดู" หรือ "เช็กเลย"',
+        inspectVoicePrompt: 'พูดว่า "ขอดูการหายใจก่อน"',
+        inspectPhrases: ['ขอดูการหายใจก่อน', 'ดูว่าหน้าอกขยับไหม'], // V30: sample lines shown on screen for the representative
         inspectSpoken: 'ระหว่างรอรถ เจ้าหน้าที่หนึ่งหกหกเก้าให้เราดูการหายใจ ตัวแทนลองก้มลงดูหน้าอกคนเจ็บหน่อยครับ',
         findingsTitle: 'ผลตรวจการหายใจ',
         findingsDesc: '🫁 ผลตรวจร่างกาย: ได้ยินเสียงหายใจ "เฮือก... ฮึ่ก..." นานๆ ครั้ง แต่หน้าอกไม่ขยับขึ้นลงเลย',
@@ -7835,7 +7894,8 @@
         title: 'การล้างทำความสะอาดบาดแผลสด',
         initialStory: 'หัวใจกลับมาเต้นแล้ว คนเจ็บเริ่มรู้สึกตัว',
         inspectQuestion: 'ขอดูแผลของคนเจ็บก่อนไหม?',
-        inspectVoicePrompt: 'พูดว่า "ตรวจดู" หรือ "เช็กเลย"',
+        inspectVoicePrompt: 'พูดว่า "ขอดูแผลก่อน"',
+        inspectPhrases: ['ขอดูแผลก่อน', 'แผลสกปรกไหม'], // V30: sample lines shown on screen for the representative
         inspectSpoken: 'ช็อกแล้วหัวใจกลับมาเต้นครับ คนเจ็บเริ่มรู้สึกตัว แต่มีแผลที่แขน ขอดูแผลหน่อยไหมครับ',
         findingsTitle: 'ผลตรวจบาดแผล',
         findingsDesc: '🩹 ผลตรวจบาดแผล: พบแผลเปิดขนาดใหญ่ที่ท่อนแขนซ้าย มีเศษดินและทรายปนเปื้อนอยู่ในเนื้อแผลสด',
@@ -7890,7 +7950,8 @@
         title: 'การห้ามเลือดและปิดบาดแผลสด',
         initialStory: 'ล้างแผลสะอาดแล้ว',
         inspectQuestion: 'ขอดูก่อนไหมว่าเลือดไหลแบบไหน?',
-        inspectVoicePrompt: 'พูดว่า "ตรวจดู" หรือ "เช็กเลย"',
+        inspectVoicePrompt: 'พูดว่า "ขอดูว่าเลือดออกตรงไหน"',
+        inspectPhrases: ['ขอดูว่าเลือดออกตรงไหน', 'เลือดออกเยอะไหม'], // V30: sample lines shown on screen for the representative
         inspectSpoken: 'แผลสะอาดแล้ว แต่เลือดยังไหลไม่หยุดครับ ขอดูหน่อยว่าเลือดไหลแบบไหน',
         findingsTitle: 'ผลตรวจเลือดออก (Bleeding Assessment)',
         findingsDesc: '🩸 ผลตรวจบาดแผล: มีเลือดสีแดงสดไหลซึมออกจากปากแผลอย่างต่อเนื่อง หากปล่อยไว้จะเสียเลือดมาก',
@@ -7934,7 +7995,8 @@
         title: 'การดามกระดูกและประคองข้อต่อแขน',
         initialStory: 'เลือดหยุดแล้ว พันแผลเรียบร้อย',
         inspectQuestion: 'ขอดูแขนของคนเจ็บก่อนไหม?',
-        inspectVoicePrompt: 'พูดว่า "ตรวจดู" หรือ "เช็กเลย"',
+        inspectVoicePrompt: 'พูดว่า "ขอดูแขนก่อน ยังไม่ขยับ"',
+        inspectPhrases: ['ขอดูแขนก่อน ยังไม่ขยับ', 'แขนผิดรูปไหม'], // V30: sample lines shown on screen for the representative
         inspectSpoken: 'เลือดหยุดแล้วครับ แต่คนเจ็บยังร้องปวดแขน ขยับไม่ได้เลย ขอดูแขนหน่อยไหมครับ',
         findingsTitle: 'ผลตรวจกระดูกและข้อต่อ',
         findingsDesc: '🦴 ผลตรวจร่างกาย: ท่อนแขนท่อนล่างบวมโตและโก่งผิดรูปชัดเจน ผู้ป่วยร้องปวดเมื่อขยับ สงสัยกระดูกแขนหัก',
@@ -8546,8 +8608,9 @@
         if (goModal) goModal.style.display = 'none';
         speechDebouncer.clear();
         MicSensor.stopSpeechRecognition();
-
-
+        VoiceChannel.stop(); // V30: never carry the previous stage's line into this one
+        window.isSystemSpeaking = false;
+        AIVoiceCoach.isSpeaking = false;
 
         // Bulletproof Multiplayer Stage Sync across all stages 0-9
         this.broadcastMultiplayerStageSync();
@@ -8862,7 +8925,7 @@
             <div class="voice-answer-bar">
               <span class="mic-live-dot"></span>
               <span id="txtLiveVoiceChoice" class="voice-bar-transcript font-technical">
-                ${isHeroDecision ? 'ไมค์พร้อมรับเสียง: พูด "ยืนยัน" หรือ "โหวตใหม่"' : 'ไมค์พร้อมรับเสียง'}
+                ไมค์พร้อมรับเสียง
               </span>
             </div>
           </div>
@@ -8917,7 +8980,7 @@
                   <div class="inspect-card-title">${data.inspectQuestion}</div>
                   <div class="inspect-voice-callout font-technical">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-                    <span>พูดตอบรับเพื่อเริ่มตรวจสอบ (เช่น “ตรวจสอบ”, “ดูอาการ”, “เช็กเลย”, “ครับ”)</span>
+                    <span>ตัวแทนลองพูด: ${(data.inspectPhrases || ['ตรวจดูก่อน']).map(t => `<span class="v30-say">“${t}”</span>`).join(' ')}</span>
                   </div>
                 </div>
               ` : (isVoting ? `
@@ -8989,11 +9052,11 @@
                   <div class="hero-action-buttons-row">
                     <button onclick="GameStateManager.confirmHeroDecision()" class="btn-hero-confirm font-technical">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                      1. ใช้คำตอบนี้ (พูด "ยืนยัน")
+                      1. “เอาตามเพื่อนเลย”
                     </button>
                     <button onclick="GameStateManager.reopenAudienceVoting()" class="btn-hero-revote font-technical">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
-                      2. ให้เพื่อนโหวตใหม่ (พูด "โหวตใหม่")
+                      2. “ขอโหวตใหม่”
                     </button>
                   </div>
 
@@ -9001,7 +9064,7 @@
                     // V29: show every option with the room's share; the top vote is marked. Click = host override.
                     const all = Object.values(this.currentVotes || {});
                     const tot = all.length;
-                    return `<div class="v29-alt-list v29-only">${data.choices.map(c => {
+                    return `<div class="v30-own-answer font-technical">มีคำตอบของตัวเอง? พูด <span class="v30-say">“ไม่เอา ขอเลือกข้อ …”</span> หรือบอกสิ่งที่จะทำ</div><div class="v29-alt-list v29-only">${data.choices.map(c => {
                       const n = all.filter(v => v.choice === c.num).length;
                       const p = tot ? Math.round((n / tot) * 100) : 0;
                       const top = this.topVotedChoice && this.topVotedChoice.num === c.num;
@@ -9348,7 +9411,11 @@
                 'ดูอาการ', 'ดูแผล', 'ดูที่เกิดเหตุ', 'ดูคนไข้', 'ดูผู้ป่วย', 'ดูสภาพ', 'ดูรถ', 'ดูแขน', 'ดูเลย',
                 'ดูครับ', 'ดูค่ะ', 'ดูหน่อย', 'ขอดู', 'เข้าไปดู', 'เข้าไปสำรวจ', 'เข้าประเมิน', 'เปิดดู',
                 'ทำครับ', 'ทำค่ะ', 'ทำเลย', 'เอาเลย', 'ได้เลย', 'ไปดู', 'เริ่มเลย', 'เริ่มตรวจสอบ', 'สแกน',
-                'ต้องการ', 'ตกลง', 'โอเค', 'ok', 'พร้อม', 'ลุย', 'ใช่', 'ครับ', 'ค่ะ', 'คับ'
+                'ต้องการ', 'ตกลง', 'โอเค', 'ok', 'พร้อม', 'ลุย', 'ใช่', 'ครับ', 'ค่ะ', 'คับ',
+                // V30: the sample lines on screen + how teens actually say them
+                'ดูก่อน', 'เช็กก่อน', 'เช็คก่อน', 'ตรวจก่อน', 'รอบๆ', 'รอบรอบ', 'ที่เกิดเหตุ', 'ปลอดภัยไหม', 'ปลอดภัยมั้ย', 'ปลอดภัยป่าว',
+                'ดูการหายใจ', 'หายใจไหม', 'หายใจมั้ย', 'หายใจป่าว', 'หน้าอก', 'อกขยับ', 'ฟังเสียงหายใจ',
+                'แผล', 'สกปรก', 'เลือดออก', 'เลือดไหล', 'ดูเลือด', 'ตรงไหน', 'แขน', 'ผิดรูป', 'บวม', 'ไม่ขยับ', 'ดูซิ', 'ดูสิ', 'ขอเช็ก', 'ขอเช็ค'
               ];
               if (inspectPhrases.some(w => valNoSpace.includes(w))) {
                 if (box) {
@@ -9369,9 +9436,19 @@
 
             // STEP 3: Hero Decision (Confirm Winning Choice, Revote, or Speak Equipment Name Directly) (V18.0)
             if (this.decisionSubStep === 'HERO_DECISION' || this.decisionSubStep === 'CONFIRM_CHOICE') {
+              // V30: a named choice wins over everything ("ไม่เอา ขอข้อ 3" = choose 3, not revote)
+              const namedChoice = matchVoiceToChoice(finalTranscript, stageNum);
+              if (namedChoice) {
+                if (box) {
+                  box.innerHTML = `“<span style="color:#11734F; font-weight:800;">${finalTranscript}</span>” <span style="color:#11734F;">(✓ เลือกข้อที่ ${namedChoice}!)</span>`;
+                }
+                this.executeDecisionOutcome(namedChoice);
+                return;
+              }
+
               const revoteWords = [
                 'โหวตใหม่', 'โหมดใหม่', 'โหวดใหม่', 'หวดใหม่', 'เลือกใหม่', 'เปลี่ยนข้อ',
-                'เปลี่ยนคำตอบ', 'เอาใหม่', 'ไม่เอา', 'ยกเลิก', 'ไม่ใช้', 'ขอใหม่'
+                'เปลี่ยนคำตอบ', 'เอาใหม่', 'ยกเลิก', 'ขอใหม่', 'ให้เพื่อนโหวต', 'ถามเพื่อนใหม่'
               ];
               if (revoteWords.some(w => valNoSpace.includes(w))) {
                 if (box) {
@@ -9391,11 +9468,22 @@
                 return;
               }
 
-              // Check general affirmative confirmation words (V18.0 expanded)
+              // V30: disagreeing without naming a choice -> ask for the choice, never auto-confirm
+              const disagreeWords = ['ไม่เอา', 'ไม่เห็นด้วย', 'ไม่ตามเพื่อน', 'ไม่เชื่อ', 'ไม่ใช่', 'ไม่ใช้', 'ไม่ถูก', 'ผิด'];
+              if (disagreeWords.some(w => valNoSpace.includes(w))) {
+                if (box) {
+                  box.innerHTML = `“<span style="color:#D97706; font-weight:800;">${finalTranscript}</span>” <span style="color:#D97706;">(บอกข้อที่จะเลือกได้เลย เช่น “ขอข้อ 3”)</span>`;
+                }
+                return;
+              }
+
+              // Check general affirmative confirmation words (V18.0 expanded; V30: no bare ครับ/ค่ะ/ใช่ so "ขอคิดก่อนครับ" never confirms)
               const confirmWords = [
                 'ยืนยัน', 'ยืนยาน', 'ยื่นยัน', 'ยืนยัง', 'ใช้คำตอบนี้', 'ใช้เลย', 'ใช้อันนี้', 'ใช้ข้อนี้',
-                'ตกลง', 'ใช่', 'เอาอันนี้', 'เอาข้อนี้', 'เอาเลย', 'ทำเลย', 'ทำครับ', 'ทำค่ะ', 'ลุยเลย',
-                'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'เลือกข้อนี้', 'สรุปข้อนี้', 'โอเค', 'ok', 'ครับ', 'ค่ะ'
+                'ตกลง', 'เอาอันนี้', 'เอาข้อนี้', 'เอาเลย', 'ทำเลย', 'ลุยเลย',
+                'ถูกต้อง', 'คอนเฟิร์ม', 'confirm', 'เลือกอันนี้', 'เลือกข้อนี้', 'สรุปข้อนี้', 'โอเค', 'ok',
+                'ตามเพื่อน', 'ตามโหวต', 'ตามที่เพื่อน', 'เชื่อเพื่อน', 'เห็นด้วย', 'เหมือนเพื่อน', 'ตามนั้น', 'เอาตามนี้',
+                'ข้อเดียวกับเพื่อน', 'เพื่อนถูก', 'ใช่เลย', 'ใช่ครับ', 'ใช่ค่ะ', 'ช่ายเลย'
               ];
               if (confirmWords.some(w => valNoSpace.includes(w))) {
                 if (box) {
@@ -9514,6 +9602,7 @@
         if (certModal) certModal.style.display = 'none';
 
         // Safely cancel any active speech synthesis or custom audio
+        VoiceChannel.stop();
         if (window.speechSynthesis) {
           try { window.speechSynthesis.cancel(); } catch(e) {}
         }
@@ -10658,6 +10747,9 @@
                     <p class="stage-sub-clean" style="margin-bottom:8px;">
                       ตัวแทนพูดทีละคำให้ดัง (หรือคลิกทีละแถว)
                     </p>
+                    <p class="stage-sub-clean v29-aed-steps" style="margin:0 0 8px;">
+                      เปิดเครื่อง → ติดแผ่นตามรูปบนแผ่น (ใต้ไหปลาร้าขวา • ข้างราวนมซ้าย) → ทำตามเสียงเครื่อง
+                    </p>
                   </div>
 
                   <div id="aedViolationContainer"></div>
@@ -11416,6 +11508,11 @@
           this.stage7PressureInterval = null;
         }
 
+        // V30: the room has to press together. Need 1/3 of the phones that voted in this stage
+        // (phones that voted are surely still here; the join list never forgets dropped phones).
+        const stage7Voters = Object.keys(this.currentVotes || {}).filter(id => !String(id).startsWith('solo_test_')).length;
+        this.stage7PressureNeed = Math.max(1, Math.ceil(stage7Voters / 3));
+
         this.renderStage();
         this.broadcastHostSync();
         this.broadcastMultiplayerStageSync();
@@ -11440,7 +11537,7 @@
                   🩸 กดแผลค้างไว้เพื่อห้ามเลือด!
                 </div>
                 <div style="font-size:13.5px; color:#475569; line-height:1.45;">
-                  ให้เพื่อนๆ ในห้องกดนิ้วค้างไว้บนปุ่มในมือถือ (หรือตัวแทนกดปุ่มด้านล่างค้างไว้) ต่อเนื่อง <strong>3.5 วินาที</strong> จนกว่าหลอดห้ามเลือดจะเต็ม 100%!
+                  ทั้งห้องกดนิ้วค้างบนปุ่มในมือถือ <strong>พร้อมกันอย่างน้อย ${this.stage7PressureNeed} คน</strong> ต่อเนื่อง <strong>3.5 วินาที</strong> จนหลอดห้ามเลือดเต็ม 100%!
                 </div>
                 <div class="pressure-gauge-track" style="height:22px;">
                   <div class="pressure-gauge-fill" id="pressureGaugeFill" style="width:0%;"></div>
@@ -11477,13 +11574,17 @@
             return;
           }
 
-          const mobileHoldCount = this.activePressureHolders ? this.activePressureHolders.size : 0;
-          const isHolding = mobileHoldCount > 0 || this.hostHoldingPressure;
+          const need = this.noPhoneMode ? 1 : (this.stage7PressureNeed || 1); // N mode (no phones): host Space alone is enough
+          const holders = this.activePressureHolders || new Set();
+          let holdCount = holders.size + (this.hostHoldingPressure ? 1 : 0); // host button / Space = one pair of hands
+          if (holders.has('bot_squad')) holdCount = holdCount - 1 + need;      // bot simulator presses as the whole room
+          const isHolding = holdCount >= need;
+          this.stage7PressureCount = holdCount;
 
           if (isHolding) {
             this.stage7PressureHeldMs = Math.min(totalMs, this.stage7PressureHeldMs + 100);
-          } else {
-            // Slowly decay if released before 100%
+          } else if (holdCount === 0) {
+            // Slowly decay only when nobody is pressing; a few hands hold the bar where it is
             this.stage7PressureHeldMs = Math.max(0, this.stage7PressureHeldMs - 50);
           }
 
@@ -11498,9 +11599,12 @@
             txt.style.color = isHolding ? '#11734F' : '#C8241A';
           }
           if (statusTxt) {
+            const shown = Math.min(holdCount, Math.max(need, holdCount));
             statusTxt.innerText = isHolding
-              ? `✓ กำลังกดห้ามเลือดอย่างต่อเนื่อง... (${(this.stage7PressureHeldMs / 1000).toFixed(1)} / 3.5 วินาที)`
-              : '⚠️ กรุณากดปุ่มค้างไว้ ห้ามปล่อยมือ!';
+              ? `✓ กดอยู่ ${shown} / ${need} คน • ${(this.stage7PressureHeldMs / 1000).toFixed(1)} / 3.5 วินาที`
+              : (holdCount > 0
+                ? `⚠️ กดอยู่ ${holdCount} / ${need} คน — ต้องการเพิ่มอีก ${need - holdCount} คน!`
+                : `⚠️ ยังไม่มีใครกด — ต้องกดพร้อมกัน ${need} คน`);
             statusTxt.style.color = isHolding ? '#11734F' : '#D97706';
           }
 
@@ -11578,9 +11682,9 @@
           let spokenHint = '';
 
           if (choice === 1) {
-            hintText = 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ ต้องประเมินความปลอดภัยก่อนเสมอ!';
+            hintText = 'ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่าน ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือไฟลุกไหม้ได้ ต้องประเมินความปลอดภัยก่อนเสมอ!';
             audioKey = 's1_hint_1';
-            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่านด้วยความเร็ว ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือเกิดระเบิดได้ครับ สิ่งสำคัญที่สุดเราต้องคำนึงถึงความปลอดภัยของใครเป็นอันดับแรกก่อนครับ? ลองเลือกใหม่อีกครั้งครับ!';
+            spokenHint = 'ยังไม่ถูกต้องครับ! คำใบ้คือ: ในที่เกิดเหตุยังมีควันพุ่งและมีรถวิ่งผ่านด้วยความเร็ว ถ้าเราวิ่งเข้าไปทันทีอาจถูกรถชนหรือไฟลุกไหม้ได้ครับ สิ่งสำคัญที่สุดเราต้องคำนึงถึงความปลอดภัยของใครเป็นอันดับแรกก่อนครับ? ลองเลือกใหม่อีกครั้งครับ!';
           } else if (choice === 3) {
             hintText = 'ห้ามมุดเข้าไปในรถที่มีควันพุ่งเด็ดขาด เพราะเครื่องยนต์อาจเกิดไฟลุกไหม้ได้ ต้องตัดความเสี่ยงดับเครื่องยนต์และกั้นพื้นที่ก่อน!';
             audioKey = 's1_hint_3';
@@ -12369,6 +12473,7 @@
         if (this.cprPhaseState !== 'INTRO' && this.cprPhaseState !== 'WAITING_READY') return;
 
         // If host clicked button while AI intro was still speaking, cancel speech cleanly
+        VoiceChannel.stop();
         if (window.speechSynthesis) {
           try { window.speechSynthesis.cancel(); } catch(e) {}
         }
@@ -13023,7 +13128,7 @@
           setTimeout(() => document.body.classList.remove('aed-shock-jolt'), 600);
 
           const fb = document.getElementById('txtAedInstructionFeedback');
-          if (fb) fb.innerHTML = '<span style="color:#10B981; font-weight:800; font-size:15px;">⚡ ช็อกแล้ว! รอดูว่าหัวใจกลับมาเต้นปกติ (ROSC)</span>';
+          if (fb) fb.innerHTML = '<span style="color:#10B981; font-weight:800; font-size:15px;">⚡ ช็อกแล้ว! ของจริงต้องกดหน้าอกต่อทันที จนเครื่องสั่งหรือทีม 1669 มาถึง</span>';
 
           setTimeout(() => {
             // V28: after the shock the line stays flat for a moment, then the heart returns beat by beat
@@ -13211,6 +13316,7 @@
 
       quickResetGame() {
         // 1. Stop all active timers, audio, speech, and mic recognition cleanly
+        VoiceChannel.stop();
         if (window.speechSynthesis) {
           try { window.speechSynthesis.cancel(); } catch(e) {}
         }
