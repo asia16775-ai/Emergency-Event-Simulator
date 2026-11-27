@@ -6182,31 +6182,47 @@
     const VoiceChannel = {
       seq: 0,
       audio: null,
+      // V32 (Safari): ONE <audio> element for every voice line. Safari only lets a page play sound
+      // on an element that was first started from a click, so the start click unlocks this element
+      // and every later line reuses it (a fresh new Audio() per line would be blocked).
+      el: null,
+      unlocked: false,
+      SILENT: 'data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA',
+      player() {
+        if (!this.el) { this.el = new Audio(); this.el.preload = 'auto'; }
+        return this.el;
+      },
+      unlock() {
+        if (this.unlocked) return;
+        const a = this.player();
+        try {
+          if (a.paused && !this.audio) {
+            a.src = this.SILENT;
+            const p = a.play();
+            if (p && p.then) p.then(() => { this.unlocked = true; if (!this.audio) a.pause(); }).catch(() => {});
+          }
+        } catch(e) {}
+        // Safari also gates speech synthesis behind a click
+        try { if (window.speechSynthesis && !this._ttsPrimed) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); this._ttsPrimed = true; } } catch(e) {}
+      },
       stop() {
         this.seq++;
         const a = this.audio;
         this.audio = null;
-        if (a) {
-          try {
-            const v0 = a.volume;
-            let i = 0;
-            const t = setInterval(() => {
-              i++;
-              try { a.volume = Math.max(0, v0 * (1 - i / 5)); } catch(e) {}
-              if (i >= 5) { clearInterval(t); try { a.pause(); a.src = ''; } catch(e) {} }
-            }, 30);
-          } catch(e) { try { a.pause(); } catch(_) {} }
-        }
+        if (a) { try { a.pause(); } catch(e) {} }
         if (window.speechSynthesis) { try { window.speechSynthesis.cancel(); } catch(e) {} }
       }
     };
+    ['pointerdown', 'keydown', 'touchend'].forEach(ev => document.addEventListener(ev, () => VoiceChannel.unlock(), true));
     window.VoiceChannel = VoiceChannel;
 
     function playCustomAudioClip(filePath, mySeq = VoiceChannel.seq) {
       return new Promise((resolve, reject) => {
         if (mySeq !== VoiceChannel.seq) return; // a newer line already took over
-        const audio = new Audio(filePath);
-        audio.preload = 'auto';
+        const audio = VoiceChannel.player(); // V32: shared, click-unlocked element (Safari)
+        audio.onplay = audio.onended = audio.onerror = audio.onloadedmetadata = null;
+        audio.volume = 1;
+        audio.src = filePath;
 
         let hasResolved = false;
         const cleanup = () => {
@@ -6246,7 +6262,14 @@
         }, safetyMs);
         armSafety();
 
-        audio.play().catch((e) => { if (mySeq === VoiceChannel.seq) reject(e); });
+        audio.play().catch((e) => {
+          if (mySeq !== VoiceChannel.seq) return;
+          if (e && e.name === 'NotAllowedError') {
+            // V32: the browser blocked sound (Safari auto-play setting / no click yet)
+            try { showToast('🔇 เบราว์เซอร์บล็อกเสียงอยู่ — คลิกที่จอ 1 ครั้ง แล้วกด [ฟังซ้ำ]', 5000); } catch(_) {}
+          }
+          reject(e);
+        });
       });
     }
 
@@ -8872,6 +8895,7 @@
           v.addEventListener('ended', onEnd);
           v.addEventListener('error', onErr, true); // <source> errors do not bubble
           v.loop = false;
+          v.muted = true; v.playsInline = true; v.setAttribute('playsinline', ''); // V32: Safari only auto-plays muted inline video
           v.poster = `videos/scenes/posters/poster_${name}.jpg`;
           v.innerHTML = `<source src="videos/scenes/scene_${name}.mp4" type="video/mp4">`;
           v.style.opacity = '1';
@@ -13566,6 +13590,7 @@
 
       bindEvents() {
         document.getElementById('btnStartConsole').addEventListener('click', () => {
+          try { VoiceChannel.unlock(); } catch(e) {}
           try { SoundEngine.initAndResume(); } catch(e) {}
           this.setStage(1);
           // V28: open the story with the intro clip, then settle into the stage-1 loop
