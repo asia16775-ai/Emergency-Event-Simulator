@@ -4733,6 +4733,7 @@
     body.v28-open.v29 .winning-choice-display-box .equipment-icon-wrap { display: none !important; }
     body.v28-open.v29 .btn-hero-confirm, body.v28-open.v29 .btn-hero-revote { font-size: 26px !important; border-radius: 4px !important; min-height: 84px !important; }
     body.v28-open.v29 .btn-hero-revote { background: transparent !important; border: 2px solid var(--v-ink) !important; color: var(--v-ink) !important; }
+    body.v31-no8 .v31-stage8, body.v31-no8 #stepPill8 { display: none !important; }
     .v30-say { display: inline-block; white-space: nowrap; font-weight: 800; color: inherit; }
     .v30-own-answer { margin-top: 8px; font-size: calc(13px * var(--ui-scale)); color: #4F5660; }
     body.v28-open .inspect-voice-callout .v30-say { color: var(--o-red) !important; margin-right: 10px; }
@@ -4966,7 +4967,7 @@
       <div id="stepPill5" class="nav-step-pill" onclick="GameStateManager.jumpToStage(5)" title="คลิกเพื่อข้ามไปด่านนี้"><b>05</b> <span>CPR/AED</span></div>
       <div id="stepPill6" class="nav-step-pill" onclick="GameStateManager.jumpToStage(6)" title="คลิกเพื่อข้ามไปด่านนี้"><b>06</b> <span>ล้างแผล</span></div>
       <div id="stepPill7" class="nav-step-pill" onclick="GameStateManager.jumpToStage(7)" title="คลิกเพื่อข้ามไปด่านนี้"><b>07</b> <span>ห้ามเลือด</span></div>
-      <div id="stepPill8" class="nav-step-pill" onclick="GameStateManager.jumpToStage(8)" title="คลิกเพื่อข้ามไปด่านนี้"><b>08</b> <span>ดามแขน</span></div>
+      <div id="stepPill8" class="nav-step-pill v31-stage8" onclick="GameStateManager.jumpToStage(8)" title="คลิกเพื่อข้ามไปด่านนี้"><b>08</b> <span>ดามแขน</span></div>
       <div id="stepPill9" class="nav-step-pill" onclick="GameStateManager.jumpToStage(9)" title="คลิกเพื่อข้ามไปด่านนี้"><span class="sp-always">สรุปผล</span></div>
     </nav>
 
@@ -5116,7 +5117,7 @@
           <div class="lobby-proto-item"><span class="proto-num">05</span><span class="proto-name">CPR &amp; AED</span></div>
           <div class="lobby-proto-item"><span class="proto-num">06</span><span class="proto-name">ล้างแผล</span></div>
           <div class="lobby-proto-item"><span class="proto-num">07</span><span class="proto-name">ห้ามเลือด</span></div>
-          <div class="lobby-proto-item"><span class="proto-num">08</span><span class="proto-name">ดามกระดูก</span></div>
+          <div class="lobby-proto-item v31-stage8"><span class="proto-num">08</span><span class="proto-name">ดามกระดูก</span></div>
         </div>
 
         <!-- Live Joined Players Wall (Kahoot-style Roster) -->
@@ -7790,6 +7791,20 @@
     // =========================================================================
     // V10.0 MASTER CLINICAL INVESTIGATION & EQUIPMENT DATA (STAGES 1, 4, 6, 7, 8)
     // =========================================================================
+    // V31 (time cuts after rehearsal): flip either back to false to restore the old flow
+    const V31_SKIP_INSPECT_PROMPT = true; // no "ขอดู…ก่อน" step: stage opens straight on the findings + vote
+    const V31_SKIP_STAGE_8 = true;        // no splint stage: bleeding (7) goes straight to the summary (9)
+    window.V31_SKIP_STAGE_8 = V31_SKIP_STAGE_8;
+    if (V31_SKIP_STAGE_8 && document.body) document.body.classList.add('v31-no8');
+
+    // V31b: the intro takes with the "ขอดู…ไหม" question cut off (audio/voice/s<N>_intro_story.mp3)
+    const V31_STORY_LINES = {
+      1: 'ระหว่างทาง เราเจอรถเก๋งชนรั้วข้างถนน มีคนเจ็บฟุบอยู่ในรถ',
+      4: 'เจ้าหน้าที่หนึ่งหกหกเก้าให้เราดูการหายใจ',
+      6: 'ช็อกแล้วหัวใจกลับมาเต้นครับ คนเจ็บเริ่มรู้สึกตัว แต่มีแผลที่แขน',
+      7: 'แผลสะอาดแล้ว แต่เลือดยังไหลไม่หยุดเลยครับ'
+    };
+
     const CLINICAL_STAGES = {
       1: {
         stageNum: 1,
@@ -8255,13 +8270,14 @@
 
       // ===== V28: room-level summary for stage 9 =====
       v28RoomStatsHtml() {
-        const firstTry = [1, 4, 6, 7, 8].filter(n => !(this.stageMistakes && this.stageMistakes[n] > 0)).length;
+        const quizStages = V31_SKIP_STAGE_8 ? [1, 4, 6, 7] : [1, 4, 6, 7, 8];
+        const firstTry = quizStages.filter(n => !(this.stageMistakes && this.stageMistakes[n] > 0)).length;
         const c = this.v28Cpr || { good: 0, miss: 0 };
         const tot = c.good + c.miss;
         const cprPct = tot > 0 ? Math.round((c.good / tot) * 100) + '%' : '–';
         const people = Object.values(this.connectedPlayers || {}).filter(p => !p.isBot).length;
         return `<div class="v28-room-stats font-technical">
-          <div><b>${firstTry}/5</b><span>ข้อที่ตอบถูกตั้งแต่ครั้งแรก</span></div>
+          <div><b>${firstTry}/${quizStages.length}</b><span>ข้อที่ตอบถูกตั้งแต่ครั้งแรก</span></div>
           ${tot > 0 ? `<div><b>${cprPct}</b><span>กดหน้าอกตรงจังหวะ</span></div>` : ''}
           ${(this.noPhoneMode || people > 0) ? `<div><b>${this.noPhoneMode ? 'ทั้งห้อง' : people}</b><span>${this.noPhoneMode ? 'ช่วยกันชูนิ้วโหวต' : 'คนช่วยผ่านมือถือ'}</span></div>` : ''}
         </div>`;
@@ -8595,6 +8611,7 @@
       }
 
       async setStage(newStage) {
+        if (V31_SKIP_STAGE_8 && newStage === 8) newStage = this.currentStage >= 9 ? 7 : 9; // V31: splint stage removed
         const prevStageForMotion = this.currentStage;
         if (newStage === 1 && prevStageForMotion !== 1) this.v28Cpr = { good: 0, miss: 0 };
         this.currentStage = newStage;
@@ -8648,6 +8665,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
+          if (V31_SKIP_INSPECT_PROMPT) { this.advanceToInspectionFinding(true); return; }
           await speakAndWait(CLINICAL_STAGES[1].inspectSpoken, 's1_intro');
           this.startClinicalVoiceTracking(1);
         } else if (newStage === 2) {
@@ -8706,6 +8724,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
+          if (V31_SKIP_INSPECT_PROMPT) { this.advanceToInspectionFinding(true); return; }
           await speakAndWait(CLINICAL_STAGES[4].inspectSpoken, 's4_intro');
           this.startClinicalVoiceTracking(4);
         } else if (newStage === 5) {
@@ -8744,6 +8763,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
+          if (V31_SKIP_INSPECT_PROMPT) { this.advanceToInspectionFinding(true); return; }
           await speakAndWait(CLINICAL_STAGES[6].inspectSpoken, 's6_intro');
           this.startClinicalVoiceTracking(6);
         } else if (newStage === 7) {
@@ -8757,6 +8777,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
+          if (V31_SKIP_INSPECT_PROMPT) { this.advanceToInspectionFinding(true); return; }
           await speakAndWait(CLINICAL_STAGES[7].inspectSpoken, 's7_intro');
           this.startClinicalVoiceTracking(7);
         } else if (newStage === 8) {
@@ -8770,6 +8791,7 @@
           this.broadcastHostSync();
           this.broadcastMultiplayerStageSync();
 
+          if (V31_SKIP_INSPECT_PROMPT) { this.advanceToInspectionFinding(true); return; }
           await speakAndWait(CLINICAL_STAGES[8].inspectSpoken, 's8_intro');
           this.startClinicalVoiceTracking(8);
         } else if (newStage === 9) {
@@ -9096,7 +9118,7 @@
         });
       }
 
-      async advanceToInspectionFinding() {
+      async advanceToInspectionFinding(storyFirst = false) {
         if (![1, 4, 6, 7, 8].includes(this.currentStage)) return;
         const stageAtStart = this.currentStage;
         if (this.voteTimerId) {
@@ -9113,6 +9135,10 @@
 
         SoundEngine.playPulseBeep(880, 0.08);
         const cData = CLINICAL_STAGES[stageAtStart];
+        if (storyFirst && V31_STORY_LINES[stageAtStart]) {
+          await speakAndWait(V31_STORY_LINES[stageAtStart], `s${stageAtStart}_intro_story`);
+          if (this.currentStage !== stageAtStart || this.decisionSubStep !== 'AUDIENCE_VOTING') return;
+        }
         if (cData) {
           await speakAndWait(cData.findingsSpoken, `s${stageAtStart}_findings`);
         }
@@ -11118,7 +11144,7 @@
             { num: '06', name: 'ล้างแผลด้วยน้ำเกลือ', val: this.stageScores[6], max: 10 },
             { num: '07', name: 'ห้ามเลือดกดแผลโดยตรง', val: this.stageScores[7], max: 10 },
             { num: '08', name: 'ดามกระดูกและคล้องแขน', val: this.stageScores[8], max: 10 }
-          ];
+          ].filter(st => !(V31_SKIP_STAGE_8 && st.num === '08'));
 
           card.innerHTML = `
             <div class="unified-status-bar" style="margin-bottom: 4px;">
@@ -11215,10 +11241,10 @@
 
                 ${this.v28RoomStatsHtml()}
 
-                <div class="v29-steps-title v29-only">8 ขั้นตอนที่ช่วยพี่ต้นไว้<small>จำลำดับนี้ไว้ ใช้ได้จริง</small></div>
+                <div class="v29-steps-title v29-only">${V31_SKIP_STAGE_8 ? 7 : 8} ขั้นตอนที่ช่วยพี่ต้นไว้<small>จำลำดับนี้ไว้ ใช้ได้จริง</small></div>
                 <div class="v29-hide" style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; font-weight:800; color:#090D16;" class="font-technical">
                   <span>คะแนนแต่ละด่าน</span>
-                  <span style="color:#4F5660; font-weight:600;">8 ด่านกู้ชีพ</span>
+                  <span style="color:#4F5660; font-weight:600;">${V31_SKIP_STAGE_8 ? 7 : 8} ด่านกู้ชีพ</span>
                 </div>
 
                 <div class="stage-scores-grid-v18 font-technical">
