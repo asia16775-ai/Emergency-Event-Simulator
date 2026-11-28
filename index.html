@@ -15037,7 +15037,7 @@
      V35 STATION TIMER — big countdown for the activities before the game.
      Opens from the lobby button or key [W]. Full screen, or minimised to a
      corner badge that keeps running over the lobby and the game.
-     Sounds: chime at 1:00, a tick each of the last 10 s, alarm + gong at 0.
+     Silent (V36): the 1:00 / last-10-s / time-up cues are visual only (TIMER_SOUNDS flag).
      ===================================================================== -->
 <style>
   #hrTimer {
@@ -15264,11 +15264,13 @@
     };
 
     // ---- sounds (through SoundEngine's master gain: [M] mutes them too) ----
+    const TIMER_SOUNDS = false; // V36: host asked for a silent timer — set true to bring back chime / ticks / alarm
     const Sfx = {
       ctx() { try { SoundEngine.initAndResume(); } catch (e) {} return SoundEngine.ctx; },
       out() { return SoundEngine.masterGain || (SoundEngine.ctx && SoundEngine.ctx.destination); },
       nodes: [],
       tone(t, hz, dur, vol, type = 'sine') {
+        if (!TIMER_SOUNDS) return;
         const c = this.ctx(); if (!c) return;
         const o = c.createOscillator(), gn = c.createGain();
         o.type = type; o.frequency.value = hz;
