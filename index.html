@@ -4324,11 +4324,13 @@
     body.v28-open .lobby-qr-join-card { gap: 36px !important; align-items: center !important; }
     body.v28-open .lobby-qr-actions { flex-wrap: wrap !important; gap: 8px !important; }
     body.v28-open .lobby-qr-actions > button { flex: 1 1 45% !important; }
-    body.v28-open .lobby-qr-frame { width: 300px !important; height: 300px !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; background: #fff !important; flex: none !important; }
-    body.v28-open #lobbyQrCanvas { width: 284px !important; height: 284px !important; image-rendering: pixelated; }
-    body.v28-open .lobby-pin-header-row span { font-size: 22px !important; color: var(--o-muted) !important; }
-    body.v28-open div:has(> #txtLobbyPin) { color: var(--o-muted) !important; font-size: 30px !important; font-weight: 600 !important; display: flex !important; align-items: baseline !important; gap: 10px !important; }
-    body.v28-open #txtLobbyPin { font-size: 104px !important; line-height: 1 !important; color: var(--o-ink) !important; letter-spacing: .02em; }
+    body.v28-open .lobby-qr-frame { width: 440px !important; height: 440px !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; background: #fff !important; flex: none !important; }
+    body.v28-open #lobbyQrCanvas { width: 440px !important; height: 440px !important; image-rendering: pixelated; }
+    body.v28-open .lobby-pin-header-row { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 8px !important; }
+    body.v28-open .lobby-pin-header-row span { font-size: 20px !important; color: var(--o-muted) !important; white-space: nowrap; }
+    body.v28-open .lobby-qr-join-card { gap: 28px !important; }
+    body.v28-open div:has(> #txtLobbyPin) { color: var(--o-muted) !important; font-size: 24px !important; font-weight: 600 !important; display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 0 !important; }
+    body.v28-open #txtLobbyPin { font-size: 88px !important; line-height: 1 !important; color: var(--o-ink) !important; letter-spacing: .02em; }
     body.v28-open #txtLobbyPin + *, body.v28-open .lobby-qr-join-card .num-readout { color: var(--o-ink) !important; }
     body.v28-open .btn-copy-pin-mini, body.v28-open .btn-dev-mobile-sim, body.v28-open .btn-bot-toggle {
       background: transparent !important; border: 1px solid var(--o-rule) !important; box-shadow: none !important; border-radius: 3px !important;
@@ -4522,7 +4524,7 @@
     body.v28-open.theme-icu .btn-team-random { color: var(--o-ink) !important; border-color: #3A4249 !important; }
     body.v28-open.theme-icu .slot-machine-viewport { background: #000 !important; }
     body.v28-open.theme-icu .voice-pill-text-clean, body.v28-open.theme-icu .voice-bar-transcript { color: #C9D0D5 !important; }
-    body.v28-open.theme-icu .lobby-qr-frame { padding: 8px !important; }
+    body.v28-open.theme-icu .lobby-qr-frame { padding: 0 !important; }
     body.v28-open.theme-icu input, body.v28-open.theme-icu .chk-pill-clean { background: #15191D !important; color: var(--o-ink) !important; border-color: #2B3237 !important; }
     body.v28-open.theme-icu #v28Takeaway { background: #F1F3F4; color: #0D1013; }
     body.v28-open.theme-icu .v28-room-stats b { color: var(--o-ink) !important; }
@@ -4911,6 +4913,107 @@
     @media (prefers-reduced-motion: no-preference) {
       body.v28-open.v29 .mic-live-dot { animation-duration: 2.4s !important; }
     }
+
+    /* =====================================================================
+       V33 — "เลือดหมู" theme (body.theme-blood, rides on theme-icu's dark-mode rules).
+       Maroon room, cream type. Red can't mark anything on a red ground, so emphasis
+       moves to gold and "wrong" to a light coral. Key [T] switches back to the light look.
+       ===================================================================== */
+    body.v28-open.theme-blood {
+      --b-bg: #5A0F1B; --b-deep: #3D0811; --b-surface: #6E1A28; --b-line: #86323F;
+      --o-paper: #5A0F1B; --o-ink: #FFF4EE; --o-muted: #F2CFC8; --o-faint: #DDA9A1; --o-rule: #86323F;
+      --o-red: #FFC85C; --o-green: #8BE6B4; --o-amber: #FFC85C;
+      --v-paper: #5A0F1B; --v-paper-2: #6E1A28;
+      --v-ink: #FFF4EE; --v-muted: #F2CFC8; --v-faint: #DDA9A1; --v-rule: #86323F;
+      --v-red: #FF9A8A; --v-green: #8BE6B4; --v-blue: #A9CFFF; --v-amber: #FFC85C;
+      background: var(--b-bg) !important; color: var(--o-ink) !important;
+    }
+    body.v28-open.theme-blood ::selection { background: #FFF4EE; color: #5A0F1B; }
+    body.v28-open.theme-blood .monitor-header { background: var(--b-deep) !important; border-bottom: 0 !important; }
+    body.v28-open.theme-blood .telemetry-ribbon-bar { background: var(--b-deep) !important; }
+    body.v28-open.theme-blood .ecg-status-badge { background: var(--b-deep) !important; color: #FFF4EE !important; }
+    body.v28-open.theme-blood .nav-step-pill, body.v28-open.theme-blood .nav-step-pill b { color: #DDA9A1 !important; border-top-color: #86323F !important; }
+    body.v28-open.theme-blood .nav-step-pill.cleared, body.v28-open.theme-blood .nav-step-pill.cleared b { color: #F2CFC8 !important; border-top-color: #F2CFC8 !important; }
+    body.v28-open.theme-blood .nav-step-pill.active { background: #FFF4EE !important; color: #5A0F1B !important; border-top-color: #FFC85C !important; }
+    body.v28-open.theme-blood .nav-step-pill.active b, body.v28-open.theme-blood .nav-step-pill.active span,
+    body.v28-open.theme-blood .nav-step-pill.active .sp-always { color: #5A0F1B !important; display: inline !important; }
+    body.v28-open.theme-blood #stageMainCard [style*="color:#11734F"], body.v28-open.theme-blood #stageMainCard [style*="color: #11734F"] { color: #8BE6B4 !important; }
+    body.v28-open.theme-blood .session-clock-pill, body.v28-open.theme-blood .session-clock-pill * { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .vital-hr { color: #8BE6B4 !important; }
+    body.v28-open.theme-blood .vital-hr.critical { color: #FFC85C !important; }
+    body.v28-open.theme-blood .vital-spo2 { color: #A9CFFF !important; }
+    body.v28-open.theme-blood .patient-hud-stage-name { color: #FFC85C !important; }
+    body.v28-open.theme-blood .micro-pill, body.v28-open.theme-blood .micro-pill * { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .micro-pill span:first-child { color: #DDA9A1 !important; }
+
+    /* type: everything that was dark ink on paper becomes cream on maroon */
+    body.v28-open.theme-blood .stage-headline-clean, body.v28-open.theme-blood .inspect-card-title,
+    body.v28-open.theme-blood .choice-equipment-title, body.v28-open.theme-blood .v29-alt-txt,
+    body.v28-open.theme-blood .vote-choice-preview-text, body.v28-open.theme-blood .vote-choice-preview-num,
+    body.v28-open.theme-blood .lobby-title-clean, body.v28-open.theme-blood #txtLobbyPin,
+    body.v28-open.theme-blood .v29-steps-title, body.v28-open.theme-blood .stage-pill-name,
+    body.v28-open.theme-blood #txtVoteTimerSec, body.v28-open.theme-blood #txtVoteCount,
+    body.v28-open.theme-blood .pressure-hold-title, body.v28-open.theme-blood #txtCprCount { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .clinical-findings-subline, body.v28-open.theme-blood .stage-sub-clean,
+    body.v28-open.theme-blood .hero-decision-badge, body.v28-open.theme-blood .v30-own-answer,
+    body.v28-open.theme-blood .winning-choice-display-box div, body.v28-open.theme-blood .v29-alt-num,
+    body.v28-open.theme-blood .v29-alt-pct, body.v28-open.theme-blood .v29-steps-title small,
+    body.v28-open.theme-blood .lobby-sub-clean, body.v28-open.theme-blood .lobby-howto-txt,
+    body.v28-open.theme-blood .proto-name, body.v28-open.theme-blood .proto-num { color: #F2CFC8 !important; }
+    body.v28-open.theme-blood .choice-equipment-title.large { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .v30-say, body.v28-open.theme-blood .v30-own-answer .v30-say,
+    body.v28-open.theme-blood .inspect-voice-callout .v30-say { color: #FFC85C !important; }
+    body.v28-open.theme-blood .v29-alt.is-top::before { background: rgba(255,200,92,.20) !important; }
+    body.v28-open.theme-blood .v29-alt::before { background: rgba(255,244,238,.08) !important; }
+    body.v28-open.theme-blood .v29-alt.is-top .v29-alt-txt { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .v29-alt.is-top .v29-alt-num, body.v28-open.theme-blood .v29-alt.is-top .v29-alt-pct { color: #FFC85C !important; }
+    body.v28-open.theme-blood .v29-alt.correct .v29-alt-txt { color: #8BE6B4 !important; }
+    body.v28-open.theme-blood .v29-alt.wrong .v29-alt-txt { color: #FF9A8A !important; }
+
+    /* buttons: cream primary, outlined secondary */
+    body.v28-open.theme-blood .btn-hero-confirm, body.v28-open.theme-blood .btn-start-console-clean,
+    body.v28-open.theme-blood .btn-view-cert, body.v28-open.theme-blood #btnHostPressureHold { background: #FFF4EE !important; color: #5A0F1B !important; border-color: #FFF4EE !important; }
+    body.v28-open.theme-blood .btn-hero-confirm *, body.v28-open.theme-blood .btn-start-console-clean * { color: #5A0F1B !important; stroke: #5A0F1B !important; }
+    body.v28-open.theme-blood .btn-hero-revote, body.v28-open.theme-blood .btn-quick-reset,
+    body.v28-open.theme-blood .btn-team-random, body.v28-open.theme-blood .btn-replay-clean,
+    body.v28-open.theme-blood .nav-btn, body.v28-open.theme-blood .btn-bot-toggle { background: transparent !important; color: #FFF4EE !important; border-color: #F2CFC8 !important; }
+    body.v28-open.theme-blood .btn-hero-revote * { color: #FFF4EE !important; stroke: #FFF4EE !important; }
+
+    /* surfaces that were white cards */
+    body.v28-open.theme-blood .pressure-hold-overlay, body.v28-open.theme-blood .vote-status-board-card,
+    body.v28-open.theme-blood .hero-decision-card-v14, body.v28-open.theme-blood .inspect-prompt-card,
+    body.v28-open.theme-blood .vote-group-status-pill, body.v28-open.theme-blood .vote-timer-progress-wrap,
+    body.v28-open.theme-blood .pressure-gauge-track { background: transparent !important; border-color: #86323F !important; color: #FFF4EE !important; }
+    body.v28-open.theme-blood .vote-status-board-card > div:nth-child(2) { background: transparent !important; }
+    body.v28-open.theme-blood .vote-timer-bar, body.v28-open.theme-blood .pressure-gauge-fill { background: #FFC85C !important; }
+    body.v28-open.theme-blood .vote-group-status-pill, body.v28-open.theme-blood .vote-group-status-pill * { color: #F2CFC8 !important; }
+    body.v28-open.theme-blood .vote-group-status-pill.voted { background: rgba(139,230,180,.16) !important; }
+    body.v28-open.theme-blood #txtVotePct, body.v28-open.theme-blood #txtPressurePct { color: #FFC85C !important; }
+    body.v28-open.theme-blood .slot-machine-viewport { background: var(--b-deep) !important; }
+    body.v28-open.theme-blood input, body.v28-open.theme-blood .chk-pill-clean,
+    body.v28-open.theme-blood .cpr-timing-judge-badge, body.v28-open.theme-blood .leaderboard-table tr.current-team td { background: var(--b-surface) !important; color: #FFF4EE !important; border-color: #86323F !important; }
+    body.v28-open.theme-blood .leaderboard-table, body.v28-open.theme-blood .leaderboard-table * { color: #FFF4EE !important; border-color: #86323F !important; }
+    body.v28-open.theme-blood #v28Takeaway { background: #FFF4EE !important; color: #5A0F1B !important; }
+    body.v28-open.theme-blood #v28Takeaway * { color: #5A0F1B !important; }
+    body.v28-open.theme-blood .clinical-wrong-hint-banner { border-top-color: #FFC85C !important; color: #FFF4EE !important; }
+
+    /* inline-styled grey/navy text inside the stage card and lobby (template literals) */
+    body.v28-open.theme-blood #stageMainCard [style*="color:#4F5660"], body.v28-open.theme-blood #stageMainCard [style*="color:#475569"],
+    body.v28-open.theme-blood #stageMainCard [style*="color:#1E293B"], body.v28-open.theme-blood #stageMainCard [style*="color:#090D16"],
+    body.v28-open.theme-blood #stageMainCard [style*="color:#64748B"], body.v28-open.theme-blood #stageMainCard [style*="color: #4F5660"],
+    body.v28-open.theme-blood #modalLobby [style*="color:#4F5660"], body.v28-open.theme-blood #modalLobby [style*="color:#475569"],
+    body.v28-open.theme-blood #modalLobby [style*="color:#64748B"], body.v28-open.theme-blood #modalLobby [style*="color: #4F5660"] { color: #F2CFC8 !important; }
+    body.v28-open.theme-blood #stageMainCard [style*="background:#F8FAFC"], body.v28-open.theme-blood #stageMainCard [style*="background: #F8FAFC"],
+    body.v28-open.theme-blood #stageMainCard [style*="background:#FFFFFF"], body.v28-open.theme-blood #stageMainCard [style*="background:#fff"] { background: transparent !important; border-color: #86323F !important; }
+
+    /* host strip + footer */
+    body.v28-open.theme-blood #v29HostStrip, body.v28-open.theme-blood #v29HostStrip * { color: #F2CFC8 !important; border-color: #86323F !important; }
+    body.v28-open.theme-blood #v29HostStrip kbd, body.v28-open.theme-blood #v29HostStrip .kbd { background: transparent !important; color: #FFF4EE !important; border-color: #DDA9A1 !important; }
+    body.v28-open.theme-blood #v29HsWait { color: #FFF4EE !important; }
+    body.v28-open.theme-blood #modalGameOver button { background: #FFF4EE !important; color: #5A0F1B !important; }
+    body.v28-open.theme-blood .stage2-kw-tile .kw-text { color: #FFF4EE !important; }
+    body.v28-open.theme-blood .stage2-kw-tile.matched .kw-text { color: #8BE6B4 !important; }
+    body.v28-open.theme-blood .stage2-kw-tile .kw-status-dot { color: #F2CFC8 !important; }
   </style>
 </head>
 <body class="lobby-mode v28-open v29">
@@ -5172,6 +5275,7 @@
               </button>
               <button id="btnNoPhoneMode" onclick="GameStateManager.toggleNoPhoneMode()" class="btn-bot-toggle font-technical" title="ใช้ตอนเน็ตล่ม: โหวตด้วยการชูนิ้ว พิธีกรกดเลข [N]">✋ ไม่ใช้มือถือ: ปิด</button>
               <button onclick="GameStateManager.showStaffRemoteQr()" class="btn-dev-mobile-sim font-technical" title="เปิดรีโมตบนมือถือพี่สตาฟ">🎛️ รีโมตสตาฟ</button>
+              <button onclick="StationTimer.show()" class="btn-dev-mobile-sim btn-open-timer font-technical" title="จับเวลาถอยหลังเต็มจอ [W]">⏱️ จับเวลา [W]</button>
             </div>
           </div>
         </div>
@@ -5405,14 +5509,16 @@
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d');
-        const cellSize = size / count;
+        // V34: whole-pixel modules + a 2-module white margin — even squares scan from much farther away
+        const cellSize = Math.max(1, Math.floor(size / (count + 4)));
+        const off = Math.floor((size - cellSize * count) / 2);
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, size, size);
         ctx.fillStyle = '#090D16';
         for (let row = 0; row < count; row++) {
           for (let col = 0; col < count; col++) {
             if (qr.isDark(row, col)) {
-              ctx.fillRect(col * cellSize, row * cellSize, Math.ceil(cellSize), Math.ceil(cellSize));
+              ctx.fillRect(off + col * cellSize, off + row * cellSize, cellSize, cellSize);
             }
           }
         }
@@ -5769,6 +5875,80 @@
       }
     }
     const SoundEngine = new SoundEngineCore();
+
+    /* ==========================================================================
+       V33 VOTE MUSIC — a quiz-show style loop synthesised live (no audio file, no licence).
+       Plays ONLY during the vote countdown, when nobody needs the mic. Anything that
+       speaks (VoiceChannel.stop) or closes the vote cuts it in 0.12 s. Last 3 s: faster,
+       busier hats and a rising tone. Goes through SoundEngine's master gain, so [M] mutes it.
+       Turn off for a session: localStorage mdbuu_music = 'off'  (key [U] toggles).
+       ========================================================================== */
+    const VoteMusic = {
+      on: (() => { try { return localStorage.getItem('mdbuu_music') !== 'off'; } catch(e) { return true; } })(),
+      bus: null, timer: null, step: 0, nextT: 0, remaining: 99, noise: null, riser: null,
+      ROOTS: [110.00, 87.31, 130.81, 98.00],          // A2 F2 C3 G2  (Am - F - C - G)
+      ARP: [0, 12, 7, 12, 3, 12, 7, 15],              // semitone offsets over the root
+      ctx() { try { SoundEngine.initAndResume(); } catch(e) {} return SoundEngine.ctx; },
+      start(totalSec) {
+        this.stop(true);
+        if (!this.on || SoundEngine.isMuted) return;
+        const ctx = this.ctx(); if (!ctx || !SoundEngine.masterGain) return;
+        if (!this.noise) {
+          const len = ctx.sampleRate * 0.5, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+          for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+          this.noise = buf;
+        }
+        this.bus = ctx.createGain();
+        this.bus.gain.setValueAtTime(0.0001, ctx.currentTime);
+        this.bus.gain.exponentialRampToValueAtTime(0.32, ctx.currentTime + 0.25);
+        this.bus.connect(SoundEngine.masterGain);
+        this.remaining = totalSec; this.step = 0; this.nextT = ctx.currentTime + 0.06;
+        this.timer = setInterval(() => this.schedule(), 25);
+      },
+      setRemaining(sec) {
+        this.remaining = sec;
+        const ctx = SoundEngine.ctx;
+        if (sec === 3 && this.bus && ctx && !this.riser) {   // rising tone for the last 3 s
+          const o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = 'sawtooth'; o.frequency.setValueAtTime(220, ctx.currentTime); o.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 3);
+          g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.05, ctx.currentTime + 2.8);
+          const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1800;
+          o.connect(f); f.connect(g); g.connect(this.bus); o.start(); o.stop(ctx.currentTime + 3.1);
+          this.riser = o;
+        }
+      },
+      schedule() {
+        const ctx = SoundEngine.ctx; if (!ctx || !this.bus) return;
+        const urgent = this.remaining <= 3;
+        const stepDur = 60 / (urgent ? 156 : 128) / 4;     // 16th notes
+        while (this.nextT < ctx.currentTime + 0.12) {
+          const st = this.step % 16, bar = Math.floor(this.step / 16) % 4, t = this.nextT;
+          if (st % 4 === 0) this.kick(t);
+          if (urgent ? true : st % 2 === 0) this.hat(t, st % 4 === 2 ? 0.09 : 0.05);
+          if (st % 4 === 0) this.tick(t, st === 0 ? 1760 : 1320);
+          if (st % 2 === 0) this.pluck(t, this.ROOTS[bar] * Math.pow(2, this.ARP[(st / 2) % 8] / 12), stepDur * 1.6);
+          if (st === 0 || st === 8) this.pad(t, this.ROOTS[bar] * 2, stepDur * 7);
+          this.nextT += stepDur; this.step++;
+        }
+      },
+      env(t, peak, dur) { const g = SoundEngine.ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); g.connect(this.bus); return g; },
+      kick(t) { const ctx = SoundEngine.ctx, o = ctx.createOscillator(); o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.12); o.connect(this.env(t, 0.9, 0.16)); o.start(t); o.stop(t + 0.18); },
+      hat(t, vol) { const ctx = SoundEngine.ctx, n = ctx.createBufferSource(), f = ctx.createBiquadFilter(); n.buffer = this.noise; f.type = 'highpass'; f.frequency.value = 7000; n.connect(f); f.connect(this.env(t, vol, 0.04)); n.start(t, Math.random() * 0.4); n.stop(t + 0.05); },
+      tick(t, hz) { const ctx = SoundEngine.ctx, o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = hz; o.connect(this.env(t, 0.10, 0.03)); o.start(t); o.stop(t + 0.04); },
+      pluck(t, hz, dur) { const ctx = SoundEngine.ctx, o = ctx.createOscillator(), f = ctx.createBiquadFilter(); o.type = 'square'; o.frequency.value = hz; f.type = 'lowpass'; f.frequency.setValueAtTime(2400, t); f.frequency.exponentialRampToValueAtTime(400, t + dur); o.connect(f); f.connect(this.env(t, 0.16, dur)); o.start(t); o.stop(t + dur + 0.02); },
+      pad(t, hz, dur) { const ctx = SoundEngine.ctx; [1, 1.1892, 1.4983].forEach(r => { const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = hz * r; o.connect(this.env(t, 0.05, dur)); o.start(t); o.stop(t + dur + 0.02); }); },
+      stop(silent) {
+        if (this.timer) { clearInterval(this.timer); this.timer = null; }
+        this.riser = null;
+        const bus = this.bus, ctx = SoundEngine.ctx; this.bus = null;
+        if (bus && ctx) {
+          try { bus.gain.cancelScheduledValues(ctx.currentTime); bus.gain.setValueAtTime(bus.gain.value || 0.3, ctx.currentTime); bus.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12); } catch(e) {}
+          setTimeout(() => { try { bus.disconnect(); } catch(e) {} }, 400);
+        }
+      },
+      toggle() { this.on = !this.on; try { localStorage.setItem('mdbuu_music', this.on ? 'on' : 'off'); } catch(e) {} if (!this.on) this.stop(); return this.on; }
+    };
+    window.VoteMusic = VoteMusic;
 
     /* ==========================================================================
        NATURAL THAI AI VOICE COACH & AUDITION (FIX #10)
@@ -6195,18 +6375,22 @@
       unlock() {
         if (this.unlocked) return;
         const a = this.player();
-        try {
-          if (a.paused && !this.audio) {
-            a.src = this.SILENT;
+        // Only before the first real line: once a line has been loaded the element is ours,
+        // and touching it here could hijack a line that is still loading.
+        if (a.getAttribute('src')) { this.unlocked = true; }
+        else {
+          try {
+            a.src = this.SILENT; // 50 ms of silence, ends by itself
             const p = a.play();
-            if (p && p.then) p.then(() => { this.unlocked = true; if (!this.audio) a.pause(); }).catch(() => {});
-          }
-        } catch(e) {}
+            if (p && p.then) p.then(() => { this.unlocked = true; }).catch(() => {});
+          } catch(e) {}
+        }
         // Safari also gates speech synthesis behind a click
         try { if (window.speechSynthesis && !this._ttsPrimed) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); this._ttsPrimed = true; } } catch(e) {}
       },
       stop() {
         this.seq++;
+        try { VoteMusic.stop(); } catch(e) {}
         const a = this.audio;
         this.audio = null;
         if (a) { try { a.pause(); } catch(e) {} }
@@ -6254,9 +6438,9 @@
           if (isFinite(audio.duration) && audio.duration > 0) safetyMs = Math.max(safetyMs, audio.duration * 1000 + 3000);
         };
         const armSafety = () => setTimeout(() => {
-          if (!hasResolved && !audio.paused) {
+          if (!hasResolved) { // V33: also give up on a line that sits paused/stalled, never hang the flow
             if (mySeq !== VoiceChannel.seq) return;
-            if (audio.currentTime + 0.5 < (audio.duration || 0)) { armSafety(); return; } // still playing normally
+            if (!audio.paused && audio.currentTime + 0.5 < (audio.duration || 0)) { armSafety(); return; } // still playing normally
             cleanup();
           }
         }, safetyMs);
@@ -6275,6 +6459,10 @@
 
     function speakAndWait(text, audioKey = null) {
       return new Promise(async (resolve) => {
+        // V33: a stage line ("s3_…") that arrives after the host already moved on is dropped
+        // (left pending, so the stale flow stops) instead of cutting the new stage's line.
+        const tagged = /^s(\d)_/.exec(audioKey || '');
+        if (tagged && window.GameStateManager && Number(tagged[1]) !== GameStateManager.currentStage) return;
         VoiceChannel.stop();
         const mySeq = VoiceChannel.seq;
         AIVoiceCoach.currentScript = text;
@@ -7815,6 +8003,7 @@
     // V10.0 MASTER CLINICAL INVESTIGATION & EQUIPMENT DATA (STAGES 1, 4, 6, 7, 8)
     // =========================================================================
     // V31 (time cuts after rehearsal): flip either back to false to restore the old flow
+    const V33_VOTE_SECONDS = 8;           // vote countdown (was 12)
     const V31_SKIP_INSPECT_PROMPT = true; // no "ขอดู…ก่อน" step: stage opens straight on the findings + vote
     const V31_SKIP_STAGE_8 = true;        // no splint stage: bleeding (7) goes straight to the summary (9)
     window.V31_SKIP_STAGE_8 = V31_SKIP_STAGE_8;
@@ -8126,7 +8315,7 @@
         this.sessionPin = /^(1)$/.test(new URLSearchParams(location.search).get('play') || new URLSearchParams(location.search).get('remote') || '') ? HostPinStore.fresh() : HostPinStore.get();
         this.connectedPlayers = {}; // id -> { id, name, group, isBot, score, correctVotes, taps, cprHits, penalties }
         this.currentVotes = {}; // id -> { choice, speedMs }
-        this.voteCountdownSeconds = 12;
+        this.voteCountdownSeconds = V33_VOTE_SECONDS;
         this.voteTimerId = null;
         this.topVotedChoice = null;
         this.topVotedPercent = 0;
@@ -8143,7 +8332,11 @@
       init() {
         document.body.classList.add('lobby-mode');
         try { if (localStorage.getItem('mdbuu_no_phone') === '1') setTimeout(() => this.toggleNoPhoneMode(true), 0); } catch(e) {}
-        try { if (localStorage.getItem('mdbuu_theme') === 'icu' || /[?&]theme=icu/.test(location.search)) document.body.classList.add('theme-icu'); } catch(e) {}
+        try {
+          const t = localStorage.getItem('mdbuu_theme') || (/[?&]theme=(\w+)/.exec(location.search) || [])[1] || 'blood';
+          if (t === 'icu') document.body.classList.add('theme-icu');
+          if (t === 'blood') document.body.classList.add('theme-icu', 'theme-blood'); // V33 default: maroon room
+        } catch(e) { document.body.classList.add('theme-icu', 'theme-blood'); }
         try { if (localStorage.getItem('mdbuu_v29') === 'off' || /[?&]v29=off/.test(location.search)) document.body.classList.remove('v29'); } catch(e) {}
         V29Host.start(this);
         this.initDisplayScaleSystem();
@@ -8232,7 +8425,7 @@
 
         if (qrCanvas) {
           const joinUrl = `${window.location.origin}${window.location.pathname}?play=1&pin=${this.sessionPin}`;
-          renderQrToCanvas(qrCanvas, joinUrl, 140);
+          renderQrToCanvas(qrCanvas, joinUrl, 440); // V34: drawn at display size
         }
       }
 
@@ -8722,6 +8915,7 @@
 
           SoundEngine.playTelephoneRing();
           await new Promise(r => setTimeout(r, 700));
+          if (this.currentStage !== 3) return; // V33: host skipped during the ring
 
           await speakAndWait('หนึ่งหกหกเก้ารับสายแล้วครับ ทุกคนกดปุ่มในมือถือรัวๆ เลย ข้อมูลสี่อย่างที่ต้องบอกเจ้าหน้าที่จะค่อยๆ ขึ้นมาบนจอ', 's3_intro');
           if (this.currentStage !== 3) return;
@@ -9051,7 +9245,7 @@
                         <span id="txtVotePct" class="num-readout" style="color:#1F5FA8; font-size:15px;">${votePct}%</span>
                       </div>
                       <div class="vote-timer-progress-wrap" style="height:11px;">
-                        <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / 12) * 100}%;"></div>
+                        <div class="vote-timer-bar" id="barVoteTimer" style="width:${(this.voteCountdownSeconds / V33_VOTE_SECONDS) * 100}%;"></div>
                       </div>
                     </div>
                   </div>
@@ -9149,7 +9343,7 @@
           clearInterval(this.voteTimerId);
           this.voteTimerId = null;
         }
-        this.voteCountdownSeconds = 12;
+        this.voteCountdownSeconds = V33_VOTE_SECONDS;
         this.decisionSubStep = 'AUDIENCE_VOTING';
         this.selectedChoiceIndex = null;
         this.currentVotes = {};
@@ -9171,7 +9365,7 @@
         if (this.currentStage !== stageAtStart || this.decisionSubStep !== 'AUDIENCE_VOTING') return;
 
         // Start 12-second audience voting countdown (V28: no-phone mode waits for the host's 1-4 key)
-        if (!this.noPhoneMode) this.startVotingCountdown(12);
+        if (!this.noPhoneMode) this.startVotingCountdown(V33_VOTE_SECONDS);
 
         // If bot simulator is active, cast automated realistic votes
         if (!this.noPhoneMode && BotSimulator.enabled && cData) {
@@ -9181,16 +9375,18 @@
         this.startClinicalVoiceTracking(stageAtStart);
       }
 
-      startVotingCountdown(seconds = 12) {
+      startVotingCountdown(seconds = V33_VOTE_SECONDS) {
         if (this.voteTimerId) clearInterval(this.voteTimerId);
         this.voteCountdownSeconds = seconds;
+        try { VoteMusic.start(seconds); } catch(e) {}
 
         this.voteTimerId = setInterval(() => {
           this.voteCountdownSeconds--;
           const txtSec = document.getElementById('txtVoteTimerSec');
           const bar = document.getElementById('barVoteTimer');
           if (txtSec) txtSec.innerText = Math.max(0, this.voteCountdownSeconds);
-          if (bar) bar.style.width = `${Math.max(0, (this.voteCountdownSeconds / 12) * 100)}%`;
+          if (bar) bar.style.width = `${Math.max(0, (this.voteCountdownSeconds / V33_VOTE_SECONDS) * 100)}%`;
+          try { VoteMusic.setRemaining(this.voteCountdownSeconds); } catch(e) {}
 
           if (this.voteCountdownSeconds <= 0) {
             this.finishAudienceVoting();
@@ -9199,6 +9395,7 @@
       }
 
       finishAudienceVoting() {
+        try { VoteMusic.stop(); } catch(e) {}
         if (this.voteTimerId) {
           clearInterval(this.voteTimerId);
           this.voteTimerId = null;
@@ -9316,8 +9513,8 @@
 
         try { V28Votes.fill(this, false); } catch(e) {}
 
-        // If all registered players in this session have voted, auto-finish immediately
-        if (regCount > 0 && votesCast >= regCount) {
+        // V33: close as soon as 80% of the joined phones have voted (the join list keeps dropped phones)
+        if (regCount > 0 && votesCast >= Math.ceil(regCount * 0.8)) {
           setTimeout(() => this.finishAudienceVoting(), 500);
         }
       }
@@ -13417,7 +13614,7 @@
         this.isStageChoiceLocked = false;
         this.isGameOver = false;
         this.isTreatmentVideoPlaying = false;
-        this.voteCountdownSeconds = 12;
+        this.voteCountdownSeconds = V33_VOTE_SECONDS;
 
         this.checklist = { location: false, incident: false, patient: false, aed: false };
         this.aedSteps = { step1: false, step2: false, step3: false };
@@ -13608,8 +13805,10 @@
             try { localStorage.setItem('mdbuu_v29', on ? 'on' : 'off'); } catch(e) {}
             if (this.currentStage > 0) this.renderStage();
           } else if (e.key === 't' || e.key === 'T') {
-            const on = document.body.classList.toggle('theme-icu'); // V28 proposal B
-            try { localStorage.setItem('mdbuu_theme', on ? 'icu' : 'light'); } catch(e) {}
+            const on = !document.body.classList.contains('theme-blood'); // V33: maroon <-> light
+            document.body.classList.toggle('theme-icu', on);
+            document.body.classList.toggle('theme-blood', on);
+            try { localStorage.setItem('mdbuu_theme', on ? 'blood' : 'light'); } catch(e) {}
           } else if (e.key === 'n' || e.key === 'N') {
             this.toggleNoPhoneMode();
           } else if (e.key === 'd' || e.key === 'D') {
@@ -13617,6 +13816,9 @@
             applyFit1080();
             V28Layout.lobby();
             if (this.currentStage > 0) this.renderStage(); else V28Layout.apply();
+          } else if (e.key === 'u' || e.key === 'U') {
+            const on = VoteMusic.toggle();
+            showToast(on ? '🎵 เพลงตอนโหวต: เปิด' : '🔇 เพลงตอนโหวต: ปิด');
           } else if (e.key === 'm' || e.key === 'M') {
             SoundEngine.toggleMute();
           } else if (e.key === 'r' || e.key === 'R') {
@@ -14829,6 +15031,294 @@
       AIVoiceCoach.initVoice();
     });
   </script>
+
+
+<!-- =====================================================================
+     V35 STATION TIMER — big countdown for the activities before the game.
+     Opens from the lobby button or key [W]. Full screen, or minimised to a
+     corner badge that keeps running over the lobby and the game.
+     Sounds: chime at 1:00, a tick each of the last 10 s, alarm + gong at 0.
+     ===================================================================== -->
+<style>
+  #hrTimer {
+    --t-bg: #5A0F1B; --t-deep: #3D0811; --t-ink: #FFF4EE; --t-muted: #F2CFC8; --t-faint: #C98E87;
+    --t-line: #86323F; --t-gold: #FFC85C; --t-hot: #B3182D;
+    position: fixed; inset: 0; z-index: 9000; display: none;
+    background: radial-gradient(120% 90% at 50% 45%, #6A1422 0%, var(--t-bg) 55%, var(--t-deep) 100%);
+    color: var(--t-ink); font-family: var(--font-thai); overflow: hidden;
+    transition: background-color .3s ease;
+  }
+  #hrTimer.open { display: block; }
+  #hrTimer canvas.t-ecg { position: absolute; left: 0; right: 0; top: 50%; width: 100%; height: 360px; transform: translateY(-58%); opacity: .55; pointer-events: none; }
+  #hrTimer .t-top { position: absolute; top: 0; left: 0; right: 0; height: 84px; display: flex; align-items: center; justify-content: space-between; padding: 0 44px; border-bottom: 1px solid var(--t-line); background: rgba(61,8,17,.55); }
+  #hrTimer .t-brand { display: flex; align-items: center; gap: 14px; font-size: 22px; font-weight: 700; letter-spacing: .02em; color: var(--t-muted); }
+  #hrTimer .t-brand b { color: var(--t-ink); font-weight: 800; }
+  #hrTimer .t-brand svg { width: 30px; height: 30px; stroke: var(--t-gold); }
+  #hrTimer .t-top-btns { display: flex; gap: 10px; }
+  #hrTimer button { font-family: var(--font-thai); cursor: pointer; }
+  #hrTimer .t-ghost { background: transparent; color: var(--t-ink); border: 1.5px solid var(--t-faint); border-radius: 4px; height: 48px; padding: 0 20px; font-size: 20px; font-weight: 700; }
+  #hrTimer .t-ghost:hover { border-color: var(--t-ink); background: rgba(255,244,238,.06); }
+  #hrTimer .t-ghost:focus-visible, #hrTimer .t-main:focus-visible, #hrTimer .t-step:focus-visible { outline: 3px solid var(--t-gold); outline-offset: 3px; }
+
+  #hrTimer .t-stage { position: absolute; inset: 84px 0 0 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; }
+  #hrTimer .t-title { font-size: 40px; font-weight: 800; color: var(--t-muted); min-width: 200px; text-align: center; padding: 4px 18px; border-radius: 4px; outline: none; }
+  #hrTimer .t-title:focus { background: rgba(255,244,238,.08); color: var(--t-ink); }
+  #hrTimer .t-digits { position: relative; font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 800; font-size: 360px; line-height: .9; letter-spacing: -.02em; color: var(--t-ink); text-shadow: 0 10px 40px rgba(20,0,4,.45); transition: color .25s ease, transform .18s cubic-bezier(.2,.8,.2,1); }
+  #hrTimer .t-digits .t-colon { display: inline-block; transform: translateY(-.06em); margin: 0 -.06em; }
+  #hrTimer.running .t-digits .t-colon { animation: tColon 1s steps(1) infinite; }
+  @keyframes tColon { 50% { opacity: .25; } }
+  #hrTimer .t-status { font-size: 30px; font-weight: 700; color: var(--t-gold); height: 40px; letter-spacing: .02em; }
+  #hrTimer .t-bar { width: min(1500px, 82vw); height: 14px; background: rgba(255,244,238,.12); border-radius: 2px; overflow: hidden; }
+  #hrTimer .t-bar i { display: block; height: 100%; width: 100%; background: var(--t-ink); transform-origin: left center; transition: background-color .3s ease; }
+  #hrTimer .t-steps { display: flex; gap: 12px; margin-top: 10px; }
+  #hrTimer .t-step { min-width: 116px; height: 58px; background: transparent; color: var(--t-ink); border: 1.5px solid var(--t-line); border-radius: 4px; font-size: 24px; font-weight: 700; font-family: var(--font-num); }
+  #hrTimer .t-step:hover { border-color: var(--t-muted); background: rgba(255,244,238,.06); }
+  #hrTimer .t-step.minus { color: var(--t-muted); }
+  #hrTimer .t-hint { font-size: 19px; color: var(--t-faint); }
+  #hrTimer .t-hint kbd { font-family: var(--font-num); font-size: 16px; border: 1px solid var(--t-faint); border-radius: 3px; padding: 1px 7px; margin: 0 2px; color: var(--t-muted); }
+  #hrTimer .t-actions { display: flex; gap: 16px; margin-top: 8px; }
+  #hrTimer .t-main { height: 84px; min-width: 300px; padding: 0 40px; border-radius: 4px; border: 0; background: var(--t-ink); color: var(--t-bg); font-size: 34px; font-weight: 800; box-shadow: 0 10px 30px rgba(20,0,4,.35); }
+  #hrTimer .t-main:hover { background: #FFFFFF; }
+  #hrTimer .t-actions .t-ghost { height: 84px; font-size: 28px; padding: 0 34px; }
+
+  /* setup (not running): steppers visible; running: hidden */
+  #hrTimer.running .t-steps, #hrTimer.running .t-hint, #hrTimer.done .t-steps, #hrTimer.done .t-hint { display: none; }
+  /* last minute */
+  #hrTimer.warn .t-bar i { background: var(--t-gold); }
+  #hrTimer.warn .t-digits { color: var(--t-gold); }
+  /* last 10 s: the room pulses with each second */
+  #hrTimer::before { content: ''; position: absolute; inset: 0; background: var(--t-hot); opacity: 0; pointer-events: none; }
+  #hrTimer.final::before { animation: tPulse 1s ease-out infinite; }
+  #hrTimer.final .t-digits { color: #FFFFFF; animation: tBeat 1s cubic-bezier(.2,.8,.2,1) infinite; }
+  @keyframes tPulse { 0% { opacity: .85; } 60%, 100% { opacity: 0; } }
+  @keyframes tBeat { 0% { transform: scale(1.06); } 40%, 100% { transform: scale(1); } }
+  /* time up */
+  #hrTimer.done { animation: tFlash .5s steps(1) infinite; }
+  @keyframes tFlash { 0% { background: var(--t-hot); } 50% { background: var(--t-deep); } }
+  #hrTimer.done .t-digits { color: #FFFFFF; }
+  #hrTimer.done .t-status { font-size: 64px; color: #FFFFFF; height: 76px; }
+  @media (prefers-reduced-motion: reduce) {
+    #hrTimer.final::before, #hrTimer.final .t-digits, #hrTimer.done, #hrTimer.running .t-digits .t-colon { animation: none !important; }
+  }
+
+  /* minimised badge */
+  #hrTimerMini { position: fixed; right: 24px; top: 6px; height: 50px; z-index: 8999; display: none; align-items: center; gap: 12px; padding: 0 16px 0 14px; border-radius: 4px; cursor: pointer;
+    background: #3D0811; color: #FFF4EE; border: 1.5px solid #C98E87; box-shadow: 0 10px 30px rgba(20,0,4,.4); font-family: var(--font-thai); }
+  #hrTimerMini.show { display: flex; }
+  #hrTimerMini .m-dot { width: 12px; height: 12px; border-radius: 50%; background: #8BE6B4; flex: none; }
+  #hrTimerMini.paused .m-dot { background: #C98E87; }
+  #hrTimerMini .m-time { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-weight: 800; font-size: 34px; line-height: 1; }
+  body.lobby-mode #hrTimerMini { top: auto; bottom: 24px; }
+  #hrTimerMini .m-label { font-size: 16px; color: #F2CFC8; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #hrTimerMini.warn { border-color: #FFC85C; } #hrTimerMini.warn .m-time { color: #FFC85C; }
+  #hrTimerMini.final, #hrTimerMini.done { background: #B3182D; border-color: #FFF4EE; animation: tMini .5s steps(1) infinite; }
+  @keyframes tMini { 50% { background: #3D0811; } }
+
+  /* lobby entry button */
+  .btn-open-timer { font-family: var(--font-thai); }
+  body.v28-open .lobby-qr-actions > button.btn-open-timer { flex: 1 1 100% !important; border-color: #FFC85C !important; color: #FFC85C !important; font-weight: 800 !important; }
+  body.v28-open:not(.theme-blood) .lobby-qr-actions > button.btn-open-timer { border-color: #5A0F1B !important; color: #5A0F1B !important; }
+</style>
+
+<div id="hrTimer" role="dialog" aria-modal="true" aria-label="จับเวลาถอยหลัง">
+  <canvas class="t-ecg" width="1920" height="360"></canvas>
+  <div class="t-top">
+    <div class="t-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 12 6 12 9 4 13 20 16 12 22 12"/></svg>
+      <span><b>HEARTBEAT RUSH</b> • จับเวลาถอยหลัง</span>
+    </div>
+    <div class="t-top-btns">
+      <button class="t-ghost" data-act="mini" title="ย่อไว้มุมจอ [Esc]">ย่อไว้มุมจอ</button>
+      <button class="t-ghost" data-act="close" title="ปิดนาฬิกา (หยุดจับเวลา)">ปิด ✕</button>
+    </div>
+  </div>
+  <div class="t-stage">
+    <div class="t-title" contenteditable="true" spellcheck="false" title="คลิกเพื่อแก้ชื่อกิจกรรม">เวลากิจกรรม</div>
+    <div class="t-digits" aria-live="off"><span class="t-mm">05</span><span class="t-colon">:</span><span class="t-ss">00</span></div>
+    <div class="t-status" aria-live="polite"></div>
+    <div class="t-bar"><i></i></div>
+    <div class="t-steps">
+      <button class="t-step minus" data-add="-300">−5 น.</button>
+      <button class="t-step minus" data-add="-60">−1 น.</button>
+      <button class="t-step minus" data-add="-10">−10 วิ</button>
+      <button class="t-step" data-add="10">+10 วิ</button>
+      <button class="t-step" data-add="60">+1 น.</button>
+      <button class="t-step" data-add="300">+5 น.</button>
+    </div>
+    <div class="t-hint">พิมพ์ตัวเลขตั้งเวลาได้เลย เช่น <kbd>1</kbd><kbd>5</kbd><kbd>0</kbd><kbd>0</kbd> = 15:00 • <kbd>Space</kbd> เริ่ม/หยุด • <kbd>Esc</kbd> ย่อ</div>
+    <div class="t-actions">
+      <button class="t-main" data-act="toggle">▶ เริ่ม</button>
+      <button class="t-ghost" data-act="reset">↺ รีเซ็ต</button>
+    </div>
+  </div>
+</div>
+<div id="hrTimerMini" title="คลิกเพื่อขยายนาฬิกา [W]"><span class="m-dot"></span><span class="m-time">05:00</span><span class="m-label">เวลากิจกรรม</span></div>
+
+<script>
+  (function () {
+    const root = document.getElementById('hrTimer'), mini = document.getElementById('hrTimerMini');
+    const $ = s => root.querySelector(s);
+    const mmEl = $('.t-mm'), ssEl = $('.t-ss'), statusEl = $('.t-status'), barEl = $('.t-bar i'), mainBtn = $('[data-act="toggle"]'), titleEl = $('.t-title');
+    const canvas = $('canvas.t-ecg'), g = canvas.getContext('2d');
+    const T = {
+      total: 300, remaining: 300, endAt: 0, running: false, done: false, typed: '',
+      warned: false, lastTick: -1, timer: null, raf: 0, open: false, minimised: false,
+
+      fmt(sec) { sec = Math.max(0, Math.ceil(sec)); const m = Math.floor(sec / 60), s = sec % 60; return [String(m).padStart(2, '0'), String(s).padStart(2, '0')]; },
+      left() { return this.running ? Math.max(0, (this.endAt - performance.now()) / 1000) : this.remaining; },
+
+      show() { this.open = true; this.minimised = false; root.classList.add('open'); this.render(); this.loop(); try { SoundEngine.initAndResume(); } catch (e) {} },
+      minimise() { this.open = false; this.minimised = true; root.classList.remove('open'); this.render(); },
+      close() { this.pause(); this.done = false; this.open = false; this.minimised = false; root.classList.remove('open'); this.stopAlarm(); this.render(); },
+      toggleView() { if (this.open) this.minimise(); else this.show(); },
+
+      setTotal(sec) {
+        if (this.running) return;
+        sec = Math.max(0, Math.min(99 * 60 + 59, Math.round(sec)));
+        this.total = this.remaining = sec; this.done = false; this.warned = sec <= 60; this.lastTick = -1; this.stopAlarm(); this.render();
+      },
+      add(d) { if (this.running) { this.endAt += d * 1000; this.total = Math.max(this.total + d, 1); if (this.left() > 60) this.warned = false; this.render(); } else this.setTotal(this.remaining + d); },
+      type(digit) {
+        if (this.running) return;
+        this.typed = (this.typed + digit).slice(-4);
+        const t = this.typed.padStart(4, '0');
+        this.setTotal(parseInt(t.slice(0, 2), 10) * 60 + Math.min(59, parseInt(t.slice(2), 10)));
+      },
+      backspace() { if (this.running) return; this.typed = this.typed.slice(0, -1); const t = this.typed.padStart(4, '0'); this.setTotal(parseInt(t.slice(0, 2), 10) * 60 + Math.min(59, parseInt(t.slice(2), 10))); },
+
+      start() {
+        if (this.remaining <= 0) return;
+        try { SoundEngine.initAndResume(); } catch (e) {}
+        this.typed = ''; this.done = false; this.running = true; this.endAt = performance.now() + this.remaining * 1000;
+        this.warned = this.remaining <= 60; this.lastTick = -1;
+        clearInterval(this.timer); this.timer = setInterval(() => this.tick(), 100);
+        this.render(); this.loop();
+      },
+      pause() { if (!this.running) return; this.remaining = this.left(); this.running = false; clearInterval(this.timer); this.render(); },
+      toggle() { if (this.done) { this.reset(); return; } this.running ? this.pause() : this.start(); },
+      reset() { this.pause(); this.remaining = this.total; this.done = false; this.warned = this.total <= 60; this.lastTick = -1; this.stopAlarm(); this.render(); },
+
+      tick() {
+        const l = this.left();
+        const whole = Math.ceil(l);
+        if (!this.warned && l <= 60 && this.total > 60) { this.warned = true; Sfx.chime(); }
+        if (whole <= 10 && whole >= 1 && whole !== this.lastTick) { this.lastTick = whole; Sfx.tick(whole); }
+        if (l <= 0) { this.running = false; this.remaining = 0; this.done = true; clearInterval(this.timer); Sfx.alarm(); }
+        this.render();
+      },
+      stopAlarm() { Sfx.stop(); },
+
+      render() {
+        const l = this.left(), [m, s] = this.fmt(l);
+        mmEl.textContent = m; ssEl.textContent = s;
+        const frac = this.total > 0 ? l / this.total : 0;
+        barEl.style.transform = `scaleX(${Math.max(0, Math.min(1, frac))})`;
+        const warn = !this.done && l <= 60 && l > 10 && (this.running || this.remaining < this.total);
+        const fin = !this.done && this.running && l <= 10;
+        root.classList.toggle('running', this.running); root.classList.toggle('done', this.done);
+        root.classList.toggle('warn', warn); root.classList.toggle('final', fin);
+        statusEl.textContent = this.done ? 'หมดเวลา!' : fin ? 'ใกล้หมดเวลาแล้ว' : warn ? 'เหลืออีกไม่ถึง 1 นาที' : (!this.running && this.remaining < this.total && this.remaining > 0) ? 'หยุดชั่วคราว' : '';
+        mainBtn.textContent = this.done ? '↺ ตั้งเวลาใหม่' : this.running ? '⏸ หยุดชั่วคราว' : (this.remaining < this.total && this.remaining > 0) ? '▶ เดินต่อ' : '▶ เริ่ม';
+        // corner badge: only while minimised and the timer means something
+        const active = this.running || this.done || (this.remaining > 0 && this.remaining < this.total);
+        mini.classList.toggle('show', this.minimised && active);
+        mini.classList.toggle('paused', !this.running && !this.done);
+        mini.classList.toggle('warn', warn); mini.classList.toggle('final', fin); mini.classList.toggle('done', this.done);
+        mini.querySelector('.m-time').textContent = this.done ? '00:00' : `${m}:${s}`;
+        mini.querySelector('.m-label').textContent = this.done ? 'หมดเวลา!' : titleEl.textContent.trim();
+      },
+
+      // heartbeat trace behind the digits; it beats faster as time runs out
+      loop() {
+        cancelAnimationFrame(this.raf);
+        const W = canvas.width, H = canvas.height; let x = 0, phase = 0, last = performance.now(), prevY = H / 2;
+        g.clearRect(0, 0, W, H);
+        const beat = p => { // one PQRST complex over p in [0,1)
+          if (p < 0.08) return Math.sin(p / 0.08 * Math.PI) * 0.08;
+          if (p < 0.14) return 0;
+          if (p < 0.16) return -0.12 * ((p - 0.14) / 0.02);
+          if (p < 0.19) return -0.12 + 1.12 * ((p - 0.16) / 0.03);
+          if (p < 0.22) return 1 - 1.35 * ((p - 0.19) / 0.03);
+          if (p < 0.25) return -0.35 + 0.35 * ((p - 0.22) / 0.03);
+          if (p < 0.42) return Math.sin((p - 0.25) / 0.17 * Math.PI) * 0.18;
+          return 0;
+        };
+        const step = (now) => {
+          if (!this.open) return;
+          const dt = Math.min(64, now - last); last = now;
+          const l = this.left(), urgent = this.running && l <= 10, warn = this.running && l <= 60;
+          const bpm = this.done ? 0 : urgent ? 150 : warn ? 110 : this.running ? 72 : 60;
+          const speed = 0.42 * dt; // px per ms sweep
+          phase += bpm / 60 * dt / 1000;
+          const y = H / 2 - (bpm ? beat(phase % 1) : 0) * H * 0.42;
+          g.clearRect(x + 1, 0, 26, H); // erase ahead of the pen
+          g.strokeStyle = this.done ? 'rgba(255,244,238,.85)' : urgent ? 'rgba(255,255,255,.95)' : warn ? 'rgba(255,200,92,.9)' : 'rgba(255,244,238,.7)';
+          g.lineWidth = 4; g.lineJoin = 'round';
+          g.beginPath(); g.moveTo(x, prevY); x += speed; g.lineTo(x, y); g.stroke();
+          prevY = y;
+          if (x > W) { x = 0; g.clearRect(0, 0, 30, H); }
+          this.raf = requestAnimationFrame(step);
+        };
+        this.raf = requestAnimationFrame(step);
+      }
+    };
+
+    // ---- sounds (through SoundEngine's master gain: [M] mutes them too) ----
+    const Sfx = {
+      ctx() { try { SoundEngine.initAndResume(); } catch (e) {} return SoundEngine.ctx; },
+      out() { return SoundEngine.masterGain || (SoundEngine.ctx && SoundEngine.ctx.destination); },
+      nodes: [],
+      tone(t, hz, dur, vol, type = 'sine') {
+        const c = this.ctx(); if (!c) return;
+        const o = c.createOscillator(), gn = c.createGain();
+        o.type = type; o.frequency.value = hz;
+        gn.gain.setValueAtTime(0.0001, t); gn.gain.exponentialRampToValueAtTime(vol, t + 0.01); gn.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(gn); gn.connect(this.out()); o.start(t); o.stop(t + dur + 0.05); this.nodes.push(o);
+      },
+      bell(t, hz, dur, vol) { this.tone(t, hz, dur, vol); this.tone(t, hz * 2.01, dur * 0.6, vol * 0.35); this.tone(t, hz * 3.02, dur * 0.35, vol * 0.15); },
+      chime() { const c = this.ctx(); if (!c) return; const t = c.currentTime + 0.02; [659.25, 783.99, 1046.5].forEach((hz, i) => this.bell(t + i * 0.22, hz, 1.4, 0.32)); },
+      tick(n) { const c = this.ctx(); if (!c) return; const t = c.currentTime + 0.01; const hz = n <= 3 ? 1568 : 1046.5; this.tone(t, hz, 0.09, n <= 3 ? 0.5 : 0.35, 'triangle'); if (n <= 3) this.tone(t, hz / 2, 0.14, 0.25); },
+      alarm() {
+        const c = this.ctx(); if (!c) return; const t0 = c.currentTime + 0.02;
+        for (let r = 0; r < 3; r++) for (let i = 0; i < 4; i++) { const t = t0 + r * 1.1 + i * 0.2; this.tone(t, i % 2 ? 1174.66 : 880, 0.16, 0.42, 'square'); }
+        const tg = t0 + 3.4; [110, 220.5, 331.5, 441, 555].forEach((hz, i) => this.tone(tg, hz, 3.2 - i * 0.4, [0.55, 0.3, 0.18, 0.12, 0.08][i]));
+      },
+      stop() { this.nodes.forEach(o => { try { o.stop(); } catch (e) {} }); this.nodes = []; }
+    };
+
+    // ---- wiring ----
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.add) T.add(parseInt(b.dataset.add, 10));
+      const a = b.dataset.act;
+      if (a === 'toggle') T.toggle(); else if (a === 'reset') T.reset(); else if (a === 'mini') T.minimise(); else if (a === 'close') T.close();
+      b.blur();
+    });
+    mini.addEventListener('click', () => T.show());
+    titleEl.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); titleEl.blur(); } });
+    titleEl.addEventListener('blur', () => { if (!titleEl.textContent.trim()) titleEl.textContent = 'เวลากิจกรรม'; T.render(); });
+
+    // keys: while the timer fills the screen it owns the keyboard (the game's Space/R must not fire underneath)
+    window.addEventListener('keydown', e => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.isContentEditable)) return;
+      if (!T.open) {
+        if ((e.key === 'w' || e.key === 'W') && !e.metaKey && !e.ctrlKey) { e.preventDefault(); e.stopImmediatePropagation(); T.show(); }
+        return;
+      }
+      e.stopImmediatePropagation();
+      if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); T.toggle(); }
+      else if (e.key === 'Escape' || e.key === 'w' || e.key === 'W') { e.preventDefault(); T.minimise(); }
+      else if (e.key === 'r' || e.key === 'R') { T.reset(); }
+      else if (/^[0-9]$/.test(e.key)) { T.type(e.key); }
+      else if (e.key === 'Backspace') { e.preventDefault(); T.backspace(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); T.add(e.shiftKey ? 10 : 60); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); T.add(e.shiftKey ? -10 : -60); }
+    }, true);
+
+    window.StationTimer = T;
+    T.render();
+  })();
+</script>
 
 </body>
 </html>
